@@ -1,5 +1,5 @@
 import {ThemeType} from './defaultTheme';
-import {defaultColors} from './colors';
+import {defaultColors, fastlyColors} from './colors';
 
 export const darkTheme: ThemeType = {
   name: 'dark',
@@ -20,6 +20,7 @@ export const darkTheme: ThemeType = {
 
   colors: {
     ...defaultColors,
+    ...fastlyColors,
 
     body: '#000',
     text: '#fff',
