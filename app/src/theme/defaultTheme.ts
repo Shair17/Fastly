@@ -1,4 +1,5 @@
 import {ThemeType as MagnusThemeType} from 'react-native-magnus';
+import {defaultColors, fastlyColors} from './colors';
 
 export type ThemeType = MagnusThemeType;
 
@@ -19,6 +20,15 @@ export const defaultTheme: ThemeType = {
     900: 'Montserrat-Black',
   },
 
+  colors: {
+    ...defaultColors,
+    ...fastlyColors,
+
+    body: '#000',
+    text: '#fff',
+  },
+
+  /**
   colors: {
     gray100: '#f7fafc',
     gray200: '#edf2f7',
@@ -123,7 +133,7 @@ export const defaultTheme: ThemeType = {
     white: '#FFFFFF',
     black: '#000000',
     transparent: 'rgba(0,0,0,0)',
-  },
+  }, */
 
   fontSize: {
     xs: 11,
