@@ -250,6 +250,9 @@ export const defaultColors: Colors = {
   rose700: '#be123c',
   rose800: '#9f1239',
   rose900: '#881337',
+
+  // Extra colors
+  facebook: '#1877F2',
 };
 
 export const fastlyColors: Colors = {

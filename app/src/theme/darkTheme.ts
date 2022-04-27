@@ -22,6 +22,13 @@ export const darkTheme: ThemeType = {
     ...defaultColors,
     ...fastlyColors,
 
+    textPrimary: '#E9F0F5',
+    textSecondary: '#FAFCFC',
+    textTertiary: '#FCFDFD',
+
+    bgPrimary: '#FCFCFC',
+    bgSecondary: '#F7F7FB',
+
     body: '#000',
     text: '#fff',
   },
@@ -113,6 +120,7 @@ export const darkTheme: ThemeType = {
     lg: 8,
     xl: 12,
     '2xl': 16,
+    '3xl': 24,
     circle: 99999,
   },
 

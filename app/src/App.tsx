@@ -9,6 +9,8 @@ import {
   setThemeToStorage,
 } from './theme';
 import Bootsplash from 'react-native-bootsplash';
+// import {OnBoardingScreen} from './modules/onboarding/OnBoardingScreen';
+import {AuthenticationScreen} from './modules/authentication/AuthenticationScreen';
 
 const ThemeSwitcher = () => {
   const {theme, setTheme} = useTheme();
@@ -45,7 +47,8 @@ function App() {
   return (
     <NavigationContainer onReady={() => Bootsplash.hide({fade: true})}>
       <ThemeProvider theme={theme}>
-        <Div bg="body" flex={1} px="lg">
+        <AuthenticationScreen />
+        {/* <Div bg="body" flex={1} px="lg">
           <Text mt="2xl" pt="xl" fontSize="5xl" color="text" fontWeight="bold">
             Settings
           </Text>
@@ -57,7 +60,7 @@ function App() {
               <ThemeSwitcher />
             </Div>
           </Div>
-        </Div>
+        </Div> */}
       </ThemeProvider>
     </NavigationContainer>
   );

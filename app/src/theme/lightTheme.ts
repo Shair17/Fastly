@@ -120,6 +120,7 @@ export const lightTheme: ThemeType = {
     lg: 8,
     xl: 12,
     '2xl': 16,
+    '3xl': 24,
     circle: 99999,
   },
 
