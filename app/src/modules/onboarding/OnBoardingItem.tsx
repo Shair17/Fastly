@@ -21,21 +21,18 @@ export const OnBoardingItem: FC<Props> = ({image, title, subtitle}) => {
           mt={20}
           alignSelf="center"
         />
-        <Div>
+        <Div px="2xl">
           <Text
             fontSize="6xl"
             color="text"
             fontWeight="bold"
-            textAlign="center"
-            mx={25}>
+            textAlign="center">
             {title}
           </Text>
-          <Text
-            fontSize="lg"
-            color="textPrimary"
-            textAlign="center"
-            mx={60}
-            mt={20}>
+
+          <Div my={10} />
+
+          <Text fontSize="lg" color="textPrimary" textAlign="center">
             {subtitle}
           </Text>
         </Div>

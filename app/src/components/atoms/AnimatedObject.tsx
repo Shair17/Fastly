@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Image} from 'react-native-magnus';
+import {Div, Image} from 'react-native-magnus';
 import * as Animatable from 'react-native-animatable';
 
 interface Props {
@@ -15,7 +15,7 @@ export const AnimatedObject: FC<Props> = ({
   image,
   w = 100,
   h = 100,
-  bg = undefined,
+  bg,
 }) => {
   return (
     <Animatable.View
@@ -36,7 +36,7 @@ export const AnimatedObject: FC<Props> = ({
       easing="ease-in-out"
       direction="alternate"
       useNativeDriver>
-      <Image position="absolute" source={image} w={w} h={h} bg={bg} />
+      <Image source={image} w={w} h={h} resizeMode="contain" bg={bg} />
     </Animatable.View>
   );
 };

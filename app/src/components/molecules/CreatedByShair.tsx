@@ -18,10 +18,7 @@ export const CreatedByShair: FC<Props> = ({
     <Div position="absolute" bottom={bottom} alignSelf="center">
       <Text fontSize={fontSize} color="gray400">
         Creado por{' '}
-        <Text
-          fontSize={fontSize}
-          color="gray600"
-          onPress={() => openLink(DEVELOPER_INSTAGRAM)}>
+        <Text fontSize={fontSize} color="gray600" onPress={() => openLink(url)}>
           @shair.dev
         </Text>
       </Text>

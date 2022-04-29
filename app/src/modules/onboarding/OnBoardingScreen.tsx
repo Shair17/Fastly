@@ -4,20 +4,20 @@ import {
   FlatList,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  Linking,
-  Alert,
 } from 'react-native';
 import {Div} from 'react-native-magnus';
 import {useDimensions} from '../../hooks/useDimensions';
 import {OnBoardingDot} from './OnBoardingDot';
 import {OnBoardingItem} from './OnBoardingItem';
+import {OnBoardingHeader} from './OnBoardingHeader';
 import {OnBoardingButton, OnBoardingDoneButton} from './OnBoardingButtons';
 import {slides} from './slides';
 import {CreatedByShair} from '../../components/molecules/CreatedByShair';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-interface Props {}
+interface Props extends NativeStackScreenProps<any, any> {}
 
-export const OnBoardingScreen: FC<Props> = () => {
+export const OnBoardingScreen: FC<Props> = ({navigation}) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const {
@@ -29,8 +29,13 @@ export const OnBoardingScreen: FC<Props> = () => {
     setCurrentSlide(currentIndex);
   };
 
+  StatusBar.setTranslucent(false);
   StatusBar.setBarStyle('dark-content');
   StatusBar.setBackgroundColor('#fff');
+
+  const getStarted = () => {
+    navigation.replace('AuthenticationScreen');
+  };
 
   const next = () => {
     const nextSlide = currentSlide + 1;
@@ -51,6 +56,8 @@ export const OnBoardingScreen: FC<Props> = () => {
   return (
     <Div flex={1} bg="body" justifyContent="center">
       <Div flex={4}>
+        <OnBoardingHeader />
+
         <FlatList
           ref={flatListRef}
           data={slides}
@@ -76,7 +83,9 @@ export const OnBoardingScreen: FC<Props> = () => {
         <Div flex={1} justifyContent="center">
           <Div px="2xl">
             {currentSlide === slides.length - 1 ? (
-              <OnBoardingDoneButton>Empezar</OnBoardingDoneButton>
+              <OnBoardingDoneButton onPress={getStarted}>
+                Empezar
+              </OnBoardingDoneButton>
             ) : (
               <Div flexDir="row" justifyContent="space-between">
                 <OnBoardingButton onPress={skip}>Saltar</OnBoardingButton>

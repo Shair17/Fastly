@@ -1,54 +1,63 @@
 export const objectsImages = [
-  /** TOP [LEFT-RIGHT] */
+  /** TOP */
   {
-    top: 20,
-    left: 250,
-    w: 150,
-    h: 150,
+    top: 50,
+    left: 0,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/croquettes.png'),
   },
   {
-    top: 20,
-    left: 10,
-    w: 150,
-    h: 150,
+    top: 50,
+    left: 130,
+    w: 125,
+    h: 125,
+    image: require('../../assets/images/objects/toilet-paper.png'),
+  },
+  {
+    top: 50,
+    left: 270,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/battery.png'),
   },
-  /** MIDDLE [LEFT-RIGHT] */
+
+  /** MIDDLE */
   {
-    top: 225,
-    left: 300,
-    w: 85,
-    h: 85,
+    top: 220,
+    left: 0,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/candy.png'),
   },
   {
-    top: 225,
-    left: 10,
-    w: 85,
-    h: 85,
+    top: 220,
+    left: 270,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/egg.png'),
   },
-  /** BOTTOM [LEFT,MIDDLE,RIGHT] */
+
+  /** BOTTOM  */
   {
-    top: 350,
-    left: 5,
-    w: 120,
-    h: 120,
+    top: 390,
+    left: 0,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/banana.png'),
   },
   {
-    top: 360,
+    top: 390,
     left: 120,
     w: 150,
     h: 150,
     image: require('../../assets/images/objects/hamburger.png'),
   },
   {
-    top: 350,
-    left: 280,
-    w: 120,
-    h: 120,
+    top: 390,
+    left: 270,
+    w: 125,
+    h: 125,
     image: require('../../assets/images/objects/apple.png'),
   },
 ];

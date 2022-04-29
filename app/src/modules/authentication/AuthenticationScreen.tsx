@@ -7,6 +7,7 @@ import {CreatedByShair} from '../../components/molecules/CreatedByShair';
 import {FooterLegalLinks} from '../../components/molecules/FooterLegalLinks';
 import {OverlayLoading} from '../../components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
+import {useAuthStore} from '../../stores/useAuthStore';
 
 interface Props {}
 
@@ -15,9 +16,21 @@ const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationScreen: FC<Props> = () => {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const setAuth = useAuthStore(s => s.setAuth);
 
   StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('transparent');
+
+  const loginWithFacebook = () => {
+    setAuth({
+      accessToken: 'some-access-token',
+      refreshToken: 'some-refresh-token',
+      isAuthenticated: true,
+      isNewUser: true,
+      user: {},
+    });
+  };
 
   return (
     <>
@@ -33,14 +46,15 @@ export const AuthenticationScreen: FC<Props> = () => {
               <Div flex={1} justifyContent="center" alignItems="center">
                 <Div position="absolute" top={0} bottom={0} left={0} right={0}>
                   {objectsImages.map(({top, left, w, h, image}, key) => (
-                    <Div top={top} left={left} key={key}>
+                    <Div
+                      position="absolute"
+                      top={top}
+                      left={left}
+                      key={key.toString()}>
                       <AnimatedObject w={w} h={h} image={image} />
                     </Div>
                   ))}
                 </Div>
-                {/**
-                 * Acá dibujar todas las imagenes que están dentro de la carpeta assets/images/objects
-                 */}
                 <Div
                   bg="red100"
                   alignSelf="center"
@@ -80,7 +94,6 @@ export const AuthenticationScreen: FC<Props> = () => {
                   bg="facebook"
                   fontWeight="bold"
                   fontSize="xl"
-                  textTransform="capitalize"
                   prefix={
                     <Icon
                       fontFamily="MaterialCommunityIcons"
@@ -89,7 +102,8 @@ export const AuthenticationScreen: FC<Props> = () => {
                       mr="sm"
                       fontSize="5xl"
                     />
-                  }>
+                  }
+                  onPress={loginWithFacebook}>
                   Continuar con Facebook
                 </Button>
 
