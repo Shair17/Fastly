@@ -12,8 +12,8 @@ import {OnBoardingItem} from './OnBoardingItem';
 import {OnBoardingHeader} from './OnBoardingHeader';
 import {OnBoardingButton, OnBoardingDoneButton} from './OnBoardingButtons';
 import {slides} from './slides';
-import {CreatedByShair} from '../../components/molecules/CreatedByShair';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 
 interface Props extends NativeStackScreenProps<any, any> {}
 
@@ -54,7 +54,7 @@ export const OnBoardingScreen: FC<Props> = ({navigation}) => {
   };
 
   return (
-    <Div flex={1} bg="body" justifyContent="center">
+    <ContainerWithCredits justifyContent="center">
       <Div flex={4}>
         <OnBoardingHeader />
 
@@ -93,10 +93,8 @@ export const OnBoardingScreen: FC<Props> = ({navigation}) => {
               </Div>
             )}
           </Div>
-
-          <CreatedByShair />
         </Div>
       </Div>
-    </Div>
+    </ContainerWithCredits>
   );
 };

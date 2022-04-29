@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text, Image} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
-import {CreatedByShair} from '../../components/molecules/CreatedByShair';
+import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {usePermissionsStore} from '../../stores/usePermissionsStore';
 import {GeolocationPermissionsHeader} from './GeolocationPermissionsHeader';
 
@@ -21,7 +21,7 @@ export const GeolocationPermissionsScreen: FC<Props> = () => {
   StatusBar.setBackgroundColor('#fff');
 
   return (
-    <Div flex={1} bg="body">
+    <ContainerWithCredits flex={1} bg="body">
       <Div flex={3}>
         <GeolocationPermissionsHeader />
         <Image source={geolocationImage} flex={1} resizeMode="contain" />
@@ -70,8 +70,6 @@ export const GeolocationPermissionsScreen: FC<Props> = () => {
           )}
         </Div>
       </Div>
-
-      <CreatedByShair />
-    </Div>
+    </ContainerWithCredits>
   );
 };

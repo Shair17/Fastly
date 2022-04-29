@@ -3,11 +3,11 @@ import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {AnimatedObject} from '../../components/atoms/AnimatedObject';
 import {Button} from '../../components/atoms/Button';
-import {CreatedByShair} from '../../components/molecules/CreatedByShair';
 import {FooterLegalLinks} from '../../components/molecules/FooterLegalLinks';
 import {OverlayLoading} from '../../components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
+import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 
 interface Props {}
 
@@ -35,7 +35,7 @@ export const AuthenticationScreen: FC<Props> = () => {
   return (
     <>
       <SafeAreaView style={{flex: 1}}>
-        <Div flex={1} bg="body">
+        <ContainerWithCredits flex={1} bg="body">
           <Div flex={4} bg="body">
             <Div
               flex={1}
@@ -112,10 +112,8 @@ export const AuthenticationScreen: FC<Props> = () => {
                 <FooterLegalLinks />
               </Div>
             </ScrollView>
-
-            <CreatedByShair />
           </Div>
-        </Div>
+        </ContainerWithCredits>
       </SafeAreaView>
 
       <OverlayLoading overlayVisible={overlayVisible} />

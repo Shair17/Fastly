@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import {StatusBar} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from 'react-native-magnus';
 import {OnBoardingScreen} from '../../modules/onboarding/OnBoardingScreen';
