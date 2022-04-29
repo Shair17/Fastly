@@ -9,7 +9,7 @@ import {
   isNewUserKey,
   accessTokenKey,
   refreshTokenKey,
-} from '../constants/authentication.constants';
+} from '../constants/auth.constants';
 import {storage} from '../storage';
 
 type AuthTypes = {
@@ -33,12 +33,12 @@ const getDefaultValues = (): AuthTypes => {
 export const useAuthStore = create(
   combine(getDefaultValues(), set => ({
     // increase: (by: number) => set(state => ({bears: state.bears + by})),
-    setAuth: (authentication: AuthTypes) => {
-      storage.set(accessTokenKey, authentication.accessToken);
-      storage.set(refreshTokenKey, authentication.refreshToken);
-      storage.set(isNewUserKey, authentication.isNewUser);
+    setAuth: (auth: AuthTypes) => {
+      storage.set(accessTokenKey, auth.accessToken);
+      storage.set(refreshTokenKey, auth.refreshToken);
+      storage.set(isNewUserKey, auth.isNewUser);
 
-      set(authentication);
+      set(auth);
     },
   })),
 );
