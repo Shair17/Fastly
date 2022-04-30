@@ -7,7 +7,12 @@ import {usePermissionsStore} from '../../stores/usePermissionsStore';
 import {LoadingTemplate} from '../../components/templates/LoadingTemplate';
 import {GeolocationPermissionsScreen} from '../../modules/geolocation-permissions/GeolocationPermissionsScreen';
 
-const Stack = createNativeStackNavigator();
+export type AuthenticatedStackParams = {
+  App: undefined;
+  GeolocationPermissions: undefined;
+};
+
+const Stack = createNativeStackNavigator<AuthenticatedStackParams>();
 
 const App = () => {
   StatusBar.setTranslucent(false);

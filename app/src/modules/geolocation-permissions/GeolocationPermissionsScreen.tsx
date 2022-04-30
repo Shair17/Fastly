@@ -6,8 +6,13 @@ import {Button} from '../../components/atoms/Button';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {usePermissionsStore} from '../../stores/usePermissionsStore';
 import {GeolocationPermissionsHeader} from './GeolocationPermissionsHeader';
+import {AuthenticatedStackParams} from '../../navigation/stacks/AuthenticatedStack';
 
-interface Props extends NativeStackScreenProps<any, any> {}
+interface Props
+  extends NativeStackScreenProps<
+    AuthenticatedStackParams,
+    'GeolocationPermissions'
+  > {}
 
 const geolocationImage = require('../../assets/images/geolocation/bg@2.png');
 
