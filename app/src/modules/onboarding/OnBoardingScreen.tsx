@@ -13,9 +13,14 @@ import {OnBoardingHeader} from './OnBoardingHeader';
 import {OnBoardingButton, OnBoardingDoneButton} from './OnBoardingButtons';
 import {slides} from './slides';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {UnauthenticatedStackParams} from '../../navigation/stacks/UnauthenticatedStack';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 
-interface Props extends NativeStackScreenProps<any, any> {}
+interface Props
+  extends NativeStackScreenProps<
+    UnauthenticatedStackParams,
+    'OnBoardingScreen'
+  > {}
 
 export const OnBoardingScreen: FC<Props> = ({navigation}) => {
   const flatListRef = useRef<FlatList>(null);
@@ -29,9 +34,9 @@ export const OnBoardingScreen: FC<Props> = ({navigation}) => {
     setCurrentSlide(currentIndex);
   };
 
-  StatusBar.setTranslucent(false);
-  StatusBar.setBarStyle('dark-content');
-  StatusBar.setBackgroundColor('#fff');
+  // StatusBar.setTranslucent(false);
+  // StatusBar.setBarStyle('dark-content');
+  // StatusBar.setBackgroundColor('#fff');
 
   const getStarted = () => {
     navigation.replace('AuthenticationScreen');

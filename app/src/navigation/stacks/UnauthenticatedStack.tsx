@@ -4,7 +4,12 @@ import {useTheme} from 'react-native-magnus';
 import {OnBoardingScreen} from '../../modules/onboarding/OnBoardingScreen';
 import {AuthenticationScreen} from '../../modules/authentication/AuthenticationScreen';
 
-const Stack = createNativeStackNavigator();
+export type UnauthenticatedStackParams = {
+  OnBoardingScreen: undefined;
+  AuthenticationScreen: undefined;
+};
+
+const Stack = createNativeStackNavigator<UnauthenticatedStackParams>();
 
 export const UnauthenticatedStack: FC = () => {
   const {theme} = useTheme();

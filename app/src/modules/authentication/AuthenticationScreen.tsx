@@ -8,8 +8,14 @@ import {OverlayLoading} from '../../components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {UnauthenticatedStackParams} from '../../navigation/stacks/UnauthenticatedStack';
 
-interface Props {}
+interface Props
+  extends NativeStackScreenProps<
+    UnauthenticatedStackParams,
+    'AuthenticationScreen'
+  > {}
 
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
@@ -35,7 +41,7 @@ export const AuthenticationScreen: FC<Props> = () => {
   return (
     <>
       <SafeAreaView style={{flex: 1}}>
-        <ContainerWithCredits flex={1} bg="body">
+        <ContainerWithCredits>
           <Div flex={4} bg="body">
             <Div
               flex={1}

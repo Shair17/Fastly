@@ -1,24 +1,34 @@
-import React, {useState} from 'react';
+import React from 'react';
+import {StatusBar} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTheme} from 'react-native-magnus';
+import {Div, Text, useTheme} from 'react-native-magnus';
+import {ThemeSwitcher} from '../../components/atoms/ThemeSwitcher';
 import {usePermissionsStore} from '../../stores/usePermissionsStore';
 import {LoadingTemplate} from '../../components/templates/LoadingTemplate';
 import {GeolocationPermissionsScreen} from '../../modules/geolocation-permissions/GeolocationPermissionsScreen';
-import {useTimeout} from '../../hooks/useTimeout';
 
 const Stack = createNativeStackNavigator();
 
+const App = () => {
+  StatusBar.setTranslucent(false);
+
+  return (
+    <Div bg="body">
+      <ThemeSwitcher />
+      <Text color="text">
+        Autenticado y con permisos de geolocalización activados! :D
+      </Text>
+    </Div>
+  );
+};
+
 export const AuthenticatedStack = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
 
-  const hide = () => setIsLoading(false);
+  console.log(theme.colors?.body);
 
-  useTimeout(hide, 1e3);
-
-  // remove `isLoading` later and replace with `locationStatus === 'unavailable'`
-  if (isLoading) {
+  if (locationStatus === 'unavailable') {
     return <LoadingTemplate />;
   }
 
@@ -28,10 +38,14 @@ export const AuthenticatedStack = () => {
         headerShown: false,
         contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
       }}>
-      <Stack.Screen
-        name="GeolocationPermissions"
-        component={GeolocationPermissionsScreen}
-      />
+      {locationStatus === 'granted' ? (
+        <Stack.Screen name="App" component={App} />
+      ) : (
+        <Stack.Screen
+          name="GeolocationPermissions"
+          component={GeolocationPermissionsScreen}
+        />
+      )}
     </Stack.Navigator>
   );
 };

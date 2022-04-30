@@ -1,12 +1,13 @@
 import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Div, Text, Image} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {usePermissionsStore} from '../../stores/usePermissionsStore';
 import {GeolocationPermissionsHeader} from './GeolocationPermissionsHeader';
 
-interface Props {}
+interface Props extends NativeStackScreenProps<any, any> {}
 
 const geolocationImage = require('../../assets/images/geolocation/bg@2.png');
 
@@ -21,7 +22,7 @@ export const GeolocationPermissionsScreen: FC<Props> = () => {
   StatusBar.setBackgroundColor('#fff');
 
   return (
-    <ContainerWithCredits flex={1} bg="body">
+    <ContainerWithCredits>
       <Div flex={3}>
         <GeolocationPermissionsHeader />
         <Image source={geolocationImage} flex={1} resizeMode="contain" />
