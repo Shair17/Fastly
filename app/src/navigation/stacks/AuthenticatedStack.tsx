@@ -31,8 +31,6 @@ export const AuthenticatedStack = () => {
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
 
-  console.log(theme.colors?.body);
-
   if (locationStatus === 'unavailable') {
     return <LoadingTemplate />;
   }

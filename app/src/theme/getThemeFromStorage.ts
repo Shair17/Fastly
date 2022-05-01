@@ -1,7 +1,5 @@
 import {storage} from '../storage';
 import {themeStorageKey} from '../constants/theme.constants';
 
-type ThemeFromStorage = () => string;
-
-export const getThemeFromStorage: ThemeFromStorage = () =>
-  storage.getString(themeStorageKey) || 'light';
+export const getThemeFromStorage = (): string =>
+  storage.getString(themeStorageKey) || 'system';

@@ -1,6 +1,7 @@
 export enum ThemesNames {
   lightTheme = 'light',
   darkTheme = 'dark',
+  systemTheme = 'system',
 }
 
 export {darkTheme} from './darkTheme';
