@@ -9,13 +9,10 @@ import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {UnauthenticatedStackParams} from '../../navigation/stacks/UnauthenticatedStack';
+import {RootStackParams} from '../../navigation/RootNavigation';
 
 interface Props
-  extends NativeStackScreenProps<
-    UnauthenticatedStackParams,
-    'AuthenticationScreen'
-  > {}
+  extends NativeStackScreenProps<RootStackParams, 'AuthenticationScreen'> {}
 
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');

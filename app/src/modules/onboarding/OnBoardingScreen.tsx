@@ -13,14 +13,11 @@ import {OnBoardingHeader} from './OnBoardingHeader';
 import {OnBoardingButton, OnBoardingDoneButton} from './OnBoardingButtons';
 import {slides} from './slides';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {UnauthenticatedStackParams} from '../../navigation/stacks/UnauthenticatedStack';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
+import {RootStackParams} from '../../navigation/RootNavigation';
 
 interface Props
-  extends NativeStackScreenProps<
-    UnauthenticatedStackParams,
-    'OnBoardingScreen'
-  > {}
+  extends NativeStackScreenProps<RootStackParams, 'OnBoardingScreen'> {}
 
 export const OnBoardingScreen: FC<Props> = ({navigation}) => {
   const flatListRef = useRef<FlatList>(null);
