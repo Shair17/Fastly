@@ -75,13 +75,13 @@ function App() {
   }, [themeState.name]);
 
   return (
-    <NavigationContainer
-      onReady={() => Bootsplash.hide({fade: true})}
-      theme={themeNavigation}>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <NavigationContainer
+        onReady={() => Bootsplash.hide({fade: true})}
+        theme={themeNavigation}>
         <RootNavigation />
-      </ThemeProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
