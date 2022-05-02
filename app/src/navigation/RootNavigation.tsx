@@ -7,21 +7,25 @@ import {GeolocationPermissionsScreen} from '../modules/geolocation-permissions/G
 import {AuthenticationScreen} from '../modules/authentication/AuthenticationScreen';
 import {OnBoardingScreen} from '../modules/onboarding/OnBoardingScreen';
 import {LoadingTemplate} from '../components/templates/LoadingTemplate';
+import {ApplicationBottomTab} from './ApplicationBottomTab';
 
 export type RootStackParams = {
   OnBoardingScreen: undefined;
   AuthenticationScreen: undefined;
   LoadingScreen: undefined;
   GeolocationPermissions: undefined;
-  App: undefined;
+  ApplicationBottomTab: undefined;
+
+  // modificar luego
+  AskData: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
-const App = () => {
+const AskDataScreen = () => {
   return (
-    <Div bg="body">
-      <Text color="text">App</Text>
+    <Div>
+      <Text>AskDataScreen</Text>
     </Div>
   );
 };
@@ -30,6 +34,7 @@ export const RootNavigation = () => {
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
   const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const isNewUser = useAuthStore(s => s.isNewUser);
 
   return (
     <Stack.Navigator>
@@ -42,7 +47,15 @@ export const RootNavigation = () => {
           {locationStatus === 'unavailable' ? (
             <Stack.Screen name="LoadingScreen" component={LoadingTemplate} />
           ) : locationStatus === 'granted' ? (
-            <Stack.Screen name="App" component={App} />
+            isNewUser ? (
+              <Stack.Screen name="AskData" component={AskDataScreen} />
+            ) : (
+              // Application Bottom Tab Navigator
+              <Stack.Screen
+                name="ApplicationBottomTab"
+                component={ApplicationBottomTab}
+              />
+            )
           ) : (
             <Stack.Screen
               name="GeolocationPermissions"
