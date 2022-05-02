@@ -7,7 +7,7 @@ const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const HeaderScreen: FC<Props> = () => {
   return (
-    <Div justifyContent="center" alignItems="center">
+    <Div justifyContent="center" alignItems="center" bg="body">
       <Div my="md" />
 
       <Div flexDir="row" justifyContent="center" alignItems="center">

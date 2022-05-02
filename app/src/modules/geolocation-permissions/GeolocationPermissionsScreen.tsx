@@ -1,19 +1,16 @@
 import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Div, Text, Image} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
+import {GeolocationPermissionsScreenProps} from '../../navigation/screens/GeolocationPermissionsScreen';
 import {usePermissionsStore} from '../../stores/usePermissionsStore';
-import {GeolocationPermissionsHeader} from './GeolocationPermissionsHeader';
-import {RootStackParams} from '../../navigation/RootNavigation';
-
-interface Props
-  extends NativeStackScreenProps<RootStackParams, 'GeolocationPermissions'> {}
 
 const geolocationImage = require('../../assets/images/geolocation/bg@2.png');
 
-export const GeolocationPermissionsScreen: FC<Props> = () => {
+export const GeolocationPermissionsController: FC<
+  GeolocationPermissionsScreenProps
+> = () => {
   const locationStatus = usePermissionsStore(s => s.locationStatus);
   const askLocationPermission = usePermissionsStore(
     s => s.askLocationPermission,
@@ -26,7 +23,6 @@ export const GeolocationPermissionsScreen: FC<Props> = () => {
   return (
     <ContainerWithCredits>
       <Div flex={3}>
-        <GeolocationPermissionsHeader />
         <Image source={geolocationImage} flex={1} resizeMode="contain" />
       </Div>
       <Div flex={3}>

@@ -1,25 +1,17 @@
 import React, {FC, useRef, useState} from 'react';
-import {
-  StatusBar,
-  FlatList,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+import {FlatList, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {Div} from 'react-native-magnus';
 import {useDimensions} from '../../hooks/useDimensions';
 import {OnBoardingDot} from './OnBoardingDot';
 import {OnBoardingItem} from './OnBoardingItem';
-import {OnBoardingHeader} from './OnBoardingHeader';
 import {OnBoardingButton, OnBoardingDoneButton} from './OnBoardingButtons';
 import {slides} from './slides';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import {RootStackParams} from '../../navigation/RootNavigation';
+import {OnBoardingScreenProps} from '../../navigation/screens/OnBoardingScreen';
 
-interface Props
-  extends NativeStackScreenProps<RootStackParams, 'OnBoardingScreen'> {}
-
-export const OnBoardingScreen: FC<Props> = ({navigation}) => {
+export const OnBoardingController: FC<OnBoardingScreenProps> = ({
+  navigation,
+}) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const {
@@ -58,8 +50,6 @@ export const OnBoardingScreen: FC<Props> = ({navigation}) => {
   return (
     <ContainerWithCredits justifyContent="center">
       <Div flex={4}>
-        <OnBoardingHeader />
-
         <FlatList
           ref={flatListRef}
           data={slides}

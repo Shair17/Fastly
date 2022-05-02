@@ -1,34 +1,47 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Div, Text, useTheme} from 'react-native-magnus';
-import {useAuthStore} from '../stores/useAuthStore';
-import {usePermissionsStore} from '../stores/usePermissionsStore';
-import {GeolocationPermissionsScreen} from '../modules/geolocation-permissions/GeolocationPermissionsScreen';
-import {AuthenticationScreen} from '../modules/authentication/AuthenticationScreen';
-import {OnBoardingScreen} from '../modules/onboarding/OnBoardingScreen';
-import {LoadingTemplate} from '../components/templates/LoadingTemplate';
+import {useTheme} from 'react-native-magnus';
+
+import {OnBoardingScreen} from './screens/OnBoardingScreen';
+import {AuthenticationScreen} from './screens/AuthenticationScreen';
+import {LoadingScreen} from './screens/LoadingScreen';
+import {GeolocationPermissionsScreen} from './screens/GeolocationPermissionsScreen';
+import {AskPersonalInformationScreen} from './screens/AskPersonalInformationScreen';
+import {AskLocationScreen} from './screens/AskLocationScreen';
+
 import {ApplicationBottomTab} from './ApplicationBottomTab';
 
+import {useAuthStore} from '../stores/useAuthStore';
+import {usePermissionsStore} from '../stores/usePermissionsStore';
+import {HeaderScreen} from '../components/molecules/HeaderScreen';
+
 export type RootStackParams = {
+  /**
+   * Unauthenticated
+   */
+
   OnBoardingScreen: undefined;
   AuthenticationScreen: undefined;
-  LoadingScreen: undefined;
-  GeolocationPermissions: undefined;
-  ApplicationBottomTab: undefined;
 
-  // modificar luego
-  AskData: undefined;
+  /**
+   * Authenticated
+   */
+
+  // Geolocation Permissions and loading permissions
+  LoadingScreen: undefined;
+  GeolocationPermissionsScreen: undefined;
+
+  // Ask for personal info only for new users
+  AskPersonalInformationScreen: undefined;
+
+  // Ask for first address only for new users
+  AskLocationScreen: undefined;
+
+  // Fastly App
+  ApplicationBottomTab: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParams>();
-
-const AskDataScreen = () => {
-  return (
-    <Div>
-      <Text>AskDataScreen</Text>
-    </Div>
-  );
-};
 
 export const RootNavigation = () => {
   const {theme} = useTheme();
@@ -45,12 +58,27 @@ export const RootNavigation = () => {
             contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
           }}>
           {locationStatus === 'unavailable' ? (
-            <Stack.Screen name="LoadingScreen" component={LoadingTemplate} />
+            <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
           ) : locationStatus === 'granted' ? (
             isNewUser ? (
-              <Stack.Screen name="AskData" component={AskDataScreen} />
+              <Stack.Group
+                screenOptions={{
+                  headerShown: true,
+                  header: () => <HeaderScreen />,
+                  contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
+                }}>
+                <Stack.Screen
+                  name="AskPersonalInformationScreen"
+                  component={AskPersonalInformationScreen}
+                />
+                <Stack.Screen
+                  name="AskLocationScreen"
+                  component={AskLocationScreen}
+                />
+              </Stack.Group>
             ) : (
               // Application Bottom Tab Navigator
+              // Acá crear todas las pantallas necesarias como: Categorías, Producto, etc...
               <Stack.Screen
                 name="ApplicationBottomTab"
                 component={ApplicationBottomTab}
@@ -58,8 +86,12 @@ export const RootNavigation = () => {
             )
           ) : (
             <Stack.Screen
-              name="GeolocationPermissions"
+              name="GeolocationPermissionsScreen"
               component={GeolocationPermissionsScreen}
+              options={{
+                headerShown: true,
+                header: () => <HeaderScreen />,
+              }}
             />
           )}
         </Stack.Group>
@@ -70,7 +102,14 @@ export const RootNavigation = () => {
             animation: 'slide_from_right',
             contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
           }}>
-          <Stack.Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+          <Stack.Screen
+            name="OnBoardingScreen"
+            component={OnBoardingScreen}
+            options={{
+              headerShown: true,
+              header: () => <HeaderScreen />,
+            }}
+          />
           <Stack.Screen
             name="AuthenticationScreen"
             component={AuthenticationScreen}

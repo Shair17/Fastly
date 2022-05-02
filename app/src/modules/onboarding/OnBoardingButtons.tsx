@@ -19,14 +19,6 @@ export const OnBoardingButton: FC<ButtonProps> = props => {
 
 export const OnBoardingDoneButton: FC<ButtonProps> = props => {
   return (
-    <Button
-      block
-      shadow="xs"
-      rounded="md"
-      fontWeight="bold"
-      fontSize="3xl"
-      bg="primary"
-      {...props}
-    />
+    <Button block shadow="xs" fontWeight="bold" fontSize="3xl" {...props} />
   );
 };

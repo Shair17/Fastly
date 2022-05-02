@@ -8,16 +8,12 @@ import {OverlayLoading} from '../../components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigation/RootNavigation';
-
-interface Props
-  extends NativeStackScreenProps<RootStackParams, 'AuthenticationScreen'> {}
+import {AuthenticationScreenProps} from '../../navigation/screens/AuthenticationScreen';
 
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
-export const AuthenticationScreen: FC<Props> = () => {
+export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
   const isAuthenticated = useAuthStore(s => s.isAuthenticated);
   const setAuth = useAuthStore(s => s.setAuth);

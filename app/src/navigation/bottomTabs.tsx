@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {ApplicationBottomTabParams} from './ApplicationBottomTab';
-import {HomeScreen} from './screens/HomeScreen';
-import {SearchScreen} from './screens/SearchScreen';
-import {CartScreen} from './screens/CartScreen';
-import {FavoritesScreen} from './screens/FavoritesScreen';
-import {ProfileScreen} from './screens/ProfileScreen';
+import {HomeScreen} from './screens/app/HomeScreen';
+import {SearchScreen} from './screens/app/SearchScreen';
+import {CartScreen} from './screens/app/CartScreen';
+import {FavoritesScreen} from './screens/app/FavoritesScreen';
+import {ProfileScreen} from './screens/app/ProfileScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 type TabIconProps = {
@@ -15,7 +15,7 @@ type TabIconProps = {
 
 interface BottomTab {
   TabName: keyof ApplicationBottomTabParams;
-  TabComponent: () => JSX.Element;
+  TabComponent: FC<any>;
   TabIcon: ({color, focused, size}: TabIconProps) => JSX.Element;
 }
 

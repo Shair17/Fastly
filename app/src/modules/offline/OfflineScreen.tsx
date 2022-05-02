@@ -25,7 +25,7 @@ export const OfflineScreen: FC<Props> = () => {
       <Div flex={2}>
         <HeaderScreen />
         <Div p="2xl">
-          <Text fontSize="6xl" fontWeight="bold">
+          <Text fontSize="6xl" fontWeight="bold" color="text">
             Por favor, comprueba tu conexión a internet.
           </Text>
         </Div>
