@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Div, Text, ScrollDiv} from 'react-native-magnus';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {ApplicationBottomTabParams} from '../ApplicationBottomTab';
 
-export const HomeScreen = () => {
+interface Props
+  extends BottomTabScreenProps<ApplicationBottomTabParams, 'HomeScreen'> {}
+
+export const HomeScreen: FC<Props> = () => {
   return (
     <ScrollDiv>
       <Text>HomeScreen</Text>

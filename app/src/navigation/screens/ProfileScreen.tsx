@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Div, Text} from 'react-native-magnus';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {ApplicationBottomTabParams} from '../ApplicationBottomTab';
 
-export const ProfileScreen = () => {
+interface Props
+  extends BottomTabScreenProps<ApplicationBottomTabParams, 'ProfileScreen'> {}
+
+export const ProfileScreen: FC<Props> = () => {
   return (
     <Div>
       <Text>ProfileScreen</Text>

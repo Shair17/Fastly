@@ -21,6 +21,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
   return (
     <Tab.Navigator
       initialRouteName="HomeScreen"
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
