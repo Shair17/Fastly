@@ -15,7 +15,6 @@ import {usePermissionsStore} from './stores/usePermissionsStore';
 import {themeStorageKey} from './constants/theme.constants';
 import {storage} from './storage';
 
-// TODO: Arreglar el cambio de tema al momento de que el usuario lo cambie desde el dispositivo
 function App() {
   const checkLocationPermission = usePermissionsStore(
     s => s.checkLocationPermission,
