@@ -1,15 +1,11 @@
 import React, {FC} from 'react';
-import {Div, Text} from 'react-native-magnus';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {ApplicationBottomTabParams} from '../../ApplicationBottomTab';
+import {SearchController} from '../../../modules/search/SearchController';
 
-interface Props
+export interface SearchScreenProps
   extends BottomTabScreenProps<ApplicationBottomTabParams, 'SearchScreen'> {}
 
-export const SearchScreen: FC<Props> = () => {
-  return (
-    <Div>
-      <Text>SearchScreen</Text>
-    </Div>
-  );
+export const SearchScreen: FC<SearchScreenProps> = props => {
+  return <SearchController {...props} />;
 };

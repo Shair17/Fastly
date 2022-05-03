@@ -3,6 +3,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {RootStackParams} from './RootNavigation';
 import {bottomTabs} from './bottomTabs';
+// import {HeaderScreen} from '../components/molecules/HeaderScreen';
 
 interface Props
   extends NativeStackScreenProps<RootStackParams, 'ApplicationBottomTab'> {}
@@ -20,10 +21,12 @@ const Tab = createBottomTabNavigator<ApplicationBottomTabParams>();
 export const ApplicationBottomTab: FC<Props> = () => {
   return (
     <Tab.Navigator
-      initialRouteName="HomeScreen"
+      // initialRouteName="HomeScreen"
+      initialRouteName="ProfileScreen"
       backBehavior="history"
       screenOptions={{
         headerShown: false,
+        // header: () => <HeaderScreen />,
         tabBarShowLabel: false,
         tabBarStyle: {
           borderTopWidth: 0,

@@ -1,100 +1,11 @@
 import React, {FC} from 'react';
-import {Div, Text, ScrollDiv} from 'react-native-magnus';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {ApplicationBottomTabParams} from '../../ApplicationBottomTab';
+import {HomeController} from '../../../modules/home/HomeController';
 
-interface Props
+export interface HomeScreenProps
   extends BottomTabScreenProps<ApplicationBottomTabParams, 'HomeScreen'> {}
 
-export const HomeScreen: FC<Props> = () => {
-  return (
-    <ScrollDiv>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-      <Text>HomeScreen</Text>
-    </ScrollDiv>
-  );
+export const HomeScreen: FC<HomeScreenProps> = props => {
+  return <HomeController {...props} />;
 };

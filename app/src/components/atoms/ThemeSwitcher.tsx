@@ -61,7 +61,7 @@ export const ThemeSwitcher = () => {
   };
 
   return (
-    <Div p="2xl">
+    <Div>
       <Radio.Group
         row
         justifyContent="space-between"

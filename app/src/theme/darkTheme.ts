@@ -141,4 +141,10 @@ export const darkTheme: ThemeType = {
     '-2xl': -32,
     '-3xl': -64,
   },
+
+  components: {
+    Text: {
+      color: '#fff',
+    },
+  },
 };
