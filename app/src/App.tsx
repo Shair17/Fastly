@@ -54,6 +54,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // setTheme(theme);
     if (themeStorage !== undefined) return;
 
     if (systemTheme === ThemesNames.lightTheme) {

@@ -15,6 +15,7 @@
       android:theme="@style/BootTheme">
       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
       <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCZNjUCqfE6p4_d3O7LXWbXM3xbeZyvWKM"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -27,5 +28,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <!-- Aún no se para que sirve esto jajaja, pero vamos a dejarlo a ver q pdo -->
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
     </application>
 </manifest>

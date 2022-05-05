@@ -1,19 +1,17 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from 'react-native-magnus';
-
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
 import {AuthenticationScreen} from './screens/AuthenticationScreen';
 import {LoadingScreen} from './screens/LoadingScreen';
 import {GeolocationPermissionsScreen} from './screens/GeolocationPermissionsScreen';
 import {AskPersonalInformationScreen} from './screens/AskPersonalInformationScreen';
 import {AskLocationScreen} from './screens/AskLocationScreen';
-
 import {ApplicationBottomTab} from './ApplicationBottomTab';
-
 import {useAuthStore} from '../stores/useAuthStore';
 import {usePermissionsStore} from '../stores/usePermissionsStore';
 import {HeaderScreen} from '../components/molecules/HeaderScreen';
+import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
 
 export type RootStackParams = {
   /**
@@ -31,9 +29,10 @@ export type RootStackParams = {
   LoadingScreen: undefined;
   GeolocationPermissionsScreen: undefined;
 
+  // Welcome new users
+  WelcomeNewUserScreen: undefined;
   // Ask for personal info only for new users
   AskPersonalInformationScreen: undefined;
-
   // Ask for first address only for new users
   AskLocationScreen: undefined;
 
@@ -63,17 +62,22 @@ export const RootNavigation = () => {
             isNewUser ? (
               <Stack.Group
                 screenOptions={{
+                  animation: 'slide_from_right',
                   headerShown: true,
                   header: () => <HeaderScreen />,
                   contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
                 }}>
                 <Stack.Screen
-                  name="AskPersonalInformationScreen"
-                  component={AskPersonalInformationScreen}
+                  name="WelcomeNewUserScreen"
+                  component={WelcomeNewUserScreen}
                 />
                 <Stack.Screen
                   name="AskLocationScreen"
                   component={AskLocationScreen}
+                />
+                <Stack.Screen
+                  name="AskPersonalInformationScreen"
+                  component={AskPersonalInformationScreen}
                 />
               </Stack.Group>
             ) : (

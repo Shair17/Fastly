@@ -26,7 +26,7 @@ const schema = z.object({
 
 export const AskPersonalInformationController: FC<
   AskPersonalInformationScreenProps
-> = () => {
+> = ({navigation}) => {
   const {
     control,
     handleSubmit,
@@ -35,16 +35,22 @@ export const AskPersonalInformationController: FC<
     resolver: zodResolver(schema),
   });
 
-  console.log({errors});
+  // const onSubmit = handleSubmit(data => {
+  //   console.log(data);
+  //   navigation.navigate('AskLocationScreen');
+  // });
 
-  const onSubmit = handleSubmit(data => console.log(data));
+  const onSubmit = () => {
+    // actualizar isNewUser boolean to true
+    console.log('finish');
+  };
 
   return (
     <ContainerWithKeyboardAvoidingView>
       <Div flex={1}>
         <Div p="2xl">
           <Div>
-            <Text fontWeight="bold" fontSize="5xl" color="text">
+            <Text fontWeight="bold" fontSize="6xl" color="text">
               Completa tu perfil para comenzar
             </Text>
 
@@ -135,7 +141,7 @@ export const AskPersonalInformationController: FC<
             fontWeight="bold"
             fontSize="2xl"
             onPress={onSubmit}>
-            Continuar
+            Finalizar
           </Button>
 
           <Div my="2xl" />
