@@ -1,15 +1,11 @@
 import React, {FC} from 'react';
-import {Div, Text} from 'react-native-magnus';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {ApplicationBottomTabParams} from '../../ApplicationBottomTab';
+import {FavoritesController} from '../../../modules/favorites/FavoritesController';
 
 export interface FavoritesScreenProps
   extends BottomTabScreenProps<ApplicationBottomTabParams, 'FavoritesScreen'> {}
 
-export const FavoritesScreen: FC<FavoritesScreenProps> = () => {
-  return (
-    <Div>
-      <Text>FavoritesScreen</Text>
-    </Div>
-  );
+export const FavoritesScreen: FC<FavoritesScreenProps> = props => {
+  return <FavoritesController {...props} />;
 };
