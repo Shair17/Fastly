@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {
-  AppState,
-  AppStateStatus,
+  // AppState,
+  // AppStateStatus,
   StatusBar,
   useColorScheme,
 } from 'react-native';
@@ -11,14 +11,13 @@ import {lightTheme, darkTheme, ThemesNames} from './theme';
 import {NavigationContainer, Theme} from '@react-navigation/native';
 import Bootsplash from 'react-native-bootsplash';
 import {RootNavigation} from './navigation/RootNavigation';
-import {usePermissionsStore} from './stores/usePermissionsStore';
+// import {usePermissionsStore} from './stores/usePermissionsStore';
 import {themeStorageKey} from './constants/theme.constants';
 import {storage} from './storage';
+import {useCheckLocationPermissions} from './hooks/useCheckLocationPermission';
 
 function App() {
-  const checkLocationPermission = usePermissionsStore(
-    s => s.checkLocationPermission,
-  );
+  // const checkLocationPermission = usePermissionsStore(s => s.checkLocationPermission);
   const systemTheme = useColorScheme() || 'light';
   const [themeStorage] = useMMKVString(themeStorageKey, storage);
   const {theme: themeState, setTheme} = useTheme();
@@ -37,21 +36,7 @@ function App() {
     },
   };
 
-  useEffect(() => {
-    checkLocationPermission();
-
-    const listener = (state: AppStateStatus) => {
-      if (state !== 'active') return;
-
-      checkLocationPermission();
-    };
-
-    const subscription = AppState.addEventListener('change', listener);
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  useCheckLocationPermissions();
 
   useEffect(() => {
     // setTheme(theme);

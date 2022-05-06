@@ -8,7 +8,7 @@ export const refreshTokenKey = '@fastly/refresh-token';
 // export const isAuthenticatedKey = '@fastly/isAuthenticated';
 export const isNewUserKey = '@fastly/isNewUser';
 
-export const isAuthenticated = true; // default: false
+export const isAuthenticated = false; // default: false
 export const isNewUser = true;
 export const user = {};
 export const accessToken = '';
