@@ -1,23 +1,16 @@
 import React, {useEffect} from 'react';
-import {
-  // AppState,
-  // AppStateStatus,
-  StatusBar,
-  useColorScheme,
-} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
 import {ThemeProvider, useTheme} from 'react-native-magnus';
 import {useMMKVString} from 'react-native-mmkv';
 import {lightTheme, darkTheme, ThemesNames} from './theme';
 import {NavigationContainer, Theme} from '@react-navigation/native';
 import Bootsplash from 'react-native-bootsplash';
 import {RootNavigation} from './navigation/RootNavigation';
-// import {usePermissionsStore} from './stores/usePermissionsStore';
 import {themeStorageKey} from './constants/theme.constants';
 import {storage} from './storage';
 import {useCheckLocationPermissions} from './hooks/useCheckLocationPermission';
 
 function App() {
-  // const checkLocationPermission = usePermissionsStore(s => s.checkLocationPermission);
   const systemTheme = useColorScheme() || 'light';
   const [themeStorage] = useMMKVString(themeStorageKey, storage);
   const {theme: themeState, setTheme} = useTheme();

@@ -1,7 +1,8 @@
-import type { NextPage } from 'next';
+import type {NextPage} from 'next';
+import {Layout} from 'components/templates/Layout';
 
 const Home: NextPage = () => {
-	return <div className="bg-white">hello fastly</div>;
+  return <Layout>home</Layout>;
 };
 
 export default Home;

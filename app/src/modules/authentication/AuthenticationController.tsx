@@ -26,7 +26,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
       accessToken: 'some-access-token',
       refreshToken: 'some-refresh-token',
       isAuthenticated: true,
-      isNewUser: true,
+      isNewUser: false,
       user: {},
     });
   };
