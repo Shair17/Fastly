@@ -1,11 +1,7 @@
 import React, {FC, useRef} from 'react';
+import {Animated} from 'react-native';
 import {Div, Image, Text} from 'react-native-magnus';
-import {Skeleton} from '../../components/atoms/Skeleton';
 import {HomeScreenProps} from '../../navigation/screens/app/HomeScreen';
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from 'react-native-reanimated';
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
@@ -13,18 +9,18 @@ const Item = () => {
   return (
     <Div>
       <Div flexDir="row" mt="md">
-        <Skeleton.Circle h={40} w={40} />
+        <Div rounded="circle" bg="gray200" h={40} w={40} />
         <Div ml="md" flex={1}>
-          <Skeleton.Box mt="sm" />
-          <Skeleton.Box mt="sm" w="80%" />
-          <Skeleton.Box mt="sm" />
+          <Div mt="sm" rounded="lg" h={15} bg="gray200" />
+          <Div mt="sm" w="80%" rounded="lg" h={15} bg="gray200" />
+          <Div mt="sm" rounded="lg" h={15} bg="gray200" />
         </Div>
       </Div>
       <Div flexDir="row" mt="md">
-        <Skeleton.Circle h={20} w={20} rounded="lg" />
-        <Skeleton.Circle h={20} w={20} rounded="lg" ml="md" />
+        <Div h={20} w={20} rounded="lg" bg="gray200" />
+        <Div h={20} w={20} rounded="lg" bg="gray200" ml="md" />
         <Div alignItems="flex-end" flex={1}>
-          <Skeleton.Box h={20} w={100}></Skeleton.Box>
+          <Div h={20} w={100} bg="gray200" rounded="lg" />
         </Div>
       </Div>
 
@@ -32,7 +28,6 @@ const Item = () => {
     </Div>
   );
 };
-
 const Header = () => {
   return (
     <Div>
@@ -60,58 +55,49 @@ const Header = () => {
 };
 
 export const HomeController: FC<HomeScreenProps> = () => {
-  const scrollY = useSharedValue(0);
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: e => {
-      scrollY.value = e.contentOffset.y;
-    },
+  const scrollY = useRef(new Animated.Value(0));
+  const diffClampScrollY = Animated.diffClamp(scrollY.current, 0, 50);
+  const headerHeight = diffClampScrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [50, 0],
+    extrapolate: 'clamp',
   });
-
-  // const scrollY = new Animated.Value(0);
-  // const onScroll = Animated.event([
-  //   {
-  //     nativeEvent: {
-  //       contentOffset: {
-  //         y: scrollY,
-  //       },
-  //     },
-  //   },
-  // ]);
-  // const diffClampScrollY = Animated.diffClamp(scrollY, 0, 50);
-  // const headerHeight = Animated.interpolateNode(diffClampScrollY, {
-  //   inputRange: [0, 50],
-  //   outputRange: [50, 0],
-  //   extrapolate: Extrapolation.CLAMP,
-  // });
-  // const headerTranslateY = Animated.interpolateNode(diffClampScrollY, {
-  //   inputRange: [0, 50],
-  //   outputRange: [0, -50],
-  //   extrapolate: Extrapolation.CLAMP,
-  // });
-  // const headerOpacity = Animated.interpolateNode(diffClampScrollY, {
-  //   inputRange: [0, 50],
-  //   outputRange: [1, 0],
-  //   extrapolate: Extrapolation.CLAMP,
-  // });
+  const headerTranslateY = diffClampScrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, -50],
+    extrapolate: 'clamp',
+  });
+  const headerOpacity = diffClampScrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
     <Div flex={1} bg="body">
-      <Animated.View
+      <Div
         style={{
+          height: 70,
+          backgroundColor: 'tomato',
           justifyContent: 'center',
           alignItems: 'center',
-          // backgroundColor: 'rgba(0,0,0,0.4)',
         }}>
-        <Header />
-      </Animated.View>
+        <Text fontSize="6xl" fontWeight="bold" color="white">
+          Fastly
+        </Text>
+      </Div>
+
       <Animated.ScrollView
-        style={{flex: 1}}
+        // style={{flex: 1}}
         bounces={false}
         showsVerticalScrollIndicator
-        scrollEventThrottle={1}
-        onScroll={scrollHandler}>
+        scrollEventThrottle={5}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY.current}}}],
+          {useNativeDriver: false},
+        )}>
         <Div p="2xl">
-          {[...Array(10)].map((_, key) => (
+          {[...Array(100)].map((_, key) => (
             <Item key={key.toString()} />
           ))}
         </Div>
