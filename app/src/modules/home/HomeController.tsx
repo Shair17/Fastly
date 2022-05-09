@@ -1,6 +1,12 @@
-import React, {FC, useRef} from 'react';
-import {Animated} from 'react-native';
+import React, {FC} from 'react';
 import {Div, Image, Text} from 'react-native-magnus';
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  interpolate,
+  Extrapolation,
+} from 'react-native-reanimated';
 import {HomeScreenProps} from '../../navigation/screens/app/HomeScreen';
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
@@ -55,49 +61,62 @@ const Header = () => {
 };
 
 export const HomeController: FC<HomeScreenProps> = () => {
-  const scrollY = useRef(new Animated.Value(0));
-  const diffClampScrollY = Animated.diffClamp(scrollY.current, 0, 50);
-  const headerHeight = diffClampScrollY.interpolate({
-    inputRange: [0, 50],
-    outputRange: [50, 0],
-    extrapolate: 'clamp',
+  const scrollY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: event => {
+      scrollY.value = event.contentOffset.y;
+    },
   });
-  const headerTranslateY = diffClampScrollY.interpolate({
-    inputRange: [0, 50],
-    outputRange: [0, -50],
-    extrapolate: 'clamp',
-  });
-  const headerOpacity = diffClampScrollY.interpolate({
-    inputRange: [0, 50],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
+  const animatedStyles = useAnimatedStyle(() => {
+    const height = interpolate(
+      scrollY.value,
+      [0, 50],
+      [50, 0],
+      Extrapolation.CLAMP,
+    );
+    const translateY = interpolate(
+      scrollY.value,
+      [0, 50],
+      [0, -50],
+      Extrapolation.CLAMP,
+    );
+    const opacity = interpolate(
+      scrollY.value,
+      [0, 50],
+      [1, 0],
+      Extrapolation.CLAMP,
+    );
+    return {
+      height,
+      transform: [{translateY}],
+      opacity,
+    };
   });
 
   return (
     <Div flex={1} bg="body">
-      <Div
-        style={{
-          height: 70,
-          backgroundColor: 'tomato',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      <Animated.View
+        style={[
+          {
+            backgroundColor: 'tomato',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          animatedStyles,
+        ]}>
         <Text fontSize="6xl" fontWeight="bold" color="white">
           Fastly
         </Text>
-      </Div>
+      </Animated.View>
 
       <Animated.ScrollView
         // style={{flex: 1}}
-        bounces={false}
+        bounces
         showsVerticalScrollIndicator
         scrollEventThrottle={5}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY.current}}}],
-          {useNativeDriver: false},
-        )}>
+        onScroll={scrollHandler}>
         <Div p="2xl">
-          {[...Array(100)].map((_, key) => (
+          {[...Array(10)].map((_, key) => (
             <Item key={key.toString()} />
           ))}
         </Div>
