@@ -6,6 +6,7 @@ import Animated, {
   useAnimatedStyle,
   interpolate,
   Extrapolation,
+  withSpring,
 } from 'react-native-reanimated';
 import {HomeScreenProps} from '../../navigation/screens/app/HomeScreen';
 
@@ -86,10 +87,11 @@ export const HomeController: FC<HomeScreenProps> = () => {
       [1, 0],
       Extrapolation.CLAMP,
     );
+    // withSpring() agrega animaciones? xd
     return {
-      height,
-      transform: [{translateY}],
-      opacity,
+      height: withSpring(height),
+      transform: [{translateY: withSpring(translateY)}],
+      opacity: withSpring(opacity),
     };
   });
 
