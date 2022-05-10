@@ -1,13 +1,11 @@
 import React, {FC} from 'react';
-import {Div, Image, Text} from 'react-native-magnus';
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  interpolate,
-  Extrapolation,
-  withSpring,
-} from 'react-native-reanimated';
+import {
+  ScrollView,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+} from 'react-native';
+import {Div, Image, Text, Icon} from 'react-native-magnus';
+import Pinar from 'pinar';
 import {HomeScreenProps} from '../../navigation/screens/app/HomeScreen';
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
@@ -35,94 +33,137 @@ const Item = () => {
     </Div>
   );
 };
-const Header = () => {
+
+const Header = ({goToSearch}: {goToSearch: () => void}) => {
   return (
-    <Div>
-      <Div my="md" />
-      <Div flexDir="row" justifyContent="center" alignItems="center">
-        <Div
-          bg="red100"
-          w={30}
-          h={30}
-          rounded="circle"
-          shadow="xs"
-          justifyContent="center"
-          alignItems="center">
-          <Image w={20} h={20} source={logoImage} />
+    <Div bg="body" shadow="xs" h={50}>
+      <Div
+        row
+        px="xl"
+        flex={1}
+        justifyContent="space-between"
+        alignItems="center">
+        <Div>
+          <Div
+            bg="red100"
+            w={30}
+            h={30}
+            rounded="circle"
+            shadow="xs"
+            justifyContent="center"
+            alignItems="center">
+            <Image w={20} h={20} source={logoImage} />
+          </Div>
         </Div>
-
-        <Div mx="xs" />
-
-        <Text fontWeight="bold" fontSize="4xl" color="text">
-          Fastly
-        </Text>
+        <Div>
+          <TouchableNativeFeedback
+            onPress={() =>
+              console.log(
+                'Has presionado la dirección, aquí abrir el bottom sheet',
+              )
+            }>
+            <Div row p="xs">
+              <Icon
+                fontFamily="Ionicons"
+                name="location"
+                fontSize={14}
+                color="primary"
+              />
+              <Text fontWeight="bold" mx={2} color="text">
+                Ricardo Palma 200
+              </Text>
+              <Icon
+                fontFamily="Ionicons"
+                name="chevron-down"
+                fontSize={12}
+                color="secondary"
+              />
+            </Div>
+          </TouchableNativeFeedback>
+        </Div>
+        <Div>
+          <TouchableOpacity activeOpacity={0.7} onPress={goToSearch}>
+            <Icon fontFamily="Ionicons" name="search-outline" fontSize="4xl" />
+          </TouchableOpacity>
+        </Div>
       </Div>
     </Div>
   );
 };
 
-export const HomeController: FC<HomeScreenProps> = () => {
-  const scrollY = useSharedValue(0);
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: event => {
-      scrollY.value = event.contentOffset.y;
-    },
-  });
-  const animatedStyles = useAnimatedStyle(() => {
-    const height = interpolate(
-      scrollY.value,
-      [0, 50],
-      [50, 0],
-      Extrapolation.CLAMP,
-    );
-    const translateY = interpolate(
-      scrollY.value,
-      [0, 50],
-      [0, -50],
-      Extrapolation.CLAMP,
-    );
-    const opacity = interpolate(
-      scrollY.value,
-      [0, 50],
-      [1, 0],
-      Extrapolation.CLAMP,
-    );
-    // withSpring() agrega animaciones? xd
-    return {
-      height: withSpring(height),
-      transform: [{translateY: withSpring(translateY)}],
-      opacity: withSpring(opacity),
-    };
-  });
+export const HomeController: FC<HomeScreenProps> = ({navigation}) => {
+  const goToSearch = () => {
+    navigation.navigate('SearchScreen');
+  };
 
   return (
     <Div flex={1} bg="body">
-      <Animated.View
-        style={[
-          {
-            backgroundColor: 'tomato',
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-          animatedStyles,
-        ]}>
-        <Text fontSize="6xl" fontWeight="bold" color="white">
-          Fastly
-        </Text>
-      </Animated.View>
-
-      <Animated.ScrollView
-        // style={{flex: 1}}
-        bounces
-        showsVerticalScrollIndicator
-        scrollEventThrottle={5}
-        onScroll={scrollHandler}>
+      <Header goToSearch={goToSearch} />
+      <ScrollView>
         <Div p="2xl">
-          {[...Array(10)].map((_, key) => (
-            <Item key={key.toString()} />
-          ))}
+          <Pinar
+            bounces={false}
+            loop
+            height={150}
+            showsControls={false}
+            autoplay
+            autoplayInterval={2000}
+            mergeStyles
+            showsDots
+            dotsContainerStyle={{
+              position: 'absolute',
+              bottom: 10,
+            }}
+            activeDotStyle={{
+              backgroundColor: '#fe554a',
+            }}
+            dotStyle={{
+              backgroundColor: '#fee2e2',
+            }}
+            style={{borderRadius: 6, overflow: 'hidden'}}>
+            <Div
+              rounded="md"
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              bg="yellow500">
+              <Text>1</Text>
+            </Div>
+            <Div
+              rounded="md"
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              bg="lime500">
+              <Text>2</Text>
+            </Div>
+            <Div
+              rounded="md"
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              bg="teal500">
+              <Text>3</Text>
+            </Div>
+            <Div
+              rounded="md"
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              bg="violet500">
+              <Text>4</Text>
+            </Div>
+            <Div
+              rounded="md"
+              flex={1}
+              justifyContent="center"
+              alignItems="center"
+              bg="sky500">
+              <Text>5</Text>
+            </Div>
+          </Pinar>
         </Div>
-      </Animated.ScrollView>
+      </ScrollView>
     </Div>
   );
 };

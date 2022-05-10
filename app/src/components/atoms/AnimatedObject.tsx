@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const AnimatedObject: FC<Props> = ({
-  duration = 3000,
+  duration = 2000,
   image,
   w = 100,
   h = 100,
