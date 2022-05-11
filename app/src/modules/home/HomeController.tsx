@@ -5,34 +5,16 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 import {Div, Image, Text, Icon} from 'react-native-magnus';
-import Pinar from 'pinar';
 import {HomeScreenProps} from '../../navigation/screens/app/HomeScreen';
+import {FeedCarousel} from '../../components/organisms/FeedCarousel';
+import {data} from './dummyData';
+import {Alert} from 'react-native';
+import {AdvertisementsCarousel} from '../../components/organisms/AdvertisementsCarousel';
+import {CreatedByShair} from '../../components/molecules/CreatedByShair';
+import {ServicesCarousel} from '../../components/organisms/ServicesCarousel';
+import TextTicker from 'react-native-text-ticker';
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
-
-const Item = () => {
-  return (
-    <Div>
-      <Div flexDir="row" mt="md">
-        <Div rounded="circle" bg="gray200" h={40} w={40} />
-        <Div ml="md" flex={1}>
-          <Div mt="sm" rounded="lg" h={15} bg="gray200" />
-          <Div mt="sm" w="80%" rounded="lg" h={15} bg="gray200" />
-          <Div mt="sm" rounded="lg" h={15} bg="gray200" />
-        </Div>
-      </Div>
-      <Div flexDir="row" mt="md">
-        <Div h={20} w={20} rounded="lg" bg="gray200" />
-        <Div h={20} w={20} rounded="lg" bg="gray200" ml="md" />
-        <Div alignItems="flex-end" flex={1}>
-          <Div h={20} w={100} bg="gray200" rounded="lg" />
-        </Div>
-      </Div>
-
-      <Div my="xl" />
-    </Div>
-  );
-};
 
 const Header = ({goToSearch}: {goToSearch: () => void}) => {
   return (
@@ -69,9 +51,16 @@ const Header = ({goToSearch}: {goToSearch: () => void}) => {
                 fontSize={14}
                 color="primary"
               />
-              <Text fontWeight="bold" mx={2} color="text">
-                Ricardo Palma 200
-              </Text>
+              <TextTicker
+                duration={5000}
+                loop
+                bounce
+                style={{width: 130, marginHorizontal: 4}}>
+                <Text fontWeight="bold" color="text">
+                  Ricardo Palma 200, La Libertad, Perú
+                </Text>
+              </TextTicker>
+
               <Icon
                 fontFamily="Ionicons"
                 name="chevron-down"
@@ -83,7 +72,12 @@ const Header = ({goToSearch}: {goToSearch: () => void}) => {
         </Div>
         <Div>
           <TouchableOpacity activeOpacity={0.7} onPress={goToSearch}>
-            <Icon fontFamily="Ionicons" name="search-outline" fontSize="4xl" />
+            <Icon
+              fontFamily="Ionicons"
+              name="search-outline"
+              color="text"
+              fontSize="4xl"
+            />
           </TouchableOpacity>
         </Div>
       </Div>
@@ -96,72 +90,42 @@ export const HomeController: FC<HomeScreenProps> = ({navigation}) => {
     navigation.navigate('SearchScreen');
   };
 
+  const onSeeMore = () => {
+    Alert.alert('jijijiji');
+  };
+
   return (
     <Div flex={1} bg="body">
       <Header goToSearch={goToSearch} />
       <ScrollView>
         <Div p="2xl">
-          <Pinar
-            bounces={false}
-            loop
-            height={150}
-            showsControls={false}
-            autoplay
-            autoplayInterval={2000}
-            mergeStyles
-            showsDots
-            dotsContainerStyle={{
-              position: 'absolute',
-              bottom: 10,
-            }}
-            activeDotStyle={{
-              backgroundColor: '#fe554a',
-            }}
-            dotStyle={{
-              backgroundColor: '#fee2e2',
-            }}
-            style={{borderRadius: 6, overflow: 'hidden'}}>
-            <Div
-              rounded="md"
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              bg="yellow500">
-              <Text>1</Text>
-            </Div>
-            <Div
-              rounded="md"
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              bg="lime500">
-              <Text>2</Text>
-            </Div>
-            <Div
-              rounded="md"
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              bg="teal500">
-              <Text>3</Text>
-            </Div>
-            <Div
-              rounded="md"
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              bg="violet500">
-              <Text>4</Text>
-            </Div>
-            <Div
-              rounded="md"
-              flex={1}
-              justifyContent="center"
-              alignItems="center"
-              bg="sky500">
-              <Text>5</Text>
-            </Div>
-          </Pinar>
+          <AdvertisementsCarousel data={data} />
+
+          <Div my="lg" />
+
+          <ServicesCarousel />
+
+          <Div my="lg" />
+
+          <Div>
+            <FeedCarousel title="Categorías 🏷️" onSeeMore={onSeeMore} />
+          </Div>
+
+          <Div my="lg" />
+
+          <Div>
+            <FeedCarousel title="Restaurantes 🍔" onSeeMore={onSeeMore} />
+          </Div>
+
+          <Div my="lg" />
+
+          <Div>
+            <FeedCarousel title="Popular 🔥" onSeeMore={onSeeMore} />
+          </Div>
+
+          <Div my="lg" />
+
+          <CreatedByShair bottom={10} />
         </Div>
       </ScrollView>
     </Div>
