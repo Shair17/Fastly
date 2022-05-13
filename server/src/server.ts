@@ -10,8 +10,9 @@ import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { bootstrap } from 'fastify-decorators';
+// import { noFavicon } from './plugins/no-favicon.plugin';
 import { schema } from './config/config.schema';
-import { AppController } from './controllers/v1';
+import { AppModule } from './app.module';
 
 // https://github.com/L2jLiga/fastify-decorators/
 
@@ -48,10 +49,6 @@ export default async function Server(
 		schema,
 	});
 
-	// server.register(require('fastify-file-upload'));
-
-	server.register(require('fastify-no-icon'));
-
 	server.register(require('@fastify/rate-limit'), {
 		max: 100,
 		timeWindow: '1 minute',
@@ -66,14 +63,28 @@ export default async function Server(
 
 	server.register(import('@fastify/compress'));
 
-	// server.register(require('fastify-routes-stats'));
+	server.register(import('@fastify/helmet'), {
+		global: true,
+		hidePoweredBy: true,
+	});
 
-	// server.get('/__stats', async function (_, reply) {
-	// reply.send(this.stats());
-	// });
+	server.register(import('@fastify/routes'));
+
+	server.register(import('@fastify/static'), {
+		root: resolve(__dirname, '../public'),
+	});
+
+	// server.register(noFavicon);
+	server.register(import('fastify-favicon'), {
+		path: './public',
+	});
+
+	server.register(import('fastify-healthcheck'), {
+		exposeUptime: true,
+	});
 
 	server.register(bootstrap, {
-		controllers: [AppController],
+		controllers: [...AppModule],
 	});
 
 	return server;

@@ -1,1 +1,0 @@
-Here goes the data base models (mongoose, typegoose, typeorm, etc)
