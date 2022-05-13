@@ -1,4 +1,5 @@
 import Server from './server';
+import { appHost } from './constants/app.constants';
 
 async function main() {
 	const startTime = performance.now();
@@ -23,7 +24,7 @@ async function main() {
 			app.log.info(
 				`Developed by @Shair17 <hello@shair.dev>, https://shair.dev`
 			);
-			await app.listen(+app.config.PORT, '0.0.0.0');
+			await app.listen(+app.config.PORT, appHost);
 		});
 	}
 }

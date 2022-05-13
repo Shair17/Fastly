@@ -1,10 +1,8 @@
 import { Service } from 'fastify-decorators';
-import { version as appVersion } from '../package.json';
+import { appVersion } from './constants/app.constants';
 
 @Service()
 export class AppService {
-	constructor() {}
-
 	getApp(): Object {
 		return {
 			appName: 'Fastly Delivery ⚡',

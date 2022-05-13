@@ -3,7 +3,7 @@
 	"private": true,
 	"version": "1.0.0",
 	"scripts": {
-		"start": "yarn build && node scripts/clear && node dist/main",
+		"start": "yarn build && node scripts/clear && node dist/src/main",
 		"dev": "yarn env:dev && node scripts/clear && nodemon | pino-pretty -c",
 		"env:dev": "cross-env NODE_ENV=development",
 		"build": "yarn clean && tsc",
@@ -32,7 +32,9 @@
 		"http-errors": "^2.0.0",
 		"http-status-codes": "^2.2.0",
 		"jsonwebtoken": "^8.5.1",
-		"reflect-metadata": "^0.1.13"
+		"mysql2": "^2.3.3",
+		"reflect-metadata": "^0.1.13",
+		"typeorm": "^0.3.6"
 	},
 	"devDependencies": {
 		"@types/http-errors": "^1.8.1",
