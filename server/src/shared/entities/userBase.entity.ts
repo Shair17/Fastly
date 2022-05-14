@@ -2,7 +2,6 @@ import { Column } from 'typeorm';
 import {
 	IsEmail,
 	IsString,
-	IsOptional,
 	IsUrl,
 	IsBoolean,
 	MinLength,
@@ -25,6 +24,11 @@ export abstract class UserBase extends Base {
 	@Column()
 	@IsString()
 	password: string;
+
+	@Column({
+		nullable: true,
+	})
+	refreshToken?: string;
 
 	@Column({
 		type: 'varchar',
@@ -59,13 +63,11 @@ export abstract class UserBase extends Base {
 		default: false,
 		nullable: true,
 	})
-	@IsOptional()
-	is_banned?: boolean;
+	is_banned: boolean;
 
 	@Column({
 		nullable: true,
 	})
-	@IsOptional()
 	ban_reason?: string;
 
 	@Column({

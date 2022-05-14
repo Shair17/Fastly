@@ -11,10 +11,15 @@ export abstract class UserAppBase extends Base {
 	email: string;
 
 	@Column({
+		nullable: true,
+	})
+	refreshToken?: string;
+
+	@Column({
 		default: false,
 		nullable: true,
 	})
-	is_banned?: boolean;
+	is_banned: boolean;
 
 	@Column({
 		nullable: true,
