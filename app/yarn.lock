@@ -6525,10 +6525,10 @@ react-native-fast-image@^8.5.11:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.11.tgz#e3dc969d0e4e8df026646bf18194465aa55cbc2b"
   integrity sha512-cNW4bIJg3nvKaheG8vGMfqCt5LMWX9MS5+wMudgKIHbGO51spRr4sgnlhVgwHLcZ5aeNOVJ8CPRxDIWKRq/0QA==
 
-react-native-fbsdk-next@^8.0.1:
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-fbsdk-next/-/react-native-fbsdk-next-8.0.3.tgz#ec756c6841670e8540645860a62a9ac140029081"
-  integrity sha512-c4SQTVEkR4BaV0MKAduibryqBw+At0K74Y4gtBka+wqpkAQD/ruSwYhi+LtxEs6fXJ/40HsumHv9MBzook4mgw==
+react-native-fbsdk-next@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-fbsdk-next/-/react-native-fbsdk-next-8.0.4.tgz#2a27459f21a0508ac86a4efdb1bbd65134c1a7d4"
+  integrity sha512-EvUdlYMTn0sB/XksmpI6y3rGMZbY31Vk+fbwWSq1ZbbGOvECVacY9gOSpmFZQF4QBSMYnsfk9yC6k4wTGYR3zA==
   dependencies:
     "@expo/config-plugins" "^4.0.4"
     xml2js "^0.4.23"

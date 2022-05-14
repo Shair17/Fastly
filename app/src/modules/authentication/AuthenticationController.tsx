@@ -1,6 +1,7 @@
 import React, {useState, FC} from 'react';
-import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
+import {StatusBar, SafeAreaView, ScrollView, Alert} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {AnimatedObject} from '../../components/atoms/AnimatedObject';
 import {Button} from '../../components/atoms/Button';
 import {FooterLegalLinks} from '../../components/molecules/FooterLegalLinks';
@@ -15,20 +16,76 @@ const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
-  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
   const setAuth = useAuthStore(s => s.setAuth);
 
   StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('transparent');
 
-  const loginWithFacebook = () => {
-    setAuth({
-      accessToken: 'some-access-token',
-      refreshToken: 'some-refresh-token',
-      isAuthenticated: true,
-      isNewUser: false,
-      user: {},
-    });
+  const loginWithFacebook = async () => {
+    try {
+      const {isCancelled} = await LoginManager.logInWithPermissions([
+        'public_profile',
+      ]);
+
+      setOverlayVisible(true);
+
+      if (isCancelled) {
+        Alert.alert(
+          'Error',
+          'El inicio de sesión con facebook fue cancelado por el usuario.',
+        );
+
+        setOverlayVisible(false);
+      } else {
+        const user = await AccessToken.getCurrentAccessToken();
+
+        if (user !== null) {
+          const {accessToken, userID} = user;
+
+          console.log({accessToken, userID});
+
+          try {
+            // Here make http calls to fastly auth api
+
+            console.log('i got');
+            console.log('here make http calls');
+
+            // Once we got tokens {accessToken, refreshToken}
+            // We need to store tokens into device memory and...
+            // Yey! we're logged in :D
+            // set isNewUser here
+
+            setOverlayVisible(false);
+          } catch (e) {
+            Alert.alert(
+              'Error',
+              'Error al conectarse al servidor de Fastly, intenta nuevamente en unos minutos.',
+            );
+            setOverlayVisible(false);
+          }
+        } else {
+          Alert.alert(
+            'Error',
+            'Los datos necesarios para iniciar sesión no fueron reicibidos correctamente.',
+          );
+          setOverlayVisible(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert(
+        'Error',
+        'Ocurrió un error al conectarse a la SDK de facebook.',
+      );
+      setOverlayVisible(false);
+    }
+    // setAuth({
+    //   accessToken: 'some-access-token',
+    //   refreshToken: 'some-refresh-token',
+    //   isAuthenticated: true,
+    //   isNewUser: false,
+    //   user: {},
+    // });
   };
 
   return (

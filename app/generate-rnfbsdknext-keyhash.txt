@@ -1,0 +1,5 @@
+Ejecutar este comando en cada computadora que se vaya a compilar la aplicación, SOLO DESARROLLO
+este comando solo sirve para desarrollo, para publicar la app ejecutar otro comando que está en
+la página de facebook: https://developers.facebook.com/docs/android/getting-started/
+
+keytool -exportcert -alias androiddebugkey -keystore C:\Users\Mi\Documents\proyects\Fastly\app\android\debug.keystore | openssl sha1 -binary | openssl base64
