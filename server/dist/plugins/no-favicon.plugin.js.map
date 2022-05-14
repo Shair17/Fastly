@@ -1,1 +1,0 @@
-{"version":3,"file":"no-favicon.plugin.js","sourceRoot":"","sources":["../../src/plugins/no-favicon.plugin.ts"],"names":[],"mappings":";;;AACA,yDAAgD;AAEzC,KAAK,UAAU,SAAS,CAAC,OAAwB;IACtD,OAAO,CAAC,GAAG,CAAC,cAAc,EAAE,CAAC,CAAC,EAAE,KAAK,EAAE,EAAE;QACvC,KAAK,CAAC,IAAI,CAAC,+BAAW,CAAC,SAAS,CAAC,CAAC,IAAI,EAAE,CAAC;IAC3C,CAAC,CAAC,CAAC;AACL,CAAC;AAJD,8BAIC"}

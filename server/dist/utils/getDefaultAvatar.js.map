@@ -1,1 +1,0 @@
-{"version":3,"file":"getDefaultAvatar.js","sourceRoot":"","sources":["../../src/utils/getDefaultAvatar.ts"],"names":[],"mappings":";;;AAAO,MAAM,gBAAgB,GAAG,CAAC,IAAa,EAAE,EAAE;IAChD,IAAI,IAAI,EAAE;QACR,OAAO,8EAA8E,IAAI,CAAC,QAAQ,EAAE,yDAAyD,CAAC;KAC/J;IAED,OAAO,yHAAyH,CAAC;AACnI,CAAC,CAAC;AANW,QAAA,gBAAgB,oBAM3B"}
