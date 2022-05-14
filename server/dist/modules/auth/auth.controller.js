@@ -19,6 +19,36 @@ let AuthController = class AuthController {
     async logInWithFacebook() {
         return 'facebook';
     }
+    async refreshFacebookTokens() {
+        return 'facebook refresh';
+    }
+    async loginAdmin() {
+        return 'admin login';
+    }
+    async registerAdmin() {
+        return 'admin register';
+    }
+    async refreshAdminTokens() {
+        return 'admin refresh';
+    }
+    async loginCustomer() {
+        return 'customer login';
+    }
+    async registerCustomer() {
+        return 'customer register';
+    }
+    async refreshCustomerTokens() {
+        return 'customer refresh';
+    }
+    async loginDealer() {
+        return 'dealer login';
+    }
+    async registerDealer() {
+        return 'dealer register';
+    }
+    async refreshDealerTokens() {
+        return 'dealer refresh';
+    }
 };
 __decorate([
     (0, fastify_decorators_1.POST)('/facebook'),
@@ -26,6 +56,66 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logInWithFacebook", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/facebook/refresh'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refreshFacebookTokens", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/admin/login'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "loginAdmin", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/admin/register'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "registerAdmin", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/admin/refresh'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refreshAdminTokens", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/customer/login'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "loginCustomer", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/customer/register'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "registerCustomer", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/customer/refresh'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refreshCustomerTokens", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/dealer/login'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "loginDealer", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/dealer/register'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "registerDealer", null);
+__decorate([
+    (0, fastify_decorators_1.POST)('/dealer/refresh'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refreshDealerTokens", null);
 AuthController = __decorate([
     (0, fastify_decorators_1.Controller)('/auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

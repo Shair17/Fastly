@@ -11,18 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const fastify_decorators_1 = require("fastify-decorators");
-const user_facade_1 = require("./user.facade");
+const user_entity_1 = require("./user.entity");
+const DataSourceProvider_1 = require("../../database/DataSourceProvider");
 let UserService = class UserService {
-    constructor(userFacade) {
-        this.userFacade = userFacade;
+    constructor(dataSourceProvider) {
+        this.dataSourceProvider = dataSourceProvider;
     }
-    async getUsers() {
-        return await this.userFacade.getUsers();
+    async init() {
+        this.userRepository =
+            this.dataSourceProvider.dataSource.getRepository(user_entity_1.User);
     }
+    async getUsers() { }
 };
+__decorate([
+    (0, fastify_decorators_1.Initializer)([DataSourceProvider_1.DataSourceProvider]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserService.prototype, "init", null);
 UserService = __decorate([
     (0, fastify_decorators_1.Service)(),
-    __metadata("design:paramtypes", [user_facade_1.UserFacade])
+    __metadata("design:paramtypes", [DataSourceProvider_1.DataSourceProvider])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

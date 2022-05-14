@@ -14,8 +14,4 @@ export class AdminService {
 		this.adminRepository =
 			this.dataSourceProvider.dataSource.getRepository(Admin);
 	}
-
-	async getAll() {
-		return this.adminRepository.count();
-	}
 }

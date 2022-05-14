@@ -19,6 +19,7 @@ class UserBase extends base_entity_1.Base {
 }
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserBase.prototype, "name", void 0);
 __decorate([
@@ -28,12 +29,15 @@ __decorate([
 ], UserBase.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserBase.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         default: defaultAvatar,
     }),
+    (0, class_validator_1.IsUrl)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UserBase.prototype, "avatar", void 0);
 __decorate([
@@ -45,18 +49,21 @@ __decorate([
         default: false,
         nullable: true,
     }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
 ], UserBase.prototype, "is_banned", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         nullable: true,
     }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UserBase.prototype, "ban_reason", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         default: false,
     }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], UserBase.prototype, "is_active", void 0);
 exports.UserBase = UserBase;

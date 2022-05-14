@@ -1,42 +1,76 @@
-import { Column } from "typeorm";
-import { IsEmail } from "class-validator";
-import { Base } from "./base.entity";
-import { getDefaultAvatar } from "../../utils/getDefaultAvatar";
+import { Column } from 'typeorm';
+import {
+	IsEmail,
+	IsString,
+	IsOptional,
+	IsUrl,
+	IsBoolean,
+	MinLength,
+	MaxLength,
+} from 'class-validator';
+import { Base } from './base.entity';
+import { getDefaultAvatar } from '../../utils/getDefaultAvatar';
 
 const defaultAvatar = getDefaultAvatar(100);
 
 export abstract class UserBase extends Base {
-  @Column()
-  name: string;
+	@Column()
+	@IsString()
+	name: string;
 
-  @Column()
-  @IsEmail()
-  email: string;
+	@Column()
+	@IsEmail()
+	email: string;
 
-  @Column()
-  password: string;
+	@Column()
+	@IsString()
+	password: string;
 
-  @Column({
-    default: defaultAvatar,
-  })
-  avatar?: string;
+	@Column({
+		type: 'varchar',
+		length: 8,
+	})
+	@MinLength(8)
+	@MaxLength(8)
+	dni: string;
 
-  @Column()
-  birth_date: Date;
+	@Column({
+		type: 'varchar',
+		length: 9,
+	})
+	@MinLength(9)
+	@MaxLength(9)
+	phone: string;
 
-  @Column({
-    default: false,
-    nullable: true,
-  })
-  is_banned?: boolean;
+	@Column()
+	@IsString()
+	address: string;
 
-  @Column({
-    nullable: true,
-  })
-  ban_reason?: string;
+	@Column({
+		default: defaultAvatar,
+	})
+	@IsUrl()
+	avatar?: string;
 
-  @Column({
-    default: false,
-  })
-  is_active: boolean;
+	@Column()
+	birth_date: Date;
+
+	@Column({
+		default: false,
+		nullable: true,
+	})
+	@IsOptional()
+	is_banned?: boolean;
+
+	@Column({
+		nullable: true,
+	})
+	@IsOptional()
+	ban_reason?: string;
+
+	@Column({
+		default: false,
+	})
+	@IsBoolean()
+	is_active: boolean;
 }

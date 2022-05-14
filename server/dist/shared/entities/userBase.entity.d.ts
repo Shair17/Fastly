@@ -1,4 +1,4 @@
-import { Base } from "./base.entity";
+import { Base } from './base.entity';
 export declare abstract class UserBase extends Base {
     name: string;
     email: string;

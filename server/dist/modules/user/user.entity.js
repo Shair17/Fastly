@@ -11,13 +11,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const class_validator_1 = require("class-validator");
 const userAppBase_entity_1 = require("../../shared/entities/userAppBase.entity");
 let User = class User extends userAppBase_entity_1.UserAppBase {
 };
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], User.prototype, "facebookId", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], User.prototype, "facebookAccessToken", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        length: 9,
+    }),
+    (0, class_validator_1.MinLength)(9),
+    (0, class_validator_1.MaxLength)(9),
+    __metadata("design:type", String)
+], User.prototype, "phone", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'varchar',
+        length: 8,
+    }),
+    (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MaxLength)(8),
+    __metadata("design:type", String)
+], User.prototype, "dni", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);

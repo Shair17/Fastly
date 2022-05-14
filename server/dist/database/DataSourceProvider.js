@@ -22,28 +22,28 @@ const store_entity_1 = require("../modules/store/store.entity");
 let DataSourceProvider = class DataSourceProvider {
     constructor() {
         this.fastify = (0, fastify_decorators_1.getInstanceByToken)(fastify_decorators_1.FastifyInstanceToken);
-    }
-    get dataSource() {
-        const { DATABASE_HOST, DATABASE_PORT, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, } = this.fastify.config;
-        return new typeorm_1.DataSource({
+        this._dataSource = new typeorm_1.DataSource({
             type: 'mysql',
-            host: DATABASE_HOST,
-            port: +DATABASE_PORT,
-            username: DATABASE_USERNAME,
-            password: DATABASE_PASSWORD,
-            database: DATABASE_NAME,
+            host: this.fastify.config.DATABASE_HOST,
+            port: +this.fastify.config.DATABASE_PORT,
+            username: this.fastify.config.DATABASE_USERNAME,
+            password: this.fastify.config.DATABASE_PASSWORD,
+            database: this.fastify.config.DATABASE_NAME,
             entities: [admin_entity_1.Admin, customer_entity_1.Customer, dealer_entity_1.Dealer, user_entity_1.User, order_entity_1.Order, product_entity_1.Product, store_entity_1.Store],
             synchronize: true,
         });
     }
+    get dataSource() {
+        return this._dataSource;
+    }
     async init() {
         let startTime = performance.now();
-        await this.dataSource.initialize();
+        await this._dataSource.initialize();
         let endTime = performance.now();
         this.fastify.log.info(`TypeORM Module has established the connection to the database and it took ${Math.floor(endTime - startTime)} ms`);
     }
     async destroy() {
-        await this.dataSource.destroy();
+        await this._dataSource.destroy();
     }
 };
 __decorate([
