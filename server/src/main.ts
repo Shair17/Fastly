@@ -10,6 +10,10 @@ async function main() {
 		ignoreTrailingSlash: true,
 	});
 
+	app.log.info(
+		`Starting Fastly server application at ${new Date().toString()}`
+	);
+
 	const endTime = performance.now();
 
 	if (!!(require.main && module.children)) {

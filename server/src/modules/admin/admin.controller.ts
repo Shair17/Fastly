@@ -1,4 +1,12 @@
-import { Controller } from 'fastify-decorators';
+import { Controller, GET as Get } from 'fastify-decorators';
+import { AdminService } from './admin.service';
 
-@Controller()
-export class AdminController {}
+@Controller('/admins')
+export class AdminController {
+	constructor(private readonly adminService: AdminService) {}
+
+	@Get('/')
+	async getAll() {
+		return this.adminService.getAll();
+	}
+}

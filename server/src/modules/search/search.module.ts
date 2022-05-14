@@ -1,3 +1,3 @@
-import { SearchController } from './search.controller';
+import { SearchController } from "./search.controller";
 
 export const SearchModule = [SearchController];

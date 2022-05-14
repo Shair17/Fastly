@@ -1,3 +1,3 @@
-import { AdminController } from './admin.controller';
+import { AdminController } from "./admin.controller";
 
 export const AdminModule = [AdminController];

@@ -1,9 +1,9 @@
 {
-	"name": "fastify-starter",
+	"name": "fastly-server",
 	"private": true,
 	"version": "1.0.0",
 	"scripts": {
-		"start": "yarn build && node scripts/clear && node dist/src/main",
+		"start": "yarn build && node scripts/clear && node dist/main",
 		"dev": "yarn env:dev && node scripts/clear && nodemon | pino-pretty -c",
 		"env:dev": "cross-env NODE_ENV=development",
 		"build": "yarn clean && tsc",
@@ -23,6 +23,7 @@
 		"ajv": "^8.6.1",
 		"argon2": "^0.28.5",
 		"axios": "^0.27.2",
+		"class-validator": "^0.13.2",
 		"cross-env": "^7.0.3",
 		"fastify": "^3.29.0",
 		"fastify-decorators": "^3.11.0",

@@ -10,11 +10,8 @@ import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { bootstrap } from 'fastify-decorators';
-// import { noFavicon } from './plugins/no-favicon.plugin';
-import { schema } from './config/config.schema';
+import { configSchema } from './config/config.schema';
 import { AppModule } from './app.module';
-
-// https://github.com/L2jLiga/fastify-decorators/
 
 declare module 'fastify' {
 	// interface FastifyRequest {
@@ -24,6 +21,12 @@ declare module 'fastify' {
 	interface FastifyInstance {
 		config: {
 			PORT: string;
+			DATABASE_TYPE: string;
+			DATABASE_HOST: string;
+			DATABASE_PORT: number;
+			DATABASE_USERNAME: string;
+			DATABASE_PASSWORD: string;
+			DATABASE_NAME: string;
 		};
 	}
 }
@@ -46,7 +49,7 @@ export default async function Server(
 			// debug: true,
 		},
 		confKey: 'config',
-		schema,
+		schema: configSchema,
 	});
 
 	server.register(require('@fastify/rate-limit'), {
@@ -74,7 +77,6 @@ export default async function Server(
 		root: resolve(__dirname, '../public'),
 	});
 
-	// server.register(noFavicon);
 	server.register(import('fastify-favicon'), {
 		path: './public',
 	});
@@ -84,6 +86,7 @@ export default async function Server(
 	});
 
 	server.register(bootstrap, {
+		prefix: '/v1',
 		controllers: [...AppModule],
 	});
 
