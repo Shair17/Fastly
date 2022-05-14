@@ -8,7 +8,8 @@
 		"env:dev": "cross-env NODE_ENV=development",
 		"build": "yarn clean && tsc",
 		"clean": "rimraf dist",
-		"format": "prettier --write \"src/**/*.ts\""
+		"format": "prettier --write \"src/**/*.ts\"",
+		"createSecret": "node scripts/createSecret"
 	},
 	"license": "MIT",
 	"dependencies": {
