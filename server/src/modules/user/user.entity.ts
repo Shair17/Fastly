@@ -15,16 +15,18 @@ export class User extends UserAppBase {
 	@Column({
 		type: 'varchar',
 		length: 9,
+		nullable: true,
 	})
 	@MinLength(9)
 	@MaxLength(9)
-	phone: string;
+	phone?: string;
 
 	@Column({
 		type: 'varchar',
 		length: 8,
+		nullable: true,
 	})
 	@MinLength(8)
 	@MaxLength(8)
-	dni: string;
+	dni?: string;
 }

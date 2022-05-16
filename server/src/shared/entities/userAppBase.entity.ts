@@ -6,9 +6,14 @@ export abstract class UserAppBase extends Base {
 	@Column()
 	name: string;
 
-	@Column()
+	// Nullable porque facebook graph api solo devuelve {id, name} ._.
+	// antes devolvía el correo, ahora ya no...
+	// pediremos el correo al usuario una vez haya iniciado sesión.
+	@Column({
+		nullable: true,
+	})
 	@IsEmail()
-	email: string;
+	email?: string;
 
 	@Column({
 		nullable: true,
@@ -19,15 +24,16 @@ export abstract class UserAppBase extends Base {
 		default: false,
 		nullable: true,
 	})
-	is_banned: boolean;
+	is_banned?: boolean;
 
 	@Column({
 		nullable: true,
 	})
 	ban_reason?: string;
 
-	@Column({
-		default: false,
-	})
-	is_active: boolean;
+	// * Creo que no es necesario tener una columna indicando si el usuario está activo
+	// @Column({
+	// 	default: false,
+	// })
+	// is_active: boolean;
 }

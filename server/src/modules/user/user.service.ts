@@ -15,5 +15,30 @@ export class UserService {
 			this.dataSourceProvider.dataSource.getRepository(User);
 	}
 
-	async getUsers() {}
+	count(): Promise<number> {
+		return this.userRepository.count();
+	}
+
+	// remove later
+	getUsers() {
+		return '';
+	}
+
+	getUserById(id: string): Promise<User | null> {
+		return this.userRepository.findOneBy({ id });
+	}
+
+	getUserByFacebookUserID(facebookUserID: string): Promise<User | null> {
+		return this.userRepository.findOne({
+			where: { facebookId: facebookUserID },
+		});
+	}
+
+	getUserByEmail(email: string): Promise<User | null> {
+		return this.userRepository.findOneBy({ email });
+	}
+
+	save(user: Partial<User>): Promise<Partial<User> & User> {
+		return this.userRepository.save(user);
+	}
 }

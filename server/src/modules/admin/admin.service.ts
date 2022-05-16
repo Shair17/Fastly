@@ -14,4 +14,16 @@ export class AdminService {
 		this.adminRepository =
 			this.dataSourceProvider.dataSource.getRepository(Admin);
 	}
+
+	count() {
+		return this.adminRepository.count();
+	}
+
+	getAdminById(id: string): Promise<Admin | null> {
+		return this.adminRepository.findOneBy({ id });
+	}
+
+	getAdminByEmail(email: string): Promise<Admin | null> {
+		return this.adminRepository.findOneBy({ email });
+	}
 }
