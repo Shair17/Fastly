@@ -5,7 +5,6 @@ import Fastify, {
 	FastifyInstance,
 	FastifyLoggerInstance,
 } from 'fastify';
-import fastifyEnv from '@fastify/env';
 import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
@@ -14,9 +13,12 @@ import { configSchema } from './config/config.schema';
 import { AppModule } from './app.module';
 
 declare module 'fastify' {
-	// interface FastifyRequest {
-	// 	userId: string;
-	// }
+	interface FastifyRequest {
+		userId: string;
+		adminId: string;
+		customerId: string;
+		dealerId: string;
+	}
 
 	interface FastifyInstance {
 		config: {
@@ -61,7 +63,7 @@ export default async function Server(
 > {
 	const server: FastifyInstance = Fastify(opts);
 
-	server.register(fastifyEnv, {
+	server.register(import('@fastify/env'), {
 		dotenv: {
 			path: resolve(__dirname, '../.env'),
 			// debug: true,
@@ -70,7 +72,7 @@ export default async function Server(
 		schema: configSchema,
 	});
 
-	server.register(require('@fastify/rate-limit'), {
+	server.register(import('@fastify/rate-limit'), {
 		max: 100,
 		timeWindow: '1 minute',
 	});

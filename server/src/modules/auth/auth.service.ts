@@ -52,7 +52,7 @@ export class AuthService {
 			);
 		}
 
-		const user = await this.userService.getUserByFacebookUserID(facebookId);
+		const user = await this.userService.getByFacebookUserID(facebookId);
 
 		// El usuario ya tiene una cuenta, entonces procedemos a verificar si está baneado y/o tiene direcciones
 		if (user !== null) {
@@ -95,12 +95,28 @@ export class AuthService {
 	async logInAdmin(data: CommonUserLoginType) {
 		const [email] = trimStrings(data.email);
 
-		const admin = await this.adminService.getAdminByEmail(email);
+		const admin = await this.adminService.getByEmail(email);
 
-		return {
-			email,
-			password: data.password,
-		};
+		if (!admin) {
+			console.log('no hay el admin');
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (!(await this.passwordService.verify(admin.password, data.password))) {
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (admin.is_banned) {
+			throw new Unauthorized('banned');
+		}
+
+		if (!admin.is_active) {
+			throw new Unauthorized('inactive_account');
+		}
+
+		// retornar tokens
+
+		return {};
 	}
 
 	async registerAdmin() {}
@@ -112,10 +128,31 @@ export class AuthService {
 	async loginCustomer(data: CommonUserLoginType) {
 		const [email] = trimStrings(data.email);
 
-		return {
-			email,
-			password: data.password,
-		};
+		const customer = await this.customerService.getByEmail(email);
+
+		if (!customer) {
+			console.log('no hay el customer');
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (
+			!(await this.passwordService.verify(customer.password, data.password))
+		) {
+			console.log('contraseña incorrecta del customer');
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (customer.is_banned) {
+			throw new Unauthorized('banned');
+		}
+
+		if (!customer.is_active) {
+			throw new Unauthorized('inactive_account');
+		}
+
+		// Devolver tokens
+
+		return {};
 	}
 
 	async registerCustomer() {}
@@ -127,10 +164,29 @@ export class AuthService {
 	async loginDealer(data: CommonUserLoginType) {
 		const [email] = trimStrings(data.email);
 
-		return {
-			email,
-			password: data.password,
-		};
+		const dealer = await this.dealerService.getByEmail(email);
+
+		if (!dealer) {
+			console.log('no hay el dealer');
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (!(await this.passwordService.verify(dealer.password, data.password))) {
+			console.log('contraseña incorrecta del dealer');
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		if (dealer.is_banned) {
+			throw new Unauthorized('banned');
+		}
+
+		if (!dealer.is_active) {
+			throw new Unauthorized('inactive_account');
+		}
+
+		// Devolver tokens
+
+		return {};
 	}
 
 	async registerDealer() {}

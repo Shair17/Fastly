@@ -2,6 +2,7 @@ import { Initializer, Service } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Unauthorized } from 'http-errors';
 
 @Service()
 export class AdminService {
@@ -19,11 +20,29 @@ export class AdminService {
 		return this.adminRepository.count();
 	}
 
-	getAdminById(id: string): Promise<Admin | null> {
+	async me(id: string) {
+		const admin = await this.getById(id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		const { password, ...rest } = admin;
+
+		return {
+			...rest,
+		};
+	}
+
+	getById(id: string): Promise<Admin | null> {
 		return this.adminRepository.findOneBy({ id });
 	}
 
-	getAdminByEmail(email: string): Promise<Admin | null> {
+	getByEmail(email: string): Promise<Admin | null> {
 		return this.adminRepository.findOneBy({ email });
+	}
+
+	save(admin: Admin) {
+		return this.adminRepository.save(admin);
 	}
 }

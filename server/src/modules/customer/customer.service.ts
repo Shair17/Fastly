@@ -14,4 +14,16 @@ export class CustomerService {
 		this.customerRepository =
 			this.dataSourceProvider.dataSource.getRepository(Customer);
 	}
+
+	me(customerId: string) {
+		return '';
+	}
+
+	getByEmail(email: string): Promise<Customer | null> {
+		return this.customerRepository.findOneBy({ email });
+	}
+
+	save(customer: Customer) {
+		return this.customerRepository.save(customer);
+	}
 }

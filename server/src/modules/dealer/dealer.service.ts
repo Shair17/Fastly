@@ -14,4 +14,16 @@ export class DealerService {
 		this.dealerRepository =
 			this.dataSourceProvider.dataSource.getRepository(Dealer);
 	}
+
+	me(dealerId: string) {
+		return '';
+	}
+
+	getByEmail(email: string): Promise<Dealer | null> {
+		return this.dealerRepository.findOneBy({ email });
+	}
+
+	save(dealer: Dealer) {
+		return this.dealerRepository.save(dealer);
+	}
 }

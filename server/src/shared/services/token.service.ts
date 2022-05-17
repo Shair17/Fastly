@@ -45,4 +45,12 @@ export class TokenService {
 		this.fastify.config.JWT_DEALER_REFRESH_SECRET_EXPIRES_IN;
 
 	constructor(private readonly jwtService: JwtService) {}
+
+	generateUserTokens() {}
+
+	generateAdminTokens() {}
+
+	generateCustomerTokens() {}
+
+	generateDealerTokens() {}
 }

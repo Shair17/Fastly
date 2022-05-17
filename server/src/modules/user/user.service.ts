@@ -15,6 +15,10 @@ export class UserService {
 			this.dataSourceProvider.dataSource.getRepository(User);
 	}
 
+	me(userId: string) {
+		return '';
+	}
+
 	count(): Promise<number> {
 		return this.userRepository.count();
 	}
@@ -24,17 +28,17 @@ export class UserService {
 		return '';
 	}
 
-	getUserById(id: string): Promise<User | null> {
+	getById(id: string): Promise<User | null> {
 		return this.userRepository.findOneBy({ id });
 	}
 
-	getUserByFacebookUserID(facebookUserID: string): Promise<User | null> {
+	getByFacebookUserID(facebookUserID: string): Promise<User | null> {
 		return this.userRepository.findOne({
 			where: { facebookId: facebookUserID },
 		});
 	}
 
-	getUserByEmail(email: string): Promise<User | null> {
+	getByEmail(email: string): Promise<User | null> {
 		return this.userRepository.findOneBy({ email });
 	}
 
