@@ -1,4 +1,4 @@
-import { Column } from 'typeorm';
+import { Column, AfterLoad } from 'typeorm';
 import {
 	IsEmail,
 	IsString,
@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 import { Base } from './base.entity';
 import { getDefaultAvatar } from '../../utils/getDefaultAvatar';
+import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
 
 const defaultAvatar = getDefaultAvatar(100);
 
@@ -57,11 +58,6 @@ export abstract class UserBase extends Base {
 	avatar?: string;
 
 	@Column({
-		name: 'birth_date',
-	})
-	birthDate: Date;
-
-	@Column({
 		default: false,
 		nullable: true,
 		name: 'is_banned',
@@ -80,4 +76,16 @@ export abstract class UserBase extends Base {
 	})
 	@IsBoolean()
 	isActive: boolean;
+
+	@Column({
+		name: 'birth_date',
+	})
+	birthDate: Date;
+
+	age: number;
+
+	@AfterLoad()
+	calcUserAge() {
+		this.age = calcAgeFromDate(this.birthDate);
+	}
 }

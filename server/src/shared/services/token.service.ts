@@ -5,6 +5,7 @@ import {
 	getInstanceByToken,
 } from 'fastify-decorators';
 import { JwtService } from './jwt.service';
+import { TokenType } from './token.type';
 
 @Service()
 export class TokenService {
@@ -46,11 +47,10 @@ export class TokenService {
 
 	constructor(private readonly jwtService: JwtService) {}
 
-	generateUserTokens() {}
-
-	generateAdminTokens() {}
-
-	generateCustomerTokens() {}
-
-	generateDealerTokens() {}
+	generateTokens(type: TokenType) {
+		return {
+			accessToken: '',
+			refreshToken: '',
+		};
+	}
 }

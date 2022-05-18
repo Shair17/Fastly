@@ -20,14 +20,14 @@ export class DealerService {
 		return this.dealerRepository.count();
 	}
 
-	async me(dealerId: string): Promise<Omit<Dealer, 'password'>> {
+	async me(dealerId: string) {
 		const dealer = await this.getById(dealerId);
 
 		if (!dealer) {
 			throw new Unauthorized();
 		}
 
-		const { password, ...restOfDealer } = dealer;
+		const { password, calcUserAge, ...restOfDealer } = dealer;
 
 		return restOfDealer;
 	}

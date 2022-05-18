@@ -177,28 +177,28 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 	{ headers, dealerId },
 	reply
 ) => {
-	const token = headers.authorization?.split(' ')[1];
-
-	const decoded = jwt.verify(token!, process.env.JWT_DEALER_SECRET!) as {
-		dealerId: string;
-	};
-
-	const dealer = await dealerRepository.findOneBy({ id: decoded.dealerId });
-
-	if (!dealer) {
-		throw new Unauthorized();
-	}
-
-	if (dealer.isBanned) {
-		throw new Unauthorized('banned');
-	}
-
-	if (!dealer.isActive) {
-		throw new Unauthorized('inactive_account');
-	}
-
-	dealerId = dealer.id;
 	try {
+		const token = headers.authorization?.split(' ')[1];
+
+		const decoded = jwt.verify(token!, process.env.JWT_DEALER_SECRET!) as {
+			dealerId: string;
+		};
+
+		const dealer = await dealerRepository.findOneBy({ id: decoded.dealerId });
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		if (dealer.isBanned) {
+			throw new Unauthorized('banned');
+		}
+
+		if (!dealer.isActive) {
+			throw new Unauthorized('inactive_account');
+		}
+
+		dealerId = dealer.id;
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
 			throw new Unauthorized(`token_expired`);

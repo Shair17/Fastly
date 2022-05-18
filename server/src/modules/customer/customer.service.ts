@@ -20,14 +20,14 @@ export class CustomerService {
 		return this.customerRepository.count();
 	}
 
-	async me(customerId: string): Promise<Omit<Customer, 'password'>> {
+	async me(customerId: string) {
 		const customer = await this.getById(customerId);
 
 		if (!customer) {
 			throw new Unauthorized();
 		}
 
-		const { password, ...restOfCustomer } = customer;
+		const { password, calcUserAge, ...restOfCustomer } = customer;
 
 		return restOfCustomer;
 	}

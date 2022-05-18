@@ -7,7 +7,7 @@ export class Dealer extends UserBase {
 	@Column({
 		type: 'enum',
 		enum: DealerVehicle,
-		default: DealerVehicle.PIE,
+		default: DealerVehicle.NONE,
 	})
 	vehicle: DealerVehicle;
 

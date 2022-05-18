@@ -19,7 +19,6 @@ import { Unauthorized, NotFound, BadRequest } from 'http-errors';
 import { CustomerService } from '../customer/customer.service';
 import { DealerService } from '../dealer/dealer.service';
 import { TokenService } from '../../shared/services/token.service';
-import { validate } from 'class-validator';
 
 @Service()
 export class AuthService {
@@ -51,7 +50,6 @@ export class AuthService {
 			facebookId = data.id;
 			name = data.name;
 		} catch (err) {
-			console.log('data not found');
 			throw new NotFound('data_not_found');
 		}
 
@@ -75,8 +73,10 @@ export class AuthService {
 				throw new Unauthorized('banned');
 			}
 
-			// retornar tokens {accessToken, refreshToken}
-			return {};
+			const tokens = this.tokenService.generateTokens('user');
+
+			// TODO también devolver datos del usuario
+			return tokens;
 		}
 
 		// El usuario es nuevo, vamos a crear uno!
@@ -87,14 +87,13 @@ export class AuthService {
 			name,
 		});
 
-		// crear los tokens
 		// const tokens = await this.tokensService.generateTokens('user', {
 		// 	userId: newUser.id,
 		// });
+		const tokens = this.tokenService.generateTokens('user');
 
-		// retornar tokens
-		// y si es un nuevo usuario
-		return {};
+		// TODO también devolver datos del usuario
+		return tokens;
 	}
 
 	async refreshFacebookTokens() {}
@@ -123,9 +122,10 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		// retornar tokens
+		const tokens = this.tokenService.generateTokens('admin');
 
-		return {};
+		// TODO también devolver datos del admin
+		return tokens;
 	}
 
 	async registerAdmin(data: AdminRegisterType) {
@@ -166,12 +166,13 @@ export class AuthService {
 			isActive: numberOfAdmins === 0,
 		});
 
-		// crear tokens y devolverlos
+		const tokens = this.tokenService.generateTokens('admin');
 
-		return {
-			success: true,
-		};
+		// TODO también devolver datos del admin
+		return tokens;
 	}
+
+	async changeAdminPassword() {}
 
 	async refreshAdminTokens() {}
 
@@ -202,16 +203,22 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		// Devolver tokens
+		const tokens = this.tokenService.generateTokens('customer');
 
-		return {};
+		// TODO también devolver datos del customer
+		return tokens;
 	}
 
 	async registerCustomer(data: CustomerRegisterType) {
 		const [] = trimStrings();
 
-		return {};
+		const tokens = this.tokenService.generateTokens('customer');
+
+		// TODO también devolver datos del usuario
+		return tokens;
 	}
+
+	async changeCustomerPassword() {}
 
 	async refreshCustomerTokens() {}
 
@@ -240,14 +247,29 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		// Devolver tokens
+		const tokens = this.tokenService.generateTokens('dealer');
 
-		return {};
+		// TODO también devolver datos del usuario
+		return tokens;
 	}
 
 	async registerDealer(data: DealerRegisterType) {
-		return {};
+		const [address, birthDate, dni, email, name, phone] = trimStrings(
+			data.address,
+			data.birthDate,
+			data.dni,
+			data.email,
+			data.name,
+			data.phone
+		);
+
+		const tokens = this.tokenService.generateTokens('dealer');
+
+		// TODO también devolver datos del usuario
+		return tokens;
 	}
+
+	async changeDealerPassword() {}
 
 	async refreshDealerTokens() {}
 

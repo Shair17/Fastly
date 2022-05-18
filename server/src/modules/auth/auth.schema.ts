@@ -40,6 +40,16 @@ export const AdminRegister = Type.Object(
 	}
 );
 export type AdminRegisterType = Static<typeof AdminRegister>;
+export const ChangeAdminPassword = Type.Object(
+	{
+		oldPassword: Type.String(),
+		newPassword: Type.String(),
+	},
+	{
+		additionalProperties: false,
+	}
+);
+export type ChangeAdminPasswordType = Static<typeof ChangeAdminPassword>;
 
 // customer
 export const CustomerLogin = Type.Object(
@@ -69,6 +79,16 @@ export const CustomerRegister = Type.Object(
 	}
 );
 export type CustomerRegisterType = Static<typeof CustomerRegister>;
+export const ChangeCustomerPassword = Type.Object(
+	{
+		oldPassword: Type.String(),
+		newPassword: Type.String(),
+	},
+	{
+		additionalProperties: false,
+	}
+);
+export type ChangeCustomerPasswordType = Static<typeof ChangeCustomerPassword>;
 
 // dealer
 export const DealerLogin = Type.Object(
@@ -98,3 +118,13 @@ export const DealerRegister = Type.Object(
 	}
 );
 export type DealerRegisterType = Static<typeof DealerRegister>;
+export const ChangeDealerPassword = Type.Object(
+	{
+		oldPassword: Type.String(),
+		newPassword: Type.String(),
+	},
+	{
+		additionalProperties: false,
+	}
+);
+export type ChangeDealerPasswordType = Static<typeof ChangeDealerPassword>;

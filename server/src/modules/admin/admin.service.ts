@@ -20,14 +20,14 @@ export class AdminService {
 		return this.adminRepository.count();
 	}
 
-	async me(id: string): Promise<Omit<Admin, 'password'>> {
+	async me(id: string) {
 		const admin = await this.getById(id);
 
 		if (!admin) {
 			throw new Unauthorized();
 		}
 
-		const { password, ...restOfAdmin } = admin;
+		const { password, calcUserAge, ...restOfAdmin } = admin;
 
 		return restOfAdmin;
 	}

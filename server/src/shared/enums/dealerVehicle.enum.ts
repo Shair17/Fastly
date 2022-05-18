@@ -3,4 +3,5 @@ export enum DealerVehicle {
 	MOTO = 'Moto',
 	BICICLETA = 'Bicicleta',
 	PIE = 'Pie',
+	NONE = 'None',
 }
