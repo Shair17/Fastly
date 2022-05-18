@@ -10,6 +10,11 @@ import {
 export class AdminController {
 	constructor(private readonly adminService: AdminService) {}
 
+	@Get('/count')
+	async count() {
+		return this.adminService.count();
+	}
+
 	@Get('/me', {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})

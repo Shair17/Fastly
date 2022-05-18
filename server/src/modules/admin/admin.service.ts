@@ -20,18 +20,16 @@ export class AdminService {
 		return this.adminRepository.count();
 	}
 
-	async me(id: string) {
+	async me(id: string): Promise<Omit<Admin, 'password'>> {
 		const admin = await this.getById(id);
 
 		if (!admin) {
 			throw new Unauthorized();
 		}
 
-		const { password, ...rest } = admin;
+		const { password, ...restOfAdmin } = admin;
 
-		return {
-			...rest,
-		};
+		return restOfAdmin;
 	}
 
 	getById(id: string): Promise<Admin | null> {
@@ -42,7 +40,7 @@ export class AdminService {
 		return this.adminRepository.findOneBy({ email });
 	}
 
-	save(admin: Admin) {
+	save(admin: Partial<Admin>) {
 		return this.adminRepository.save(admin);
 	}
 }

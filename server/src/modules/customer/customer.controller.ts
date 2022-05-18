@@ -10,6 +10,11 @@ import {
 export class CustomerController {
 	constructor(private readonly customerService: CustomerService) {}
 
+	@Get('/count')
+	async count() {
+		return this.customerService.count();
+	}
+
 	@Get('/me', {
 		onRequest: [hasBearerToken, customerIsAuthenticated],
 	})

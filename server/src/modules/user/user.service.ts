@@ -2,6 +2,7 @@ import { Initializer, Service } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Unauthorized } from 'http-errors';
 
 @Service()
 export class UserService {
@@ -15,8 +16,14 @@ export class UserService {
 			this.dataSourceProvider.dataSource.getRepository(User);
 	}
 
-	me(userId: string) {
-		return '';
+	async me(userId: string): Promise<User> {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		return user;
 	}
 
 	count(): Promise<number> {

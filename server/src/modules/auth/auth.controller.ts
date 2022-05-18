@@ -4,8 +4,18 @@ import { Request, Reply } from '../../interfaces/http.interfaces';
 import {
 	LogInWithFacebook,
 	LogInWithFacebookType,
-	CommonUserLogin,
-	CommonUserLoginType,
+	AdminLogin,
+	AdminLoginType,
+	AdminRegister,
+	AdminRegisterType,
+	CustomerLogin,
+	CustomerLoginType,
+	CustomerRegister,
+	CustomerRegisterType,
+	DealerLogin,
+	DealerLoginType,
+	DealerRegister,
+	DealerRegisterType,
 } from './auth.schema';
 
 @Controller('/auth')
@@ -48,12 +58,12 @@ export class AuthController {
 
 	@Post('/admin/login', {
 		schema: {
-			body: CommonUserLogin,
+			body: AdminLogin,
 		},
 	})
 	async logInAdmin(
 		request: Request<{
-			Body: CommonUserLoginType;
+			Body: AdminLoginType;
 		}>,
 		reply: Reply
 	) {
@@ -64,11 +74,16 @@ export class AuthController {
 
 	@Post('/admin/register', {
 		schema: {
-			body: {},
+			body: AdminRegister,
 		},
 	})
-	async registerAdmin(request: Request, reply: Reply) {
-		return this.authService.registerAdmin();
+	async registerAdmin(
+		request: Request<{
+			Body: AdminRegisterType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.registerAdmin(request.body);
 	}
 
 	@Post('/admin/refresh', {
@@ -91,12 +106,12 @@ export class AuthController {
 
 	@Post('/customer/login', {
 		schema: {
-			body: CommonUserLogin,
+			body: CustomerLogin,
 		},
 	})
 	async loginCustomer(
 		request: Request<{
-			Body: CommonUserLoginType;
+			Body: CustomerLoginType;
 		}>,
 		reply: Reply
 	) {
@@ -107,11 +122,17 @@ export class AuthController {
 
 	@Post('/customer/register', {
 		schema: {
-			body: {},
+			body: CustomerRegister,
 		},
 	})
-	async registerCustomer(request: Request, reply: Reply) {
-		return this.authService.registerCustomer();
+	async registerCustomer(
+		request: Request<{
+			Body: CustomerRegisterType;
+		}>,
+		reply: Reply
+	) {
+		// return this.authService.registerCustomer({});
+		return 'ok';
 	}
 
 	@Post('/customer/refresh', {
@@ -134,12 +155,12 @@ export class AuthController {
 
 	@Post('/dealer/login', {
 		schema: {
-			body: CommonUserLogin,
+			body: DealerLogin,
 		},
 	})
 	async loginDealer(
 		request: Request<{
-			Body: CommonUserLoginType;
+			Body: DealerLoginType;
 		}>,
 		reply: Reply
 	) {
@@ -150,11 +171,17 @@ export class AuthController {
 
 	@Post('/dealer/register', {
 		schema: {
-			body: {},
+			body: DealerRegister,
 		},
 	})
-	async registerDealer(request: Request, reply: Reply) {
-		return this.authService.registerDealer();
+	async registerDealer(
+		request: Request<{
+			Body: DealerRegisterType;
+		}>,
+		reply: Reply
+	) {
+		// return this.authService.registerDealer();
+		return 'ok';
 	}
 
 	@Post('/dealer/refresh', {

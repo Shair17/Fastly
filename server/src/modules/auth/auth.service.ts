@@ -1,5 +1,13 @@
 import { Service } from 'fastify-decorators';
-import { LogInWithFacebookType, CommonUserLoginType } from './auth.schema';
+import {
+	LogInWithFacebookType,
+	AdminLoginType,
+	AdminRegisterType,
+	CustomerLoginType,
+	CustomerRegisterType,
+	DealerLoginType,
+	DealerRegisterType,
+} from './auth.schema';
 import { HttpService } from '../../shared/services/http.service';
 import { PasswordService } from '../../shared/services/password.service';
 import { trimStrings } from '../../utils/trimStrings';
@@ -7,10 +15,11 @@ import { UserService } from '../user/user.service';
 import { AdminService } from '../admin/admin.service';
 import { buildFacebookUri } from '../../utils/buildFacebookUri';
 import { FacebookGraphApiResponse } from './dto/facebookGraphApiResponse.dto';
-import { Unauthorized, NotFound } from 'http-errors';
+import { Unauthorized, NotFound, BadRequest } from 'http-errors';
 import { CustomerService } from '../customer/customer.service';
 import { DealerService } from '../dealer/dealer.service';
 import { TokenService } from '../../shared/services/token.service';
+import { validate } from 'class-validator';
 
 @Service()
 export class AuthService {
@@ -42,8 +51,8 @@ export class AuthService {
 			facebookId = data.id;
 			name = data.name;
 		} catch (err) {
-			// throw new NotFound('data_not_found');
 			console.log('data not found');
+			throw new NotFound('data_not_found');
 		}
 
 		if (facebookUserID === facebookId) {
@@ -58,11 +67,11 @@ export class AuthService {
 		if (user !== null) {
 			// falta agregar addresses (direcciones), hacerlo luego
 			// TODO -> AGREGAR DIRECCIONES
-			const { id, is_banned, ban_reason } = user;
+			const { id, isBanned, banReason } = user;
 
-			if (is_banned) {
+			if (isBanned) {
 				console.log('usuario baneado');
-				console.log('benado?', is_banned, 'razón:', ban_reason);
+				console.log('benado?', isBanned, 'razón:', banReason);
 				throw new Unauthorized('banned');
 			}
 
@@ -92,7 +101,7 @@ export class AuthService {
 
 	async logOutFromFacebook() {}
 
-	async logInAdmin(data: CommonUserLoginType) {
+	async logInAdmin(data: AdminLoginType) {
 		const [email] = trimStrings(data.email);
 
 		const admin = await this.adminService.getByEmail(email);
@@ -106,11 +115,11 @@ export class AuthService {
 			throw new Unauthorized('invalid_credentials');
 		}
 
-		if (admin.is_banned) {
+		if (admin.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
-		if (!admin.is_active) {
+		if (!admin.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
 
@@ -119,13 +128,56 @@ export class AuthService {
 		return {};
 	}
 
-	async registerAdmin() {}
+	async registerAdmin(data: AdminRegisterType) {
+		const [address, dni, email, name, phone, birthDate] = trimStrings(
+			data.address,
+			data.dni,
+			data.email,
+			data.name,
+			data.phone,
+			data.birthDate
+		);
+
+		const numberOfAdmins = await this.adminService.count();
+
+		if (numberOfAdmins !== 0) {
+			throw new BadRequest('service_disabled');
+		}
+
+		const foundAdmin = await this.adminService.getByEmail(email);
+
+		if (foundAdmin) {
+			throw new BadRequest('account_taken');
+		}
+
+		const hashedPassword = await this.passwordService.hash(data.password);
+
+		// new Date("11/29/2001")
+
+		const newAdmin = await this.adminService.save({
+			address,
+			avatar: data.avatar,
+			birthDate: new Date(birthDate),
+			dni,
+			email,
+			name,
+			phone,
+			password: hashedPassword,
+			isActive: numberOfAdmins === 0,
+		});
+
+		// crear tokens y devolverlos
+
+		return {
+			success: true,
+		};
+	}
 
 	async refreshAdminTokens() {}
 
 	async logOutAdmin() {}
 
-	async loginCustomer(data: CommonUserLoginType) {
+	async loginCustomer(data: CustomerLoginType) {
 		const [email] = trimStrings(data.email);
 
 		const customer = await this.customerService.getByEmail(email);
@@ -142,11 +194,11 @@ export class AuthService {
 			throw new Unauthorized('invalid_credentials');
 		}
 
-		if (customer.is_banned) {
+		if (customer.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
-		if (!customer.is_active) {
+		if (!customer.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
 
@@ -155,13 +207,17 @@ export class AuthService {
 		return {};
 	}
 
-	async registerCustomer() {}
+	async registerCustomer(data: CustomerRegisterType) {
+		const [] = trimStrings();
+
+		return {};
+	}
 
 	async refreshCustomerTokens() {}
 
 	async logOutCustomer() {}
 
-	async loginDealer(data: CommonUserLoginType) {
+	async loginDealer(data: DealerLoginType) {
 		const [email] = trimStrings(data.email);
 
 		const dealer = await this.dealerService.getByEmail(email);
@@ -176,11 +232,11 @@ export class AuthService {
 			throw new Unauthorized('invalid_credentials');
 		}
 
-		if (dealer.is_banned) {
+		if (dealer.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
-		if (!dealer.is_active) {
+		if (!dealer.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
 
@@ -189,7 +245,9 @@ export class AuthService {
 		return {};
 	}
 
-	async registerDealer() {}
+	async registerDealer(data: DealerRegisterType) {
+		return {};
+	}
 
 	async refreshDealerTokens() {}
 

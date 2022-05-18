@@ -75,11 +75,11 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized();
 		}
 
-		if (admin.is_banned) {
+		if (admin.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
-		if (!admin.is_active) {
+		if (!admin.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
 
@@ -114,7 +114,7 @@ export const userIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized();
 		}
 
-		if (user.is_banned) {
+		if (user.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
@@ -151,11 +151,11 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized();
 		}
 
-		if (customer.is_banned) {
+		if (customer.isBanned) {
 			throw new Unauthorized('banned');
 		}
 
-		if (!customer.is_active) {
+		if (!customer.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
 
@@ -189,11 +189,11 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 		throw new Unauthorized();
 	}
 
-	if (dealer.is_banned) {
+	if (dealer.isBanned) {
 		throw new Unauthorized('banned');
 	}
 
-	if (!dealer.is_active) {
+	if (!dealer.isActive) {
 		throw new Unauthorized('inactive_account');
 	}
 

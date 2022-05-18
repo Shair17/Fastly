@@ -56,23 +56,28 @@ export abstract class UserBase extends Base {
 	@IsUrl()
 	avatar?: string;
 
-	@Column()
-	birth_date: Date;
+	@Column({
+		name: 'birth_date',
+	})
+	birthDate: Date;
 
 	@Column({
 		default: false,
 		nullable: true,
+		name: 'is_banned',
 	})
-	is_banned: boolean;
+	isBanned?: boolean;
 
 	@Column({
 		nullable: true,
+		name: 'ban_reason',
 	})
-	ban_reason?: string;
+	banReason?: string;
 
 	@Column({
 		default: false,
+		name: 'is_active',
 	})
 	@IsBoolean()
-	is_active: boolean;
+	isActive: boolean;
 }

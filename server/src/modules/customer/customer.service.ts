@@ -2,6 +2,7 @@ import { Service, Initializer } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { Customer } from './customer.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Unauthorized } from 'http-errors';
 
 @Service()
 export class CustomerService {
@@ -15,8 +16,24 @@ export class CustomerService {
 			this.dataSourceProvider.dataSource.getRepository(Customer);
 	}
 
-	me(customerId: string) {
-		return '';
+	count() {
+		return this.customerRepository.count();
+	}
+
+	async me(customerId: string): Promise<Omit<Customer, 'password'>> {
+		const customer = await this.getById(customerId);
+
+		if (!customer) {
+			throw new Unauthorized();
+		}
+
+		const { password, ...restOfCustomer } = customer;
+
+		return restOfCustomer;
+	}
+
+	getById(id: string) {
+		return this.customerRepository.findOneBy({ id });
 	}
 
 	getByEmail(email: string): Promise<Customer | null> {

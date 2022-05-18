@@ -10,6 +10,11 @@ import {
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
+	@Get('/count')
+	async count() {
+		return this.userService.count();
+	}
+
 	@Get('/me', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})

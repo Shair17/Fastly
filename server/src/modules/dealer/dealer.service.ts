@@ -2,6 +2,7 @@ import { Service, Initializer } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { Dealer } from './dealer.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Unauthorized } from 'http-errors';
 
 @Service()
 export class DealerService {
@@ -15,8 +16,24 @@ export class DealerService {
 			this.dataSourceProvider.dataSource.getRepository(Dealer);
 	}
 
-	me(dealerId: string) {
-		return '';
+	count() {
+		return this.dealerRepository.count();
+	}
+
+	async me(dealerId: string): Promise<Omit<Dealer, 'password'>> {
+		const dealer = await this.getById(dealerId);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		const { password, ...restOfDealer } = dealer;
+
+		return restOfDealer;
+	}
+
+	getById(id: string) {
+		return this.dealerRepository.findOneBy({ id });
 	}
 
 	getByEmail(email: string): Promise<Dealer | null> {

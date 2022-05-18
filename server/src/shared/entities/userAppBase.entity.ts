@@ -23,17 +23,13 @@ export abstract class UserAppBase extends Base {
 	@Column({
 		default: false,
 		nullable: true,
+		name: 'is_banned',
 	})
-	is_banned?: boolean;
+	isBanned?: boolean;
 
 	@Column({
 		nullable: true,
+		name: 'ban_reason',
 	})
-	ban_reason?: string;
-
-	// * Creo que no es necesario tener una columna indicando si el usuario está activo
-	// @Column({
-	// 	default: false,
-	// })
-	// is_active: boolean;
+	banReason?: string;
 }

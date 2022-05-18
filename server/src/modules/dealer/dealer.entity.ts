@@ -1,5 +1,4 @@
 import { Entity, Column } from 'typeorm';
-import { IsBoolean } from 'class-validator';
 import { UserBase } from '../../shared/entities/userBase.entity';
 import { DealerVehicle } from '../../shared/enums/dealerVehicle.enum';
 
@@ -8,11 +7,13 @@ export class Dealer extends UserBase {
 	@Column({
 		type: 'enum',
 		enum: DealerVehicle,
+		default: DealerVehicle.PIE,
 	})
 	vehicle: DealerVehicle;
 
-	@Column()
-	@IsBoolean()
+	@Column({
+		default: false,
+	})
 	available: boolean;
 }
 

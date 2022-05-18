@@ -10,6 +10,11 @@ import {
 export class DealerController {
 	constructor(private readonly dealerService: DealerService) {}
 
+	@Get('/count')
+	async count() {
+		return this.dealerService.count();
+	}
+
 	@Get('/me', {
 		onRequest: [hasBearerToken, dealerIsAuthenticated],
 	})
