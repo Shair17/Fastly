@@ -213,7 +213,46 @@ export class AuthService {
 		// TODO: Enviar correo aquí
 	}
 
-	async newAdminPassword(data: NewAdminPasswordType) {}
+	async newAdminPassword({
+		newPassword,
+		resetPasswordToken,
+	}: NewAdminPasswordType) {
+		const decoded = this.tokenService.verifyForgotPasswordToken(
+			'admin',
+			resetPasswordToken
+		);
+		console.log('payload del reset password token ->', decoded);
+
+		const admin = await this.adminService.getById(decoded.id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		if (
+			admin.resetPasswordToken &&
+			admin.resetPasswordToken !== resetPasswordToken
+		) {
+			throw new Unauthorized();
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.adminService.save({
+				...admin,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async changeAdminPassword(
 		adminId: string,
@@ -304,7 +343,46 @@ export class AuthService {
 		});
 	}
 
-	async newCustomerPassword(data: NewCustomerPasswordType) {}
+	async newCustomerPassword({
+		newPassword,
+		resetPasswordToken,
+	}: NewCustomerPasswordType) {
+		const decoded = this.tokenService.verifyForgotPasswordToken(
+			'customer',
+			resetPasswordToken
+		);
+		console.log('payload del reset password token ->', decoded);
+
+		const customer = await this.customerService.getById(decoded.id);
+
+		if (!customer) {
+			throw new Unauthorized();
+		}
+
+		if (
+			customer.resetPasswordToken &&
+			customer.resetPasswordToken !== resetPasswordToken
+		) {
+			throw new Unauthorized();
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.customerService.save({
+				...customer,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async changeCustomerPassword(
 		customerId: string,
@@ -400,7 +478,46 @@ export class AuthService {
 		});
 	}
 
-	async newDealerPassword(data: NewDealerPasswordType) {}
+	async newDealerPassword({
+		newPassword,
+		resetPasswordToken,
+	}: NewDealerPasswordType) {
+		const decoded = this.tokenService.verifyForgotPasswordToken(
+			'dealer',
+			resetPasswordToken
+		);
+		console.log('payload del reset password token ->', decoded);
+
+		const dealer = await this.dealerService.getById(decoded.id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		if (
+			dealer.resetPasswordToken &&
+			dealer.resetPasswordToken !== resetPasswordToken
+		) {
+			throw new Unauthorized();
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.dealerService.save({
+				...dealer,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async changeDealerPassword(
 		dealerId: string,

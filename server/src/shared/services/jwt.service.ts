@@ -20,7 +20,7 @@ export class JwtService {
 	verify(
 		token: string,
 		secretOrPublicKey: jwt.Secret,
-		options: jwt.VerifyOptions & { complete: true }
+		options?: jwt.VerifyOptions & { complete: true }
 	) {
 		return this.jwt.verify(token, secretOrPublicKey, options);
 	}
