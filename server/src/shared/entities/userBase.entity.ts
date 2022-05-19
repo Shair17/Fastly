@@ -29,12 +29,12 @@ export abstract class UserBase extends Base {
 	@Column({
 		nullable: true,
 	})
-	refreshToken?: string;
+	refreshToken?: string | null;
 
 	@Column({
 		nullable: true,
 	})
-	resetPasswordToken?: string;
+	resetPasswordToken?: string | null;
 
 	@Column({
 		type: 'varchar',
@@ -60,7 +60,7 @@ export abstract class UserBase extends Base {
 		default: defaultAvatar,
 	})
 	@IsUrl()
-	avatar?: string;
+	avatar?: string | null;
 
 	@Column({
 		default: false,
@@ -73,7 +73,7 @@ export abstract class UserBase extends Base {
 		nullable: true,
 		name: 'ban_reason',
 	})
-	banReason?: string;
+	banReason?: string | null;
 
 	@Column({
 		default: false,

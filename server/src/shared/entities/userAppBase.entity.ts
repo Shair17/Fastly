@@ -18,7 +18,7 @@ export abstract class UserAppBase extends Base {
 	@Column({
 		nullable: true,
 	})
-	refreshToken?: string;
+	refreshToken?: string | null;
 
 	@Column({
 		default: false,

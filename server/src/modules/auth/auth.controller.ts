@@ -11,6 +11,8 @@ import {
 import {
 	LogInWithFacebook,
 	LogInWithFacebookType,
+	RefreshFacebookToken,
+	RefreshFacebookTokenType,
 	AdminLogin,
 	AdminLoginType,
 	AdminRegister,
@@ -21,6 +23,8 @@ import {
 	NewAdminPasswordType,
 	ChangeAdminPassword,
 	ChangeAdminPasswordType,
+	RefreshAdminToken,
+	RefreshAdminTokenType,
 	CustomerLogin,
 	CustomerLoginType,
 	CustomerRegister,
@@ -31,6 +35,8 @@ import {
 	NewCustomerPasswordType,
 	ChangeCustomerPassword,
 	ChangeCustomerPasswordType,
+	RefreshCustomerToken,
+	RefreshCustomerTokenType,
 	DealerLogin,
 	DealerLoginType,
 	DealerRegister,
@@ -41,6 +47,8 @@ import {
 	NewDealerPasswordType,
 	ChangeDealerPassword,
 	ChangeDealerPasswordType,
+	RefreshDealerToken,
+	RefreshDealerTokenType,
 } from './auth.schema';
 
 @Controller('/auth')
@@ -58,28 +66,28 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		const { accessToken, userID } = request.body;
-
-		return this.authService.logInWithFacebook({ accessToken, userID });
+		return this.authService.logInWithFacebook(request.body);
 	}
 
 	@Post('/facebook/refresh', {
 		schema: {
-			body: {},
+			body: RefreshFacebookToken,
 		},
 	})
-	async refreshFacebookTokens(request: Request, reply: Reply) {
-		return this.authService.refreshFacebookTokens();
+	async refreshFacebookToken(
+		request: Request<{
+			Body: RefreshFacebookTokenType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.refreshFacebookToken(request.body);
 	}
 
 	@Post('/facebook/logout', {
-		schema: {
-			body: {},
-		},
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async logOutFromFacebook(request: Request, reply: Reply) {
-		return this.authService.logOutFromFacebook();
+		return this.authService.logOutFromFacebook(request.userId);
 	}
 
 	@Post('/admin/login', {
@@ -93,9 +101,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		const { email, password } = request.body;
-
-		return this.authService.logInAdmin({ email, password });
+		return this.authService.logInAdmin(request.body);
 	}
 
 	@Post('/admin/register', {
@@ -157,21 +163,23 @@ export class AuthController {
 
 	@Post('/admin/refresh', {
 		schema: {
-			body: {},
+			body: RefreshAdminToken,
 		},
 	})
-	async refreshAdminTokens(request: Request, reply: Reply) {
-		return this.authService.refreshAdminTokens();
+	async refreshAdminToken(
+		request: Request<{
+			Body: RefreshAdminTokenType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.refreshAdminToken(request.body);
 	}
 
 	@Post('/admin/logout', {
-		schema: {
-			body: {},
-		},
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async logOutAdmin(request: Request, reply: Reply) {
-		return this.authService.logOutAdmin();
+		return this.authService.logOutAdmin(request.adminId);
 	}
 
 	@Post('/customer/login', {
@@ -185,9 +193,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		const { email, password } = request.body;
-
-		return this.authService.loginCustomer({ email, password });
+		return this.authService.loginCustomer(request.body);
 	}
 
 	@Post('/customer/register', {
@@ -201,8 +207,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		// return this.authService.registerCustomer({});
-		return 'ok';
+		return this.authService.registerCustomer(request.body);
 	}
 
 	@Put('/customer/forgot-password', {
@@ -253,21 +258,23 @@ export class AuthController {
 
 	@Post('/customer/refresh', {
 		schema: {
-			body: {},
+			body: RefreshCustomerToken,
 		},
 	})
-	async refreshCustomerTokens(request: Request, reply: Reply) {
-		return this.authService.refreshCustomerTokens();
+	async refreshCustomerToken(
+		request: Request<{
+			Body: RefreshCustomerTokenType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.refreshCustomerToken(request.body);
 	}
 
 	@Post('/customer/logout', {
-		schema: {
-			body: {},
-		},
 		onRequest: [hasBearerToken, customerIsAuthenticated],
 	})
 	async logOutCustomer(request: Request, reply: Reply) {
-		return this.authService.logOutCustomer();
+		return this.authService.logOutCustomer(request.customerId);
 	}
 
 	@Post('/dealer/login', {
@@ -281,9 +288,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		const { email, password } = request.body;
-
-		return this.authService.loginDealer({ email, password });
+		return this.authService.loginDealer(request.body);
 	}
 
 	@Post('/dealer/register', {
@@ -297,8 +302,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		// return this.authService.registerDealer();
-		return 'ok';
+		return this.authService.registerDealer(request.body);
 	}
 
 	@Put('/dealer/forgot-password', {
@@ -317,7 +321,7 @@ export class AuthController {
 
 	@Post('/dealer/new-password', {
 		schema: {
-			body: NewAdminPassword,
+			body: NewDealerPassword,
 		},
 	})
 	async newDealerPassword(
@@ -349,20 +353,22 @@ export class AuthController {
 
 	@Post('/dealer/refresh', {
 		schema: {
-			body: {},
+			body: RefreshDealerToken,
 		},
 	})
-	async refreshDealerTokens(request: Request, reply: Reply) {
-		return this.authService.refreshDealerTokens();
+	async refreshDealerToken(
+		request: Request<{
+			Body: RefreshDealerTokenType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.refreshDealerToken(request.body);
 	}
 
 	@Post('/dealer/logout', {
-		schema: {
-			body: {},
-		},
 		onRequest: [hasBearerToken, dealerIsAuthenticated],
 	})
 	async logOutDealer(request: Request, reply: Reply) {
-		return this.authService.logOutDealer();
+		return this.authService.logOutDealer(request.dealerId);
 	}
 }

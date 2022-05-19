@@ -17,6 +17,10 @@ export const LogInWithFacebook = Type.Object(
 	}
 );
 export type LogInWithFacebookType = Static<typeof LogInWithFacebook>;
+export const RefreshFacebookToken = Type.Object({
+	refreshToken: Type.RegEx(JWT_REGEX),
+});
+export type RefreshFacebookTokenType = Static<typeof RefreshFacebookToken>;
 
 // admin
 export const AdminLogin = Type.Object(
@@ -65,6 +69,10 @@ export const ChangeAdminPassword = Type.Object(
 	}
 );
 export type ChangeAdminPasswordType = Static<typeof ChangeAdminPassword>;
+export const RefreshAdminToken = Type.Object({
+	refreshToken: Type.RegEx(JWT_REGEX),
+});
+export type RefreshAdminTokenType = Static<typeof RefreshAdminToken>;
 
 // customer
 export const CustomerLogin = Type.Object(
@@ -112,6 +120,10 @@ export const ChangeCustomerPassword = Type.Object(
 	}
 );
 export type ChangeCustomerPasswordType = Static<typeof ChangeCustomerPassword>;
+export const RefreshCustomerToken = Type.Object({
+	refreshToken: Type.RegEx(JWT_REGEX),
+});
+export type RefreshCustomerTokenType = Static<typeof RefreshCustomerToken>;
 
 // dealer
 export const DealerLogin = Type.Object(
@@ -159,3 +171,7 @@ export const ChangeDealerPassword = Type.Object(
 	}
 );
 export type ChangeDealerPasswordType = Static<typeof ChangeDealerPassword>;
+export const RefreshDealerToken = Type.Object({
+	refreshToken: Type.RegEx(JWT_REGEX),
+});
+export type RefreshDealerTokenType = Static<typeof RefreshDealerToken>;

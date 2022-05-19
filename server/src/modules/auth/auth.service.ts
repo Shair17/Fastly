@@ -16,6 +16,10 @@ import {
 	NewAdminPasswordType,
 	NewDealerPasswordType,
 	NewCustomerPasswordType,
+	RefreshFacebookTokenType,
+	RefreshAdminTokenType,
+	RefreshCustomerTokenType,
+	RefreshDealerTokenType,
 } from './auth.schema';
 import { HttpService } from '../../shared/services/http.service';
 import { PasswordService } from '../../shared/services/password.service';
@@ -33,6 +37,17 @@ import {
 import { CustomerService } from '../customer/customer.service';
 import { DealerService } from '../dealer/dealer.service';
 import { TokenService } from '../../shared/services/token.service';
+import { MailService } from '../../shared/services/mail.service';
+
+/**
+ * @CreatedBy Shair17
+ * @Shair17 aka as Jimmy Morales
+ * @For Fastly Delivery 2022
+ * @Copyright Todos los derechos reservados 2022.
+ * TODO: Hacer la configuración del servicio de correos para poder enviar los correos de recuperación de contraseñas
+ * TODO: Probar todos los endpoints
+ * TODO: Conectar el servidor a sus respectivos frontends
+ */
 
 @Service()
 export class AuthService {
@@ -43,6 +58,7 @@ export class AuthService {
 		private readonly customerService: CustomerService,
 		private readonly dealerService: DealerService,
 		private readonly tokenService: TokenService,
+		private readonly mailService: MailService,
 		private readonly passwordService: PasswordService
 	) {}
 
@@ -67,52 +83,140 @@ export class AuthService {
 			throw new NotFound('data_not_found');
 		}
 
-		if (facebookUserID === facebookId) {
-			console.log(
-				'el userID proporcionado por el frontend y el obtenido por el backend son los mismos, coinciden, lo dejamos pasar'
-			);
+		if (facebookUserID !== facebookId) {
+			throw new Unauthorized();
 		}
+
+		console.log(
+			'el userID proporcionado por el frontend y el obtenido por el backend son los mismos, coinciden, lo dejamos pasar'
+		);
 
 		const user = await this.userService.getByFacebookUserID(facebookId);
 
 		// El usuario ya tiene una cuenta, entonces procedemos a verificar si está baneado y/o tiene direcciones
 		if (user !== null) {
-			// falta agregar addresses (direcciones), hacerlo luego
 			// TODO -> AGREGAR DIRECCIONES
-			const { id, isBanned, banReason } = user;
 
-			if (isBanned) {
+			if (user.isBanned) {
 				console.log('usuario baneado');
-				console.log('benado?', isBanned, 'razón:', banReason);
+				console.log(
+					'benado?',
+					user.isBanned ? 'si' : 'no',
+					'razón:',
+					user.banReason
+				);
 				throw new Unauthorized('banned');
 			}
 
-			const tokens = this.tokenService.generateTokens('user');
+			const { accessToken, refreshToken } = this.tokenService.generateTokens(
+				'user',
+				{
+					id: user.id,
+					name: user.name,
+					email: user.email,
+				}
+			);
+
+			try {
+				await this.userService.save({
+					...user,
+					refreshToken,
+				});
+			} catch (error) {
+				throw new InternalServerError();
+			}
 
 			// TODO también devolver datos del usuario
-			return tokens;
+			return {
+				accessToken,
+				refreshToken,
+			};
 		}
 
 		// El usuario es nuevo, vamos a crear uno!
-		// comprobar luego los datos que guardo y recibo!!
 		const newUser = await this.userService.save({
 			facebookId,
 			facebookAccessToken,
 			name,
 		});
 
-		// const tokens = await this.tokensService.generateTokens('user', {
-		// 	userId: newUser.id,
-		// });
-		const tokens = this.tokenService.generateTokens('user');
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'user',
+			{
+				id: newUser.id,
+				name: newUser.name,
+			}
+		);
 
-		// TODO también devolver datos del usuario
-		return tokens;
+		try {
+			await this.userService.save({
+				...newUser,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
-	async refreshFacebookTokens() {}
+	async refreshFacebookToken({ refreshToken }: RefreshFacebookTokenType) {
+		const decoded = this.tokenService.verifyRefreshToken('user', refreshToken);
+		let accessToken: string;
 
-	async logOutFromFacebook() {}
+		console.log('payload del refresh token de facebook ->', decoded);
+
+		const user = await this.userService.getById(decoded.id);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (user.email) {
+			accessToken = this.tokenService.generateAccessToken('user', {
+				id: user.id,
+				name: user.name,
+				email: user.email,
+			});
+		} else {
+			accessToken = this.tokenService.generateAccessToken('user', {
+				id: user.id,
+				name: user.name,
+			});
+		}
+
+		return {
+			statusCode: 200,
+			accessToken,
+			refreshToken,
+			success: true,
+		};
+	}
+
+	async logOutFromFacebook(id: string) {
+		const user = await this.userService.getById(id);
+
+		if (!user) {
+			throw new BadRequest();
+		}
+
+		try {
+			await this.userService.save({
+				...user,
+				refreshToken: null,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			success: true,
+		};
+	}
 
 	async logInAdmin(data: AdminLoginType) {
 		const [email] = trimStrings(data.email);
@@ -136,10 +240,29 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		const tokens = this.tokenService.generateTokens('admin');
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'admin',
+			{
+				id: admin.id,
+				name: admin.name,
+				email: admin.email,
+			}
+		);
+
+		try {
+			await this.adminService.save({
+				...admin,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
 
 		// TODO también devolver datos del admin
-		return tokens;
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async registerAdmin(data: AdminRegisterType) {
@@ -180,10 +303,29 @@ export class AuthService {
 			isActive: numberOfAdmins === 0,
 		});
 
-		const tokens = this.tokenService.generateTokens('admin');
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'admin',
+			{
+				id: newAdmin.id,
+				name: newAdmin.name,
+				email: newAdmin.email,
+			}
+		);
+
+		try {
+			await this.adminService.save({
+				...newAdmin,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
 
 		// TODO también devolver datos del admin
-		return tokens;
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async forgotAdminPassword({ email }: ForgotAdminPasswordType) {
@@ -197,6 +339,7 @@ export class AuthService {
 			'admin',
 			{
 				id: admin.id,
+				name: admin.name,
 				email: admin.email,
 			}
 		);
@@ -211,6 +354,10 @@ export class AuthService {
 		}
 
 		// TODO: Enviar correo aquí
+
+		return {
+			resetPasswordToken,
+		};
 	}
 
 	async newAdminPassword({
@@ -286,9 +433,52 @@ export class AuthService {
 		};
 	}
 
-	async refreshAdminTokens() {}
+	async refreshAdminToken({ refreshToken }: RefreshAdminTokenType) {
+		const decoded = this.tokenService.verifyRefreshToken('admin', refreshToken);
 
-	async logOutAdmin() {}
+		console.log('payload del refresh token de admin ->', decoded);
+
+		const admin = await this.adminService.getById(decoded.id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		const accessToken = this.tokenService.generateAccessToken('admin', {
+			id: admin.id,
+			name: admin.name,
+			email: admin.email,
+		});
+
+		return {
+			statusCode: 200,
+			accessToken,
+			refreshToken,
+			success: true,
+		};
+	}
+
+	async logOutAdmin(id: string) {
+		const admin = await this.adminService.getById(id);
+
+		if (!admin) {
+			throw new BadRequest();
+		}
+
+		try {
+			await this.adminService.save({
+				...admin,
+				refreshToken: null,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			success: true,
+		};
+	}
 
 	async loginCustomer(data: CustomerLoginType) {
 		const [email] = trimStrings(data.email);
@@ -296,14 +486,12 @@ export class AuthService {
 		const customer = await this.customerService.getByEmail(email);
 
 		if (!customer) {
-			console.log('no hay el customer');
 			throw new Unauthorized('invalid_credentials');
 		}
 
 		if (
 			!(await this.passwordService.verify(customer.password, data.password))
 		) {
-			console.log('contraseña incorrecta del customer');
 			throw new Unauthorized('invalid_credentials');
 		}
 
@@ -315,19 +503,86 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		const tokens = this.tokenService.generateTokens('customer');
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'customer',
+			{
+				id: customer.id,
+				name: customer.name,
+				email: customer.email,
+			}
+		);
+
+		try {
+			await this.customerService.save({
+				...customer,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
 
 		// TODO también devolver datos del customer
-		return tokens;
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async registerCustomer(data: CustomerRegisterType) {
-		const [] = trimStrings();
+		const [address, dni, email, name, phone, birthDate] = trimStrings(
+			data.address,
+			data.dni,
+			data.email,
+			data.name,
+			data.phone,
+			data.birthDate
+		);
 
-		const tokens = this.tokenService.generateTokens('customer');
+		const foundCustomer = await this.customerService.getByEmail(email);
 
-		// TODO también devolver datos del usuario
-		return tokens;
+		if (foundCustomer) {
+			throw new BadRequest('account_taken');
+		}
+
+		const hashedPassword = await this.passwordService.hash(data.password);
+
+		// birthDate example: new Date("11/29/2001")
+
+		const newCustomer = await this.customerService.save({
+			address,
+			avatar: data.avatar,
+			birthDate: new Date(birthDate),
+			dni,
+			email,
+			name,
+			phone,
+			password: hashedPassword,
+			isActive: false,
+		});
+
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'customer',
+			{
+				id: newCustomer.id,
+				name: newCustomer.name,
+				email: newCustomer.email,
+			}
+		);
+
+		try {
+			await this.customerService.save({
+				...newCustomer,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		// TODO también devolver datos del customer
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async forgotCustomerPassword({ email }: ForgotCustomerPasswordType) {
@@ -337,10 +592,29 @@ export class AuthService {
 			throw new BadRequest();
 		}
 
-		const token = this.tokenService.generateForgotPasswordToken('customer', {
-			id: customer.id,
-			email: customer.email,
-		});
+		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
+			'customer',
+			{
+				id: customer.id,
+				name: customer.name,
+				email: customer.email,
+			}
+		);
+
+		// enviar correo aquí
+
+		try {
+			await this.customerService.save({
+				...customer,
+				resetPasswordToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			resetPasswordToken,
+		};
 	}
 
 	async newCustomerPassword({
@@ -416,9 +690,55 @@ export class AuthService {
 		};
 	}
 
-	async refreshCustomerTokens() {}
+	async refreshCustomerToken({ refreshToken }: RefreshCustomerTokenType) {
+		const decoded = this.tokenService.verifyRefreshToken(
+			'customer',
+			refreshToken
+		);
 
-	async logOutCustomer() {}
+		console.log('payload del refresh token de customer ->', decoded);
+
+		const customer = await this.customerService.getById(decoded.id);
+
+		if (!customer) {
+			throw new Unauthorized();
+		}
+
+		const accessToken = this.tokenService.generateAccessToken('customer', {
+			id: customer.id,
+			name: customer.name,
+			email: customer.email,
+		});
+
+		return {
+			statusCode: 200,
+			accessToken,
+			refreshToken,
+			success: true,
+		};
+	}
+
+	async logOutCustomer(id: string) {
+		const customer = await this.customerService.getById(id);
+
+		if (!customer) {
+			throw new BadRequest();
+		}
+
+		try {
+			await this.customerService.save({
+				...customer,
+				refreshToken: null,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			success: true,
+		};
+	}
 
 	async loginDealer(data: DealerLoginType) {
 		const [email] = trimStrings(data.email);
@@ -443,26 +763,86 @@ export class AuthService {
 			throw new Unauthorized('inactive_account');
 		}
 
-		const tokens = this.tokenService.generateTokens('dealer');
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'dealer',
+			{
+				id: dealer.id,
+				name: dealer.name,
+				email: dealer.email,
+			}
+		);
+
+		try {
+			await this.dealerService.save({
+				...dealer,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
 
 		// TODO también devolver datos del usuario
-		return tokens;
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async registerDealer(data: DealerRegisterType) {
-		const [address, birthDate, dni, email, name, phone] = trimStrings(
+		const [address, dni, email, name, phone, birthDate] = trimStrings(
 			data.address,
-			data.birthDate,
 			data.dni,
 			data.email,
 			data.name,
-			data.phone
+			data.phone,
+			data.birthDate
 		);
 
-		const tokens = this.tokenService.generateTokens('dealer');
+		const foundDealer = await this.dealerService.getByEmail(email);
 
-		// TODO también devolver datos del usuario
-		return tokens;
+		if (foundDealer) {
+			throw new BadRequest('account_taken');
+		}
+
+		const hashedPassword = await this.passwordService.hash(data.password);
+
+		// birthDate example: new Date("11/29/2001")
+
+		const newDealer = await this.dealerService.save({
+			address,
+			avatar: data.avatar,
+			birthDate: new Date(birthDate),
+			dni,
+			email,
+			name,
+			phone,
+			password: hashedPassword,
+			isActive: false,
+		});
+
+		const { accessToken, refreshToken } = this.tokenService.generateTokens(
+			'dealer',
+			{
+				id: newDealer.id,
+				name: newDealer.name,
+				email: newDealer.email,
+			}
+		);
+
+		try {
+			await this.dealerService.save({
+				...newDealer,
+				refreshToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		// TODO también devolver datos del dealer
+		return {
+			accessToken,
+			refreshToken,
+		};
 	}
 
 	async forgotDealerPassword({ email }: ForgotDealerPasswordType) {
@@ -472,10 +852,27 @@ export class AuthService {
 			throw new BadRequest();
 		}
 
-		const token = this.tokenService.generateForgotPasswordToken('dealer', {
-			id: dealer.id,
-			email: dealer.email,
-		});
+		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
+			'dealer',
+			{
+				id: dealer.id,
+				name: dealer.name,
+				email: dealer.email,
+			}
+		);
+
+		try {
+			await this.dealerService.save({
+				...dealer,
+				resetPasswordToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			resetPasswordToken,
+		};
 	}
 
 	async newDealerPassword({
@@ -551,7 +948,53 @@ export class AuthService {
 		};
 	}
 
-	async refreshDealerTokens() {}
+	async refreshDealerToken({ refreshToken }: RefreshDealerTokenType) {
+		const decoded = this.tokenService.verifyRefreshToken(
+			'dealer',
+			refreshToken
+		);
 
-	async logOutDealer() {}
+		console.log('payload del refresh token de dealer ->', decoded);
+
+		const dealer = await this.dealerService.getById(decoded.id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		const accessToken = this.tokenService.generateAccessToken('dealer', {
+			id: dealer.id,
+			name: dealer.name,
+			email: dealer.email,
+		});
+
+		return {
+			statusCode: 200,
+			accessToken,
+			refreshToken,
+			success: true,
+		};
+	}
+
+	async logOutDealer(id: string) {
+		const dealer = await this.dealerService.getById(id);
+
+		if (!dealer) {
+			throw new BadRequest();
+		}
+
+		try {
+			await this.dealerService.save({
+				...dealer,
+				refreshToken: null,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			success: true,
+		};
+	}
 }

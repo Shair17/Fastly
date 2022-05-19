@@ -19,7 +19,7 @@ export class User extends UserAppBase {
 	})
 	@MinLength(9)
 	@MaxLength(9)
-	phone?: string;
+	phone?: string | null;
 
 	@Column({
 		type: 'varchar',
@@ -28,5 +28,5 @@ export class User extends UserAppBase {
 	})
 	@MinLength(8)
 	@MaxLength(8)
-	dni?: string;
+	dni?: string | null;
 }
