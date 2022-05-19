@@ -32,6 +32,11 @@ export abstract class UserBase extends Base {
 	refreshToken?: string;
 
 	@Column({
+		nullable: true,
+	})
+	resetPasswordToken?: string;
+
+	@Column({
 		type: 'varchar',
 		length: 8,
 	})

@@ -3,13 +3,19 @@ import {
 	LogInWithFacebookType,
 	AdminLoginType,
 	AdminRegisterType,
+	ForgotAdminPasswordType,
 	ChangeAdminPasswordType,
 	CustomerLoginType,
 	CustomerRegisterType,
+	ForgotCustomerPasswordType,
 	ChangeCustomerPasswordType,
 	DealerLoginType,
 	DealerRegisterType,
+	ForgotDealerPasswordType,
 	ChangeDealerPasswordType,
+	NewAdminPasswordType,
+	NewDealerPasswordType,
+	NewCustomerPasswordType,
 } from './auth.schema';
 import { HttpService } from '../../shared/services/http.service';
 import { PasswordService } from '../../shared/services/password.service';
@@ -180,6 +186,35 @@ export class AuthService {
 		return tokens;
 	}
 
+	async forgotAdminPassword({ email }: ForgotAdminPasswordType) {
+		const admin = await this.adminService.getByEmail(email);
+
+		if (!admin) {
+			throw new BadRequest();
+		}
+
+		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
+			'admin',
+			{
+				id: admin.id,
+				email: admin.email,
+			}
+		);
+
+		try {
+			await this.adminService.save({
+				...admin,
+				resetPasswordToken,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		// TODO: Enviar correo aquí
+	}
+
+	async newAdminPassword(data: NewAdminPasswordType) {}
+
 	async changeAdminPassword(
 		adminId: string,
 		{ oldPassword, newPassword }: ChangeAdminPasswordType
@@ -255,6 +290,21 @@ export class AuthService {
 		// TODO también devolver datos del usuario
 		return tokens;
 	}
+
+	async forgotCustomerPassword({ email }: ForgotCustomerPasswordType) {
+		const customer = await this.customerService.getByEmail(email);
+
+		if (!customer) {
+			throw new BadRequest();
+		}
+
+		const token = this.tokenService.generateForgotPasswordToken('customer', {
+			id: customer.id,
+			email: customer.email,
+		});
+	}
+
+	async newCustomerPassword(data: NewCustomerPasswordType) {}
 
 	async changeCustomerPassword(
 		customerId: string,
@@ -336,6 +386,21 @@ export class AuthService {
 		// TODO también devolver datos del usuario
 		return tokens;
 	}
+
+	async forgotDealerPassword({ email }: ForgotDealerPasswordType) {
+		const dealer = await this.dealerService.getByEmail(email);
+
+		if (!dealer) {
+			throw new BadRequest();
+		}
+
+		const token = this.tokenService.generateForgotPasswordToken('dealer', {
+			id: dealer.id,
+			email: dealer.email,
+		});
+	}
+
+	async newDealerPassword(data: NewDealerPasswordType) {}
 
 	async changeDealerPassword(
 		dealerId: string,

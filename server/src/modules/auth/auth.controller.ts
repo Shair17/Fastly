@@ -1,4 +1,4 @@
-import { Controller, POST as Post } from 'fastify-decorators';
+import { Controller, POST as Post, PUT as Put } from 'fastify-decorators';
 import { AuthService } from './auth.service';
 import { Request, Reply } from '../../interfaces/http.interfaces';
 import {
@@ -15,18 +15,30 @@ import {
 	AdminLoginType,
 	AdminRegister,
 	AdminRegisterType,
+	ForgotAdminPassword,
+	ForgotAdminPasswordType,
+	NewAdminPassword,
+	NewAdminPasswordType,
 	ChangeAdminPassword,
 	ChangeAdminPasswordType,
 	CustomerLogin,
 	CustomerLoginType,
 	CustomerRegister,
 	CustomerRegisterType,
+	ForgotCustomerPassword,
+	ForgotCustomerPasswordType,
+	NewCustomerPassword,
+	NewCustomerPasswordType,
 	ChangeCustomerPassword,
 	ChangeCustomerPasswordType,
 	DealerLogin,
 	DealerLoginType,
 	DealerRegister,
 	DealerRegisterType,
+	ForgotDealerPassword,
+	ForgotDealerPasswordType,
+	NewDealerPassword,
+	NewDealerPasswordType,
 	ChangeDealerPassword,
 	ChangeDealerPasswordType,
 } from './auth.schema';
@@ -100,6 +112,34 @@ export class AuthController {
 		return this.authService.registerAdmin(request.body);
 	}
 
+	@Post('/admin/forgot-password', {
+		schema: {
+			body: ForgotAdminPassword,
+		},
+	})
+	async forgotAdminPassword(
+		request: Request<{
+			Body: ForgotAdminPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.forgotAdminPassword(request.body);
+	}
+
+	@Post('/admin/new-password', {
+		schema: {
+			body: NewAdminPassword,
+		},
+	})
+	async newAdminPassword(
+		request: Request<{
+			Body: NewAdminPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.newAdminPassword(request.body);
+	}
+
 	@Post('/admin/change-password', {
 		schema: {
 			body: ChangeAdminPassword,
@@ -163,6 +203,34 @@ export class AuthController {
 	) {
 		// return this.authService.registerCustomer({});
 		return 'ok';
+	}
+
+	@Put('/customer/forgot-password', {
+		schema: {
+			body: ForgotCustomerPassword,
+		},
+	})
+	async forgotCustomerPassword(
+		request: Request<{
+			Body: ForgotCustomerPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.forgotCustomerPassword(request.body);
+	}
+
+	@Post('/customer/new-password', {
+		schema: {
+			body: NewCustomerPassword,
+		},
+	})
+	async newCustomerPassword(
+		request: Request<{
+			Body: NewCustomerPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.newCustomerPassword(request.body);
 	}
 
 	@Post('/customer/change-password', {
@@ -231,6 +299,34 @@ export class AuthController {
 	) {
 		// return this.authService.registerDealer();
 		return 'ok';
+	}
+
+	@Put('/dealer/forgot-password', {
+		schema: {
+			body: ForgotDealerPassword,
+		},
+	})
+	async forgotDealerPassword(
+		request: Request<{
+			Body: ForgotDealerPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.forgotDealerPassword(request.body);
+	}
+
+	@Post('/dealer/new-password', {
+		schema: {
+			body: NewAdminPassword,
+		},
+	})
+	async newDealerPassword(
+		request: Request<{
+			Body: NewDealerPasswordType;
+		}>,
+		reply: Reply
+	) {
+		return this.authService.newDealerPassword(request.body);
 	}
 
 	@Post('/dealer/change-password', {
