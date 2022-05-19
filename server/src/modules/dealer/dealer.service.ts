@@ -40,7 +40,7 @@ export class DealerService {
 		return this.dealerRepository.findOneBy({ email });
 	}
 
-	save(dealer: Dealer) {
+	save(dealer: Partial<Dealer>) {
 		return this.dealerRepository.save(dealer);
 	}
 }

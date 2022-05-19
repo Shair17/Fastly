@@ -3,10 +3,13 @@ import {
 	LogInWithFacebookType,
 	AdminLoginType,
 	AdminRegisterType,
+	ChangeAdminPasswordType,
 	CustomerLoginType,
 	CustomerRegisterType,
+	ChangeCustomerPasswordType,
 	DealerLoginType,
 	DealerRegisterType,
+	ChangeDealerPasswordType,
 } from './auth.schema';
 import { HttpService } from '../../shared/services/http.service';
 import { PasswordService } from '../../shared/services/password.service';
@@ -15,7 +18,12 @@ import { UserService } from '../user/user.service';
 import { AdminService } from '../admin/admin.service';
 import { buildFacebookUri } from '../../utils/buildFacebookUri';
 import { FacebookGraphApiResponse } from './dto/facebookGraphApiResponse.dto';
-import { Unauthorized, NotFound, BadRequest } from 'http-errors';
+import {
+	Unauthorized,
+	NotFound,
+	BadRequest,
+	InternalServerError,
+} from 'http-errors';
 import { CustomerService } from '../customer/customer.service';
 import { DealerService } from '../dealer/dealer.service';
 import { TokenService } from '../../shared/services/token.service';
@@ -152,7 +160,7 @@ export class AuthService {
 
 		const hashedPassword = await this.passwordService.hash(data.password);
 
-		// new Date("11/29/2001")
+		// example: new Date("11/29/2001")
 
 		const newAdmin = await this.adminService.save({
 			address,
@@ -172,7 +180,37 @@ export class AuthService {
 		return tokens;
 	}
 
-	async changeAdminPassword() {}
+	async changeAdminPassword(
+		adminId: string,
+		{ oldPassword, newPassword }: ChangeAdminPasswordType
+	) {
+		const admin = await this.adminService.getById(adminId);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		if (!(await this.passwordService.verify(admin.password, oldPassword))) {
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.adminService.save({
+				...admin,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async refreshAdminTokens() {}
 
@@ -218,7 +256,37 @@ export class AuthService {
 		return tokens;
 	}
 
-	async changeCustomerPassword() {}
+	async changeCustomerPassword(
+		customerId: string,
+		{ oldPassword, newPassword }: ChangeCustomerPasswordType
+	) {
+		const customer = await this.customerService.getById(customerId);
+
+		if (!customer) {
+			throw new Unauthorized();
+		}
+
+		if (!(await this.passwordService.verify(customer.password, oldPassword))) {
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.customerService.save({
+				...customer,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async refreshCustomerTokens() {}
 
@@ -269,7 +337,37 @@ export class AuthService {
 		return tokens;
 	}
 
-	async changeDealerPassword() {}
+	async changeDealerPassword(
+		dealerId: string,
+		{ oldPassword, newPassword }: ChangeDealerPasswordType
+	) {
+		const dealer = await this.dealerService.getById(dealerId);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		if (!(await this.passwordService.verify(dealer.password, oldPassword))) {
+			throw new Unauthorized('invalid_credentials');
+		}
+
+		const hashedPassword = await this.passwordService.hash(newPassword);
+
+		try {
+			await this.dealerService.save({
+				...dealer,
+				password: hashedPassword,
+			});
+		} catch (error) {
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			message: 'Password changed',
+			success: true,
+		};
+	}
 
 	async refreshDealerTokens() {}
 

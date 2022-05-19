@@ -112,7 +112,7 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		return this.authService.changeAdminPassword();
+		return this.authService.changeAdminPassword(request.adminId, request.body);
 	}
 
 	@Post('/admin/refresh', {
@@ -177,7 +177,10 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		return this.authService.changeCustomerPassword();
+		return this.authService.changeCustomerPassword(
+			request.customerId,
+			request.body
+		);
 	}
 
 	@Post('/customer/refresh', {
@@ -242,7 +245,10 @@ export class AuthController {
 		}>,
 		reply: Reply
 	) {
-		return this.authService.changeDealerPassword();
+		return this.authService.changeDealerPassword(
+			request.dealerId,
+			request.body
+		);
 	}
 
 	@Post('/dealer/refresh', {
