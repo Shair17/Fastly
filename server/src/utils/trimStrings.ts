@@ -1,9 +1,9 @@
 export const trimStrings = (...strings: string[]) => {
-	let s: string[] = [];
+  let s: string[] = [];
 
-	strings.forEach((v) => {
-		s.push(v.trim());
-	});
+  strings.forEach((v) => {
+    s.push(v.trim());
+  });
 
-	return s;
+  return s;
 };

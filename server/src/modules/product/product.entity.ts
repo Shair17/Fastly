@@ -1,23 +1,23 @@
-import { Column, Entity } from 'typeorm';
-import { IsNumber, IsPositive, IsString, IsUrl } from 'class-validator';
-import { Base } from '../../shared/entities/base.entity';
+import { Column, Entity } from "typeorm";
+import { IsNumber, IsPositive, IsString, IsUrl } from "class-validator";
+import { Base } from "../../shared/entities/base.entity";
 
-@Entity('products')
+@Entity("products")
 export class Product extends Base {
-	@Column()
-	@IsString()
-	name: string;
+  @Column()
+  @IsString()
+  name: string;
 
-	@Column()
-	@IsNumber()
-	@IsPositive()
-	price: number;
+  @Column()
+  @IsNumber()
+  @IsPositive()
+  price: number;
 
-	// Debería agregar el blur hash??
-	// https://blurha.sh/
+  // Debería agregar el blur hash??
+  // https://blurha.sh/
 
-	@Column()
-	@IsString()
-	@IsUrl()
-	image: string;
+  @Column()
+  @IsString()
+  @IsUrl()
+  image: string;
 }

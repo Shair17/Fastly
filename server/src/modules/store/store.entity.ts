@@ -1,5 +1,5 @@
-import { Entity } from 'typeorm';
-import { Base } from '../../shared/entities/base.entity';
+import { Entity } from "typeorm";
+import { Base } from "../../shared/entities/base.entity";
 
-@Entity('stores')
+@Entity("stores")
 export class Store extends Base {}
