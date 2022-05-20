@@ -11,6 +11,7 @@ import {
 	Center,
 	Box,
 } from '@mantine/core';
+import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
@@ -53,7 +54,13 @@ export const ForgotPassword = () => {
 					required
 				/>
 				<Group position="apart" mt="lg" className={classes.controls}>
-					<Anchor color="dimmed" size="sm" className={classes.control}>
+					<Anchor
+						component={Link}
+						to="/login"
+						color="dimmed"
+						size="sm"
+						className={classes.control}
+					>
 						<Center inline>
 							<ArrowLeft size={12} />
 							<Box ml={5}>Regresar a iniciar sesión</Box>
