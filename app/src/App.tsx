@@ -3,9 +3,9 @@ import {StatusBar, useColorScheme} from 'react-native';
 import {ThemeProvider, useTheme} from 'react-native-magnus';
 import {useMMKVString} from 'react-native-mmkv';
 import {NavigationContainer, Theme} from '@react-navigation/native';
+import {Navigation} from './navigation/Navigation';
 import Bootsplash from 'react-native-bootsplash';
 import {lightTheme, darkTheme, ThemesNames} from './theme';
-import {RootNavigation} from './navigation/RootNavigation';
 import {themeStorageKey} from './constants/theme.constants';
 import {storage} from './storage';
 import {useCheckLocationPermissions} from './hooks/useCheckLocationPermission';
@@ -57,7 +57,7 @@ function App() {
       <NavigationContainer
         onReady={() => Bootsplash.hide({fade: true})}
         theme={themeNavigation}>
-        <RootNavigation />
+        <Navigation />
       </NavigationContainer>
     </ThemeProvider>
   );

@@ -1,46 +1,46 @@
-import { Service, Initializer } from "fastify-decorators";
-import { Repository } from "typeorm";
-import { Customer } from "./customer.entity";
-import { DataSourceProvider } from "../../database/DataSourceProvider";
-import { Unauthorized } from "http-errors";
+import { Service, Initializer } from 'fastify-decorators';
+import { Repository } from 'typeorm';
+import { Customer } from './customer.entity';
+import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Unauthorized } from 'http-errors';
 
-@Service()
+@Service('CustomerServiceToken')
 export class CustomerService {
-  private customerRepository: Repository<Customer>;
+	private customerRepository: Repository<Customer>;
 
-  constructor(private readonly dataSourceProvider: DataSourceProvider) {}
+	constructor(private readonly dataSourceProvider: DataSourceProvider) {}
 
-  @Initializer([DataSourceProvider])
-  async init(): Promise<void> {
-    this.customerRepository =
-      this.dataSourceProvider.dataSource.getRepository(Customer);
-  }
+	@Initializer([DataSourceProvider])
+	async init(): Promise<void> {
+		this.customerRepository =
+			this.dataSourceProvider.dataSource.getRepository(Customer);
+	}
 
-  count() {
-    return this.customerRepository.count();
-  }
+	count() {
+		return this.customerRepository.count();
+	}
 
-  async me(customerId: string) {
-    const customer = await this.getById(customerId);
+	async me(customerId: string) {
+		const customer = await this.getById(customerId);
 
-    if (!customer) {
-      throw new Unauthorized();
-    }
+		if (!customer) {
+			throw new Unauthorized();
+		}
 
-    const { password, calcUserAge, ...restOfCustomer } = customer;
+		const { password, calcUserAge, ...restOfCustomer } = customer;
 
-    return restOfCustomer;
-  }
+		return restOfCustomer;
+	}
 
-  getById(id: string) {
-    return this.customerRepository.findOneBy({ id });
-  }
+	getById(id: string) {
+		return this.customerRepository.findOneBy({ id });
+	}
 
-  getByEmail(email: string): Promise<Customer | null> {
-    return this.customerRepository.findOneBy({ email });
-  }
+	getByEmail(email: string): Promise<Customer | null> {
+		return this.customerRepository.findOneBy({ email });
+	}
 
-  save(customer: Partial<Customer>) {
-    return this.customerRepository.save(customer);
-  }
+	save(customer: Partial<Customer>) {
+		return this.customerRepository.save(customer);
+	}
 }

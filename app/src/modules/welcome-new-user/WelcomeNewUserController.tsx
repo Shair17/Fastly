@@ -29,8 +29,9 @@ export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
                   fontWeight="bold"
                   fontSize="6xl"
                   color="secondary"
-                  textDecorLine="underline"
-                  textDecorStyle="dotted">
+                  //textDecorLine="underline"
+                  //textDecorStyle="dotted"
+                >
                   Jimmy
                 </Text>
                 , gracias por descargar{' '}
@@ -60,7 +61,7 @@ export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
               delay={3000}
               useNativeDriver>
               <Text fontWeight="bold" fontSize="5xl" color="text">
-                A continuación configurarás tu perfil.
+                A continuación, configurarás tu perfil.
               </Text>
             </Animatable.View>
 

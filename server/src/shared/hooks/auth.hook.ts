@@ -1,213 +1,198 @@
-import { onRequestHookHandler } from "fastify";
-import * as jwt from "jsonwebtoken";
-import { BadRequest, Unauthorized, InternalServerError } from "http-errors";
-import { DataSource } from "typeorm";
-import { Admin } from "../../modules/admin/admin.entity";
-import { User } from "../../modules/user/user.entity";
-import { Customer } from "../../modules/customer/customer.entity";
-import { Dealer } from "../../modules/dealer/dealer.entity";
-
-const dataSource = new DataSource({
-  type: "mysql",
-  host: process.env.DATABASE_HOST,
-  port: +process.env.DATABASE_PORT!,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  entities: [Admin, Customer, Dealer, User],
-});
-
-const adminRepository = dataSource.getRepository(Admin);
-const userRepository = dataSource.getRepository(User);
-const customerRepository = dataSource.getRepository(Customer);
-const dealerRepository = dataSource.getRepository(Dealer);
+import { onRequestHookHandler } from 'fastify';
+import { getInstanceByToken } from 'fastify-decorators';
+import { AdminService } from '../../modules/admin/admin.service';
+import { CustomerService } from '../../modules/customer/customer.service';
+import { DealerService } from '../../modules/dealer/dealer.service';
+import { UserService } from '../../modules/user/user.service';
+import * as jwt from 'jsonwebtoken';
+import { BadRequest, Unauthorized, InternalServerError } from 'http-errors';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)...
 export const hasBearerToken: onRequestHookHandler = async (
-  { headers },
-  reply
+	{ headers },
+	reply
 ) => {
-  const { authorization } = headers;
-  let token: string;
+	const { authorization } = headers;
+	let token: string;
 
-  if (authorization) {
-    const parts = authorization.split(" ");
+	if (authorization) {
+		const parts = authorization.split(' ');
 
-    if (parts.length === 2 && parts[1].split(".").length === 3) {
-      const scheme = parts[0];
-      token = parts[1];
+		if (parts.length === 2 && parts[1].split('.').length === 3) {
+			const scheme = parts[0];
+			token = parts[1];
 
-      if (!/^Bearer$/i.test(scheme)) {
-        throw new BadRequest("malformed_token");
-      }
-    } else {
-      throw new BadRequest("malformed_token");
-    }
-  } else {
-    throw new Unauthorized("token_not_provided");
-  }
+			if (!/^Bearer$/i.test(scheme)) {
+				throw new BadRequest('malformed_token');
+			}
+		} else {
+			throw new BadRequest('malformed_token');
+		}
+	} else {
+		throw new Unauthorized('token_not_provided');
+	}
 
-  const decoded = jwt.decode(token) as jwt.JwtPayload;
+	const decoded = jwt.decode(token) as jwt.JwtPayload;
 
-  if (!decoded) {
-    throw new BadRequest(`malformed_token`);
-  }
+	if (!decoded) {
+		throw new BadRequest(`malformed_token`);
+	}
 
-  if (new Date(decoded.exp! * 1000) < new Date()) {
-    throw new BadRequest(`token_expired`);
-  }
+	if (new Date(decoded.exp! * 1000) < new Date()) {
+		throw new BadRequest(`token_expired`);
+	}
 };
 
 export const adminIsAuthenticated: onRequestHookHandler = async (
-  { headers, adminId },
-  reply
+	{ headers, adminId },
+	reply
 ) => {
-  try {
-    const token = headers.authorization?.split(" ")[1];
+	try {
+		const token = headers.authorization?.split(' ')[1];
 
-    const decoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
-      adminId: string;
-    };
+		const decoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
+			id: string;
+		};
 
-    const admin = await adminRepository.findOneBy({ id: decoded.adminId });
+		const adminService = getInstanceByToken<AdminService>('AdminServiceToken');
+		const admin = await adminService.getById(decoded.id);
 
-    if (!admin) {
-      throw new Unauthorized();
-    }
+		if (!admin) {
+			throw new Unauthorized();
+		}
 
-    if (admin.isBanned) {
-      throw new Unauthorized("banned");
-    }
+		if (admin.isBanned) {
+			throw new Unauthorized('banned');
+		}
 
-    if (!admin.isActive) {
-      throw new Unauthorized("inactive_account");
-    }
+		if (!admin.isActive) {
+			throw new Unauthorized('inactive_account');
+		}
 
-    adminId = admin.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
-    throw new InternalServerError();
-  }
+		adminId = admin.id;
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+		throw new InternalServerError();
+	}
 };
 
 export const userIsAuthenticated: onRequestHookHandler = async (
-  { headers, userId },
-  reply
+	{ headers, userId },
+	reply
 ) => {
-  try {
-    const token = headers.authorization?.split(" ")[1];
+	try {
+		const token = headers.authorization?.split(' ')[1];
 
-    const decoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
-      userId: string;
-    };
+		const decoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+			id: string;
+		};
 
-    const user = await userRepository.findOneBy({ id: decoded.userId });
+		const userService = getInstanceByToken<UserService>('UserServiceToken');
+		const user = await userService.getById(decoded.id);
 
-    if (!user) {
-      throw new Unauthorized();
-    }
+		if (!user) {
+			throw new Unauthorized();
+		}
 
-    if (user.isBanned) {
-      throw new Unauthorized("banned");
-    }
+		if (user.isBanned) {
+			throw new Unauthorized('banned');
+		}
 
-    userId = user.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
+		userId = user.id;
+	} catch (error) {
+		console.log(error);
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
 
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
 
-    throw new InternalServerError();
-  }
+		throw new InternalServerError();
+	}
 };
 
 export const customerIsAuthenticated: onRequestHookHandler = async (
-  { headers, customerId },
-  reply
+	{ headers, customerId },
+	reply
 ) => {
-  try {
-    const token = headers.authorization?.split(" ")[1];
+	try {
+		const token = headers.authorization?.split(' ')[1];
 
-    const decoded = jwt.verify(token!, process.env.JWT_CUSTOMER_SECRET!) as {
-      customerId: string;
-    };
+		const decoded = jwt.verify(token!, process.env.JWT_CUSTOMER_SECRET!) as {
+			id: string;
+		};
 
-    const customer = await customerRepository.findOneBy({
-      id: decoded.customerId,
-    });
+		const customerService = getInstanceByToken<CustomerService>(
+			'CustomerServiceToken'
+		);
+		const customer = await customerService.getById(decoded.id);
 
-    if (!customer) {
-      throw new Unauthorized();
-    }
+		if (!customer) {
+			throw new Unauthorized();
+		}
 
-    if (customer.isBanned) {
-      throw new Unauthorized("banned");
-    }
+		if (customer.isBanned) {
+			throw new Unauthorized('banned');
+		}
 
-    if (!customer.isActive) {
-      throw new Unauthorized("inactive_account");
-    }
+		if (!customer.isActive) {
+			throw new Unauthorized('inactive_account');
+		}
 
-    customerId = customer.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
-    throw new InternalServerError();
-  }
+		customerId = customer.id;
+	} catch (error) {
+		console.log(error);
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+		throw new InternalServerError();
+	}
 };
 
 export const dealerIsAuthenticated: onRequestHookHandler = async (
-  { headers, dealerId },
-  reply
+	{ headers, dealerId },
+	reply
 ) => {
-  try {
-    const token = headers.authorization?.split(" ")[1];
+	try {
+		const token = headers.authorization?.split(' ')[1];
 
-    const decoded = jwt.verify(token!, process.env.JWT_DEALER_SECRET!) as {
-      dealerId: string;
-    };
+		const decoded = jwt.verify(token!, process.env.JWT_DEALER_SECRET!) as {
+			id: string;
+		};
 
-    const dealer = await dealerRepository.findOneBy({ id: decoded.dealerId });
+		const dealerService =
+			getInstanceByToken<DealerService>('DealerServiceToken');
+		const dealer = await dealerService.getById(decoded.id);
 
-    if (!dealer) {
-      throw new Unauthorized();
-    }
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+		if (dealer.isBanned) {
+			throw new Unauthorized('banned');
+		}
+		if (!dealer.isActive) {
+			throw new Unauthorized('inactive_account');
+		}
+		dealerId = dealer.id;
+	} catch (error) {
+		console.log(error);
 
-    if (dealer.isBanned) {
-      throw new Unauthorized("banned");
-    }
-
-    if (!dealer.isActive) {
-      throw new Unauthorized("inactive_account");
-    }
-
-    dealerId = dealer.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
-    throw new InternalServerError();
-  }
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+		throw new InternalServerError();
+	}
 };

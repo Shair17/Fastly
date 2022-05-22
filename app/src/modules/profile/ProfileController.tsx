@@ -1,12 +1,25 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 // import {Skeleton} from '../../components/atoms/Skeleton';
 import {ProfileScreenProps} from '../../navigation/screens/app/ProfileScreen';
 import {ThemeSwitcher} from '../../components/atoms/ThemeSwitcher';
 
+import {http} from '../../services/http.service';
+
 const avatar = require('../../assets/images/avatar-placeholder.jpg');
 
 export const ProfileController: FC<ProfileScreenProps> = () => {
+  useEffect(() => {
+    http
+      .get('/users/me')
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Div flex={1} bg="body">
       <Div p="2xl">

@@ -5,25 +5,21 @@ import {
   refreshToken,
   isNewUser,
   user,
-  isAuthenticated,
   isNewUserKey,
   accessTokenKey,
   refreshTokenKey,
+  Tokens,
 } from '../constants/auth.constants';
 import {storage} from '../storage';
 
-type AuthTypes = {
-  isAuthenticated: boolean;
+type AuthTypes = Tokens & {
   isNewUser: boolean;
-  accessToken: string;
-  refreshToken: string;
   user: {};
 };
 
 const getDefaultValues = (): AuthTypes => {
   return {
-    isAuthenticated,
-    isNewUser,
+    isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,
     accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
     user,
@@ -33,12 +29,31 @@ const getDefaultValues = (): AuthTypes => {
 export const useAuthStore = create(
   combine(getDefaultValues(), (set, get) => ({
     // increase: (by: number) => set(state => ({bears: state.bears + by})),
-    setAuth: (auth: AuthTypes) => {
-      storage.set(accessTokenKey, auth.accessToken);
-      storage.set(refreshTokenKey, auth.refreshToken);
-      storage.set(isNewUserKey, auth.isNewUser);
+    setUser: (user: {}) => {
+      // ...
+    },
+    setIsNewUser: (isNewUser: boolean) => {
+      storage.set(isNewUserKey, isNewUser);
 
-      set(auth);
+      set({
+        isNewUser,
+      });
+    },
+    setRefreshToken: (refreshToken: string) => {
+      storage.set(refreshTokenKey, refreshToken);
+
+      set({
+        refreshToken,
+      });
+    },
+    setTokens: ({accessToken, refreshToken}: Tokens) => {
+      storage.set(accessTokenKey, accessToken);
+      storage.set(refreshTokenKey, refreshToken);
+
+      set({
+        accessToken,
+        refreshToken,
+      });
     },
   })),
 );

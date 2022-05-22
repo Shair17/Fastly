@@ -10,13 +10,14 @@ import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {AuthenticationScreenProps} from '../../navigation/screens/AuthenticationScreen';
+import {AuthService} from '../../services/auth.service';
 
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
-  const setAuth = useAuthStore(s => s.setAuth);
+  const setTokens = useAuthStore(s => s.setTokens);
 
   StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('transparent');
@@ -42,17 +43,20 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
         if (user !== null) {
           const {accessToken, userID} = user;
 
-          console.log({accessToken, userID});
-
           try {
-            // Here make http calls to fastly auth api
+            const authService = new AuthService();
 
-            console.log('i got');
-            console.log('here make http calls');
+            // Should return {accessToken, refreshToken}
+            const response = await authService.logInWithFacebook({
+              accessToken,
+              userID,
+            });
 
-            // Once we got tokens {accessToken, refreshToken}
-            // We need to store tokens into device memory and...
-            // Yey! we're logged in :D
+            setTokens({
+              accessToken: response.data.accessToken,
+              refreshToken: response.data.refreshToken,
+            });
+
             // set isNewUser here
 
             setOverlayVisible(false);
@@ -79,13 +83,6 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
       );
       setOverlayVisible(false);
     }
-    // setAuth({
-    //   accessToken: 'some-access-token',
-    //   refreshToken: 'some-refresh-token',
-    //   isAuthenticated: true,
-    //   isNewUser: false,
-    //   user: {},
-    // });
   };
 
   return (

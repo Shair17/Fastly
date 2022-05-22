@@ -1,5 +1,5 @@
 import {isDev} from './environment.constants';
 
 export const API_BASE = isDev
-  ? 'http://192.168.1.57:5000'
+  ? 'http://192.168.1.46:3000/v1'
   : 'https://api.fastly.delivery';

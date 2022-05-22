@@ -8,6 +8,7 @@ import {AskPersonalInformationScreenProps} from '../../navigation/screens/AskPer
 import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import z from 'zod';
+import {useAuthStore} from '../../stores/useAuthStore';
 
 const avatarPlaceholderImage = require('../../assets/images/avatar-placeholder.jpg');
 
@@ -27,6 +28,7 @@ const schema = z.object({
 export const AskPersonalInformationController: FC<
   AskPersonalInformationScreenProps
 > = ({navigation}) => {
+  const setIsNewUser = useAuthStore(s => s.setIsNewUser);
   const {
     control,
     handleSubmit,
@@ -43,6 +45,7 @@ export const AskPersonalInformationController: FC<
   const onSubmit = () => {
     // actualizar isNewUser boolean to true
     console.log('finish');
+    setIsNewUser(false);
   };
 
   return (

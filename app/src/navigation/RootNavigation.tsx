@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from 'react-native-magnus';
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
@@ -12,6 +12,9 @@ import {useAuthStore} from '../stores/useAuthStore';
 import {usePermissionsStore} from '../stores/usePermissionsStore';
 import {HeaderScreen} from '../components/molecules/HeaderScreen';
 import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
+import {isValidToken} from '../utils/isValidToken';
+import {isTokenExpired} from '../utils/isTokenExpired';
+import {http} from '../services/http.service';
 
 export type RootStackParams = {
   /**
@@ -45,8 +48,81 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 export const RootNavigation = () => {
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
-  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const accessToken = useAuthStore(s => s.accessToken);
+  const refreshToken = useAuthStore(s => s.refreshToken);
+  const setRefreshToken = useAuthStore(s => s.setRefreshToken);
+  const setTokens = useAuthStore(s => s.setTokens);
+  const hasTokens = !!useAuthStore(s => s.accessToken && s.refreshToken);
   const isNewUser = useAuthStore(s => s.isNewUser);
+
+  const isAuthenticated =
+    hasTokens &&
+    isValidToken(accessToken) &&
+    isValidToken(refreshToken) &&
+    !isTokenExpired(accessToken) &&
+    !isTokenExpired(refreshToken);
+
+  useEffect(() => {
+    if (refreshToken) {
+      setRefreshToken(refreshToken);
+    }
+  }, [refreshToken]);
+
+  useEffect(() => {
+    if (!accessToken) return;
+
+    http.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    http
+      .get('/users/me')
+      .then(({data}) => {
+        // console.log('get /me');
+        // setUser({...})
+        // console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (!refreshToken) return;
+
+    const initialRefreshTokens = async () => {
+      const response = await http.post('/auth/facebook/refresh', {
+        refreshToken,
+      });
+
+      if (response.data.accessToken) {
+        http.interceptors.response.use(
+          res => res,
+          async error => {
+            console.log('interceptor error');
+            const response = await http.post('/auth/facebook/refresh', {
+              refreshToken,
+            });
+
+            if (response.data.accessToken) {
+              console.log('interceptor token refrescado');
+              setTokens({accessToken: response.data.accessToken, refreshToken});
+
+              if (error.config) {
+                console.log('volver a intentar', error.config);
+
+                error.config.headers.common[
+                  'Authorization'
+                ] = `Bearer ${response.data.accessToken}`;
+                http.request(error.config);
+              }
+            }
+          },
+        );
+        setTokens({accessToken: response.data.accessToken, refreshToken});
+      }
+    };
+
+    initialRefreshTokens();
+  }, []);
 
   return (
     <Stack.Navigator>
