@@ -22,9 +22,9 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
         {/* Logo Container */}
         <div className="flex items-center justify-center flex-1 lg:justify-start">
           <Link href="/" passHref>
-            <a className="flex items-center justify-center text-3xl font-bold">
-              <Logo className="h-6 mr-2" />
-              Fastly
+            <a className="flex items-center justify-center">
+              <Logo className="mr-2 h-7" />
+              <span className="self-center text-2xl font-bold">Fastly</span>
             </a>
           </Link>
         </div>
