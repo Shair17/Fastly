@@ -4,11 +4,14 @@ import {
 	Text,
 	Button,
 	Container,
+	Center,
 	useMantineTheme,
+	Image,
 	Anchor,
 } from '@mantine/core';
 import { Dots } from '../components/atoms/Dots';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/images/fastly@1000x1000.png';
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -42,6 +45,17 @@ const useStyles = createStyles((theme) => ({
 	dotsLeft: {
 		left: 0,
 		top: 0,
+	},
+
+	logoContainer: {
+		backgroundColor: '#fee2e2',
+		height: 120,
+		width: 120,
+		borderRadius: 100,
+		display: 'flex',
+		alignSelf: 'center',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 
 	title: {
@@ -107,6 +121,11 @@ export const Index = () => {
 			<Dots className={classes.dots} style={{ right: 0, top: 60 }} />
 
 			<div className={classes.inner}>
+				<Center mb="xs">
+					<div className={classes.logoContainer}>
+						<Image src={Logo} width={80} height={80} />
+					</div>
+				</Center>
 				<Title className={classes.title}>
 					Bienvenido al panel de administración de{' '}
 					<Text

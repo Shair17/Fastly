@@ -12,13 +12,13 @@ const services = [
       {
         itemService: [
           {
-            title: 'Licores',
+            title: 'Licorería',
             img: require('../../assets/images/objects/liqueur.png'),
             bgColor: 'green100',
             borderColor: 'green300',
           },
           {
-            title: 'Restaurantes',
+            title: 'Restaurante',
             img: require('../../assets/images/objects/hamburger.png'),
             bgColor: 'yellow100',
             borderColor: 'yellow300',
