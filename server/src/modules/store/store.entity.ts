@@ -3,6 +3,8 @@ import { Customer } from '../customer/customer.entity';
 import { Base } from '../../shared/entities/base.entity';
 import { StoreCategory } from '../../shared/enums/storeCategories.enum';
 
+// store ranking es one to many relationship
+
 @Entity('stores')
 export class Store extends Base {
 	@ManyToOne(() => Customer, (customer) => customer.stores)
