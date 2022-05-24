@@ -48,11 +48,8 @@ export class Store extends Base {
 		// TODO: Probar si esto funciona!!
 		if (this.openTime === undefined && this.closeTime === undefined) {
 			this.openFullTime = true;
+		} else {
+			this.openFullTime = false;
 		}
 	}
-
-	// TODO
-	// openTime
-	// closeTime
-	// if those are nulls, then the store is open all day
 }
