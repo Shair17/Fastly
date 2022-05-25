@@ -1,4 +1,4 @@
-import { Controller, POST as Post, PUT as Put, Hook } from 'fastify-decorators';
+import { Controller, POST as Post, PUT as Put } from 'fastify-decorators';
 import { AuthService } from './auth.service';
 import { Request, Reply } from '../../interfaces/http.interfaces';
 import {

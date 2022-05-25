@@ -9,8 +9,8 @@ import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { bootstrap } from 'fastify-decorators';
-import { configSchema } from './config/config.schema';
 import { AppModule } from './app.module';
+import { ConfigSchema, ConfigSchemaType } from './config/config.schema';
 
 declare module 'fastify' {
 	interface FastifyRequest {
@@ -21,39 +21,40 @@ declare module 'fastify' {
 	}
 
 	interface FastifyInstance {
-		config: {
-			PORT: string;
+		config: ConfigSchemaType;
+		// config: {
+		// 	PORT: string;
 
-			DATABASE_TYPE: string;
-			DATABASE_HOST: string;
-			DATABASE_PORT: number;
-			DATABASE_USERNAME: string;
-			DATABASE_PASSWORD: string;
-			DATABASE_NAME: string;
+		// 	DATABASE_TYPE: string;
+		// 	DATABASE_HOST: string;
+		// 	DATABASE_PORT: number;
+		// 	DATABASE_USERNAME: string;
+		// 	DATABASE_PASSWORD: string;
+		// 	DATABASE_NAME: string;
 
-			JWT_USER_SECRET: string;
-			JWT_USER_SECRET_EXPIRES_IN: string;
-			JWT_USER_REFRESH_SECRET: string;
-			JWT_USER_REFRESH_SECRET_EXPIRES_IN: string;
-			JWT_ADMIN_SECRET: string;
-			JWT_ADMIN_SECRET_EXPIRES_IN: string;
-			JWT_ADMIN_REFRESH_SECRET: string;
-			JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN: string;
-			JWT_FORGOT_ADMIN_PASSWORD_SECRET: string;
-			JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN: string;
-			JWT_CUSTOMER_SECRET: string;
-			JWT_CUSTOMER_SECRET_EXPIRES_IN: string;
-			JWT_CUSTOMER_REFRESH_SECRET: string;
-			JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN: string;
-			JWT_FORGOT_CUSTOMER_PASSWORD_SECRET: string;
-			JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN: string;
-			JWT_DEALER_SECRET: string;
-			JWT_DEALER_SECRET_EXPIRES_IN: string;
-			JWT_DEALER_REFRESH_SECRET: string;
-			JWT_DEALER_REFRESH_SECRET_EXPIRES_IN: string;
-			JWT_FORGOT_DEALER_PASSWORD_SECRET: string;
-			JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN: string;
-		};
+		// 	JWT_USER_SECRET: string;
+		// 	JWT_USER_SECRET_EXPIRES_IN: string;
+		// 	JWT_USER_REFRESH_SECRET: string;
+		// 	JWT_USER_REFRESH_SECRET_EXPIRES_IN: string;
+		// 	JWT_ADMIN_SECRET: string;
+		// 	JWT_ADMIN_SECRET_EXPIRES_IN: string;
+		// 	JWT_ADMIN_REFRESH_SECRET: string;
+		// 	JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN: string;
+		// 	JWT_FORGOT_ADMIN_PASSWORD_SECRET: string;
+		// 	JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN: string;
+		// 	JWT_CUSTOMER_SECRET: string;
+		// 	JWT_CUSTOMER_SECRET_EXPIRES_IN: string;
+		// 	JWT_CUSTOMER_REFRESH_SECRET: string;
+		// 	JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN: string;
+		// 	JWT_FORGOT_CUSTOMER_PASSWORD_SECRET: string;
+		// 	JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN: string;
+		// 	JWT_DEALER_SECRET: string;
+		// 	JWT_DEALER_SECRET_EXPIRES_IN: string;
+		// 	JWT_DEALER_REFRESH_SECRET: string;
+		// 	JWT_DEALER_REFRESH_SECRET_EXPIRES_IN: string;
+		// 	JWT_FORGOT_DEALER_PASSWORD_SECRET: string;
+		// 	JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN: string;
+		// };
 	}
 }
 
@@ -75,7 +76,7 @@ export default async function Server(
 			// debug: true,
 		},
 		confKey: 'config',
-		schema: configSchema,
+		schema: ConfigSchema,
 	});
 
 	server.register(import('@fastify/rate-limit'), {
