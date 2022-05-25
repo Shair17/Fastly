@@ -1,23 +1,41 @@
-import { Column, Entity } from 'typeorm';
-import { IsNumber, IsPositive, IsString, IsUrl } from 'class-validator';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { Store } from '../store/store.entity';
 import { Base } from '../../shared/entities/base.entity';
+import { UserFavorite } from '../user/user-favorite.entity';
 
 @Entity('products')
 export class Product extends Base {
-	@Column()
-	@IsString()
+	@ManyToOne(() => Store, (store) => store.products)
+	store: Store;
+
+	@ManyToOne(() => UserFavorite, (userFavorite) => userFavorite.products)
+	userFavorite: UserFavorite;
+
+	@Column({
+		type: 'varchar',
+	})
 	name: string;
 
-	@Column()
-	@IsNumber()
-	@IsPositive()
+	@Column({
+		type: 'varchar',
+		nullable: true,
+	})
+	description?: string | null;
+
+	@Column({
+		type: 'double',
+		unsigned: true,
+	})
 	price: number;
 
-	// Debería agregar el blur hash??
-	// https://blurha.sh/
-
-	@Column()
-	@IsString()
-	@IsUrl()
+	@Column({
+		type: 'varchar',
+	})
 	image: string;
+
+	@Column({
+		type: 'varchar',
+		name: 'blurhash',
+	})
+	blurHash: string;
 }

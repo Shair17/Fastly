@@ -1,7 +1,9 @@
-import { AfterLoad, Column, Entity, ManyToOne } from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Customer } from '../customer/customer.entity';
+import { Product } from '../product/product.entity';
+import { StoreRanking } from './store-ranking.entity';
 import { Base } from '../../shared/entities/base.entity';
-import { StoreCategory } from '../../shared/enums/storeCategories.enum';
+import { StoreCategory } from '../../shared/enums/store-categories.enum';
 
 // store ranking es one to many relationship
 
@@ -10,10 +12,26 @@ export class Store extends Base {
 	@ManyToOne(() => Customer, (customer) => customer.stores)
 	owner: Customer;
 
-	@Column()
+	@OneToMany(() => Product, (product) => product.store)
+	products: Product[];
+
+	@OneToMany(() => StoreRanking, (ranking) => ranking.store)
+	rankings?: StoreRanking[];
+
+	@Column({
+		type: 'varchar',
+		nullable: true,
+	})
+	logoImage?: string | null;
+
+	@Column({
+		type: 'varchar',
+	})
 	name: string;
 
-	@Column()
+	@Column({
+		type: 'varchar',
+	})
 	address: string;
 
 	@Column({

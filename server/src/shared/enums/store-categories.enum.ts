@@ -13,6 +13,5 @@ export enum StoreCategory {
 	SUPERMERCADOS = 'Supermercados',
 	LIBRERIA = 'Librería',
 	JUGUERIA = 'Juguería',
-
 	OTRO = 'Otro',
 }

@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { UserAddress } from './user-address.entity';
-import { IsString, MinLength, MaxLength } from 'class-validator';
+import { UserFavorite } from './user-favorite.entity';
+import { UserCart } from './user-cart.entity';
 import { UserAppBase } from '../../shared/entities/userAppBase.entity';
 
 @Entity('users')
@@ -8,12 +9,18 @@ export class User extends UserAppBase {
 	@OneToMany(() => UserAddress, (address) => address.user, { nullable: true })
 	addresses?: UserAddress[];
 
+	@OneToMany(() => UserFavorite, (favorites) => favorites.user, {
+		nullable: true,
+	})
+	favorites?: UserFavorite[];
+
+	@OneToMany(() => UserCart, (cart) => cart.user, { nullable: true })
+	cart?: UserCart[];
+
 	@Column()
-	@IsString()
 	facebookId: string;
 
 	@Column()
-	@IsString()
 	facebookAccessToken: string;
 
 	@Column({
@@ -21,8 +28,6 @@ export class User extends UserAppBase {
 		length: 9,
 		nullable: true,
 	})
-	@MinLength(9)
-	@MaxLength(9)
 	phone?: string | null;
 
 	@Column({
@@ -30,7 +35,5 @@ export class User extends UserAppBase {
 		length: 8,
 		nullable: true,
 	})
-	@MinLength(8)
-	@MaxLength(8)
 	dni?: string | null;
 }

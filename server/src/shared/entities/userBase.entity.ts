@@ -1,12 +1,4 @@
 import { Column, AfterLoad } from 'typeorm';
-import {
-	IsEmail,
-	IsString,
-	IsUrl,
-	IsBoolean,
-	MinLength,
-	MaxLength,
-} from 'class-validator';
 import { Base } from './base.entity';
 import { getDefaultAvatar } from '../../utils/getDefaultAvatar';
 import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
@@ -14,16 +6,19 @@ import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
 const defaultAvatar = getDefaultAvatar(100);
 
 export abstract class UserBase extends Base {
-	@Column()
-	@IsString()
+	@Column({
+		type: 'varchar',
+	})
 	name: string;
 
-	@Column()
-	@IsEmail()
+	@Column({
+		type: 'varchar',
+	})
 	email: string;
 
-	@Column()
-	@IsString()
+	@Column({
+		type: 'varchar',
+	})
 	password: string;
 
 	@Column({
@@ -42,27 +37,23 @@ export abstract class UserBase extends Base {
 		type: 'varchar',
 		length: 8,
 	})
-	@MinLength(8)
-	@MaxLength(8)
 	dni: string;
 
 	@Column({
 		type: 'varchar',
 		length: 9,
 	})
-	@MinLength(9)
-	@MaxLength(9)
 	phone: string;
 
-	@Column()
-	@IsString()
+	@Column({
+		type: 'varchar',
+	})
 	address: string;
 
 	@Column({
 		type: 'varchar',
 		default: defaultAvatar,
 	})
-	@IsUrl()
 	avatar?: string | null;
 
 	@Column({
@@ -83,7 +74,6 @@ export abstract class UserBase extends Base {
 		default: false,
 		name: 'is_active',
 	})
-	@IsBoolean()
 	isActive: boolean;
 
 	@Column({

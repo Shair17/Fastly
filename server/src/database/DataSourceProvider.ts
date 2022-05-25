@@ -10,11 +10,15 @@ import { DataSource } from 'typeorm';
 import { Admin } from '../modules/admin/admin.entity';
 import { Customer } from '../modules/customer/customer.entity';
 import { Dealer } from '../modules/dealer/dealer.entity';
+import { DealerRanking } from '../modules/dealer/dealer-ranking.entity';
 import { User } from '../modules/user/user.entity';
 import { UserAddress } from '../modules/user/user-address.entity';
+import { UserFavorite } from '../modules/user/user-favorite.entity';
+import { UserCart } from '../modules/user/user-cart.entity';
 import { Order } from '../modules/order/order.entity';
 import { Product } from '../modules/product/product.entity';
 import { Store } from '../modules/store/store.entity';
+import { StoreRanking } from '../modules/store/store-ranking.entity';
 
 @Service()
 export class DataSourceProvider {
@@ -32,11 +36,15 @@ export class DataSourceProvider {
 			Admin,
 			Customer,
 			Dealer,
+			DealerRanking,
 			User,
 			UserAddress,
+			UserFavorite,
+			UserCart,
 			Order,
 			Product,
 			Store,
+			StoreRanking,
 		],
 		synchronize: true,
 		// logging: true,

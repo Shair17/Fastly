@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { Base } from '../../shared/entities/base.entity';
-import { UserAddressTag } from '../../shared/enums/userAddressTag.enum';
+import { UserAddressTag } from '../../shared/enums/user-address-tag.enum';
 
 @Entity('users_addresses')
 export class UserAddress extends Base {
