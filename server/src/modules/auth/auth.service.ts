@@ -49,7 +49,7 @@ import { MailService } from '../../shared/services/mail.service';
  * TODO: Conectar el servidor a sus respectivos frontends
  */
 
-@Service()
+@Service('AuthServiceToken')
 export class AuthService {
 	constructor(
 		private readonly httpService: HttpService,

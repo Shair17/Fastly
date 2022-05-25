@@ -1,4 +1,4 @@
-import { Service, Initializer } from "fastify-decorators";
+import { Service, Initializer } from 'fastify-decorators';
 
-@Service()
+@Service('MailServiceToken')
 export class MailService {}

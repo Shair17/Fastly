@@ -1,4 +1,4 @@
-import { Controller } from "fastify-decorators";
+import { Controller, GET as Get } from 'fastify-decorators';
 
-@Controller()
+@Controller('/stores')
 export class StoreController {}
