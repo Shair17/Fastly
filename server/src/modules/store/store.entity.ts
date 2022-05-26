@@ -22,7 +22,7 @@ export class Store extends Base {
 		type: 'varchar',
 		nullable: true,
 	})
-	logoImage?: string | null;
+	logo?: string | null;
 
 	@Column({
 		type: 'varchar',

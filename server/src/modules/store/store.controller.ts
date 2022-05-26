@@ -4,17 +4,36 @@ import { Request, Reply } from '../../interfaces/http.interfaces';
 import {
 	hasBearerToken,
 	userIsAuthenticated,
+	customerIsAuthenticated,
 } from '../../shared/hooks/auth.hook';
-import { GetStoreParams, GetStoreParamsType } from './store.schema';
+import {
+	GetStoreParams,
+	GetStoreParamsType,
+	GetStoresQueryString,
+	GetStoresQueryStringType,
+} from './store.schema';
 
 @Controller('/stores')
 export class StoreController {
 	constructor(private readonly storeService: StoreService) {}
 
 	@Get('/', {
+		schema: {
+			querystring: GetStoresQueryString,
+		},
 		// onRequest: [hasBearerToken, userIsAuthenticated],
 	})
-	async getStores() {
+	async getStoresByQueryString(
+		request: Request<{
+			Querystring: GetStoresQueryStringType;
+		}>,
+		reply: Reply
+	) {
+		if (request.query.category) {
+			return this.storeService.getByCategory(request.query.category);
+		}
+
+		// fallback
 		return this.storeService.getStores();
 	}
 
@@ -31,14 +50,5 @@ export class StoreController {
 		reply: Reply
 	) {
 		return this.storeService.getById(request.params.id);
-	}
-
-	@Get('/shair', {
-		// onRequest: [hasBearerToken, userIsAuthenticated],
-	})
-	async pruebita(request: Request, reply: Reply) {
-		const { id, params, query } = request;
-		console.log(id, params, query);
-		return 'pruebita';
 	}
 }
