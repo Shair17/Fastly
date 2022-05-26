@@ -142,7 +142,7 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
                 </p>
               </div>
               <div>
-                <div className="mt-2 space-y-1">
+                <div className="mt-2 space-y-2">
                   <a href="#" className="block">
                     <AndroidBadge />
                   </a>
