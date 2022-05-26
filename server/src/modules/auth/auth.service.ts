@@ -40,11 +40,6 @@ import { TokenService } from '../../shared/services/token.service';
 import { MailService } from '../../shared/services/mail.service';
 
 /**
- * @CreatedBy Shair17
- * @Shair17 aka as Jimmy Morales
- * @For Fastly Delivery 2022
- * @Copyright Todos los derechos reservados 2022.
- * TODO: Hacer la configuración del servicio de correos para poder enviar los correos de recuperación de contraseñas
  * TODO: Probar todos los endpoints
  * TODO: Conectar el servidor a sus respectivos frontends
  */
@@ -359,6 +354,18 @@ export class AuthService {
 		);
 
 		try {
+			await this.mailService.sendEmail({
+				from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
+				to: admin.email,
+				subject: 'Recuperación de Contraseña ⚡',
+				html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://admin.fastly.delivery/new-password/${resetPasswordToken}" target="_blank">https://admin.fastly.delivery/new-password/${resetPasswordToken}</a>`,
+			});
+		} catch (error) {
+			console.log('error al enviar el correo', error);
+			throw new InternalServerError();
+		}
+
+		try {
 			await this.adminService.save({
 				...admin,
 				resetPasswordToken,
@@ -367,9 +374,12 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO: Enviar correo aquí
-
 		return {
+			statusCode: 200,
+			message: 'Verifica tu correo para resetear tu contraseña',
+			success: true,
+			// TODO: borrar esto, solo me servirá de prueba
+			link: `https://admin.fastly.delivery/new-password/${resetPasswordToken}`,
 			resetPasswordToken,
 		};
 	}
@@ -615,7 +625,17 @@ export class AuthService {
 			}
 		);
 
-		// enviar correo aquí
+		try {
+			await this.mailService.sendEmail({
+				from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
+				to: customer.email,
+				subject: 'Recuperación de Contraseña ⚡',
+				html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://customer.fastly.delivery/new-password/${resetPasswordToken}" target="_blank">https://customer.fastly.delivery/new-password/${resetPasswordToken}</a>`,
+			});
+		} catch (error) {
+			console.log('error al enviar el correo', error);
+			throw new InternalServerError();
+		}
 
 		try {
 			await this.customerService.save({
@@ -627,6 +647,11 @@ export class AuthService {
 		}
 
 		return {
+			statusCode: 200,
+			message: 'Verifica tu correo para resetear tu contraseña',
+			success: true,
+			// TODO: borrar esto, solo me servirá de prueba
+			link: `https://customer.fastly.delivery/new-password/${resetPasswordToken}`,
 			resetPasswordToken,
 		};
 	}
@@ -876,6 +901,18 @@ export class AuthService {
 		);
 
 		try {
+			await this.mailService.sendEmail({
+				from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
+				to: dealer.email,
+				subject: 'Recuperación de Contraseña ⚡',
+				html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://dealer.fastly.delivery/new-password/${resetPasswordToken}" target="_blank">https://dealer.fastly.delivery/new-password/${resetPasswordToken}</a>`,
+			});
+		} catch (error) {
+			console.log('error al enviar el correo', error);
+			throw new InternalServerError();
+		}
+
+		try {
 			await this.dealerService.save({
 				...dealer,
 				resetPasswordToken,
@@ -885,6 +922,11 @@ export class AuthService {
 		}
 
 		return {
+			statusCode: 200,
+			message: 'Verifica tu correo para resetear tu contraseña',
+			success: true,
+			// TODO: borrar esto, solo me servirá de prueba
+			link: `https://dealer.fastly.delivery/new-password/${resetPasswordToken}`,
 			resetPasswordToken,
 		};
 	}

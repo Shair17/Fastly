@@ -73,7 +73,7 @@ export default async function Server(
 	server.register(import('@fastify/env'), {
 		dotenv: {
 			path: resolve(__dirname, '../.env'),
-			// debug: true,
+			debug: true,
 		},
 		confKey: 'config',
 		schema: ConfigSchema,
