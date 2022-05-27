@@ -3,119 +3,8 @@ import Link from 'next/link';
 import {Logo} from '../atoms/Logo';
 import {AndroidBadge} from '../atoms/AndroidBadge';
 import {IOSBadge} from '../atoms/IOSBadge';
-import {FacebookIcon} from '../atoms/FacebookIcon';
-import {InstagramIcon} from '../atoms/InstagramIcon';
-import {WhatsappIcon} from '../atoms/WhatsappIcon';
-
-const footerSocial = [
-  {
-    title: '',
-    href: '',
-    icon: (
-      <FacebookIcon className="w-6 h-6 text-primary-100 hover:text-white" />
-    ),
-  },
-  {
-    title: '',
-    href: '',
-    icon: (
-      <InstagramIcon className="w-6 h-6 text-primary-100 hover:text-white" />
-    ),
-  },
-  {
-    title: '',
-    href: '',
-    icon: (
-      <WhatsappIcon className="w-6 h-6 text-primary-100 hover:text-white" />
-    ),
-  },
-];
-
-const footerItems = [
-  {
-    title: 'Ecosistema',
-    items: [
-      {
-        name: 'Emprendedores',
-        href: '#',
-      },
-      {
-        name: 'Repartidores',
-        href: '#',
-      },
-      {
-        name: 'Desarrolladores',
-        href: '#',
-      },
-      {
-        name: 'Influencers',
-        href: '#',
-      },
-      {
-        name: 'Inversionistas',
-        href: '#',
-      },
-    ],
-  },
-  {
-    title: 'Recursos',
-    items: [
-      {
-        name: 'Fastly para Android',
-        href: '#',
-      },
-      {
-        name: 'Fastly para iOS',
-        href: '#',
-      },
-      {
-        name: 'Assets de Fastly',
-        href: '#',
-      },
-      {
-        name: 'Panel del Emprendedor',
-        href: '#',
-      },
-      {
-        name: 'Panel del Repartidor',
-        href: '#',
-      },
-      {
-        name: 'Panel del Administrador',
-        href: '#',
-      },
-    ],
-  },
-  {
-    title: 'Acerca de Fastly',
-    items: [
-      {
-        name: 'Contacto',
-        href: '#',
-      },
-      {
-        name: 'Política de Privacidad',
-        href: '#',
-      },
-      {
-        name: 'Terminos y Condiciones',
-        href: '#',
-      },
-      {
-        name: 'Servicios de Fastly',
-        href: '#',
-      },
-      {
-        name: 'Blog de Fastly',
-        href: '#',
-      },
-      {
-        name: 'Shair en Fastly',
-        href: '#',
-      },
-    ],
-  },
-];
+import {footerItems} from './footer-items.constants';
+import {footerSocial} from './footer-social.constants';
 
 interface Props {}
 
@@ -143,10 +32,10 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               </div>
               <div>
                 <div className="mt-2 space-y-2">
-                  <a href="#" className="block">
+                  <a href="/android" target="_blank" className="block">
                     <AndroidBadge />
                   </a>
-                  <a href="#" className="block">
+                  <a href="/ios" target="_blank" className="block">
                     <IOSBadge />
                   </a>
                 </div>
@@ -173,11 +62,11 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               <ul className="mt-4 space-y-3">
                 {items.map(({name, href}, key) => (
                   <li key={key.toString()}>
-                    <a
-                      className="text-primary-100 hover:text-white"
-                      href={href}>
-                      {name}
-                    </a>
+                    <Link href={href} passHref>
+                      <a className="text-primary-100 hover:text-white">
+                        {name}
+                      </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -189,12 +78,9 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
             © {new Date().getFullYear().toString()} <strong>Fastly</strong> ·
             Desarrollado por{' '}
             <strong>
-              <a
-                href="https://www.instagram.com/shair.dev"
-                target="_blank"
-                className="hover:underline">
-                @shair.dev
-              </a>
+              <Link href="/shair-instagram" passHref target="_blank">
+                <a className="hover:underline">@shair.dev</a>
+              </Link>
             </strong>{' '}
             · Todos los derechos reservados.
           </div>
