@@ -17,6 +17,7 @@ import { UserFavorite } from '../modules/user/user-favorite.entity';
 import { UserCart } from '../modules/user/user-cart.entity';
 import { Order } from '../modules/order/order.entity';
 import { Product } from '../modules/product/product.entity';
+import { Coupon } from '../modules/coupon/coupon.entity';
 import { Store } from '../modules/store/store.entity';
 import { StoreRanking } from '../modules/store/store-ranking.entity';
 
@@ -43,6 +44,7 @@ export class DataSourceProvider {
 			UserCart,
 			Order,
 			Product,
+			Coupon,
 			Store,
 			StoreRanking,
 		],

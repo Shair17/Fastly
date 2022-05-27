@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, AfterLoad } from 'typeorm';
 import { DealerRanking } from './dealer-ranking.entity';
 import { Order } from '../order/order.entity';
 import { UserBase } from '../../shared/entities/userBase.entity';
@@ -25,6 +25,23 @@ export class Dealer extends UserBase {
 		default: false,
 	})
 	available: boolean;
+
+	ranking: number;
+
+	@AfterLoad()
+	calcDealerRanking() {
+		if (this.rankings) {
+			let sum = 0;
+
+			for (const ranking of this.rankings) {
+				sum += ranking.value;
+			}
+
+			this.ranking = Math.round(sum / this.rankings.length);
+		} else {
+			this.ranking = 0;
+		}
+	}
 }
 
 export { DealerVehicle };

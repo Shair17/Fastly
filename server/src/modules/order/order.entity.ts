@@ -14,6 +14,13 @@ export class Order extends Base {
 	product: Product;
 
 	@Column({
+		type: 'number',
+		name: 'delivery_price',
+		unsigned: true,
+	})
+	deliveryPrice: number;
+
+	@Column({
 		default: 1,
 		unsigned: false,
 	})

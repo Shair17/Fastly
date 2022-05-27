@@ -40,8 +40,7 @@ import { TokenService } from '../../shared/services/token.service';
 import { MailService } from '../../shared/services/mail.service';
 
 /**
- * TODO: Probar todos los endpoints
- * TODO: Conectar el servidor a sus respectivos frontends
+ * TODO: Probar la lib ´dayjs´ para manejar las fechas
  */
 
 @Service('AuthServiceToken')
