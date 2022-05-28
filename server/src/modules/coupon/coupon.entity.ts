@@ -1,7 +1,6 @@
 import { Entity, Column, AfterLoad, OneToMany } from 'typeorm';
 import { Product } from '../product/product.entity';
 import { Base } from '../../shared/entities/base.entity';
-import { generateRandomId } from '../../utils/generateRandomId';
 
 @Entity('coupons')
 export class Coupon extends Base {
@@ -11,7 +10,6 @@ export class Coupon extends Base {
 	@Column({
 		type: 'varchar',
 		length: 10,
-		default: () => generateRandomId(),
 		unique: true,
 	})
 	code: string;

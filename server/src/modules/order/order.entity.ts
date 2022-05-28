@@ -14,7 +14,7 @@ export class Order extends Base {
 	product: Product;
 
 	@Column({
-		type: 'number',
+		type: 'float',
 		name: 'delivery_price',
 		unsigned: true,
 	})
