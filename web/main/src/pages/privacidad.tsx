@@ -1,5 +1,6 @@
 import type {NextPage} from 'next';
 import {LegalLayout} from 'components/templates/LegalLayout';
+import styles from '../styles/legal.module.css';
 
 const Terminos: NextPage = () => {
   return (
@@ -47,27 +48,27 @@ const Terminos: NextPage = () => {
       </p>
       <p>La información recopilada por los archivos de registro incluye:</p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Direcciones de protocolo de Internet (IP) (pueden revelar su ubicación
           geográfica).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Detalles del software que realiza la solicitud (como tipo de
           navegador, versión, sistema operativo).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Tipo de dispositivo (móvil, tableta, escritorio).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Sello de fecha y hora de la solicitud.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           El nombre del recurso solicitado.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Número de solicitudes.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Páginas de referencia / salida.
         </li>
       </ul>
@@ -83,8 +84,8 @@ const Terminos: NextPage = () => {
       <p>
         Cuando se comunique con nosotros mediante nuestros formularios de
         contacto, es posible que se le solicite información de identificación
-        personal que se puede utilizar para contactar o identificarle ("Datos
-        personales").
+        personal que se puede utilizar para contactar o identificarle
+        (&quot;Datos personales&quot;).
       </p>
       <p>
         Fastly protege sus Datos personales de acuerdo con las leyes aplicables
@@ -102,14 +103,18 @@ const Terminos: NextPage = () => {
         registrándote con Apple, recopilamos:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">Tu nombre.</li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+          Tu nombre.
+        </li>
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico (o el alias generado por Apple).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Un identificador proporcionado por Apple.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">Idioma preferido.</li>
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+          Idioma preferido.
+        </li>
       </ul>
       <p>
         Almacenaremos esta información durante el tiempo que desee formar parte
@@ -124,10 +129,10 @@ const Terminos: NextPage = () => {
       </h2>
       <p>Cuando manejamos sus solicitudes de soporte, recopilamos:</p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Cualquier información que proporcione para el contexto (registros de
           fallas, información de diagnóstico, etc.).
         </li>
@@ -137,17 +142,17 @@ const Terminos: NextPage = () => {
         recopilamos el siguientes datos sobre su dispositivo:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Modelo de dispositivo (por ejemplo, iPhone XR).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Versión de software instalada (por ejemplo, iOS 13.7).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Idioma del sistema preferido y el idioma que se muestra en la
           aplicación Fastly.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Versión y número de compilación de la aplicación Fastly.
         </li>
       </ul>
@@ -161,11 +166,11 @@ const Terminos: NextPage = () => {
         Podemos retener correos electrónicos de soporte indefinidamente para:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Tener contexto de solicitudes anteriores, lo que puede ayudarnos a
           responder a sus preguntas futuras más rápidamente.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Identificar tendencias en las consultas de soporte, que pueden
           ayudarnos a detectar y resolver problemas y mejorar la aplicación
           Fastly
@@ -187,10 +192,10 @@ const Terminos: NextPage = () => {
         sugerencia, recoger:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           El contenido de su comentario o sugerencia (incluidos los enlaces o
           cualquier otro material adicional que nos proporcione como contexto).
         </li>
@@ -200,17 +205,17 @@ const Terminos: NextPage = () => {
         recopilamos el siguientes datos sobre su dispositivo:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Modelo de dispositivo (por ejemplo, Xiaomi Redmi Note 8 Pro).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Versión de software instalada (por ejemplo, Android 10).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Idioma del sistema preferido y el idioma que se muestra en la
           aplicación Fastly.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Versión y número de compilación de la aplicación Fastly.
         </li>
       </ul>
@@ -219,11 +224,11 @@ const Terminos: NextPage = () => {
         indefinido para:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Tener contexto de comentarios / sugerencias anteriores que puede haber
           enviado a nosotros, para que podamos comprender mejor sus necesidades.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Identifique posibles mejoras en la aplicación Fastly.
         </li>
       </ul>
@@ -267,8 +272,8 @@ const Terminos: NextPage = () => {
         Tomamos precauciones para proteger su información. Donde sea que
         recolectemos información confidencial, esa información se cifra y se
         transmite a nosotros de forma segura. Puede verificar esto buscando un
-        icono de candado en la barra de direcciones y busca "https" al principio
-        de la dirección de este sitio.
+        icono de candado en la barra de direcciones y busca &quot;https&quot; al
+        principio de la dirección de este sitio.
       </p>
       <p>
         La seguridad de sus datos es importante para nosotros, pero ningún
@@ -318,8 +323,8 @@ const Terminos: NextPage = () => {
         Se almacenan los contenidos de sus compras y sobras y la configuración
         de su aplicación localmente en su dispositivo. Solo cuando nos contactes
         directamente desde la aplicación procesamos sus Datos personales, como
-        se define en "Consultas de soporte" y "Comentarios y sugerencias" de
-        esta Política de privacidad.
+        se define en &quot;Consultas de soporte&quot; y &quot;Comentarios y
+        sugerencias&quot; de esta Política de privacidad.
       </p>
       <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
         Uso de la aplicación
@@ -350,10 +355,10 @@ const Terminos: NextPage = () => {
         Si la aplicación falla mientras la usa, los datos anonimizados sobre el
         Apple puede recopilar el bloqueo para ayudarnos a identificar la causa
         del falla, por lo que esperamos poder solucionarlo en una actualización
-        futura. Estos "registros de fallos" contener información como el estado
-        de la aplicación, el sistema operativo y dispositivo en el momento del
-        accidente. Ninguno de estos datos puede identificarlo en de todas
-        formas.
+        futura. Estos &quot;registros de fallos&quot; contener información como
+        el estado de la aplicación, el sistema operativo y dispositivo en el
+        momento del accidente. Ninguno de estos datos puede identificarlo en de
+        todas formas.
       </p>
       <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">Actualizaciones</h2>
       <p>
@@ -372,7 +377,7 @@ const Terminos: NextPage = () => {
         actividades en Fastly.
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           <a
             href="https://www.apple.com/"
             target="_blank"
@@ -383,7 +388,7 @@ const Terminos: NextPage = () => {
           : Procesamiento de pagos, verificación de actualizaciones y
           administración de licencias de iOS aplicaciones.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           <a
             href="https://formspree.io/"
             target="_blank"
@@ -393,7 +398,7 @@ const Terminos: NextPage = () => {
           </a>
           : Manejo de envíos de formularios de contacto.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           <a
             href="https://www.mailgun.com/"
             target="_blank"
@@ -403,7 +408,7 @@ const Terminos: NextPage = () => {
           </a>
           : Manejo de la lista de correo del programa beta.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           <a
             href="https://github.com/"
             target="_blank"
@@ -415,7 +420,7 @@ const Terminos: NextPage = () => {
           de este servicio. a medida que ocurren los procesos de soporte al
           cliente.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           <a
             href="https://slack.com/"
             target="_blank"

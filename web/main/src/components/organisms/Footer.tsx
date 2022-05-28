@@ -32,10 +32,18 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               </div>
               <div>
                 <div className="mt-2 space-y-2">
-                  <a href="/android" target="_blank" className="block">
+                  <a
+                    href="/android"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block">
                     <AndroidBadge />
                   </a>
-                  <a href="/ios" target="_blank" className="block">
+                  <a
+                    href="/ios"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block">
                     <IOSBadge />
                   </a>
                 </div>
@@ -47,6 +55,7 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
                   <a
                     href={href}
                     target="_blank"
+                    rel="noreferrer"
                     aria-label={title}
                     title={title}
                     className="block">
@@ -78,7 +87,11 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
             © {new Date().getFullYear().toString()} <strong>Fastly</strong> ·
             Desarrollado por{' '}
             <strong>
-              <Link href="/shair-instagram" passHref target="_blank">
+              <Link
+                href="/shair-instagram"
+                passHref
+                target="_blank"
+                rel="noreferrer">
                 <a className="hover:underline">@shair.dev</a>
               </Link>
             </strong>{' '}

@@ -13,3 +13,4 @@ export const DEALER_PANEL = 'https://dealer.fastly.delivery';
 
 export const SHAIR_WEB = 'https://shair.dev';
 export const SHAIR_INSTAGRAM = 'https://www.instagram.com/shair.dev';
+export const SHAIR_CONTACTO = 'https://shair.dev/contact';

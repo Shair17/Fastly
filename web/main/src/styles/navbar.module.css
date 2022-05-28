@@ -1,0 +1,16 @@
+.nav__listitem {
+  /* padding: 1rem; */
+}
+.nav__listitem:hover ul,
+.nav__listitem:focus ul {
+  opacity: 1;
+  visibility: visible;
+}
+.nav__listitemdrop {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease-in-out;
+}
+.nav__listitemdrop li {
+  transition: background-color 200ms ease-in-out;
+}

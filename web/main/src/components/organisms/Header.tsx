@@ -1,60 +1,11 @@
 import {FC, PropsWithChildren} from 'react';
 import Link from 'next/link';
-import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
-import clsx from 'clsx';
+import {headerItems} from './header-items.constants';
 import {Logo} from '../atoms/Logo';
+import {ChevronDown} from 'tabler-icons-react';
+import styles from '../../styles/navbar.module.css';
 
 interface Props {}
-
-const headerItems = [
-  {
-    title: 'Características',
-  },
-  {
-    title: 'Como Funciona',
-  },
-  {
-    title: 'Servicios',
-    items: [
-      {
-        title: 'Fastly para Emprendedores',
-        description:
-          'Incrementa tus ventas y llega a más personas y potenciales clientes con nuestro sistema de emprendedores.',
-      },
-      {
-        title: 'Fastly para Repartidores',
-        description:
-          'Genera dinero extra realizando pedidos y recibes el 100% de tus propinas con nuestro sistema amigable para el repartidor.',
-      },
-      {
-        title: 'Fastly para Influencers',
-        description:
-          'Si tienes una comunidad entonces Fastly para Influencers es para ti! Ayúdanos a llegar a más personas y nosotros te daremos muchos beneficios.',
-      },
-      {
-        title: 'Fastly para Desarrolladores',
-        description:
-          '¿Eres curioso eh? Si tienes los conocimientos necesarios entonces Fastly para Desarrolladores es para ti, usamos mejores tecnologías y practicas que en otras plataformas.',
-      },
-    ],
-  },
-  {
-    title: 'Blog',
-  },
-  {
-    title: 'Contacto',
-    items: [
-      {
-        title: 'Fastly',
-        description: 'Ponte en contacto con Fastly',
-      },
-      {
-        title: 'Shair',
-        description: 'Ponte en contacto con Shair',
-      },
-    ],
-  },
-];
 
 export const Header: FC<PropsWithChildren<Props>> = () => {
   return (
@@ -70,15 +21,56 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
           </Link>
         </div>
 
-        {/* Navigation */}
         <nav className="items-center justify-center hidden h-full space-x-2 lg:flex">
-          {headerItems.map(({title}, key) => (
-            <a
-              key={key.toString()}
-              className="flex px-1 py-2 font-semibold text-gray-800 transition-colors duration-150 cursor-pointer whitespace-nowrap hover:text-black">
-              {title}
-            </a>
-          ))}
+          {headerItems.map(({title, href, items}, key) =>
+            items ? (
+              <div
+                tabIndex={0}
+                className={`relative inline-block text-left cursor-default ${styles.nav__listitem}`}
+                key={key.toString()}>
+                <div className="flex items-center w-full mx-2">
+                  <span
+                    aria-label={title}
+                    className="flex px-1 py-2 font-semibold text-gray-700 group whitespace-nowrap hover:text-black">
+                    {title}
+                  </span>
+                  <ChevronDown
+                    className="w-4 h-4 text-inherit"
+                    strokeWidth={1}
+                  />
+                </div>
+                <ul
+                  className={`shadow-lg rounded-lg bg-white flex flex-col space-y-1 p-2 w-[16rem] lg:w-[18rem] -left-20 top-0 absolute mt-10 ${styles.nav__listitemdrop}`}
+                  tabIndex={0}>
+                  {items.map(({title, description, href}, key) => (
+                    <li
+                      className="w-full px-4 py-3 rounded-md cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
+                      key={key.toString()}>
+                      <Link href={href} passHref>
+                        <a className="outline-none cursor-pointer">
+                          <span className="text-base font-medium text-gray-900">
+                            {title}
+                          </span>
+
+                          <div className="mt-1 text-sm text-gray-700 ">
+                            {description}
+                          </div>
+                        </a>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <Link href={href} passHref key={key.toString()}>
+                <a
+                  className="flex px-1 py-2 font-semibold text-gray-700 group whitespace-nowrap hover:text-black"
+                  aria-label={title}>
+                  {title}
+                </a>
+              </Link>
+            ),
+          )}
         </nav>
 
         {/* Buttons */}

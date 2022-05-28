@@ -1,5 +1,7 @@
 import type {NextPage} from 'next';
+import Link from 'next/link';
 import {LegalLayout} from 'components/templates/LegalLayout';
+import styles from '../styles/legal.module.css';
 
 const Privacidad: NextPage = () => {
   return (
@@ -14,10 +16,10 @@ const Privacidad: NextPage = () => {
           className="text-primary-500">
           @shair.dev
         </a>
-        . Hemos redactado estos Términos de servicio ("Términos") para que
-        conozca las reglas que se aplican cuando utiliza la aplicación Fastly o
-        cualquiera de nuestros otros productos o servicios que se vinculan a
-        estos Términos ("Servicios").
+        . Hemos redactado estos Términos de servicio (&quot;Términos&quot;) para
+        que conozca las reglas que se aplican cuando utiliza la aplicación
+        Fastly o cualquiera de nuestros otros productos o servicios que se
+        vinculan a estos Términos (&quot;Servicios&quot;).
       </p>
       <p>
         Al descargar o utilizar los Servicios, estos Términos automáticamente se
@@ -42,28 +44,28 @@ const Privacidad: NextPage = () => {
       </p>
       <p>Con esta licencia no puede: </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Modifique o copie los materiales.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Utilice los materiales para cualquier propósito comercial o para
           cualquier público exhibición (comercial o no comercial).
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Intente realizar ingeniería inversa o extraer el código fuente de
           nuestro software.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Intente traducir la aplicación a otros idiomas o haga derivada
           versiones.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Elimine cualquier copyright u otras anotaciones de propiedad del
           materiales.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
-          Transfiera los materiales a otra persona o "refleje" los materiales en
-          cualquier otro servidor.
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+          Transfiera los materiales a otra persona o &quot;refleje&quot; los
+          materiales en cualquier otro servidor.
         </li>
       </ul>
       <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
@@ -83,13 +85,13 @@ const Privacidad: NextPage = () => {
       </h2>
       <p>
         Su uso de los Servicios es bajo su propio riesgo. Los materiales en
-        nuestro el sitio web y las aplicaciones móviles se proporcionan "TAL
-        CUAL" y "SEGÚN DISPONIBILIDAD" base. Los Servicios se brindan sin
-        garantías de ningún tipo, expreso o implícito, y por la presente
-        renuncia y niega todos los demás garantías que incluyen, entre otras,
-        garantías implícitas de comerciabilidad, idoneidad para un propósito
-        particular, no infracción de propiedad intelectual u otra violación de
-        derechos.
+        nuestro el sitio web y las aplicaciones móviles se proporcionan
+        &quot;TAL CUAL&quot; y &quot;SEGÚN DISPONIBILIDAD&quot; base. Los
+        Servicios se brindan sin garantías de ningún tipo, expreso o implícito,
+        y por la presente renuncia y niega todos los demás garantías que
+        incluyen, entre otras, garantías implícitas de comerciabilidad,
+        idoneidad para un propósito particular, no infracción de propiedad
+        intelectual u otra violación de derechos.
       </p>
       <p>
         Además, si bien intentamos brindar una excelente experiencia de usuario,
@@ -157,9 +159,9 @@ const Privacidad: NextPage = () => {
         Nos tomamos muy en serio su privacidad, por eso recopilamos lo mínimo
         información sobre usted que podamos. Puedes aprender cómo es tu
         información manejado cuando usa nuestros Servicios leyendo la{' '}
-        <a className="text-primary-500" href="/privacidad">
-          Política de privacidad
-        </a>
+        <Link href="/privacidad" passHref>
+          <a className="text-primary-500">Política de privacidad</a>
+        </Link>
         . Aceptas que la Privacidad La política constituye parte de estos
         Términos.
       </p>
@@ -168,10 +170,10 @@ const Privacidad: NextPage = () => {
       </h2>
       <p>
         Los Servicios pueden contener enlaces a otros sitios web o servicios
-        ("Vinculado Sitios"). Los Sitios enlazados no están bajo el control de
-        Fastly y Fastly no es responsable del contenido de ningún sitio
-        vinculado, incluido sin limitación, cualquier enlace contenido en un
-        sitio vinculado, o cualquier cambio o actualizaciones a un sitio
+        (&quot;Vinculado Sitios&quot;). Los Sitios enlazados no están bajo el
+        control de Fastly y Fastly no es responsable del contenido de ningún
+        sitio vinculado, incluido sin limitación, cualquier enlace contenido en
+        un sitio vinculado, o cualquier cambio o actualizaciones a un sitio
         vinculado. Fastly le proporciona estos enlaces únicamente a usted por
         conveniencia, y la inclusión de cualquier enlace no implica respaldo por
         parte de Fastly del sitio o cualquier asociación con sus operadores.
@@ -199,17 +201,18 @@ const Privacidad: NextPage = () => {
       </p>
       <p>
         Usted comprende y acepta los términos que se enumeran a continuación al
-        compartir cualquier información o material ("Contenido") con nosotros:
+        compartir cualquier información o material (&quot;Contenido&quot;) con
+        nosotros:
       </p>
       <ul className="pl-5">
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Tiene todos los derechos necesarios para revelarnos el Contenido.
           Haciendo por lo tanto, no está violando los derechos de ningún tercero
           y sabe de ninguna otra persona o entidad cuyos derechos serán
           infringidos por la revisión y / o uso del Contenido por parte de
           Fastly.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Entiende que Fastly no tiene ninguna obligación, ya sea expresa o
           implícito, para desarrollar o usar su Contenido y que no se ofrece
           compensación debido a usted o cualquier otra persona por cualquier uso
@@ -217,7 +220,7 @@ const Privacidad: NextPage = () => {
           derivadas de su idea. Tú Entiendo que Fastly no asume ninguna
           obligación con respecto a ninguno de los Tu contenido.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Daremos a su Contenido la consideración que garantice nuestro juicio
           único. Nuestra revisión de su contenido no se interpretará como
           cualquier reconocimiento de la novedad u originalidad del Contenido.
@@ -225,13 +228,13 @@ const Privacidad: NextPage = () => {
           revelar Nuestras actividades que están relacionadas con el tema de la
           presentación Contenido.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Usted reconoce que el Fastly, directa o indirectamente, puede ser
           trabajando en el mismo Contenido o en un Contenido similar, o ya
           conoces dicho Contenido de otras fuentes, o simplemente desea
           desarrollar este Contenido o similar al Contenido por sí solo.
         </li>
-        <li className="relative pl-8 mb-6 fA_DsS1e45">
+        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
           Por la presente, usted libera irrevocablemente y libera a Fastly para
           siempre de cualquier y todas las acciones, causas de acciones,
           reclamos, daños, responsabilidades y demandas, absolutas o
