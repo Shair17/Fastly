@@ -1,13 +1,21 @@
 import { Service } from 'fastify-decorators';
-import { appVersion } from './constants/app.constants';
+import {
+	serverName,
+	serverVersion,
+	appName,
+	appVersion,
+	appDeveloper,
+} from './constants/app.constants';
 
 @Service('AppServiceToken')
 export class AppService {
 	getApp(): Object {
 		return {
-			appName: 'Fastly Delivery ⚡',
+			serverName,
+			serverVersion,
+			appName,
 			appVersion,
-			appDeveloper: 'Shair <hello@shair.dev>',
+			appDeveloper,
 			date: new Date().toISOString(),
 		};
 	}
