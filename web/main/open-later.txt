@@ -1,5 +1,0 @@
-# Referencias para hacer layouts
-
-https://nuxtjs.org/
-https://vercel.com/
-https://nextjs.org/
