@@ -32,6 +32,10 @@ async function main() {
 			);
 			await app.listen(+app.config.PORT, serverHost);
 		});
+
+		// app.close().then((err) => {
+		// 	app.log.error(`Application closed on ${signal}`);
+		// });
 	}
 }
 

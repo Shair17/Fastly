@@ -44,6 +44,7 @@
 		"typeorm": "^0.3.6"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^7.1.0",
 		"@types/http-errors": "^1.8.1",
 		"@types/jsonwebtoken": "^8.5.8",
 		"@types/node": "^16.0.0",
