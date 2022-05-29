@@ -16,6 +16,10 @@ import { ForgotPassword } from './pages/forgot-password';
 import { NewPassword } from './pages/new-password';
 
 import { Dashboard } from './pages/dashboard/index';
+import { DashboardAdmins } from './pages/dashboard/admins';
+import { DashboardUsers } from './pages/dashboard/users';
+import { DashboardCustomers } from './pages/dashboard/customers';
+import { DashboardDealers } from './pages/dashboard/dealers';
 
 function App() {
 	const preferredColorScheme = useColorScheme();
@@ -35,7 +39,24 @@ function App() {
 			toggleColorScheme={toggleColorScheme}
 		>
 			<MantineProvider
-				theme={{ colorScheme }}
+				theme={{
+					colorScheme,
+					colors: {
+						brand: [
+							'#FEF0E3',
+							'#FEE9DA',
+							'#FECDB6',
+							'#FEAB92',
+							'#FE8A77',
+							'#FE554A',
+							'#DA3639',
+							'#B62534',
+							'#93172E',
+							'#790E2B',
+						],
+					},
+					primaryColor: 'brand',
+				}}
 				withGlobalStyles
 				withNormalizeCSS
 			>
@@ -46,6 +67,10 @@ function App() {
 					<Route path="/forgot-password" element={<ForgotPassword />} />
 					<Route path="/new-password" element={<NewPassword />} />
 					<Route path="/dashboard" element={<Dashboard />} />
+					<Route path="/dashboard/admins" element={<DashboardAdmins />} />
+					<Route path="/dashboard/users" element={<DashboardUsers />} />
+					<Route path="/dashboard/customers" element={<DashboardCustomers />} />
+					<Route path="/dashboard/dealers" element={<DashboardDealers />} />
 					<Route path="*" element={<NotFound404 />} />
 				</Routes>
 			</MantineProvider>

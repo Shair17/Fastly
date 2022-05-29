@@ -1,13 +1,14 @@
+import { FC } from 'react';
 import { SVGProps } from 'react-html-props';
 
 interface Props extends SVGProps {}
 
-export const Logo = (props: Props) => {
+export const Logo: FC<Props> = (props) => {
 	return (
 		<svg
+			viewBox="0 0 50 65"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 50 50"
 			{...props}
 		>
 			<path

@@ -6,15 +6,14 @@ import {
 	createStyles,
 	ScrollArea,
 } from '@mantine/core';
+import { Link, useLocation } from 'react-router-dom';
 import {
 	ShieldLock,
 	User,
 	Users,
-	ShoppingCart,
 	Settings,
 	Logout,
 	Motorbike,
-	BuildingStore,
 } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -100,22 +99,22 @@ const useStyles = createStyles((theme, _params, getRef) => {
 const tabs = {
 	accounts: [
 		{
-			link: '',
+			link: '/dashboard/admins',
 			label: 'Administradores',
 			icon: ShieldLock,
 		},
 		{
-			link: '',
+			link: '/dashboard/users',
 			label: 'Usuarios',
 			icon: User,
 		},
 		{
-			link: '',
+			link: '/dashboard/customers',
 			label: 'Clientes',
 			icon: Users,
 		},
 		{
-			link: '',
+			link: '/dashboard/dealers',
 			label: 'Repartidores',
 			icon: Motorbike,
 		},
@@ -136,23 +135,23 @@ interface Props {
 export const Navbar = ({ hidden }: Props) => {
 	const { classes, cx } = useStyles();
 	const [section, setSection] = useState('accounts');
-	const [active, setActive] = useState('Billing');
+	// const [active, setActive] = useState('Billing');
+	const { pathname } = useLocation();
 
 	const links = tabs[section].map((item) => (
-		<a
-			className={cx(classes.link, {
-				[classes.linkActive]: item.label === active,
-			})}
-			href={item.link}
+		<Link
+			to={item.link}
 			key={item.label}
-			onClick={(event) => {
-				event.preventDefault();
-				setActive(item.label);
-			}}
+			className={cx(classes.link, {
+				[classes.linkActive]: pathname === item.link,
+			})}
+			// onClick={(event) => {
+			// setActive(item.label);
+			// }}
 		>
 			<item.icon className={classes.linkIcon} />
 			<span>{item.label}</span>
-		</a>
+		</Link>
 	));
 
 	return (
