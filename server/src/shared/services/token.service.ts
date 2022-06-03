@@ -308,29 +308,5 @@ export class TokenService {
 			accessToken: this.generateAccessToken(type, payload),
 			refreshToken: this.generateRefreshToken(type, payload),
 		};
-		// switch (type) {
-		// 	case 'user':
-		// 		return {
-		// 			accessToken: '',
-		// 			refreshToken: '',
-		// 		};
-		// 	case 'admin':
-		// 		return {
-		// 			accessToken: this.generateAccessToken(type, payload),
-		// 			refreshToken: this.generateRefreshToken(type, payload),
-		// 		};
-		// 	case 'customer':
-		// 		return {
-		// 			accessToken: '',
-		// 			refreshToken: '',
-		// 		};
-		// 	case 'dealer':
-		// 		return {
-		// 			accessToken: '',
-		// 			refreshToken: '',
-		// 		};
-		// 	default:
-		// 		throw new Error('Invalid token type');
-		// }
 	}
 }

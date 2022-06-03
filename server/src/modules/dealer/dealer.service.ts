@@ -32,6 +32,32 @@ export class DealerService {
 		return restOfDealer;
 	}
 
+	async getDealers(): Promise<Dealer[]> {
+		return this.dealerRepository.find({
+			select: [
+				'address',
+				'age',
+				'available',
+				'avatar',
+				'banReason',
+				'birthDate',
+				'createdAt',
+				'dni',
+				'email',
+				'id',
+				'isActive',
+				'isBanned',
+				'name',
+				'orders',
+				'phone',
+				'ranking',
+				'rankings',
+				'updatedAt',
+				'vehicle',
+			],
+		});
+	}
+
 	getById(id: string) {
 		return this.dealerRepository.findOneBy({ id });
 	}

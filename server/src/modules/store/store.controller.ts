@@ -1,4 +1,4 @@
-import { Controller, GET as Get } from 'fastify-decorators';
+import { Controller, GET as Get, POST as Post } from 'fastify-decorators';
 import { StoreService } from './store.service';
 import { Request, Reply } from '../../interfaces/http.interfaces';
 import {
@@ -7,7 +7,9 @@ import {
 	customerIsAuthenticated,
 } from '../../shared/hooks/auth.hook';
 import {
+	CreateStoreBody,
 	GetStoreParams,
+	CreateStoreBodyType,
 	GetStoreParamsType,
 	GetStoresQueryString,
 	GetStoresQueryStringType,
@@ -21,7 +23,7 @@ export class StoreController {
 		schema: {
 			querystring: GetStoresQueryString,
 		},
-		// onRequest: [hasBearerToken, userIsAuthenticated],
+		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async getStoresByQueryString(
 		request: Request<{
@@ -50,5 +52,24 @@ export class StoreController {
 		reply: Reply
 	) {
 		return this.storeService.getById(request.params.id);
+	}
+
+	@Get('/categories')
+	async getCategories() {
+		return this.storeService.getCategories();
+	}
+
+	@Post('/create', {
+		schema: {
+			body: CreateStoreBody,
+		},
+		onRequest: [hasBearerToken, customerIsAuthenticated],
+	})
+	async createStore(
+		request: Request<{
+			Body: CreateStoreBodyType;
+		}>
+	) {
+		return this.storeService.createStore(request.body);
 	}
 }

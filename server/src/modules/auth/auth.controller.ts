@@ -87,6 +87,8 @@ export class AuthController {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async logOutFromFacebook(request: Request, reply: Reply) {
+		// TODO: test this
+		reply.removeHeader('authorization');
 		return this.authService.logOutFromFacebook(request.userId);
 	}
 
@@ -179,6 +181,8 @@ export class AuthController {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async logOutAdmin(request: Request, reply: Reply) {
+		// TODO: test this
+		reply.removeHeader('authorization');
 		return this.authService.logOutAdmin(request.adminId);
 	}
 
@@ -274,6 +278,8 @@ export class AuthController {
 		onRequest: [hasBearerToken, customerIsAuthenticated],
 	})
 	async logOutCustomer(request: Request, reply: Reply) {
+		// TODO: test this
+		reply.removeHeader('authorization');
 		return this.authService.logOutCustomer(request.customerId);
 	}
 
@@ -369,6 +375,8 @@ export class AuthController {
 		onRequest: [hasBearerToken, dealerIsAuthenticated],
 	})
 	async logOutDealer(request: Request, reply: Reply) {
+		// TODO: test this
+		reply.removeHeader('authorization');
 		return this.authService.logOutDealer(request.dealerId);
 	}
 }

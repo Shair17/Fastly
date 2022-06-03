@@ -9,7 +9,7 @@ import {
 
 @Service('AppServiceToken')
 export class AppService {
-	getApp(): Object {
+	getApp() {
 		return {
 			serverName,
 			serverVersion,

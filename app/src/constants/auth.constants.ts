@@ -5,10 +5,16 @@ export type Tokens = {
 
 export const accessTokenKey = '@fastly/token';
 export const refreshTokenKey = '@fastly/refresh-token';
-// export const isAuthenticatedKey = '@fastly/isAuthenticated';
+
 export const isNewUserKey = '@fastly/isNewUser';
 
-export const isNewUser = true;
+export const userKey = '@fastly/user';
+
 export const user = {};
+
+export const isNewUser = true;
+
+export const isBanned = false;
+
 export const accessToken = '';
 export const refreshToken = '';

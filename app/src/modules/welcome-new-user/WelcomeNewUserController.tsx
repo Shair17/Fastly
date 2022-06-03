@@ -1,20 +1,24 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import * as Animatable from 'react-native-animatable';
 import {WelcomeNewUserScreenProps} from '../../navigation/screens/WelcomeNewUserScreen';
 import {Button} from '../../components/atoms/Button';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
+import {useUserStore} from '../../stores/useUserStore';
 
 export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
   navigation,
 }) => {
+  const name = useUserStore(user => user.name);
+  const firstName = name.split(' ')[0];
+
   StatusBar.setTranslucent(false);
   StatusBar.setBackgroundColor('#fff');
   StatusBar.setBarStyle('dark-content');
 
   const handleNext = () => {
-    navigation.navigate('AskLocationScreen');
+    navigation.navigate('AskPersonalInformationScreen');
   };
 
   return (
@@ -25,14 +29,8 @@ export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
             <Animatable.View animation="fadeIn" delay={500} useNativeDriver>
               <Text fontWeight="bold" fontSize="6xl" color="text">
                 Hola{' '}
-                <Text
-                  fontWeight="bold"
-                  fontSize="6xl"
-                  color="secondary"
-                  //textDecorLine="underline"
-                  //textDecorStyle="dotted"
-                >
-                  Jimmy
+                <Text fontWeight="bold" fontSize="6xl" color="secondary">
+                  {firstName}
                 </Text>
                 , gracias por descargar{' '}
                 <Text

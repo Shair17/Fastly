@@ -83,10 +83,7 @@ export class AuthService {
 
 		const user = await this.userService.getByFacebookUserID(facebookId);
 
-		// El usuario ya tiene una cuenta, entonces procedemos a verificar si está baneado y/o tiene direcciones
 		if (user !== null) {
-			// TODO -> AGREGAR DIRECCIONES
-
 			if (user.isBanned) {
 				console.log('usuario baneado');
 				console.log(
@@ -125,14 +122,23 @@ export class AuthService {
 				throw new InternalServerError();
 			}
 
-			// TODO también devolver datos del usuario
+			const {
+				checkIsNewUser,
+				facebookAccessToken,
+				refreshToken: userRefreshToken,
+				...restOfUser
+			} = user;
+
 			return {
 				accessToken,
 				refreshToken,
+				user: {
+					...restOfUser,
+				},
 			};
 		}
 
-		// El usuario es nuevo, vamos a crear uno!
+		// El usuario es nuevo, vamos a crear uno
 		const newUser = await this.userService.save({
 			facebookId,
 			facebookAccessToken,
@@ -165,9 +171,19 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
+		const {
+			checkIsNewUser,
+			facebookAccessToken: newUserFacebookAccessToken,
+			refreshToken: newUserRefreshToken,
+			...restOfNewUser
+		} = newUser;
+
 		return {
 			accessToken,
 			refreshToken,
+			user: {
+				...restOfNewUser,
+			},
 		};
 	}
 
@@ -232,7 +248,6 @@ export class AuthService {
 		const admin = await this.adminService.getByEmail(email);
 
 		if (!admin) {
-			console.log('no hay el admin');
 			throw new Unauthorized('invalid_credentials');
 		}
 
@@ -297,8 +312,6 @@ export class AuthService {
 
 		const hashedPassword = await this.passwordService.hash(data.password);
 
-		// example: new Date("11/29/2001")
-
 		const newAdmin = await this.adminService.save({
 			address,
 			avatar: data.avatar,
@@ -326,6 +339,7 @@ export class AuthService {
 				refreshToken,
 			});
 		} catch (error) {
+			console.log('error?');
 			throw new InternalServerError();
 		}
 

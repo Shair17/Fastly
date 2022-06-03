@@ -12,6 +12,7 @@ import {
 import { Dots } from '../components/atoms/Dots';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/images/fastly@1000x1000.png';
+import useAxios from 'axios-hooks';
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -110,6 +111,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const Index = () => {
+	const [{ data }, refetch] = useAxios<number>('/admins/count');
 	const { classes } = useStyles();
 	const theme = useMantineTheme();
 
@@ -160,14 +162,16 @@ export const Index = () => {
 					>
 						Iniciar sesión
 					</Button>
-					<Button
-						component={Link}
-						to="/register"
-						className={classes.control}
-						size="lg"
-					>
-						Registrarse
-					</Button>
+					{data === 0 && (
+						<Button
+							component={Link}
+							to="/register"
+							className={classes.control}
+							size="lg"
+						>
+							Registrarse
+						</Button>
+					)}
 				</div>
 			</div>
 		</Container>

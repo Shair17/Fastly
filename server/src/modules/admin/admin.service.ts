@@ -36,6 +36,27 @@ export class AdminService {
 		return this.adminRepository.findOneBy({ id });
 	}
 
+	async getAdmins(): Promise<Admin[]> {
+		return this.adminRepository.find({
+			select: [
+				'address',
+				'age',
+				'avatar',
+				'banReason',
+				'birthDate',
+				'createdAt',
+				'dni',
+				'email',
+				'id',
+				'isActive',
+				'isBanned',
+				'name',
+				'phone',
+				'updatedAt',
+			],
+		});
+	}
+
 	getByEmail(email: string): Promise<Admin | null> {
 		return this.adminRepository.findOneBy({ email });
 	}

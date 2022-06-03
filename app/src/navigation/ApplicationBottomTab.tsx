@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {RootStackParams} from './RootNavigation';
+import {RootStackParams} from './RootNavigation.type';
 import {bottomTabs} from './bottomTabs';
 
 interface Props

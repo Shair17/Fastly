@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {ThemeProvider, useTheme} from 'react-native-magnus';
+import {NotifierWrapper} from 'react-native-notifier';
 import {useMMKVString} from 'react-native-mmkv';
 import {NavigationContainer, Theme} from '@react-navigation/native';
-import {Navigation} from './navigation/Navigation';
+import {RootNavigation} from './navigation/RootNavigation';
 import Bootsplash from 'react-native-bootsplash';
 import {lightTheme, darkTheme, ThemesNames} from './theme';
 import {themeStorageKey} from './constants/theme.constants';
@@ -53,13 +54,15 @@ function App() {
   }, [themeState.name]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer
-        onReady={() => Bootsplash.hide({fade: true})}
-        theme={themeNavigation}>
-        <Navigation />
-      </NavigationContainer>
-    </ThemeProvider>
+    <NotifierWrapper>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer
+          onReady={() => Bootsplash.hide({fade: true})}
+          theme={themeNavigation}>
+          <RootNavigation />
+        </NavigationContainer>
+      </ThemeProvider>
+    </NotifierWrapper>
   );
 }
 

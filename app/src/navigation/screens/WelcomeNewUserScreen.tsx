@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {WelcomeNewUserController} from '../../modules/welcome-new-user/WelcomeNewUserController';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParams} from '../RootNavigation';
+import {RootStackParams} from '../RootNavigation.type';
 
 export interface WelcomeNewUserScreenProps
   extends NativeStackScreenProps<RootStackParams, 'AskLocationScreen'> {}

@@ -8,7 +8,7 @@ export enum StoreCategory {
 	FARMACIA = 'Farmacia',
 	CUIDADO_PERSONAL = 'Cuidado Personal',
 	MAQUILLAJE = 'Maquillaje',
-	FLORERIA = 'Floreria',
+	FLORISTERIA = 'Floristería',
 	TIENDA = 'Tienda',
 	SUPERMERCADOS = 'Supermercados',
 	LIBRERIA = 'Librería',

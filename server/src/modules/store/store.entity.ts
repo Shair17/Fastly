@@ -5,7 +5,7 @@ import { StoreRanking } from './store-ranking.entity';
 import { Base } from '../../shared/entities/base.entity';
 import { StoreCategory } from '../../shared/enums/store-categories.enum';
 
-// store ranking es one to many relationship
+export { StoreCategory };
 
 @Entity('stores')
 export class Store extends Base {
@@ -28,6 +28,12 @@ export class Store extends Base {
 		type: 'varchar',
 	})
 	name: string;
+
+	@Column({
+		type: 'varchar',
+		nullable: true,
+	})
+	description?: string | null;
 
 	@Column({
 		type: 'varchar',

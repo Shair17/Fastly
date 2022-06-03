@@ -10,6 +10,11 @@ export interface ILocation {
   longitude: number;
 }
 
+export const defaultUserLocation = {
+  longitude: 0,
+  latitude: 0,
+};
+
 export const useLocation = () => {
   const [hasLocation, setHasLocation] = useState(false);
   const [gpsAccessDenied, setGpsAccessDenied] = useState<boolean>(false);
@@ -18,10 +23,8 @@ export const useLocation = () => {
     longitude: 0,
     latitude: 0,
   });
-  const [userLocation, setUserLocation] = useState<ILocation>({
-    longitude: 0,
-    latitude: 0,
-  });
+  const [userLocation, setUserLocation] =
+    useState<ILocation>(defaultUserLocation);
 
   const watchId = useRef<number>();
   const isMounted = useRef(true);

@@ -12,116 +12,37 @@ import {useAuthStore} from '../stores/useAuthStore';
 import {usePermissionsStore} from '../stores/usePermissionsStore';
 import {HeaderScreen} from '../components/molecules/HeaderScreen';
 import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
-import {isValidToken} from '../utils/isValidToken';
-import {isTokenExpired} from '../utils/isTokenExpired';
-import {http} from '../services/http.service';
-
-export type RootStackParams = {
-  /**
-   * Unauthenticated
-   */
-
-  OnBoardingScreen: undefined;
-  AuthenticationScreen: undefined;
-
-  /**
-   * Authenticated
-   */
-
-  // Geolocation Permissions and loading permissions
-  LoadingScreen: undefined;
-  GeolocationPermissionsScreen: undefined;
-
-  // Welcome new users
-  WelcomeNewUserScreen: undefined;
-  // Ask for personal info only for new users
-  AskPersonalInformationScreen: undefined;
-  // Ask for first address only for new users
-  AskLocationScreen: undefined;
-
-  // Fastly App
-  ApplicationBottomTab: undefined;
-};
+import {RootStackParams} from './RootNavigation.type';
+import {isLoggedIn, isTokenExpired} from '../services/refresh-token.service';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 export const RootNavigation = () => {
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
-  const accessToken = useAuthStore(s => s.accessToken);
   const refreshToken = useAuthStore(s => s.refreshToken);
-  const setRefreshToken = useAuthStore(s => s.setRefreshToken);
-  const setTokens = useAuthStore(s => s.setTokens);
+  const setAccessToken = useAuthStore(s => s.setAccessToken);
   const hasTokens = !!useAuthStore(s => s.accessToken && s.refreshToken);
   const isNewUser = useAuthStore(s => s.isNewUser);
 
-  const isAuthenticated =
-    hasTokens &&
-    isValidToken(accessToken) &&
-    isValidToken(refreshToken) &&
-    !isTokenExpired(accessToken) &&
-    !isTokenExpired(refreshToken);
+  const isAuthenticated = isLoggedIn();
 
   useEffect(() => {
-    if (refreshToken) {
-      setRefreshToken(refreshToken);
+    if (!hasTokens) return;
+
+    if (isTokenExpired(refreshToken)) {
+      Notifier.showNotification({
+        title: 'Sesión Expirada',
+        description:
+          'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
+        Component: NotifierComponents.Alert,
+        componentProps: {
+          alertType: 'error',
+          backgroundColor: 'red',
+        },
+      });
     }
-  }, [refreshToken]);
-
-  useEffect(() => {
-    if (!accessToken) return;
-
-    http.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-    http
-      .get('/users/me')
-      .then(({data}) => {
-        // console.log('get /me');
-        // setUser({...})
-        // console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [accessToken]);
-
-  useEffect(() => {
-    if (!refreshToken) return;
-
-    const initialRefreshTokens = async () => {
-      const response = await http.post('/auth/facebook/refresh', {
-        refreshToken,
-      });
-
-      if (response.data.accessToken) {
-        http.interceptors.response.use(
-          res => res,
-          async error => {
-            console.log('interceptor error');
-            const response = await http.post('/auth/facebook/refresh', {
-              refreshToken,
-            });
-
-            if (response.data.accessToken) {
-              console.log('interceptor token refrescado');
-              setTokens({accessToken: response.data.accessToken, refreshToken});
-
-              if (error.config) {
-                console.log('volver a intentar', error.config);
-
-                error.config.headers.common[
-                  'Authorization'
-                ] = `Bearer ${response.data.accessToken}`;
-                http.request(error.config);
-              }
-            }
-          },
-        );
-        setTokens({accessToken: response.data.accessToken, refreshToken});
-      }
-    };
-
-    initialRefreshTokens();
   }, []);
 
   return (
@@ -148,12 +69,12 @@ export const RootNavigation = () => {
                   component={WelcomeNewUserScreen}
                 />
                 <Stack.Screen
-                  name="AskLocationScreen"
-                  component={AskLocationScreen}
-                />
-                <Stack.Screen
                   name="AskPersonalInformationScreen"
                   component={AskPersonalInformationScreen}
+                />
+                <Stack.Screen
+                  name="AskLocationScreen"
+                  component={AskLocationScreen}
                 />
               </Stack.Group>
             ) : (

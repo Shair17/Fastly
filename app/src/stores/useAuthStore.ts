@@ -4,7 +4,6 @@ import {
   accessToken,
   refreshToken,
   isNewUser,
-  user,
   isNewUserKey,
   accessTokenKey,
   refreshTokenKey,
@@ -12,31 +11,37 @@ import {
 } from '../constants/auth.constants';
 import {storage} from '../storage';
 
+export interface ITokens extends Tokens {}
+
 type AuthTypes = Tokens & {
   isNewUser: boolean;
-  user: {};
 };
+
+// TODO: es necesario guardar el accessToken en disco? o solo mantenerlo en memoria? creo q es mejor en memoria
 
 const getDefaultValues = (): AuthTypes => {
   return {
-    isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,
     accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
-    user,
+    isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,
   };
 };
 
 export const useAuthStore = create(
   combine(getDefaultValues(), (set, get) => ({
     // increase: (by: number) => set(state => ({bears: state.bears + by})),
-    setUser: (user: {}) => {
-      // ...
-    },
     setIsNewUser: (isNewUser: boolean) => {
       storage.set(isNewUserKey, isNewUser);
 
       set({
         isNewUser,
+      });
+    },
+    setAccessToken: (accessToken: string) => {
+      storage.set(accessTokenKey, accessToken);
+
+      set({
+        accessToken,
       });
     },
     setRefreshToken: (refreshToken: string) => {
@@ -53,6 +58,15 @@ export const useAuthStore = create(
       set({
         accessToken,
         refreshToken,
+      });
+    },
+    removeTokens: () => {
+      storage.delete(accessTokenKey);
+      storage.delete(refreshTokenKey);
+
+      set({
+        accessToken: '',
+        refreshToken: '',
       });
     },
   })),

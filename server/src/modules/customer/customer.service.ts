@@ -32,6 +32,28 @@ export class CustomerService {
 		return restOfCustomer;
 	}
 
+	async getCustomers(): Promise<Customer[]> {
+		return this.customerRepository.find({
+			select: [
+				'address',
+				'age',
+				'avatar',
+				'banReason',
+				'birthDate',
+				'createdAt',
+				'dni',
+				'email',
+				'id',
+				'isActive',
+				'isBanned',
+				'name',
+				'phone',
+				'stores',
+				'updatedAt',
+			],
+		});
+	}
+
 	getById(id: string) {
 		return this.customerRepository.findOneBy({ id });
 	}

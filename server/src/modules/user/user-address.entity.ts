@@ -27,9 +27,15 @@ export class UserAddress extends Base {
 	@Column()
 	city: string;
 
-	// [latitude, longitude]
-	@Column({ type: 'simple-array' })
-	coordinates: number[];
+	@Column({
+		type: 'float',
+	})
+	latitude: number;
+
+	@Column({
+		type: 'float',
+	})
+	longitude: number;
 
 	@ManyToOne(() => User, (user) => user.addresses)
 	user: User;

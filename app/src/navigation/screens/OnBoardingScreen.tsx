@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {OnBoardingController} from '../../modules/onboarding/OnBoardingController';
-import {RootStackParams} from '../RootNavigation';
+import {RootStackParams} from '../RootNavigation.type';
 
 export interface OnBoardingScreenProps
   extends NativeStackScreenProps<RootStackParams, 'OnBoardingScreen'> {}

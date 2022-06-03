@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Image, Text, Icon} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
@@ -7,45 +7,79 @@ import {ContainerWithKeyboardAvoidingView} from '../../components/templates/Cont
 import {AskPersonalInformationScreenProps} from '../../navigation/screens/AskPersonalInformationScreen';
 import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import z from 'zod';
-import {useAuthStore} from '../../stores/useAuthStore';
+import {
+  launchImageLibrary,
+  ImagePickerResponse,
+} from 'react-native-image-picker';
+import {PersonalInformationType} from '../../interfaces/appInterfaces';
+import {AskPersonalInformationSchema} from '../../schemas/ask-personal-information.schema';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
 
 const avatarPlaceholderImage = require('../../assets/images/avatar-placeholder.jpg');
-
-type PersonalInformationType = {
-  phone: string;
-  dni: string;
-};
-
-const schema = z.object({
-  phone: z
-    .string()
-    .max(9)
-    .regex(/^[9]\d{8}$/),
-  dni: z.string().max(8),
-});
 
 export const AskPersonalInformationController: FC<
   AskPersonalInformationScreenProps
 > = ({navigation}) => {
-  const setIsNewUser = useAuthStore(s => s.setIsNewUser);
+  const [image, setImage] = useState<ImagePickerResponse>();
+
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm<PersonalInformationType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(AskPersonalInformationSchema),
   });
 
-  // const onSubmit = handleSubmit(data => {
-  //   console.log(data);
-  //   navigation.navigate('AskLocationScreen');
-  // });
+  const userPickedAvatar = image !== undefined && image?.assets !== undefined;
 
-  const onSubmit = () => {
-    // actualizar isNewUser boolean to true
-    console.log('finish');
-    setIsNewUser(false);
+  const avatarImage =
+    image !== undefined && image?.assets !== undefined
+      ? {uri: image.assets[0].uri}
+      : avatarPlaceholderImage;
+
+  const handleNext = handleSubmit(({email, phone, dni}) => {
+    // image?.assets![0].base64
+
+    navigation.navigate('AskLocationScreen', {
+      avatar:
+        image !== undefined && image?.assets !== undefined
+          ? image.assets[0].uri
+          : undefined,
+      email,
+      phone,
+      dni,
+    });
+  });
+
+  const handleChangeAvatar = () => {
+    launchImageLibrary(
+      {
+        maxHeight: 200,
+        maxWidth: 200,
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: true,
+        quality: 0.7,
+      },
+      response => {
+        if (response.didCancel) return;
+        if (!response.assets) return;
+
+        setImage(response);
+      },
+    );
+  };
+
+  const handleRemoveAvatar = () => {
+    setImage(undefined);
+  };
+
+  const handleChangeAvatarInfo = () => {
+    Notifier.showNotification({
+      title: 'Personaliza tu avatar',
+      description: 'Toca el avatar para elegir uno desde tu galería.',
+      Component: NotifierComponents.Notification,
+    });
   };
 
   return (
@@ -54,7 +88,7 @@ export const AskPersonalInformationController: FC<
         <Div p="2xl">
           <Div>
             <Text fontWeight="bold" fontSize="6xl" color="text">
-              Completa tu perfil para comenzar
+              Completa tu perfil para continuar
             </Text>
 
             <Div my="md" />
@@ -70,15 +104,42 @@ export const AskPersonalInformationController: FC<
           <Div justifyContent="center" alignItems="center">
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => console.log('user press avatar picture')}
-              onLongPress={() => console.log('user longpress avatar picture')}>
-              <Div shadow="sm" w={120} h={120} rounded="circle">
+              onPress={handleChangeAvatar}
+              onLongPress={handleChangeAvatarInfo}>
+              {userPickedAvatar && (
+                <Button
+                  bg="red"
+                  right={0}
+                  top={2}
+                  w={28}
+                  h={28}
+                  p={0}
+                  zIndex={9}
+                  borderWidth={2}
+                  borderColor="white"
+                  rounded="circle"
+                  position="absolute"
+                  onPress={handleRemoveAvatar}>
+                  <Icon
+                    fontFamily="Ionicons"
+                    name="close"
+                    color="white"
+                    fontSize="xl"
+                  />
+                </Button>
+              )}
+              <Div
+                borderWidth={!userPickedAvatar ? 2 : 0}
+                borderColor={!userPickedAvatar ? 'gray100' : undefined}
+                w={120}
+                h={120}
+                rounded="circle">
                 <Image
                   flex={1}
                   rounded="circle"
                   borderColor="#fff"
-                  borderWidth={4}
-                  source={avatarPlaceholderImage}
+                  borderWidth={5}
+                  source={avatarImage}
                 />
               </Div>
             </TouchableOpacity>
@@ -87,6 +148,33 @@ export const AskPersonalInformationController: FC<
           <Div my="lg" />
 
           <Div mb="lg">
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  placeholder="Correo electrónico"
+                  keyboardType="email-address"
+                  fontSize="lg"
+                  prefix={<Icon fontFamily="Ionicons" name="mail" />}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  borderColor={!!errors.email ? 'red' : 'gray400'}
+                />
+              )}
+              name="email"
+            />
+            {errors.email && (
+              <Text color="red" mt={2} fontWeight="500">
+                Tu correo electrónico es inválido
+              </Text>
+            )}
+
+            <Div my="md" />
+
             <Controller
               control={control}
               rules={{
@@ -103,11 +191,16 @@ export const AskPersonalInformationController: FC<
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  borderColor={!!errors.phone ? 'red' : 'gray400'}
                 />
               )}
               name="phone"
             />
-            {errors.phone && <Text>This is required.</Text>}
+            {errors.phone && (
+              <Text color="red" mt={2} fontWeight="500">
+                Tu número de celular es inválido
+              </Text>
+            )}
 
             <Div my="md" />
 
@@ -127,11 +220,16 @@ export const AskPersonalInformationController: FC<
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  borderColor={!!errors.dni ? 'red' : 'gray400'}
                 />
               )}
               name="dni"
             />
-            {errors.dni && <Text>This is required.</Text>}
+            {errors.dni && (
+              <Text color="red" mt={2} fontWeight="500">
+                Tu DNI es inválido
+              </Text>
+            )}
 
             <Div my="md" />
           </Div>
@@ -143,8 +241,8 @@ export const AskPersonalInformationController: FC<
             shadow="xs"
             fontWeight="bold"
             fontSize="2xl"
-            onPress={onSubmit}>
-            Finalizar
+            onPress={handleNext}>
+            Continuar
           </Button>
 
           <Div my="2xl" />

@@ -21,7 +21,7 @@ import { Coupon } from '../modules/coupon/coupon.entity';
 import { Store } from '../modules/store/store.entity';
 import { StoreRanking } from '../modules/store/store-ranking.entity';
 
-@Service()
+@Service('DataSourceProviderToken')
 export class DataSourceProvider {
 	private readonly fastify =
 		getInstanceByToken<FastifyInstance>(FastifyInstanceToken);

@@ -9,7 +9,8 @@
 		"build": "yarn clean && tsc",
 		"clean": "rimraf dist",
 		"format": "prettier --write \"src/**/*.ts\"",
-		"createSecret": "node scripts/createSecret"
+		"createSecret": "node scripts/createSecret",
+		"seed:admins": "ts-node ./scripts/seeds/admins.ts"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -21,6 +22,7 @@
 		"@fastify/routes": "^4.0.0",
 		"@fastify/routes-stats": "^3.0.0",
 		"@fastify/static": "^5.0.2",
+		"@fastify/swagger": "^6.1.0",
 		"@sinclair/typebox": "^0.23.5",
 		"ajv": "^8.6.1",
 		"argon2": "^0.28.5",
@@ -51,6 +53,7 @@
 		"@types/nodemailer": "^6.4.4",
 		"@types/qs": "^6.9.7",
 		"cross-env": "^7.0.3",
+		"dotenv": "^16.0.1",
 		"nodemon": "^2.0.14",
 		"pino-pretty": "^7.2.0",
 		"prettier": "^2.4.1",

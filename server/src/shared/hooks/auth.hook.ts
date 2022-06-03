@@ -4,8 +4,8 @@ import { AdminService } from '../../modules/admin/admin.service';
 import { CustomerService } from '../../modules/customer/customer.service';
 import { DealerService } from '../../modules/dealer/dealer.service';
 import { UserService } from '../../modules/user/user.service';
+import { Unauthorized, InternalServerError } from 'http-errors';
 import * as jwt from 'jsonwebtoken';
-import { BadRequest, Unauthorized, InternalServerError } from 'http-errors';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)...
 export const hasBearerToken: onRequestHookHandler = async (
@@ -23,10 +23,10 @@ export const hasBearerToken: onRequestHookHandler = async (
 			token = parts[1];
 
 			if (!/^Bearer$/i.test(scheme)) {
-				throw new BadRequest('malformed_token');
+				throw new Unauthorized('malformed_token');
 			}
 		} else {
-			throw new BadRequest('malformed_token');
+			throw new Unauthorized('malformed_token');
 		}
 	} else {
 		throw new Unauthorized('token_not_provided');
@@ -35,11 +35,11 @@ export const hasBearerToken: onRequestHookHandler = async (
 	const decoded = jwt.decode(token) as jwt.JwtPayload;
 
 	if (!decoded) {
-		throw new BadRequest(`malformed_token`);
+		throw new Unauthorized(`malformed_token`);
 	}
 
 	if (new Date(decoded.exp! * 1000) < new Date()) {
-		throw new BadRequest(`token_expired`);
+		throw new Unauthorized(`token_expired`);
 	}
 };
 

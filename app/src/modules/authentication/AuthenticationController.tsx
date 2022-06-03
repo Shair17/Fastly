@@ -1,4 +1,4 @@
-import React, {useState, FC} from 'react';
+import React, {useState, FC, Fragment} from 'react';
 import {StatusBar, SafeAreaView, ScrollView, Alert} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
@@ -8,16 +8,27 @@ import {FooterLegalLinks} from '../../components/molecules/FooterLegalLinks';
 import {OverlayLoading} from '../../components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
 import {useAuthStore} from '../../stores/useAuthStore';
+import {useUserStore} from '../../stores/useUserStore';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {AuthenticationScreenProps} from '../../navigation/screens/AuthenticationScreen';
-import {AuthService} from '../../services/auth.service';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
+import useAxios from 'axios-hooks';
 
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
+  const [{loading}, executeLogInWithFacebook] = useAxios(
+    {
+      url: '/auth/facebook',
+      method: 'POST',
+    },
+    {manual: true},
+  );
   const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
   const setTokens = useAuthStore(s => s.setTokens);
+  const setIsNewUser = useAuthStore(s => s.setIsNewUser);
+  const setUser = useUserStore(user => user.setUser);
 
   StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('transparent');
@@ -31,10 +42,18 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
       setOverlayVisible(true);
 
       if (isCancelled) {
-        Alert.alert(
-          'Error',
-          'El inicio de sesión con facebook fue cancelado por el usuario.',
-        );
+        Notifier.showNotification({
+          title: 'Error',
+          description:
+            'El inicio de sesión con Facebook fue cancelado por el usuario.',
+          Component: NotifierComponents.Alert,
+          componentProps: {
+            alertType: 'warn',
+          },
+          containerStyle: {
+            paddingTop: StatusBar.currentHeight,
+          },
+        });
 
         setOverlayVisible(false);
       } else {
@@ -43,50 +62,90 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
         if (user !== null) {
           const {accessToken, userID} = user;
 
-          try {
-            const authService = new AuthService();
-
-            // Should return {accessToken, refreshToken}
-            const response = await authService.logInWithFacebook({
+          executeLogInWithFacebook({
+            data: {
               accessToken,
               userID,
+            },
+          })
+            .then(response => {
+              Notifier.showNotification({
+                title: 'Fastly',
+                description:
+                  'Inicio de sesión con éxito, estamos cargando tus datos...',
+                Component: NotifierComponents.Alert,
+                componentProps: {
+                  alertType: 'success',
+                },
+                containerStyle: {
+                  paddingTop: StatusBar.currentHeight,
+                },
+                duration: 1000,
+                onHidden: () => {
+                  setIsNewUser(response.data.user.isNewUser);
+                  setUser(response.data.user);
+                  setTokens({
+                    accessToken: response.data.accessToken,
+                    refreshToken: response.data.refreshToken,
+                  });
+                  setOverlayVisible(false);
+                },
+              });
+            })
+            .catch(e => {
+              console.log(e);
+
+              Notifier.showNotification({
+                title: 'Error',
+                description:
+                  'Error al conectarse al servidor de Fastly, intenta nuevamente en unos minutos.',
+                Component: NotifierComponents.Alert,
+                componentProps: {
+                  alertType: 'error',
+                  backgroundColor: 'red',
+                },
+                containerStyle: {
+                  paddingTop: StatusBar.currentHeight,
+                },
+              });
+              setOverlayVisible(false);
             });
-
-            setTokens({
-              accessToken: response.data.accessToken,
-              refreshToken: response.data.refreshToken,
-            });
-
-            // set isNewUser here
-
-            setOverlayVisible(false);
-          } catch (e) {
-            Alert.alert(
-              'Error',
-              'Error al conectarse al servidor de Fastly, intenta nuevamente en unos minutos.',
-            );
-            setOverlayVisible(false);
-          }
         } else {
-          Alert.alert(
-            'Error',
-            'Los datos necesarios para iniciar sesión no fueron reicibidos correctamente.',
-          );
+          Notifier.showNotification({
+            title: 'Error',
+            description:
+              'Los datos necesarios para iniciar sesión no fueron reicibidos correctamente.',
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'warn',
+            },
+            containerStyle: {
+              paddingTop: StatusBar.currentHeight,
+            },
+          });
           setOverlayVisible(false);
         }
       }
     } catch (error) {
       console.error(error);
-      Alert.alert(
-        'Error',
-        'Ocurrió un error al conectarse a la SDK de facebook.',
-      );
+      Notifier.showNotification({
+        title: 'Error',
+        description: 'Ocurrió un error al conectarse a la SDK de Facebook.',
+        Component: NotifierComponents.Alert,
+        componentProps: {
+          alertType: 'error',
+          backgroundColor: 'red',
+        },
+        containerStyle: {
+          paddingTop: StatusBar.currentHeight,
+        },
+      });
       setOverlayVisible(false);
     }
   };
 
   return (
-    <>
+    <Fragment>
       <SafeAreaView style={{flex: 1}}>
         <ContainerWithCredits>
           <Div flex={4} bg="body">
@@ -169,7 +228,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
         </ContainerWithCredits>
       </SafeAreaView>
 
-      <OverlayLoading overlayVisible={overlayVisible} />
-    </>
+      <OverlayLoading overlayVisible={overlayVisible && loading} />
+    </Fragment>
   );
 };

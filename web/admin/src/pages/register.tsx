@@ -13,10 +13,65 @@ import {
 import { DatePicker } from '@mantine/dates';
 import { Link } from 'react-router-dom';
 import { getDefaultAvatar } from '../utils/getDefaultAvatar';
+import { useForm, zodResolver } from '@mantine/form';
+import useAxios from 'axios-hooks';
+import { getRegisterErrorMessage } from '../utils/getErrorMessages';
+import { registerSchema } from '../schemas/register-schema';
+import { showNotification } from '@mantine/notifications';
 
 const avatar = getDefaultAvatar(100);
 
 export const Register = () => {
+	const [{ data, loading, error }, executePost] = useAxios(
+		{
+			url: '/auth/admin/register',
+			method: 'POST',
+		},
+		{ manual: true }
+	);
+	const form = useForm({
+		schema: zodResolver(registerSchema),
+		initialValues: {
+			fullName: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
+			dni: '',
+			phone: '',
+			address: '',
+			birthDate: '',
+		},
+	});
+
+	const handleRegister = form.onSubmit(
+		({ address, birthDate, dni, email, fullName, password, phone }) => {
+			executePost({
+				data: {
+					address,
+					birthDate: new Date(birthDate),
+					dni,
+					email,
+					name: fullName,
+					password,
+					phone,
+				},
+			})
+				.then((res) => {
+					const { accessToken, refreshToken } = res.data;
+					console.log({ accessToken, refreshToken });
+				})
+				.catch((error) => {
+					if (error?.response?.data.message) {
+						showNotification({
+							title: 'Error!',
+							message: getRegisterErrorMessage(error.response.data.message),
+							color: 'red',
+						});
+					}
+				});
+		}
+	);
+
 	return (
 		<Container size={420} my={40}>
 			<Title
@@ -35,7 +90,15 @@ export const Register = () => {
 				</Anchor>
 			</Text>
 
-			<Paper withBorder shadow="md" p={30} mt={30} radius="md">
+			<Paper
+				withBorder
+				shadow="md"
+				p={30}
+				mt={30}
+				radius="md"
+				component="form"
+				onSubmit={handleRegister}
+			>
 				<Center>
 					<Avatar src={avatar} size="xl" radius={100} alt="Fastly avatar" />
 				</Center>
@@ -45,6 +108,7 @@ export const Register = () => {
 					required
 					type="text"
 					mt="md"
+					{...form.getInputProps('fullName')}
 				/>
 				<TextInput
 					label="Correo electrónico"
@@ -52,25 +116,32 @@ export const Register = () => {
 					required
 					type="email"
 					mt="md"
+					{...form.getInputProps('email')}
 				/>
 				<PasswordInput
 					label="Contraseña"
 					placeholder="Tu contraseña segura"
+					description="Mínimo ocho caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial."
 					required
 					mt="md"
+					{...form.getInputProps('password')}
 				/>
 				<PasswordInput
 					label="Confirma tu contraseña"
+					description="Aquí debes escribir la contraseña que pusiste arriba."
 					placeholder="Confirma tu contraseña segura"
 					required
 					mt="md"
+					{...form.getInputProps('confirmPassword')}
 				/>
 				<TextInput
 					label="Documento Nacional de Identidad"
 					placeholder="Tu Documento Nacional de Identidad"
 					required
 					type="number"
+					maxLength={8}
 					mt="md"
+					{...form.getInputProps('dni')}
 				/>
 				<TextInput
 					label="Número de celular"
@@ -78,6 +149,7 @@ export const Register = () => {
 					required
 					type="number"
 					mt="md"
+					{...form.getInputProps('phone')}
 				/>
 				<TextInput
 					label="Dirección"
@@ -85,14 +157,16 @@ export const Register = () => {
 					required
 					type="text"
 					mt="md"
+					{...form.getInputProps('address')}
 				/>
 				<DatePicker
 					label="Fecha de nacimiento"
 					placeholder="Tu fecha de nacimiento"
 					mt="md"
 					required
+					{...form.getInputProps('birthDate')}
 				/>
-				<Button fullWidth mt="xl">
+				<Button fullWidth mt="xl" type="submit" loading={loading}>
 					Registrarse
 				</Button>
 			</Paper>
