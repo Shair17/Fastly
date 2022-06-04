@@ -18,7 +18,7 @@ const authenticationBackgroundImage = require('../../assets/images/authenticatio
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
-  const [{loading}, executeLogInWithFacebook] = useAxios(
+  const [{loading, error}, executeLogInWithFacebook] = useAxios(
     {
       url: '/auth/facebook',
       method: 'POST',
@@ -93,8 +93,6 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
               });
             })
             .catch(e => {
-              console.log(e);
-
               Notifier.showNotification({
                 title: 'Error',
                 description:

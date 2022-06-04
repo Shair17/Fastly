@@ -9,22 +9,22 @@ const EXPIRE_FUDGE = 10;
 type Token = string;
 
 export const isLoggedIn = (): boolean => {
-  const token = getRefreshToken();
+  const refreshToken = getRefreshToken();
 
-  if (!token) {
+  if (!refreshToken) {
     return false;
   }
 
-  if (!isValidToken(token)) {
+  if (!isValidToken(refreshToken)) {
     return false;
   }
 
-  if (isTokenExpired(token)) {
+  if (isTokenExpired(refreshToken)) {
     clearAuthTokens();
     return false;
   }
 
-  return !!token;
+  return !!refreshToken;
 };
 
 export const setAuthTokens = ({accessToken, refreshToken}: ITokens): void => {
@@ -176,14 +176,12 @@ export const authTokenInterceptor =
       return requestConfig;
     };
 
-    // Queue the request if another refresh request is currently happening
     if (isRefreshing) {
       return new Promise((resolve: (token?: string) => void, reject) => {
         queue.push({resolve, reject});
       }).then(authenticateRequest);
     }
 
-    // Do refresh if needed
     let accessToken;
 
     try {
@@ -202,7 +200,6 @@ export const authTokenInterceptor =
     }
     resolveQueue(accessToken);
 
-    // add token to headers
     return authenticateRequest(accessToken);
   };
 

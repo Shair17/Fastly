@@ -38,12 +38,10 @@ export const AskPersonalInformationController: FC<
       : avatarPlaceholderImage;
 
   const handleNext = handleSubmit(({email, phone, dni}) => {
-    // image?.assets![0].base64
-
     navigation.navigate('AskLocationScreen', {
       avatar:
         image !== undefined && image?.assets !== undefined
-          ? image.assets[0].uri
+          ? `data:image/jpg;base64,${image.assets[0].base64}`
           : undefined,
       email,
       phone,
@@ -54,12 +52,12 @@ export const AskPersonalInformationController: FC<
   const handleChangeAvatar = () => {
     launchImageLibrary(
       {
-        maxHeight: 200,
-        maxWidth: 200,
+        maxHeight: 500,
+        maxWidth: 500,
         selectionLimit: 1,
         mediaType: 'photo',
         includeBase64: true,
-        quality: 0.7,
+        quality: 0.5,
       },
       response => {
         if (response.didCancel) return;

@@ -4,12 +4,20 @@ import {Div, Text} from 'react-native-magnus';
 import {HeaderScreen} from '../../components/molecules/HeaderScreen';
 import {useDimensions} from '../../hooks/useDimensions';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
+import {useBackHandler} from '../../hooks/useBackHandler';
 
-interface Props {}
+interface Props {
+  backHandler?: boolean;
+  // Por favor, comprueba tu conexión a internet.
+  title?: string;
+}
 
-const offlineAstronautIllustration = require('../../assets/images/offline/astronaut.png');
+const astronautIllustration = require('./astronaut.png');
 
-export const OfflineScreen: FC<Props> = () => {
+export const ErrorScreen: FC<Props> = ({
+  backHandler = false,
+  title = 'Ha ocurrido algo inesperado, vuelve en unos minutos por favor.',
+}) => {
   const {
     window: {width},
   } = useDimensions();
@@ -18,7 +26,9 @@ export const OfflineScreen: FC<Props> = () => {
   StatusBar.setBarStyle('dark-content');
   StatusBar.setBackgroundColor('#fff');
 
-  // useBackHandler(() => true);
+  if (backHandler) {
+    useBackHandler(() => true);
+  }
 
   return (
     <ContainerWithCredits>
@@ -26,12 +36,12 @@ export const OfflineScreen: FC<Props> = () => {
         <HeaderScreen />
         <Div p="2xl">
           <Text fontSize="6xl" fontWeight="bold" color="text">
-            Por favor, comprueba tu conexión a internet.
+            {title}
           </Text>
         </Div>
       </Div>
       <Div flex={4} justifyContent="flex-end" px="2xl" alignItems="center">
-        <Div w={width} h={380} bgImg={offlineAstronautIllustration} mb="xl" />
+        <Div w={width} h={380} bgImg={astronautIllustration} mb="xl" />
       </Div>
     </ContainerWithCredits>
   );

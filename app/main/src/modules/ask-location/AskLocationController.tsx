@@ -16,12 +16,19 @@ import {LocationInformationType} from '../../interfaces/appInterfaces';
 import {LocationInformationSchema} from '../../schemas/ask-location.schema';
 import {Input} from '../../components/atoms/Input';
 import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
+import useAxios from 'axios-hooks';
 
 export const AskLocationController: FC<AskLocationScreenProps> = ({
   navigation,
   route: {params},
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [{loading}, executeUpdateNewUser] = useAxios(
+    {
+      url: '/users/new-user',
+      method: 'PUT',
+    },
+    {manual: true},
+  );
   const [showTagError, setTagError] = useState(false);
   const [tag, setTag] = useState<TagType>();
   const {
@@ -116,37 +123,26 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
 
       setTagError(false);
 
-      // enviar este objeto al servidor, luego de recibir una respuesta establecer al usuario como uno ya registrado y no nuevo, luego llevarlo a la pantalla principal de fastly
-      const data = {
-        ...params,
-        address: {
-          name,
-          street,
-          instructions,
-          city,
-          zip,
-          tag,
-          ...userLocation,
+      executeUpdateNewUser({
+        data: {
+          ...params,
+          address: {
+            name,
+            street,
+            instructions,
+            city,
+            zip,
+            tag,
+            ...userLocation,
+          },
         },
-      };
-
-      /**
-       * avatar?
-       * email
-       * phone
-       * dni
-       * address: {
-       *    name,
-       *    street,
-       *    instructions,
-       *    city,
-       *    zip,
-       *    tag,
-       *    latitude,
-       *    longitude,
-       * }
-       */
-      // setIsNewUser(false);
+      })
+        .then(response => {
+          if (response.status === 200 && response.data) {
+            setIsNewUser(response.data.isNewUser);
+          }
+        })
+        .catch(e => console.log(e?.response?.data.message));
     },
   );
 
@@ -374,6 +370,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
               <Radio.Group
                 row
                 onChange={tag => {
+                  setTagError(false);
                   setTag(tag);
                 }}>
                 {defaultTags.map((item, key) => (
@@ -425,7 +422,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
             shadow="xs"
             fontWeight="bold"
             fontSize="2xl"
-            loading={isLoading}
+            loading={loading}
             h={50}
             onPress={handleFinish}>
             Finalizar

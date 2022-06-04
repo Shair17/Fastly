@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from 'react-native-magnus';
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
@@ -13,37 +13,39 @@ import {usePermissionsStore} from '../stores/usePermissionsStore';
 import {HeaderScreen} from '../components/molecules/HeaderScreen';
 import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
 import {RootStackParams} from './RootNavigation.type';
-import {isLoggedIn, isTokenExpired} from '../services/refresh-token.service';
-import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {isLoggedIn} from '../services/refresh-token.service';
+import {useShowSessionIsExpired} from '../hooks/useShowSessionIsExpired';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 export const RootNavigation = () => {
+  useShowSessionIsExpired();
   const {theme} = useTheme();
   const locationStatus = usePermissionsStore(s => s.locationStatus);
-  const refreshToken = useAuthStore(s => s.refreshToken);
-  const setAccessToken = useAuthStore(s => s.setAccessToken);
-  const hasTokens = !!useAuthStore(s => s.accessToken && s.refreshToken);
+  // const refreshToken = useAuthStore(s => s.refreshToken);
   const isNewUser = useAuthStore(s => s.isNewUser);
 
   const isAuthenticated = isLoggedIn();
 
-  useEffect(() => {
-    if (!hasTokens) return;
+  // useEffect(() => {
+  //   if (!refreshToken) return;
 
-    if (isTokenExpired(refreshToken)) {
-      Notifier.showNotification({
-        title: 'Sesión Expirada',
-        description:
-          'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
-        Component: NotifierComponents.Alert,
-        componentProps: {
-          alertType: 'error',
-          backgroundColor: 'red',
-        },
-      });
-    }
-  }, []);
+  //   if (!isValidToken(refreshToken)) return;
+
+  //   if (isTokenExpired(refreshToken)) {
+  //     Notifier.showNotification({
+  //       title: 'Sesión Expirada',
+  //       description:
+  //         'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
+  //       Component: NotifierComponents.Alert,
+  //       duration: 3000,
+  //       componentProps: {
+  //         alertType: 'error',
+  //         backgroundColor: 'red',
+  //       },
+  //     });
+  //   }
+  // }, [refreshToken]);
 
   return (
     <Stack.Navigator>

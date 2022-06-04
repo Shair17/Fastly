@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import * as Animatable from 'react-native-animatable';
