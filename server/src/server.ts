@@ -82,6 +82,7 @@ export default async function Server(
 		healthcheckUrl: '/v1/health',
 	});
 
+	/**
 	server.register(import('@fastify/swagger'), {
 		routePrefix: '/documentation',
 		swagger: {
@@ -137,7 +138,7 @@ export default async function Server(
 		staticCSP: true,
 		transformStaticCSP: (header) => header,
 		exposeRoute: true,
-	});
+	});*/
 
 	server.register(bootstrap, {
 		prefix: '/v1',

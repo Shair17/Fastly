@@ -3,14 +3,16 @@ import { UserAddressTag } from '../../shared/enums/user-address-tag.enum';
 import {
 	LATITUDE_REGEX,
 	LONGITUDE_REGEX,
+	PHONE_NUMBER_REGEX,
+	DNI_REGEX,
 } from '../../constants/regex.constants';
 
 export const UpdateNewUserBody = Type.Object(
 	{
-		avatar: Type.Optional(Type.String({ format: 'uri' })),
+		avatar: Type.Optional(Type.String()),
 		email: Type.String({ format: 'email' }),
-		phone: Type.RegEx(/^[9]\d{8}$/),
-		dni: Type.String({ minLength: 8, maxLength: 8 }),
+		phone: Type.RegEx(PHONE_NUMBER_REGEX),
+		dni: Type.RegEx(DNI_REGEX),
 		address: Type.Object(
 			{
 				name: Type.String(),
@@ -19,8 +21,6 @@ export const UpdateNewUserBody = Type.Object(
 				zip: Type.String(),
 				city: Type.String(),
 				tag: Type.Enum(UserAddressTag),
-				// latitude: Type.Number(),
-				// longitude: Type.Number(),
 				latitude: Type.Number(Type.RegEx(LATITUDE_REGEX)),
 				longitude: Type.Number(Type.RegEx(LONGITUDE_REGEX)),
 			},

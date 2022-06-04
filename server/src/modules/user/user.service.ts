@@ -5,12 +5,16 @@ import { UserAddress } from './user-address.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
 import { Unauthorized, InternalServerError } from 'http-errors';
 import { UpdateNewUserBodyType } from './user.schema';
+import { CloudinaryService } from '../../shared/services/cloudinary.service';
 
 @Service('UserServiceToken')
 export class UserService {
 	private userRepository: Repository<User>;
 
-	constructor(private readonly dataSourceProvider: DataSourceProvider) {}
+	constructor(
+		private readonly dataSourceProvider: DataSourceProvider,
+		private readonly cloudinaryService: CloudinaryService
+	) {}
 
 	@Initializer([DataSourceProvider])
 	async init(): Promise<void> {
@@ -68,7 +72,20 @@ export class UserService {
 		}
 
 		try {
+			if (avatar) {
+				const upload = await this.cloudinaryService.upload(
+					avatar,
+					`${user.name.toLowerCase().replace(/\s/g, '_')}@${user.facebookId}`
+				);
+				console.log(upload);
+				user.avatar = upload.secure_url;
+			}
+			user.email = email;
+			user.phone = phone;
+			user.dni = dni;
+
 			const userAddress = new UserAddress();
+
 			userAddress.name = address.name;
 			userAddress.street = address.street;
 			userAddress.instructions = address.instructions;
@@ -78,22 +95,24 @@ export class UserService {
 			userAddress.latitude = address.latitude;
 			userAddress.longitude = address.longitude;
 
-			await this.save({
-				...user,
-				avatar,
-				email,
-				phone,
-				dni,
-				addresses: [userAddress],
-			});
+			await this.userRepository.manager.save(userAddress);
+
+			user.addresses = [userAddress];
+
+			await this.save(user);
 		} catch (error) {
 			console.log(error);
 			throw new InternalServerError();
 		}
 
+		const updatedUser = await this.getById(userId);
+
+		if (!updatedUser) throw new Unauthorized();
+
 		return {
 			statusCode: 200,
 			success: true,
+			isNewUser: updatedUser.isNewUser,
 		};
 	}
 

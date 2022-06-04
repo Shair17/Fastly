@@ -119,6 +119,7 @@ export class AuthService {
 					refreshToken,
 				});
 			} catch (error) {
+				console.log(error);
 				throw new InternalServerError();
 			}
 
@@ -189,8 +190,6 @@ export class AuthService {
 
 	async refreshFacebookToken({ refreshToken }: RefreshFacebookTokenType) {
 		const decoded = this.tokenService.verifyRefreshToken('user', refreshToken);
-
-		// console.log(`payload del refresh token de facebook ->`, decoded);
 
 		const user = await this.userService.getById(decoded.id);
 

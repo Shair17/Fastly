@@ -6,15 +6,22 @@ import { UserAppBase } from '../../shared/entities/userAppBase.entity';
 
 @Entity('users')
 export class User extends UserAppBase {
-	@OneToMany(() => UserAddress, (address) => address.user, { nullable: true })
+	@OneToMany(() => UserAddress, (address) => address.user, {
+		nullable: true,
+		eager: true,
+	})
 	addresses?: UserAddress[];
 
 	@OneToMany(() => UserFavorite, (favorites) => favorites.user, {
 		nullable: true,
+		eager: true,
 	})
 	favorites?: UserFavorite[];
 
-	@OneToMany(() => UserCart, (cart) => cart.user, { nullable: true })
+	@OneToMany(() => UserCart, (cart) => cart.user, {
+		nullable: true,
+		eager: true,
+	})
 	cart?: UserCart[];
 
 	@Column({

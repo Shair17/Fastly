@@ -37,6 +37,8 @@ export class UserAddress extends Base {
 	})
 	longitude: number;
 
-	@ManyToOne(() => User, (user) => user.addresses)
+	@ManyToOne(() => User, (user) => user.addresses, {
+		cascade: true,
+	})
 	user: User;
 }

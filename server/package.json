@@ -29,6 +29,7 @@
 		"axios": "^0.27.2",
 		"blurhash": "^1.1.5",
 		"class-validator": "^0.13.2",
+		"cloudinary": "^1.30.0",
 		"dayjs": "^1.11.2",
 		"fastify": "^3.29.0",
 		"fastify-decorators": "^3.11.0",
