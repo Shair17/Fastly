@@ -23,6 +23,8 @@ export abstract class UserBase extends Base {
 
 	@Column({
 		type: 'varchar',
+		name: 'refresh_token',
+		length: 1020,
 		nullable: true,
 	})
 	refreshToken?: string | null;

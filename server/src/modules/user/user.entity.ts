@@ -33,7 +33,10 @@ export class User extends UserAppBase {
 	@Column()
 	facebookId: string;
 
-	@Column()
+	@Column({
+		type: 'varchar',
+		length: 510,
+	})
 	facebookAccessToken: string;
 
 	@Column({

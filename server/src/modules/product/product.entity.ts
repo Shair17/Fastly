@@ -37,6 +37,7 @@ export class Product extends Base {
 	})
 	image: string;
 
+	// TODO: Blurhash
 	@Column({
 		type: 'varchar',
 		name: 'blurhash',
