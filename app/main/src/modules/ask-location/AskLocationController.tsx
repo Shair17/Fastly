@@ -3,7 +3,7 @@ import {ScrollView} from 'react-native';
 import {Div, Text, Icon, Radio} from 'react-native-magnus';
 import {ActivityIndicator} from '../../components/atoms/ActivityIndicator';
 import {AskLocationScreenProps} from '../../navigation/screens/AskLocationScreen';
-import {defaultTags, TagType} from './defaultTags';
+import {defaultTags} from './defaultTags';
 import {useForm, Controller} from 'react-hook-form';
 import {useAuthStore} from '../../stores/useAuthStore';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -12,7 +12,7 @@ import {Button} from '../../components/atoms/Button';
 import {RetryPhoneGPS} from '../../components/molecules/RetryPhoneGPS';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {LocationInformationType} from '../../interfaces/appInterfaces';
+import {LocationInformationType, TagType} from '../../interfaces/appInterfaces';
 import {LocationInformationSchema} from '../../schemas/ask-location.schema';
 import {Input} from '../../components/atoms/Input';
 import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
@@ -20,7 +20,7 @@ import useAxios from 'axios-hooks';
 
 export const AskLocationController: FC<AskLocationScreenProps> = ({
   navigation,
-  route: {params},
+  route,
 }) => {
   const [{loading}, executeUpdateNewUser] = useAxios(
     {
@@ -125,7 +125,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
 
       executeUpdateNewUser({
         data: {
-          ...params,
+          ...route.params,
           address: {
             name,
             street,
@@ -138,6 +138,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
         },
       })
         .then(response => {
+          console.log(response.data);
           if (response.status === 200 && response.data) {
             setIsNewUser(response.data.isNewUser);
           }

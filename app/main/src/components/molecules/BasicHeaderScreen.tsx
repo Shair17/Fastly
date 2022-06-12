@@ -5,7 +5,7 @@ interface Props {}
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
-export const HeaderScreen: FC<Props> = () => {
+export const BasicHeaderScreen: FC<Props> = () => {
   return (
     <Div justifyContent="center" alignItems="center" bg="body">
       <Div my="md" />

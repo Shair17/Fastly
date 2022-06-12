@@ -1,11 +1,16 @@
 import React, {FC} from 'react';
-import {Div, Text} from 'react-native-magnus';
-import {SearchScreenProps} from '../../navigation/screens/app/SearchScreen';
+import {SearchScreenProps} from '../../navigation/screens/app/SearchStack';
+import {SearchScreen} from './screens/SearchScreen';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const SearchStack = createNativeStackNavigator();
 
 export const SearchController: FC<SearchScreenProps> = () => {
   return (
-    <Div flex={1} bg="body">
-      <Text>SearchScreen</Text>
-    </Div>
+    <SearchStack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="Search">
+      <SearchStack.Screen name="Search" component={SearchScreen} />
+    </SearchStack.Navigator>
   );
 };

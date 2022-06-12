@@ -7,17 +7,29 @@ import {
 } from 'react-native';
 import {ScrollDiv} from 'react-native-magnus';
 
-interface Props {}
+interface Props {
+  flexFull?: boolean;
+}
 
-export const ContainerWithKeyboardAvoidingView: FC<Props> = ({children}) => {
+export const ContainerWithKeyboardAvoidingView: FC<Props> = ({
+  children,
+  flexFull = false,
+}) => {
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollDiv>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={flexFull ? {flex: 1} : undefined}>
+      {flexFull ? (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{flex: 1}}>
           {children}
         </TouchableWithoutFeedback>
-      </ScrollDiv>
+      ) : (
+        <ScrollDiv>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            {children}
+          </TouchableWithoutFeedback>
+        </ScrollDiv>
+      )}
     </KeyboardAvoidingView>
   );
 };

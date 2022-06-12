@@ -95,7 +95,6 @@ export class AuthService {
 				throw new Unauthorized('banned');
 			}
 
-			// TODO: Verificar si hacer esto da problemas al iniciar sesión y refrescar los tokens
 			let payload: { id: string; name: string; email?: string } = {
 				id: user.id,
 				name: user.name,

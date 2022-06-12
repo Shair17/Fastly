@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
-import {HeaderScreen} from '../../components/molecules/HeaderScreen';
+import {BasicHeaderScreen} from '../../components/molecules/BasicHeaderScreen';
 import {useDimensions} from '../../hooks/useDimensions';
 import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
 import {useBackHandler} from '../../hooks/useBackHandler';
@@ -23,8 +23,8 @@ export const ErrorScreen: FC<Props> = ({
   } = useDimensions();
 
   StatusBar.setTranslucent(false);
-  StatusBar.setBarStyle('dark-content');
-  StatusBar.setBackgroundColor('#fff');
+  // StatusBar.setBarStyle('dark-content');
+  // StatusBar.setBackgroundColor('#fff');
 
   if (backHandler) {
     useBackHandler(() => true);
@@ -33,7 +33,7 @@ export const ErrorScreen: FC<Props> = ({
   return (
     <ContainerWithCredits>
       <Div flex={2}>
-        <HeaderScreen />
+        <BasicHeaderScreen />
         <Div p="2xl">
           <Text fontSize="6xl" fontWeight="bold" color="text">
             {title}

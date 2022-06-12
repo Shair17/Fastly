@@ -17,8 +17,8 @@ export const GeolocationPermissionsController: FC<
   );
 
   StatusBar.setTranslucent(false);
-  StatusBar.setBarStyle('dark-content');
-  StatusBar.setBackgroundColor('#fff');
+  // StatusBar.setBarStyle('dark-content');
+  // StatusBar.setBackgroundColor('#fff');
 
   return (
     <ContainerWithCredits>

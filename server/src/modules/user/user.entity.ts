@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, AfterLoad } from 'typeorm';
+import { Entity, OneToMany, AfterLoad } from 'typeorm';
 import { UserAddress } from './user-address.entity';
 import { UserFavorite } from './user-favorite.entity';
 import { UserCart } from './user-cart.entity';
@@ -23,35 +23,6 @@ export class User extends UserAppBase {
 		eager: true,
 	})
 	cart?: UserCart[];
-
-	@Column({
-		type: 'varchar',
-		nullable: true,
-	})
-	avatar?: string | null;
-
-	@Column()
-	facebookId: string;
-
-	@Column({
-		type: 'varchar',
-		length: 510,
-	})
-	facebookAccessToken: string;
-
-	@Column({
-		type: 'varchar',
-		length: 9,
-		nullable: true,
-	})
-	phone?: string | null;
-
-	@Column({
-		type: 'varchar',
-		length: 8,
-		nullable: true,
-	})
-	dni?: string | null;
 
 	isNewUser: boolean;
 

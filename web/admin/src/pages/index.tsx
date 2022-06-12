@@ -13,6 +13,7 @@ import { Dots } from '../components/atoms/Dots';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/images/fastly@1000x1000.png';
 import useAxios from 'axios-hooks';
+import { AuthRedirect } from '../components/hoc/AuthRedirect';
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -111,69 +112,74 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const Index = () => {
-	const [{ data }, refetch] = useAxios<number>('/admins/count');
+	const [{ data }] = useAxios<number>('/admins/count');
 	const { classes } = useStyles();
 	const theme = useMantineTheme();
 
 	return (
-		<Container className={classes.wrapper} size={1400}>
-			<Dots className={classes.dots} style={{ left: 0, top: 0 }} />
-			<Dots className={classes.dots} style={{ left: 60, top: 0 }} />
-			<Dots className={classes.dots} style={{ left: 0, top: 140 }} />
-			<Dots className={classes.dots} style={{ right: 0, top: 60 }} />
+		<AuthRedirect>
+			<Container className={classes.wrapper} size={1400}>
+				<Dots className={classes.dots} style={{ left: 0, top: 0 }} />
+				<Dots className={classes.dots} style={{ left: 60, top: 0 }} />
+				<Dots className={classes.dots} style={{ left: 0, top: 140 }} />
+				<Dots className={classes.dots} style={{ right: 0, top: 60 }} />
 
-			<div className={classes.inner}>
-				<Center mb="xs">
-					<div className={classes.logoContainer}>
-						<Image src={Logo} width={80} height={80} />
-					</div>
-				</Center>
-				<Title className={classes.title}>
-					Bienvenido al panel de administración de{' '}
-					<Text
-						component="a"
-						href="https://fastly.delivery/"
-						target="_blank"
-						color={theme.primaryColor}
-						inherit
-					>
-						Fastly
-					</Text>
-				</Title>
+				<div className={classes.inner}>
+					<Center mb="xs">
+						<div className={classes.logoContainer}>
+							<Image src={Logo} width={80} height={80} />
+						</div>
+					</Center>
+					<Title className={classes.title}>
+						Bienvenido al panel de administración de{' '}
+						<Text
+							component="a"
+							href="https://fastly.delivery/"
+							target="_blank"
+							color={theme.primaryColor}
+							inherit
+						>
+							Fastly
+						</Text>
+					</Title>
 
-				<Container p={0} size={600}>
-					<Text size="lg" color="dimmed" className={classes.description}>
-						Este sitio es solo para{' '}
-						<Anchor href="https://www.instagram.com/shair.dev/" target="_blank">
-							@shair.dev
-						</Anchor>{' '}
-						y personas o entidades autorizadas por él. Caso contrario este sitio
-						no te será nada útil.
-					</Text>
-				</Container>
-				<div className={classes.controls}>
-					<Button
-						component={Link}
-						to="/login"
-						className={classes.control}
-						size="lg"
-						variant="default"
-						color="gray"
-					>
-						Iniciar sesión
-					</Button>
-					{data === 0 && (
+					<Container p={0} size={600}>
+						<Text size="lg" color="dimmed" className={classes.description}>
+							Este sitio es solo para{' '}
+							<Anchor
+								href="https://www.instagram.com/shair.dev/"
+								target="_blank"
+							>
+								@shair.dev
+							</Anchor>{' '}
+							y personas o entidades autorizadas por él. Caso contrario este
+							sitio no te será nada útil.
+						</Text>
+					</Container>
+					<div className={classes.controls}>
 						<Button
 							component={Link}
-							to="/register"
+							to="/login"
 							className={classes.control}
 							size="lg"
+							variant="default"
+							color="gray"
 						>
-							Registrarse
+							Iniciar sesión
 						</Button>
-					)}
+						{data === 0 && (
+							<Button
+								component={Link}
+								to="/register"
+								className={classes.control}
+								size="lg"
+							>
+								Registrarse
+							</Button>
+						)}
+					</div>
 				</div>
-			</div>
-		</Container>
+			</Container>
+		</AuthRedirect>
 	);
 };

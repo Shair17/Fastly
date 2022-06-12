@@ -5,9 +5,12 @@ import {useAuthStore} from '../stores/useAuthStore';
 import {isValidToken} from '../utils/isValidToken';
 
 export const useShowSessionIsExpired = () => {
+  // const executedRef = useRef<boolean>(false);
   const refreshToken = useAuthStore(s => s.refreshToken);
 
   useEffect(() => {
+    // if (executedRef.current) return;
+
     if (!refreshToken) return;
 
     if (!isValidToken(refreshToken)) return;
@@ -25,5 +28,7 @@ export const useShowSessionIsExpired = () => {
         },
       });
     }
-  }, [refreshToken]);
+
+    // executedRef.current = true;
+  }, [refreshToken /* executedRef.current */]);
 };

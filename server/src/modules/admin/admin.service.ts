@@ -38,22 +38,22 @@ export class AdminService {
 
 	async getAdmins(): Promise<Admin[]> {
 		return this.adminRepository.find({
-			select: [
-				'address',
-				'age',
-				'avatar',
-				'banReason',
-				'birthDate',
-				'createdAt',
-				'dni',
-				'email',
-				'id',
-				'isActive',
-				'isBanned',
-				'name',
-				'phone',
-				'updatedAt',
-			],
+			select: {
+				password: false,
+				address: true,
+				avatar: true,
+				banReason: true,
+				birthDate: true,
+				createdAt: true,
+				dni: true,
+				email: true,
+				id: true,
+				isActive: true,
+				isBanned: true,
+				name: true,
+				phone: true,
+				updatedAt: true,
+			},
 		});
 	}
 

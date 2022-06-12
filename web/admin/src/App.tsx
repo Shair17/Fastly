@@ -22,9 +22,11 @@ import { DashboardUsers } from './pages/dashboard/users';
 import { DashboardCustomers } from './pages/dashboard/customers';
 import { DashboardDealers } from './pages/dashboard/dealers';
 import useAxios from 'axios-hooks';
+import { RequireAuth } from './components/hoc/RequireAuth';
+import { useShowSessionIsExpired } from './hooks/useShowSessionIsExpired';
 
 function App() {
-	const [{ data }, refetch] = useAxios<number>('/admins/count');
+	const [{ data }] = useAxios<number>('/admins/count');
 	const preferredColorScheme = useColorScheme();
 	const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
 		key: '@fastly.admin/theme',
@@ -35,6 +37,8 @@ function App() {
 		setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
+
+	useShowSessionIsExpired();
 
 	return (
 		<ColorSchemeProvider
@@ -70,6 +74,7 @@ function App() {
 						{data === 0 && <Route path="/register" element={<Register />} />}
 						<Route path="/forgot-password" element={<ForgotPassword />} />
 						<Route path="/new-password" element={<NewPassword />} />
+
 						<Route path="/dashboard" element={<Dashboard />} />
 						<Route path="/dashboard/admins" element={<DashboardAdmins />} />
 						<Route path="/dashboard/users" element={<DashboardUsers />} />
@@ -78,6 +83,7 @@ function App() {
 							element={<DashboardCustomers />}
 						/>
 						<Route path="/dashboard/dealers" element={<DashboardDealers />} />
+
 						<Route path="*" element={<NotFound404 />} />
 					</Routes>
 				</NotificationsProvider>

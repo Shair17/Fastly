@@ -1,5 +1,5 @@
 import React, {useState, FC, Fragment} from 'react';
-import {StatusBar, SafeAreaView, ScrollView, Alert} from 'react-native';
+import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {AnimatedObject} from '../../components/atoms/AnimatedObject';
@@ -18,7 +18,7 @@ const authenticationBackgroundImage = require('../../assets/images/authenticatio
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
-  const [{loading, error}, executeLogInWithFacebook] = useAxios(
+  const [{loading}, executeLogInWithFacebook] = useAxios(
     {
       url: '/auth/facebook',
       method: 'POST',
@@ -29,9 +29,6 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const setTokens = useAuthStore(s => s.setTokens);
   const setIsNewUser = useAuthStore(s => s.setIsNewUser);
   const setUser = useUserStore(user => user.setUser);
-
-  StatusBar.setTranslucent(true);
-  StatusBar.setBackgroundColor('transparent');
 
   const loginWithFacebook = async () => {
     try {
@@ -144,6 +141,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
 
   return (
     <Fragment>
+      <StatusBar translucent backgroundColor="transparent" />
       <SafeAreaView style={{flex: 1}}>
         <ContainerWithCredits>
           <Div flex={4} bg="body">

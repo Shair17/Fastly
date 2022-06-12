@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
-import {ThemeProvider, useTheme} from 'react-native-magnus';
+import {ThemeProvider, useTheme, withTheme} from 'react-native-magnus';
 import {NotifierWrapper} from 'react-native-notifier';
 import {useMMKVString} from 'react-native-mmkv';
 import {NavigationContainer, Theme} from '@react-navigation/native';
@@ -12,11 +12,14 @@ import {storage} from './storage';
 import {useCheckLocationPermissions} from './hooks/useCheckLocationPermission';
 
 function App() {
+  useCheckLocationPermissions();
+
   const systemTheme = useColorScheme() || 'light';
   const [themeStorage] = useMMKVString(themeStorageKey, storage);
   const {theme: themeState, setTheme} = useTheme();
   const currentTheme = themeStorage || systemTheme;
   const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+  const isLightTheme = theme.name === ThemesNames.lightTheme;
 
   const themeNavigation: Theme = {
     dark: themeState.name === ThemesNames.darkTheme,
@@ -30,34 +33,44 @@ function App() {
     },
   };
 
-  useCheckLocationPermissions();
+  // useEffect(() => {
+  //   if (themeStorage !== undefined) return;
+
+  //   if (systemTheme === ThemesNames.lightTheme) {
+  //     setTheme(lightTheme);
+  //   } else {
+  //     setTheme(darkTheme);
+  //   }
+  // }, [systemTheme, currentTheme, themeStorage]);
 
   useEffect(() => {
-    // setTheme(theme);
-    if (themeStorage !== undefined) return;
-
-    if (systemTheme === ThemesNames.lightTheme) {
-      setTheme(lightTheme);
-    } else {
-      setTheme(darkTheme);
-    }
-  }, [systemTheme, currentTheme, themeStorage]);
-
-  useEffect(() => {
-    if (theme.name === ThemesNames.lightTheme) {
+    if (isLightTheme) {
       StatusBar.setBarStyle('dark-content');
       StatusBar.setBackgroundColor('#fff');
+      setTheme(lightTheme);
     } else {
       StatusBar.setBarStyle('light-content');
       StatusBar.setBackgroundColor('#000');
+      setTheme(darkTheme);
     }
-  }, [themeState.name]);
+  }, [theme.name]);
 
   return (
     <NotifierWrapper>
+      <StatusBar
+        barStyle={isLightTheme ? 'dark-content' : 'light-content'}
+        backgroundColor={isLightTheme ? '#fff' : '#000'}
+      />
       <ThemeProvider theme={theme}>
         <NavigationContainer
-          onReady={() => Bootsplash.hide({fade: true})}
+          onReady={() => {
+            Bootsplash.hide({fade: true});
+            if (isLightTheme) {
+              setTheme(lightTheme);
+            } else {
+              setTheme(darkTheme);
+            }
+          }}
           theme={themeNavigation}>
           <RootNavigation />
         </NavigationContainer>

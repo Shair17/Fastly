@@ -36,3 +36,45 @@ export enum StoreCategory {
   JUGUERIA = 'Juguería',
   OTRO = 'Otro',
 }
+
+export type TagType =
+  | 'casa'
+  | 'amigo'
+  | 'pareja'
+  | 'trabajo'
+  | 'universidad'
+  | 'otro';
+
+export interface Address {
+  city: string;
+  createdAt: string;
+  id: string;
+  instructions: string;
+  latitude: number;
+  longitude: number;
+  name: string;
+  street: string;
+  tag: TagType;
+  updatedAt: string;
+  zip: string;
+}
+
+export interface MyProfileResponse {
+  addresses: Address[];
+  avatar: string;
+  banReason?: string;
+  cart: [];
+  createdAt: string;
+  dni: string;
+  email: string;
+  facebookAccessToken: string;
+  facebookId: string;
+  favorites: [];
+  id: string;
+  isBanned: boolean;
+  isNewUser: boolean;
+  name: string;
+  phone: string;
+  refreshToken: string;
+  updatedAt: string;
+}

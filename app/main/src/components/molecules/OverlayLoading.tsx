@@ -14,7 +14,9 @@ export const OverlayLoading: FC<Props> = ({
   return (
     <Overlay visible={overlayVisible} alignItems="center" p="xl">
       <ActivityIndicator />
-      <Text mt="md">{text}</Text>
+      <Text mt="md" color="text">
+        {text}
+      </Text>
     </Overlay>
   );
 };

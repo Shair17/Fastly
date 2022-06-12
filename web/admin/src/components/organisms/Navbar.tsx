@@ -6,7 +6,7 @@ import {
 	createStyles,
 	ScrollArea,
 } from '@mantine/core';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
 	ShieldLock,
 	User,
@@ -15,6 +15,8 @@ import {
 	Logout,
 	Motorbike,
 } from 'tabler-icons-react';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { isLoggedIn } from '../../services/refresh-token.service';
 
 const useStyles = createStyles((theme, _params, getRef) => {
 	const icon = getRef('icon');
@@ -137,7 +139,16 @@ export const Navbar = ({ hidden }: Props) => {
 	const [section, setSection] = useState('accounts');
 	// const [active, setActive] = useState('Billing');
 	const { pathname } = useLocation();
+	const removeTokens = useAuthStore((s) => s.removeTokens);
+	const navigate = useNavigate();
 
+	const logOut = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+		event.preventDefault();
+		removeTokens();
+		navigate('/login', { replace: true });
+	};
+
+	// @ts-ignore
 	const links = tabs[section].map((item) => (
 		<Link
 			to={item.link}
@@ -198,11 +209,7 @@ export const Navbar = ({ hidden }: Props) => {
 					<Settings className={classes.linkIcon} />
 					<span>Configuración</span>
 				</a>
-				<a
-					href="#"
-					className={classes.link}
-					onClick={(event) => event.preventDefault()}
-				>
+				<a href="#" className={classes.link} onClick={logOut}>
 					<Logout className={classes.linkIcon} />
 					<span>Cerrar sesión</span>
 				</a>

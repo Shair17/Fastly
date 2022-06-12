@@ -10,7 +10,7 @@ import {AskLocationScreen} from './screens/AskLocationScreen';
 import {ApplicationBottomTab} from './ApplicationBottomTab';
 import {useAuthStore} from '../stores/useAuthStore';
 import {usePermissionsStore} from '../stores/usePermissionsStore';
-import {HeaderScreen} from '../components/molecules/HeaderScreen';
+import {BasicHeaderScreen} from '../components/molecules/BasicHeaderScreen';
 import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
 import {RootStackParams} from './RootNavigation.type';
 import {isLoggedIn} from '../services/refresh-token.service';
@@ -26,26 +26,6 @@ export const RootNavigation = () => {
   const isNewUser = useAuthStore(s => s.isNewUser);
 
   const isAuthenticated = isLoggedIn();
-
-  // useEffect(() => {
-  //   if (!refreshToken) return;
-
-  //   if (!isValidToken(refreshToken)) return;
-
-  //   if (isTokenExpired(refreshToken)) {
-  //     Notifier.showNotification({
-  //       title: 'Sesión Expirada',
-  //       description:
-  //         'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
-  //       Component: NotifierComponents.Alert,
-  //       duration: 3000,
-  //       componentProps: {
-  //         alertType: 'error',
-  //         backgroundColor: 'red',
-  //       },
-  //     });
-  //   }
-  // }, [refreshToken]);
 
   return (
     <Stack.Navigator>
@@ -63,7 +43,7 @@ export const RootNavigation = () => {
                 screenOptions={{
                   animation: 'slide_from_right',
                   headerShown: true,
-                  header: () => <HeaderScreen />,
+                  header: () => <BasicHeaderScreen />,
                   contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
                 }}>
                 <Stack.Screen
@@ -93,7 +73,7 @@ export const RootNavigation = () => {
               component={GeolocationPermissionsScreen}
               options={{
                 headerShown: true,
-                header: () => <HeaderScreen />,
+                header: () => <BasicHeaderScreen />,
               }}
             />
           )}
@@ -110,7 +90,7 @@ export const RootNavigation = () => {
             component={OnBoardingScreen}
             options={{
               headerShown: true,
-              header: () => <HeaderScreen />,
+              header: () => <BasicHeaderScreen />,
             }}
           />
           <Stack.Screen

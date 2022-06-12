@@ -29,6 +29,7 @@ export const lightTheme: ThemeType = {
     bgPrimary: '#FCFCFC',
     bgSecondary: '#F7F7FB',
 
+    background: '#f9fafb',
     body: '#fff',
     text: '#000',
   },

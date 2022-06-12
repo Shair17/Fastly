@@ -43,20 +43,18 @@ export const ThemeSwitcher = () => {
     if (themeName === ThemesNames.systemTheme) {
       setThemeStorage(undefined);
       setTheme(systemTheme === 'light' ? lightTheme : darkTheme);
-      StatusBar.setBarStyle(
-        systemTheme === 'light' ? 'dark-content' : 'light-content',
-      );
-      StatusBar.setBackgroundColor(systemTheme === 'light' ? '#fff' : '#000');
+      // StatusBar.setBarStyle(systemTheme === 'light' ? 'dark-content' : 'light-content');
+      // StatusBar.setBackgroundColor(systemTheme === 'light' ? '#fff' : '#000');
     } else if (themeName === ThemesNames.lightTheme) {
       setThemeStorage(ThemesNames.lightTheme);
       setTheme(lightTheme);
-      StatusBar.setBarStyle('dark-content');
-      StatusBar.setBackgroundColor('#fff');
+      // StatusBar.setBarStyle('dark-content');
+      // StatusBar.setBackgroundColor('#fff');
     } else if (themeName === ThemesNames.darkTheme) {
       setThemeStorage(ThemesNames.darkTheme);
       setTheme(darkTheme);
-      StatusBar.setBarStyle('light-content');
-      StatusBar.setBackgroundColor('#000');
+      // StatusBar.setBarStyle('light-content');
+      //StatusBar.setBackgroundColor('#000');
     }
   };
 

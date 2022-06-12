@@ -11,18 +11,20 @@ import {
 	Button,
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getDefaultAvatar } from '../utils/getDefaultAvatar';
 import { useForm, zodResolver } from '@mantine/form';
 import useAxios from 'axios-hooks';
 import { getRegisterErrorMessage } from '../utils/getErrorMessages';
 import { registerSchema } from '../schemas/register-schema';
 import { showNotification } from '@mantine/notifications';
+import { useAuthStore, ITokens } from '../stores/useAuthStore';
+import { AuthRedirect } from '../components/hoc/AuthRedirect';
 
 const avatar = getDefaultAvatar(100);
 
 export const Register = () => {
-	const [{ data, loading, error }, executePost] = useAxios(
+	const [{ loading }, executePost] = useAxios<ITokens>(
 		{
 			url: '/auth/admin/register',
 			method: 'POST',
@@ -42,6 +44,12 @@ export const Register = () => {
 			birthDate: '',
 		},
 	});
+	const navigate = useNavigate();
+	const location = useLocation();
+	const setTokens = useAuthStore((s) => s.setTokens);
+
+	// @ts-ignore
+	const from = location.state?.from?.pathname || '/dashboard';
 
 	const handleRegister = form.onSubmit(
 		({ address, birthDate, dni, email, fullName, password, phone }) => {
@@ -57,8 +65,11 @@ export const Register = () => {
 				},
 			})
 				.then((res) => {
-					const { accessToken, refreshToken } = res.data;
-					console.log({ accessToken, refreshToken });
+					// const { accessToken, refreshToken } = res.data;
+					setTokens(res.data);
+				})
+				.then(() => {
+					navigate(from, { replace: true });
 				})
 				.catch((error) => {
 					if (error?.response?.data.message) {
@@ -73,103 +84,105 @@ export const Register = () => {
 	);
 
 	return (
-		<Container size={420} my={40}>
-			<Title
-				align="center"
-				sx={(theme) => ({
-					fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-					fontWeight: 900,
-				})}
-			>
-				Bienvenido a Fastly!
-			</Title>
-			<Text color="dimmed" size="sm" align="center" mt={5}>
-				Ya tienes una cuenta?{' '}
-				<Anchor component={Link} to="/login" size="sm">
-					Iniciar sesión
-				</Anchor>
-			</Text>
+		<AuthRedirect>
+			<Container size={420} my={40}>
+				<Title
+					align="center"
+					sx={(theme) => ({
+						fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+						fontWeight: 900,
+					})}
+				>
+					Bienvenido a Fastly!
+				</Title>
+				<Text color="dimmed" size="sm" align="center" mt={5}>
+					Ya tienes una cuenta?{' '}
+					<Anchor component={Link} to="/login" size="sm">
+						Iniciar sesión
+					</Anchor>
+				</Text>
 
-			<Paper
-				withBorder
-				shadow="md"
-				p={30}
-				mt={30}
-				radius="md"
-				component="form"
-				onSubmit={handleRegister}
-			>
-				<Center>
-					<Avatar src={avatar} size="xl" radius={100} alt="Fastly avatar" />
-				</Center>
-				<TextInput
-					label="Nombre(s) y Apellidos"
-					placeholder="Tus nombre(s) y apellidos"
-					required
-					type="text"
-					mt="md"
-					{...form.getInputProps('fullName')}
-				/>
-				<TextInput
-					label="Correo electrónico"
-					placeholder="tucorreo@gmail.com"
-					required
-					type="email"
-					mt="md"
-					{...form.getInputProps('email')}
-				/>
-				<PasswordInput
-					label="Contraseña"
-					placeholder="Tu contraseña segura"
-					description="Mínimo ocho caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial."
-					required
-					mt="md"
-					{...form.getInputProps('password')}
-				/>
-				<PasswordInput
-					label="Confirma tu contraseña"
-					description="Aquí debes escribir la contraseña que pusiste arriba."
-					placeholder="Confirma tu contraseña segura"
-					required
-					mt="md"
-					{...form.getInputProps('confirmPassword')}
-				/>
-				<TextInput
-					label="Documento Nacional de Identidad"
-					placeholder="Tu Documento Nacional de Identidad"
-					required
-					type="number"
-					maxLength={8}
-					mt="md"
-					{...form.getInputProps('dni')}
-				/>
-				<TextInput
-					label="Número de celular"
-					placeholder="Tu número de celular"
-					required
-					type="number"
-					mt="md"
-					{...form.getInputProps('phone')}
-				/>
-				<TextInput
-					label="Dirección"
-					placeholder="Tu dirección de casa o residencia"
-					required
-					type="text"
-					mt="md"
-					{...form.getInputProps('address')}
-				/>
-				<DatePicker
-					label="Fecha de nacimiento"
-					placeholder="Tu fecha de nacimiento"
-					mt="md"
-					required
-					{...form.getInputProps('birthDate')}
-				/>
-				<Button fullWidth mt="xl" type="submit" loading={loading}>
-					Registrarse
-				</Button>
-			</Paper>
-		</Container>
+				<Paper
+					withBorder
+					shadow="md"
+					p={30}
+					mt={30}
+					radius="md"
+					component="form"
+					onSubmit={handleRegister}
+				>
+					<Center>
+						<Avatar src={avatar} size="xl" radius={100} alt="Fastly avatar" />
+					</Center>
+					<TextInput
+						label="Nombre(s) y Apellidos"
+						placeholder="Tus nombre(s) y apellidos"
+						required
+						type="text"
+						mt="md"
+						{...form.getInputProps('fullName')}
+					/>
+					<TextInput
+						label="Correo electrónico"
+						placeholder="tucorreo@gmail.com"
+						required
+						type="email"
+						mt="md"
+						{...form.getInputProps('email')}
+					/>
+					<PasswordInput
+						label="Contraseña"
+						placeholder="Tu contraseña segura"
+						description="Mínimo ocho caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial."
+						required
+						mt="md"
+						{...form.getInputProps('password')}
+					/>
+					<PasswordInput
+						label="Confirma tu contraseña"
+						description="Aquí debes escribir la contraseña que pusiste arriba."
+						placeholder="Confirma tu contraseña segura"
+						required
+						mt="md"
+						{...form.getInputProps('confirmPassword')}
+					/>
+					<TextInput
+						label="Documento Nacional de Identidad"
+						placeholder="Tu Documento Nacional de Identidad"
+						required
+						type="number"
+						maxLength={8}
+						mt="md"
+						{...form.getInputProps('dni')}
+					/>
+					<TextInput
+						label="Número de celular"
+						placeholder="Tu número de celular"
+						required
+						type="number"
+						mt="md"
+						{...form.getInputProps('phone')}
+					/>
+					<TextInput
+						label="Dirección"
+						placeholder="Tu dirección de casa o residencia"
+						required
+						type="text"
+						mt="md"
+						{...form.getInputProps('address')}
+					/>
+					<DatePicker
+						label="Fecha de nacimiento"
+						placeholder="Tu fecha de nacimiento"
+						mt="md"
+						required
+						{...form.getInputProps('birthDate')}
+					/>
+					<Button fullWidth mt="xl" type="submit" loading={loading}>
+						Registrarse
+					</Button>
+				</Paper>
+			</Container>
+		</AuthRedirect>
 	);
 };

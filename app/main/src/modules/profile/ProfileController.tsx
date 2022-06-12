@@ -1,67 +1,30 @@
 import React, {FC} from 'react';
-import {Div, Text, Image, Icon} from 'react-native-magnus';
-// import {Skeleton} from '../../components/atoms/Skeleton';
-import {ProfileScreenProps} from '../../navigation/screens/app/ProfileScreen';
-import {ThemeSwitcher} from '../../components/atoms/ThemeSwitcher';
+import {ProfileScreenProps} from '../../navigation/screens/app/ProfileStack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ProfileScreen} from './screens/ProfileScreen';
+import {ThemeScreen} from './screens/ThemeScreen';
+import {EditProfileScreen} from './screens/EditProfileScreen';
+import {SupportScreen} from './screens/SupportScreen';
+import {MyAddressesScreen} from './screens/MyAddressesScreen';
+import {MyOrdersScreen} from './screens/MyOrdersScreen';
+import {ProfileStackParams} from './ProfileStackParams.type';
 
-const avatarPlaceholder = require('../../assets/images/avatar-placeholder.jpg');
+const ProfileStack = createNativeStackNavigator<ProfileStackParams>();
 
 export const ProfileController: FC<ProfileScreenProps> = () => {
   return (
-    <Div flex={1} bg="body">
-      <Div p="2xl">
-        <Div row>
-          <Div>
-            <Div w={100} h={100} rounded="circle">
-              <Image
-                flex={1}
-                rounded="circle"
-                borderColor="#fff"
-                borderWidth={4}
-                source={avatarPlaceholder}
-              />
-            </Div>
-          </Div>
-
-          <Div mx="md" />
-
-          <Div flex={1} alignSelf="center" alignItems="flex-start">
-            <Text fontWeight="bold" fontSize="3xl">
-              Jimmy Morales
-            </Text>
-            <Text>@shair17</Text>
-          </Div>
-        </Div>
-
-        <Div my="lg" />
-
-        <Div>
-          <Div row>
-            <Icon fontFamily="Ionicons" name="location" fontSize="lg" />
-            <Text fontSize="lg" ml="md">
-              Chepén, La Libertad, Perú.
-            </Text>
-          </Div>
-
-          <Div my="xs" />
-
-          <Div row>
-            <Icon fontFamily="Ionicons" name="phone-portrait" fontSize="lg" />
-            <Text fontSize="lg" ml="md">
-              +51 966107266
-            </Text>
-          </Div>
-
-          <Div my="xs" />
-
-          <Div row>
-            <Icon fontFamily="Ionicons" name="mail" fontSize="lg" />
-            <Text fontSize="lg" ml="md">
-              jimmy_jhair17@outlook.es
-            </Text>
-          </Div>
-        </Div>
-      </Div>
-    </Div>
+    <ProfileStack.Navigator
+      screenOptions={{
+        animation: 'slide_from_right',
+        headerShown: false,
+      }}
+      initialRouteName="Profile">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
+      <ProfileStack.Screen name="MyAddresses" component={MyAddressesScreen} />
+      <ProfileStack.Screen name="MyOrders" component={MyOrdersScreen} />
+      <ProfileStack.Screen name="Theme" component={ThemeScreen} />
+      <ProfileStack.Screen name="Support" component={SupportScreen} />
+    </ProfileStack.Navigator>
   );
 };

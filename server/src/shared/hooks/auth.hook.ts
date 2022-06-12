@@ -4,7 +4,7 @@ import { AdminService } from '../../modules/admin/admin.service';
 import { CustomerService } from '../../modules/customer/customer.service';
 import { DealerService } from '../../modules/dealer/dealer.service';
 import { UserService } from '../../modules/user/user.service';
-import { Unauthorized, InternalServerError } from 'http-errors';
+import { Unauthorized } from 'http-errors';
 import * as jwt from 'jsonwebtoken';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)...
@@ -77,7 +77,8 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
 		if (error instanceof jwt.JsonWebTokenError) {
 			throw new Unauthorized(`invalid_token`);
 		}
-		throw new InternalServerError();
+
+		throw new Unauthorized();
 	}
 };
 
@@ -105,7 +106,6 @@ export const userIsAuthenticated: onRequestHookHandler = async (
 
 		userId = user.id;
 	} catch (error) {
-		console.log(error);
 		if (error instanceof jwt.TokenExpiredError) {
 			throw new Unauthorized(`token_expired`);
 		}
@@ -114,7 +114,7 @@ export const userIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized(`invalid_token`);
 		}
 
-		throw new InternalServerError();
+		throw new Unauthorized();
 	}
 };
 
@@ -155,7 +155,8 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
 		if (error instanceof jwt.JsonWebTokenError) {
 			throw new Unauthorized(`invalid_token`);
 		}
-		throw new InternalServerError();
+
+		throw new Unauthorized();
 	}
 };
 
@@ -193,6 +194,7 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 		if (error instanceof jwt.JsonWebTokenError) {
 			throw new Unauthorized(`invalid_token`);
 		}
-		throw new InternalServerError();
+
+		throw new Unauthorized();
 	}
 };

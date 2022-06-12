@@ -30,7 +30,7 @@ export class Dealer extends UserBase {
 
 	@AfterLoad()
 	calcDealerRanking() {
-		if (this.rankings) {
+		if (this.rankings !== undefined) {
 			let sum = 0;
 
 			for (const ranking of this.rankings) {

@@ -13,6 +13,7 @@ export abstract class UserBase extends Base {
 
 	@Column({
 		type: 'varchar',
+		unique: true,
 	})
 	email: string;
 

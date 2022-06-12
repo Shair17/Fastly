@@ -1,11 +1,3 @@
-export type TagType =
-  | 'casa'
-  | 'amigo'
-  | 'pareja'
-  | 'trabajo'
-  | 'universidad'
-  | 'otro';
-
 export const defaultTags = [
   {
     icon: 'home',

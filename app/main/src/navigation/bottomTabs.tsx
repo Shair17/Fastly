@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 import {ApplicationBottomTabParams} from './ApplicationBottomTab';
-import {HomeScreen} from './screens/app/HomeScreen';
-import {SearchScreen} from './screens/app/SearchScreen';
+import {HomeScreen} from './screens/app/HomeStack';
+import {SearchScreen} from './screens/app/SearchStack';
 import {CartScreen} from './screens/app/CartScreen';
 import {FavoritesScreen} from './screens/app/FavoritesScreen';
-import {ProfileScreen} from './screens/app/ProfileScreen';
+import {ProfileScreen} from './screens/app/ProfileStack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 type TabIconProps = {
@@ -21,7 +21,7 @@ interface BottomTab {
 
 export const bottomTabs: BottomTab[] = [
   {
-    TabName: 'HomeScreen',
+    TabName: 'HomeStack',
     TabComponent: HomeScreen,
     TabIcon: ({color, focused, size}) => (
       <Icon
@@ -32,7 +32,7 @@ export const bottomTabs: BottomTab[] = [
     ),
   },
   {
-    TabName: 'SearchScreen',
+    TabName: 'SearchStack',
     TabComponent: SearchScreen,
     TabIcon: ({color, focused, size}) => (
       <Icon
@@ -65,7 +65,7 @@ export const bottomTabs: BottomTab[] = [
     ),
   },
   {
-    TabName: 'ProfileScreen',
+    TabName: 'ProfileStack',
     TabComponent: ProfileScreen,
     TabIcon: ({color, focused, size}) => (
       <Icon

@@ -14,8 +14,8 @@ export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
   const firstName = name.split(' ')[0];
 
   StatusBar.setTranslucent(false);
-  StatusBar.setBackgroundColor('#fff');
-  StatusBar.setBarStyle('dark-content');
+  // StatusBar.setBackgroundColor('#fff');
+  // StatusBar.setBarStyle('dark-content');
 
   const handleNext = () => {
     navigation.navigate('AskPersonalInformationScreen');

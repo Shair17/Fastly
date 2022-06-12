@@ -13,7 +13,7 @@ type UserType = {
   dni?: string;
   email?: string;
   phone?: string;
-  avatar?: string;
+  avatar: string;
 
   isBanned: boolean;
   banReason?: string;

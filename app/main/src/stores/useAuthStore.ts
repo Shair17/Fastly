@@ -19,10 +19,8 @@ type AuthTypes = Tokens & {
 
 const getDefaultValues = (): AuthTypes => {
   return {
-    // accessToken: storage.getString(accessTokenKey) ?? accessToken,
-
-    // No es necesario guardarlo en memoria local
-    accessToken: accessToken,
+    // accessToken: accessToken,
+    accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
     isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,
   };
@@ -39,7 +37,7 @@ export const useAuthStore = create(
       });
     },
     setAccessToken: (accessToken: string) => {
-      // storage.set(accessTokenKey, accessToken);
+      storage.set(accessTokenKey, accessToken);
 
       set({
         accessToken,
@@ -53,7 +51,7 @@ export const useAuthStore = create(
       });
     },
     setTokens: ({accessToken, refreshToken}: Tokens) => {
-      // storage.set(accessTokenKey, accessToken);
+      storage.set(accessTokenKey, accessToken);
       storage.set(refreshTokenKey, refreshToken);
 
       set({
@@ -62,7 +60,7 @@ export const useAuthStore = create(
       });
     },
     removeTokens: () => {
-      // storage.delete(accessTokenKey);
+      storage.delete(accessTokenKey);
       storage.delete(refreshTokenKey);
 
       set({

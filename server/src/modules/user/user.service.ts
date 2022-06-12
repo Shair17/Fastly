@@ -71,7 +71,16 @@ export class UserService {
 			throw new Unauthorized();
 		}
 
+		if (user.addresses === undefined) {
+			return {
+				statusCode: 200,
+				success: true,
+				isNewUser: user.isNewUser,
+			};
+		}
+
 		try {
+			// avatar should be base64 encode image
 			if (avatar) {
 				const upload = await this.cloudinaryService.upload(
 					avatar,

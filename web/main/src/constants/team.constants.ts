@@ -1,0 +1,42 @@
+export const team = [
+  {
+    name: 'Jimmy Morales',
+    description: 'CEO & Programador',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
+    name: 'Jorge Malca',
+    description: 'Administración & Marketing',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
+    name: 'Joaquin Quiroz',
+    description: 'Barman & Programador',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
+    name: 'Hugo Román',
+    description: 'Enfermero & Repartidor',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
+    name: 'William Oliva',
+    description: 'Porgramador & Analista',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+];

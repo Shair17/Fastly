@@ -5,6 +5,7 @@ import {BlogLayout} from '../../components/templates/BlogLayout';
 import PostType from '../../types/post';
 import {getPostBySlug, getAllPosts} from '../../utils/api';
 import markdownToHtml from '../../utils/markdownToHtml';
+import {PostLayout} from 'components/templates/PostLayout';
 
 interface Props {
   post: PostType;
@@ -20,7 +21,7 @@ const Post: NextPage<Props> = ({post, morePosts, preview}) => {
 
   return (
     <BlogLayout>
-      {router.isFallback ? <div>cargando</div> : <div>post</div>}
+      {router.isFallback ? <div>cargando...</div> : <PostLayout post={post} />}
     </BlogLayout>
   );
 };

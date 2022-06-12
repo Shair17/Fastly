@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Div, Image, Text, Icon} from 'react-native-magnus';
+import {Div, Text, Icon, Avatar} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
 import {Input} from '../../components/atoms/Input';
 import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
@@ -132,11 +132,10 @@ export const AskPersonalInformationController: FC<
                 w={120}
                 h={120}
                 rounded="circle">
-                <Image
-                  flex={1}
+                <Avatar
+                  size={116}
                   rounded="circle"
-                  borderColor="#fff"
-                  borderWidth={5}
+                  bg="gray100"
                   source={avatarImage}
                 />
               </Div>

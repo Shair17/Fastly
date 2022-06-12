@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import {HeaderScreen} from '../../components/molecules/HeaderScreen';
+import {BasicHeaderScreen} from '../../components/molecules/BasicHeaderScreen';
 
 interface Props {}
 
 export const AskPersonalInformationHeader: FC<Props> = () => {
-  return <HeaderScreen />;
+  return <BasicHeaderScreen />;
 };

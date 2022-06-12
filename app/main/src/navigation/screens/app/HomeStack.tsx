@@ -4,7 +4,7 @@ import {ApplicationBottomTabParams} from '../../ApplicationBottomTab';
 import {HomeController} from '../../../modules/home/HomeController';
 
 export interface HomeScreenProps
-  extends BottomTabScreenProps<ApplicationBottomTabParams, 'HomeScreen'> {}
+  extends BottomTabScreenProps<ApplicationBottomTabParams, 'HomeStack'> {}
 
 export const HomeScreen: FC<HomeScreenProps> = props => {
   return <HomeController {...props} />;
