@@ -10,6 +10,7 @@ import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { bootstrap } from 'fastify-decorators';
 import { AppModule } from './app.module';
+import { AppService } from './app.service';
 import { ConfigSchema, ConfigSchemaType } from './config/config.schema';
 
 declare module 'fastify' {
@@ -143,6 +144,14 @@ export default async function Server(
 	server.register(bootstrap, {
 		prefix: '/v1',
 		controllers: [...AppModule],
+	});
+
+	server.route({
+		method: 'GET',
+		url: '/',
+		handler: async () => {
+			return new AppService().getApp();
+		},
 	});
 
 	return server;

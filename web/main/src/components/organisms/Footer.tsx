@@ -32,20 +32,16 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               </div>
               <div>
                 <div className="mt-2 space-y-2">
-                  <a
-                    href="/android"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="block">
-                    <AndroidBadge />
-                  </a>
-                  <a
-                    href="/ios"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="block">
-                    <IOSBadge />
-                  </a>
+                  <Link href="/android" target="_blank" passHref>
+                    <a className="block">
+                      <AndroidBadge />
+                    </a>
+                  </Link>
+                  <Link href="/ios" target="_blank" passHref>
+                    <a className="block">
+                      <IOSBadge />
+                    </a>
+                  </Link>
                 </div>
               </div>
             </section>

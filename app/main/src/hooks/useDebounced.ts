@@ -20,7 +20,7 @@ function useStateIgnoreCallback<T>(initialState: T): [T, Dispatch<T>] {
   return [state, setStateIgnoreCallback];
 }
 
-export default function useDebounce<T>(
+export function useDebounce<T>(
   value: T,
   delay: number,
   options?: {

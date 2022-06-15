@@ -1,13 +1,14 @@
+import {FC} from 'react';
 import {SVGProps} from 'react-html-props';
 
-export const IOSBadge = (props: SVGProps) => {
+export const IOSBadge: FC<SVGProps> = ({width = 150, height = 45, ...rest}) => {
   return (
     <svg
-      width={150}
-      height={45}
+      width={width}
+      height={height}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+      {...rest}>
       <g clipPath="url(#a)">
         <path
           d="M144.663 44.444H5.254C2.358 44.444 0 42.08 0 39.186V5.25A5.26 5.26 0 0 1 5.254 0h139.409C147.559 0 150 2.356 150 5.251v33.935c0 2.894-2.441 5.258-5.337 5.258z"

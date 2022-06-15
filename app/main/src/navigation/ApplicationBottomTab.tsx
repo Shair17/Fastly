@@ -2,10 +2,11 @@ import React, {FC, Fragment, useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNetInfo} from '@react-native-community/netinfo';
 import {RootStackParams} from './RootNavigation.type';
 import {LoadingScreen} from './screens/LoadingScreen';
 import {bottomTabs} from './bottomTabs';
-import {ErrorScreen} from '../modules/error/ErrorScreen';
+import {ErrorController} from '../modules/error/ErrorController';
 import {useUserAddresses} from '../stores/useUserAddresses';
 import {useUserStore} from '../stores/useUserStore';
 import {MyProfileResponse} from '../interfaces/appInterfaces';
@@ -32,10 +33,12 @@ const Tab = createBottomTabNavigator<ApplicationBottomTabParams>();
 export const ApplicationBottomTab: FC<Props> = () => {
   StatusBar.setTranslucent(false);
 
-  const [{loading, error}, executeUserPopulate, cancelUserPopulateRequest] =
-    useAxios<MyProfileResponse>('/users/me', {
+  const [{loading, error}, executeUserPopulate] = useAxios<MyProfileResponse>(
+    '/users/me',
+    {
       manual: true,
-    });
+    },
+  );
   const addressesBottomSheetActive = useAddressesBottomSheetStore(
     a => a.isActive,
   );
@@ -44,6 +47,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
   );
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
+  const {isConnected} = useNetInfo();
 
   useEffect(() => {
     executeUserPopulate()
@@ -61,14 +65,12 @@ export const ApplicationBottomTab: FC<Props> = () => {
         setAddresses(addresses);
       })
       .catch(console.log);
-
-    // return cancelUserPopulateRequest;
   }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading || isConnected === null) return <LoadingScreen />;
 
-  if (error) {
-    return <ErrorScreen />;
+  if (!isConnected || error) {
+    return <ErrorController />;
   }
 
   return (

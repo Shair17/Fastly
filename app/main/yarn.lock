@@ -6646,11 +6646,6 @@ react-native-fbsdk-next@^8.0.4:
     "@expo/config-plugins" "^4.0.4"
     xml2js "^0.4.23"
 
-react-native-fresh-refresh@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-fresh-refresh/-/react-native-fresh-refresh-2.1.1.tgz#1afd80650cccfcfc2ea5106063aaade49551d91c"
-  integrity sha512-0X9yV9xlhxrABq5ov+Ja03qV350eUPKVSle4WIE5BZJQJZhm/4YeRO8l24wpysVygi7ZTk3opVCcrb83K9ynag==
-
 react-native-geolocation-service@^5.3.0-beta.4:
   version "5.3.0-beta.4"
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.0-beta.4.tgz#8061396f734028b0ecbf8316a2cda9179df19210"

@@ -26,7 +26,7 @@ export const TeamMember: FC<Props> = ({
         <Image src={avatar} width={96} height={96} />
       </div>
       <div className="flex flex-col justify-between mt-2 text-left md:py-2 md:mt-0">
-        <p className="mt-1 text-lg font-medium text-gray-600">{name}</p>
+        <h4 className="mt-1 text-lg font-medium text-gray-600">{name}</h4>
         <p>{description}</p>
         <div className="mt-2 space-x-1 text-gray-400 md:mt-4">
           <Link href={facebook} passHref>

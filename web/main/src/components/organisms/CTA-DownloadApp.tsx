@@ -1,0 +1,53 @@
+import Link from 'next/link';
+import {FC} from 'react';
+import {AndroidBadge} from '../atoms/AndroidBadge';
+import {IOSBadge} from '../atoms/IOSBadge';
+import {CircleBackgroundIcon} from '../atoms/CircleBackgroundIcon';
+
+interface Props {}
+
+export const CTADownloadApp: FC<Props> = ({}) => {
+  return (
+    <div className="w-full my-28" id="download">
+      <div className="px-4 mx-auto">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary-400 via-red-400 to-secondary-400">
+          <div className="px-4 py-20 mx-auto max-w-7xl sm:px-3 lg:px-6">
+            <div className="grid items-center grid-cols-1 gap-12 md:grid-cols-2">
+              <div>
+                <h3 className="text-5xl font-bold text-white md:text-6xl">
+                  Descargar Fastly
+                </h3>
+                <p className="mt-4 text-base text-gray-200 md:text-xl">
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Rerum vel nesciunt voluptatem ut iure iusto obcaecati soluta
+                  unde doloremque incidunt illum amet, iste fuga adipisci vero
+                  cupiditate veritatis at nemo!
+                </p>
+                <div className="flex flex-row items-center mt-8 space-x-4 md:mt-12">
+                  <Link href="/android" target="_blank" passHref>
+                    <a className="flex">
+                      <AndroidBadge />
+                    </a>
+                  </Link>
+                  <Link href="/ios" target="_blank" passHref>
+                    <a className="flex">
+                      <IOSBadge />
+                    </a>
+                  </Link>
+                </div>
+              </div>
+              <div className="relative px-12">
+                <CircleBackgroundIcon className="absolute right-0 bottom-0 left-1/2 -mb-48 h-[460px] w-[460px] -translate-x-1/2 text-primary-50 lg:-mb-72 sm:w-[600px] sm:h-[600px]" />
+                <img
+                  src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/iphone-mockup.png"
+                  alt="mockup"
+                  className="relative w-full max-w-xs mx-auto -mb-60 lg:-mb-64"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

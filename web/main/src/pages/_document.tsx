@@ -27,7 +27,7 @@ class FastlyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html className="scroll-smooth">
         <Head />
         <body className="antialiased">
           <Main />

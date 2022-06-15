@@ -105,11 +105,11 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
 
         {/* Buttons */}
         <div className="flex items-center justify-end gap-1 lg:flex-1">
-          <button
-            type="button"
-            className="inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
-            Descargar
-          </button>
+          <Link href="/#download" scroll={false}>
+            <a className="inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
+              Descargar
+            </a>
+          </Link>
         </div>
       </div>
       {mobileMenuOpen && !matches ? (
@@ -124,7 +124,7 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
                 </Link>
                 <Link href="/" passHref>
                   <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
-                    Como Funciona
+                    Cómo Funciona
                   </a>
                 </Link>
                 <Link href="/blog" passHref>
@@ -175,9 +175,11 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
               </ul>
             </div>
           </div>
-          <button className="w-full justify-center inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
-            Descargar
-          </button>
+          <Link href="/#download" scroll={false}>
+            <a className="w-full justify-center inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
+              Descargar
+            </a>
+          </Link>
         </div>
       ) : null}
     </header>

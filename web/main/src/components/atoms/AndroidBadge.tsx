@@ -1,13 +1,18 @@
+import {FC} from 'react';
 import {SVGProps} from 'react-html-props';
 
-export const AndroidBadge = (props: SVGProps) => {
+export const AndroidBadge: FC<SVGProps> = ({
+  width = 150,
+  height = 45,
+  ...rest
+}) => {
   return (
     <svg
-      width={150}
-      height={45}
+      width={width}
+      height={height}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}>
+      {...rest}>
       <g clipPath="url(#a)">
         <path
           d="M144.444 44.452H5.556C2.444 44.452 0 42.008 0 38.897V5.563C0 2.453 2.444.008 5.556.008h138.888c3.112 0 5.556 2.444 5.556 5.555v33.334c0 3.11-2.444 5.555-5.556 5.555z"

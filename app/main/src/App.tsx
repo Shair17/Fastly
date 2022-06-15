@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
-import {ThemeProvider, useTheme, withTheme} from 'react-native-magnus';
+import {ThemeProvider, useTheme} from 'react-native-magnus';
 import {NotifierWrapper} from 'react-native-notifier';
 import {useMMKVString} from 'react-native-mmkv';
 import {NavigationContainer, Theme} from '@react-navigation/native';
@@ -42,6 +42,15 @@ function App() {
   //     setTheme(darkTheme);
   //   }
   // }, [systemTheme, currentTheme, themeStorage]);
+  useEffect(() => {
+    if (systemTheme === ThemesNames.lightTheme) {
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setBackgroundColor('#fff');
+    } else {
+      StatusBar.setBarStyle('light-content');
+      StatusBar.setBackgroundColor('#000');
+    }
+  }, [systemTheme]);
 
   useEffect(() => {
     if (isLightTheme) {
@@ -64,12 +73,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <NavigationContainer
           onReady={() => {
-            Bootsplash.hide({fade: true});
-            if (isLightTheme) {
-              setTheme(lightTheme);
-            } else {
-              setTheme(darkTheme);
-            }
+            Bootsplash.hide({
+              fade: true,
+            });
           }}
           theme={themeNavigation}>
           <RootNavigation />

@@ -3,7 +3,7 @@ import {team} from 'constants/team.constants';
 
 export const Team = () => {
   return (
-    <div className="w-full">
+    <div className="w-full my-28">
       <div className="px-1 mx-auto max-w-7xl sm:px-3 lg:px-6">
         <h3 className="text-4xl font-bold text-center">Equipo</h3>
         <p className="max-w-2xl mx-auto mt-6 text-lg text-center text-gray-700">

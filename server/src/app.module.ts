@@ -8,6 +8,7 @@ import { CouponModule } from './modules/coupon/coupon.module';
 import { SearchModule } from './modules/search/search.module';
 import { StoreModule } from './modules/store/store.module';
 import { UserModule } from './modules/user/user.module';
+
 import { AppController } from './app.controller';
 
 export const AppModule = [

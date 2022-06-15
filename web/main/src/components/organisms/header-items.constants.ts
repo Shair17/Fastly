@@ -2,11 +2,11 @@
 export const headerItems = [
   {
     title: 'Características',
-    href: '/',
+    href: '/#features',
   },
   {
-    title: 'Como Funciona',
-    href: '/',
+    title: 'Cómo Funciona',
+    href: '/#how-it-works',
   },
   {
     title: 'Servicios',

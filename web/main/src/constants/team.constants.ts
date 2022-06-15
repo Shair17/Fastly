@@ -8,6 +8,14 @@ export const team = [
     whatsapp: '/shair-whatsapp',
   },
   {
+    name: 'Iván Aguilar',
+    description: 'Cofundador & Programador',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
     name: 'Jorge Malca',
     description: 'Administración & Marketing',
     avatar: '/assets/images/team/shair.jpg',

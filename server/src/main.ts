@@ -7,7 +7,7 @@ async function main() {
 
 	const app = await Server({
 		logger: true,
-		disableRequestLogging: true,
+		// disableRequestLogging: true,
 		ignoreTrailingSlash: true,
 		querystringParser: (str) => qs.parse(str),
 	});

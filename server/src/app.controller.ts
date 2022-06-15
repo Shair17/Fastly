@@ -1,12 +1,4 @@
-import { Controller, GET as Get } from "fastify-decorators";
-import { AppService } from "./app.service";
+import { Controller } from 'fastify-decorators';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  async getApp() {
-    return this.appService.getApp();
-  }
-}
+@Controller('/')
+export class AppController {}
