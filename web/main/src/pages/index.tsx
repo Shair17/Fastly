@@ -10,7 +10,7 @@ import {FAQ} from 'components/organisms/FAQ';
 
 const Home: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="Delivery de lo que quieras en minutos">
       <Hero />
       <Features />
       <HowItWorks />

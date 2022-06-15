@@ -1,9 +1,17 @@
 import '../styles/fonts.css';
 import '../styles/app.css';
-import type { AppProps } from 'next/app';
+import {Fragment} from 'react';
+import type {AppProps} from 'next/app';
+import {DefaultSeo} from 'next-seo';
+import {defaultSEO} from 'constants/seo.constants';
 
-function MyApp({ Component, pageProps }: AppProps) {
-	return <Component {...pageProps} />;
+function MyApp({Component, pageProps}: AppProps) {
+  return (
+    <Fragment>
+      <DefaultSeo {...defaultSEO} />
+      <Component {...pageProps} />
+    </Fragment>
+  );
 }
 
 export default MyApp;

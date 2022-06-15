@@ -11,8 +11,8 @@ export const Post = ({post}: Props) => {
   return (
     <div className="cursor-pointer link-effect">
       <div className="relative overflow-hidden transition-shadow bg-gray-100 rounded-md dark:bg-gray-800 hover:shadow-sm aspect-video">
-        <Link as={`/blog/${post.slug}`} href="/blog/[slug]">
-          <a>
+        <Link as={`/blog/${post.slug}`} href="/blog/[slug]" title={post.title}>
+          <a title={post.title}>
             <Image
               className="object-contain"
               layout="fill"

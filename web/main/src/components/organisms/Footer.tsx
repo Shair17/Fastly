@@ -16,8 +16,10 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
           <div>
             <section>
               <div>
-                <Link href="/" passHref>
-                  <a className="inline-flex px-4 py-2 bg-white rounded-full">
+                <Link href="/" passHref title="Inicio de Fastly">
+                  <a
+                    className="inline-flex px-4 py-2 bg-white rounded-full"
+                    title="Inicio de Fastly">
                     <Logo className="mr-2 h-7" />
                     <span className="self-center text-2xl font-bold">
                       Fastly
@@ -32,13 +34,21 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               </div>
               <div>
                 <div className="mt-2 space-y-2">
-                  <Link href="/android" target="_blank" passHref>
-                    <a className="block">
+                  <Link
+                    href="/android"
+                    target="_blank"
+                    passHref
+                    title="Descargar Fastly en Android">
+                    <a className="block" title="Descargar Fastly en Android">
                       <AndroidBadge />
                     </a>
                   </Link>
-                  <Link href="/ios" target="_blank" passHref>
-                    <a className="block">
+                  <Link
+                    href="/ios"
+                    target="_blank"
+                    passHref
+                    title="Descargar Fastly en iOS">
+                    <a className="block" title="Descargar Fastly en iOS">
                       <IOSBadge />
                     </a>
                   </Link>
@@ -67,8 +77,10 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
               <ul className="mt-4 space-y-3">
                 {items.map(({name, href}, key) => (
                   <li key={key.toString()}>
-                    <Link href={href} passHref>
-                      <a className="text-primary-100 hover:text-white">
+                    <Link href={href} passHref title={name}>
+                      <a
+                        className="text-primary-100 hover:text-white"
+                        title={name}>
                         {name}
                       </a>
                     </Link>

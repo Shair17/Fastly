@@ -19,13 +19,21 @@ export const Hero = () => {
               tenemos para ti.
             </p>
             <div className="flex space-x-4">
-              <Link href="/android" target="_blank" passHref>
-                <a className="flex">
+              <Link
+                href="/android"
+                target="_blank"
+                passHref
+                title="Descargar Fastly en Android">
+                <a className="flex" title="Descargar Fastly en Android">
                   <AndroidBadge />
                 </a>
               </Link>
-              <Link href="/ios" target="_blank" passHref>
-                <a className="flex">
+              <Link
+                href="/ios"
+                target="_blank"
+                passHref
+                title="Descargar Fastly en iOS">
+                <a className="flex" title="Descargar Fastly en iOS">
                   <IOSBadge />
                 </a>
               </Link>

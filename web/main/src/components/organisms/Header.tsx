@@ -43,8 +43,10 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
 
         {/* Logo Container */}
         <div className="flex items-center justify-center flex-1 lg:justify-start">
-          <Link href="/" passHref>
-            <a className="flex items-center justify-center px-2 py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 rounded-xl disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
+          <Link href="/" passHref title="Inicio de Fastly">
+            <a
+              className="flex items-center justify-center px-2 py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 rounded-xl disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300"
+              title="Inicio de Fastly">
               <Logo className="mr-2 h-7" />
               <span className="self-center text-2xl font-bold">Fastly</span>
             </a>
@@ -76,8 +78,10 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
                     <li
                       className="w-full px-4 py-3 rounded-md cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
                       key={key.toString()}>
-                      <Link href={href} passHref>
-                        <a className="outline-none cursor-pointer ">
+                      <Link href={href} passHref title={title}>
+                        <a
+                          className="outline-none cursor-pointer"
+                          title={title}>
                           <span className="text-base font-medium text-gray-900">
                             {title}
                           </span>
@@ -92,10 +96,11 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
                 </ul>
               </div>
             ) : (
-              <Link href={href} passHref key={key.toString()}>
+              <Link href={href} passHref key={key.toString()} title={title}>
                 <a
                   className="flex px-1 py-2 font-semibold text-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300 group whitespace-nowrap hover:text-black"
-                  aria-label={title}>
+                  aria-label={title}
+                  title={title}>
                   {title}
                 </a>
               </Link>
@@ -105,8 +110,10 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
 
         {/* Buttons */}
         <div className="flex items-center justify-end gap-1 lg:flex-1">
-          <Link href="/#download" scroll={false}>
-            <a className="inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
+          <Link href="/#download" scroll={false} title="Descargar Fastly">
+            <a
+              className="inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300"
+              title="Descargar Fastly">
               Descargar
             </a>
           </Link>
@@ -117,18 +124,28 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
           <div className="space-y-4">
             <div>
               <ul>
-                <Link href="/" passHref>
+                <Link
+                  href="/#features"
+                  passHref
+                  title="Características de Fastly">
                   <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
                     Características
                   </a>
                 </Link>
-                <Link href="/" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link
+                  href="/#how-it-works"
+                  passHref
+                  title="Cómo Funciona Fastly">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Cómo Funciona Fastly">
                     Cómo Funciona
                   </a>
                 </Link>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/blog" passHref title="Blog de Fastly">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Blog de Fastly">
                     Blog
                   </a>
                 </Link>
@@ -137,23 +154,31 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
             <div>
               <h4 className="text-lg font-semibold">Servicios</h4>
               <ul>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Fastly para emprendedores">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Fastly para emprendedores">
                     Emprendedores
                   </a>
                 </Link>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Fastly para repartidores">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Fastly para repartidores">
                     Repartidores
                   </a>
                 </Link>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Fastly para influencers">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Fastly para influencers">
                     Influencers
                   </a>
                 </Link>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Fastly para desarrolladores">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Fastly para desarrolladores">
                     Desarrolladores
                   </a>
                 </Link>
@@ -162,21 +187,27 @@ export const Header: FC<PropsWithChildren<Props>> = () => {
             <div>
               <h4 className="text-lg font-semibold">Contacto</h4>
               <ul>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Contacto con Fastly">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Contacto con Fastly">
                     Fastly
                   </a>
                 </Link>
-                <Link href="/blog" passHref>
-                  <a className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50">
+                <Link href="/" passHref title="Contacto con Shair">
+                  <a
+                    className="block w-full p-2 transition-colors border-b rounded-md cursor-pointer border-gray-50 hover:bg-gray-50"
+                    title="Contacto con Shair">
                     Shair
                   </a>
                 </Link>
               </ul>
             </div>
           </div>
-          <Link href="/#download" scroll={false}>
-            <a className="w-full justify-center inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300">
+          <Link href="/#download" scroll={false} title="Descargar Fastly">
+            <a
+              className="w-full justify-center inline-flex items-center px-4 py-2.5 border border-primary-300 text-sm font-bold uppercase rounded-xl shadow-xs shadow-primary-600/5 text-white bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:bg-primary-400 disabled:border-primary-200 disabled:text-gray-300"
+              title="Descargar Fastly">
               Descargar
             </a>
           </Link>

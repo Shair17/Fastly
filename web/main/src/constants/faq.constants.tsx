@@ -33,9 +33,13 @@ export const faq = [
     question: 'Tengo un negocio, ¿Puede mi negocio estar en Fastly?',
     reply: (
       <>
-        {`Por supuesto que sí, si tienes un negocio donde ofreces productos o servicios puedes registrar tu negocio en Fastly desde `}
-        <Link href="/admin" passHref>
-          <a className="text-primary-500">aquí</a>
+        {`Por supuesto que sí, si tienes un negocio donde ofreces productos o servicios puedes `}
+        <Link href="/customer" passHref title="Registrar mi negocio en Fastly">
+          <a
+            className="text-primary-500"
+            title="Registrar mi negocio en Fastly">
+            registrar tu negocio en Fastly
+          </a>
         </Link>
         {`.`}
       </>
@@ -46,9 +50,16 @@ export const faq = [
       'Quiero ser un repartidor autorizado de Fastly, ¿Cómo puedo ser uno?',
     reply: (
       <>
-        {`Para ser un repartidor autorizado de Fastly solo necesitas tener las ganas de ser uno! Puedes registrarte como repartidor en Fastly desde `}
-        <Link href="/dealer" passHref>
-          <a className="text-primary-500">aquí</a>
+        {`Para ser un repartidor autorizado de Fastly solo necesitas tener las ganas de ser uno! Si estás interesado, puedes `}
+        <Link
+          href="/dealer"
+          passHref
+          title="Registrarme como repartidor en Fastly">
+          <a
+            className="text-primary-500"
+            title="Registrarme como repartidor en Fastly">
+            registrarte como repartidor en Fastly
+          </a>
         </Link>
         {`, una vez que hayamos aprobado tu solicitud, podrás empezar a hacer delivery.`}
       </>

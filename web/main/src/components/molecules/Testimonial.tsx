@@ -52,7 +52,8 @@ export const Testimonial: FC<Props> = ({
           href={socialUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-block text-primary-500">
+          className="inline-block text-primary-500"
+          title="Fuente del testimonio">
           <SocialIcon socialType={socialType} />
         </a>
       </div>

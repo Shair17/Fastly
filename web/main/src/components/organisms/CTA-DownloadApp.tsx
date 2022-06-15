@@ -25,13 +25,21 @@ export const CTADownloadApp: FC<Props> = ({}) => {
                   cupiditate veritatis at nemo!
                 </p>
                 <div className="flex flex-row items-center mt-8 space-x-4 md:mt-12">
-                  <Link href="/android" target="_blank" passHref>
-                    <a className="flex">
+                  <Link
+                    href="/android"
+                    target="_blank"
+                    passHref
+                    title="Descargar Fastly en Android">
+                    <a className="flex" title="Descargar Fastly en Android">
                       <AndroidBadge />
                     </a>
                   </Link>
-                  <Link href="/ios" target="_blank" passHref>
-                    <a className="flex">
+                  <Link
+                    href="/ios"
+                    target="_blank"
+                    passHref
+                    title="Descargar Fastly en iOS">
+                    <a className="flex" title="Descargar Fastly en iOS">
                       <IOSBadge />
                     </a>
                   </Link>

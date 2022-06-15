@@ -9,7 +9,7 @@ interface Props {
 
 export const Error = (props: Props) => {
   return (
-    <Layout>
+    <Layout title={props.title}>
       <div className="relative z-0 flex flex-col w-full h-full pt-0 xl:flex-row xl:py-10">
         <div className="flex-auto order-last min-w-0 mt-0 xl:order-first xl:mt-0">
           <div className="relative z-10 flex flex-col items-center justify-center px-2 my-20 sm:px-4 lg:my-32 md:px-0">
