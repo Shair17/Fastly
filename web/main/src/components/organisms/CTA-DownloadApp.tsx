@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {FC} from 'react';
+import Image from 'next/image';
 import {AndroidBadge} from '../atoms/AndroidBadge';
 import {IOSBadge} from '../atoms/IOSBadge';
 import {CircleBackgroundIcon} from '../atoms/CircleBackgroundIcon';
@@ -38,11 +39,14 @@ export const CTADownloadApp: FC<Props> = ({}) => {
               </div>
               <div className="relative px-12">
                 <CircleBackgroundIcon className="absolute right-0 bottom-0 left-1/2 -mb-48 h-[460px] w-[460px] -translate-x-1/2 text-primary-50 lg:-mb-72 sm:w-[600px] sm:h-[600px]" />
-                <img
-                  src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/iphone-mockup.png"
-                  alt="mockup"
-                  className="relative w-full max-w-xs mx-auto -mb-60 lg:-mb-64"
-                />
+                <div className="relative w-full max-w-xs mx-auto -mb-20 pl-9 lg:-mb-24">
+                  <Image
+                    src="/assets/images/iphone-mockup.png"
+                    width={250}
+                    height={500}
+                    alt="Fastyl mockup"
+                  />
+                </div>
               </div>
             </div>
           </div>

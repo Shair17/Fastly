@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import PostType from '../../types/post';
 import {format, parseISO} from 'date-fns';
 
@@ -10,14 +11,16 @@ export const Post = ({post}: Props) => {
   return (
     <div className="cursor-pointer link-effect">
       <div className="relative overflow-hidden transition-shadow bg-gray-100 rounded-md dark:bg-gray-800 hover:shadow-sm aspect-video">
-        <a href="#">
-          <Image
-            className="object-contain"
-            layout="fill"
-            src={post.coverImage}
-            alt={post.title}
-          />
-        </a>
+        <Link as={`/blog/${post.slug}`} href="/blog/[slug]">
+          <a>
+            <Image
+              className="object-contain"
+              layout="fill"
+              src={post.coverImage}
+              alt={post.title}
+            />
+          </a>
+        </Link>
       </div>
       <h2 className="mt-3 text-lg font-semibold tracking-normal text-black text-brand-primary dark:text-white">
         <span className="link-underline link-underline-blue">{post.title}</span>

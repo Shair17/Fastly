@@ -1,4 +1,5 @@
 import PostType from '../../types/post';
+import Image from 'next/image';
 import {format, parseISO} from 'date-fns';
 import {getReadingTime} from '../../utils/getReadingTime';
 import {PostBody} from '../organisms/PostBody';
@@ -17,8 +18,9 @@ export const PostLayout = ({post}: Props) => {
         <div className="flex justify-center mt-3 space-x-3 text-gray-500">
           <div className="flex items-center gap-3">
             <div className="relative flex-shrink-0 w-10 h-10">
-              <img
+              <Image
                 src={post.author.picture}
+                layout="fill"
                 className="rounded-full"
                 alt={post.author.name}
               />
@@ -41,7 +43,7 @@ export const PostLayout = ({post}: Props) => {
       </div>
 
       <div className="relative z-0 mx-auto mt-4 overflow-hidden lg:rounded-lg aspect-video">
-        <img src={post.coverImage} alt={post.title} />
+        <Image src={post.coverImage} alt={post.title} layout="fill" />
       </div>
 
       <div>

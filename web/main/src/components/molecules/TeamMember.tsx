@@ -23,7 +23,7 @@ export const TeamMember: FC<Props> = ({
   return (
     <div className="flex flex-col md:items-center md:flex-row md:space-x-6">
       <div className="flex items-end justify-start overflow-hidden rounded-lg">
-        <Image src={avatar} width={96} height={96} />
+        <Image src={avatar} width={96} height={96} alt={name} />
       </div>
       <div className="flex flex-col justify-between mt-2 text-left md:py-2 md:mt-0">
         <h4 className="mt-1 text-lg font-medium text-gray-600">{name}</h4>
