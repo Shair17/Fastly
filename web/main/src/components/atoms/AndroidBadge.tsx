@@ -28,19 +28,19 @@ export const AndroidBadge: FC<SVGProps> = ({
         />
         <path
           d="M11.556 8.341c-.334.333-.445.889-.445 1.556v24.555c0 .667.222 1.222.556 1.556l.11.11 13.779-13.777v-.222l-14-13.778z"
-          fill="url(#b)"
+          fill="url(#android-b)"
         />
         <path
           d="m30 27.008-4.556-4.556v-.333L30 17.563l.111.111 5.445 3.111c1.555.89 1.555 2.334 0 3.223l-5.556 3z"
-          fill="url(#c)"
+          fill="url(#android-c)"
         />
         <path
           d="m30.111 26.897-4.666-4.667-13.89 13.889c.556.556 1.334.556 2.334.111l16.222-9.333z"
-          fill="url(#d)"
+          fill="url(#android-d)"
         />
         <path
           d="M30.111 17.563 13.89 8.341c-1-.555-1.778-.444-2.333.111L25.444 22.23l4.666-4.667z"
-          fill="url(#e)"
+          fill="url(#android-e)"
         />
         <path
           opacity={0.2}
@@ -60,7 +60,7 @@ export const AndroidBadge: FC<SVGProps> = ({
       </g>
       <defs>
         <linearGradient
-          id="b"
+          id="android-b"
           x1={24.222}
           y1={9.686}
           x2={5.574}
@@ -74,7 +74,7 @@ export const AndroidBadge: FC<SVGProps> = ({
           <stop offset={1} stopColor="#00E3FF" />
         </linearGradient>
         <linearGradient
-          id="c"
+          id="android-c"
           x1={37.593}
           y1={22.231}
           x2={10.708}
@@ -86,7 +86,7 @@ export const AndroidBadge: FC<SVGProps> = ({
           <stop offset={1} stopColor="#FF9C00" />
         </linearGradient>
         <linearGradient
-          id="d"
+          id="android-d"
           x1={27.586}
           y1={24.781}
           x2={2.299}
@@ -96,7 +96,7 @@ export const AndroidBadge: FC<SVGProps> = ({
           <stop offset={1} stopColor="#C31162" />
         </linearGradient>
         <linearGradient
-          id="e"
+          id="android-e"
           x1={8.108}
           y1={0.203}
           x2={19.4}
@@ -108,7 +108,7 @@ export const AndroidBadge: FC<SVGProps> = ({
           <stop offset={0.801} stopColor="#06E775" />
           <stop offset={1} stopColor="#00F076" />
         </linearGradient>
-        <clipPath id="a">
+        <clipPath id="android-a">
           <path fill="#fff" d="M0 0h150v44.46H0z" />
         </clipPath>
       </defs>

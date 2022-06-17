@@ -5,14 +5,16 @@ import {
 	refreshToken,
 	accessTokenKey,
 	refreshTokenKey,
+	admin,
+	adminKey,
 	Tokens,
 } from '../constants/auth.constants';
 
 export interface ITokens extends Tokens {}
 
-type AuthTypes = Tokens;
+type AuthType = Tokens;
 
-const getDefaultValues = (): AuthTypes => {
+const getDefaultValues = (): AuthType => {
 	return {
 		accessToken: localStorage.getItem(accessTokenKey) ?? accessToken,
 		refreshToken: localStorage.getItem(refreshTokenKey) ?? refreshToken,

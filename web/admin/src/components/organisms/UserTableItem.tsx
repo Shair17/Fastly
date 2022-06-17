@@ -9,9 +9,15 @@ import {
 } from '@mantine/core';
 import { Pencil, Trash } from 'tabler-icons-react';
 import { Admin } from '../../interfaces/appInterfaces';
+import { useAdminStore } from '../../stores/useAdminStore';
 import dayjs from 'dayjs';
+import { useModals } from '@mantine/modals';
+import { getEntityType } from '../../utils/getEntityType';
+import { useAdminsStore } from '../../stores/useAdminsStore';
 
-interface Props extends Admin {}
+interface Props extends Admin {
+	type: 'admin' | 'user' | 'customer' | 'dealer';
+}
 
 export const UserTableItem = ({
 	id,
@@ -28,8 +34,37 @@ export const UserTableItem = ({
 	isActive,
 	isBanned,
 	banReason,
+
+	type,
 }: Props) => {
 	const theme = useMantineTheme();
+	const selfId = useAdminStore((a) => a.id);
+	const removeAdmin = useAdminsStore((a) => a.removeAdmin);
+	const modals = useModals();
+
+	const openEditAdminModal = () => {};
+
+	const openDeleteModal = () => {
+		modals.openConfirmModal({
+			title: `Eliminar ${getEntityType(type)}`,
+			centered: true,
+			children: (
+				<Text size="sm" inline>
+					Estás seguro que quieres eliminar a <strong>{name}</strong>? Todos los
+					datos relacionados a su cuenta serán eliminados luego de 1 mes, por
+					mientras se establecerá su cuenta en desactivado.
+				</Text>
+			),
+			labels: {
+				confirm: `Eliminar ${getEntityType(type)}`,
+				cancel: 'Cancelar',
+			},
+			confirmProps: { color: 'red' },
+			onConfirm: async () => {
+				await removeAdmin(id, name);
+			},
+		});
+	};
 
 	return (
 		<tr>
@@ -94,10 +129,14 @@ export const UserTableItem = ({
 			</td>
 			<td>
 				<Group spacing={0} position="right">
-					<ActionIcon>
+					<ActionIcon onClick={openEditAdminModal}>
 						<Pencil size={16} />
 					</ActionIcon>
-					<ActionIcon color="red">
+					<ActionIcon
+						color="red"
+						disabled={id === selfId || !isActive}
+						onClick={openDeleteModal}
+					>
 						<Trash size={16} />
 					</ActionIcon>
 				</Group>

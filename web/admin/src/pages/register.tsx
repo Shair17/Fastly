@@ -19,12 +19,14 @@ import { getRegisterErrorMessage } from '../utils/getErrorMessages';
 import { registerSchema } from '../schemas/register-schema';
 import { showNotification } from '@mantine/notifications';
 import { useAuthStore, ITokens } from '../stores/useAuthStore';
+// import { useAdminStore } from '../stores/useAdminStore';
 import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { Admin } from '../interfaces/appInterfaces';
 
 const avatar = getDefaultAvatar(100);
 
 export const Register = () => {
-	const [{ loading }, executePost] = useAxios<ITokens>(
+	const [{ loading }, executePost] = useAxios<ITokens & { admin: Admin }>(
 		{
 			url: '/auth/admin/register',
 			method: 'POST',
@@ -47,6 +49,7 @@ export const Register = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const setTokens = useAuthStore((s) => s.setTokens);
+	// const setAdmin = useAdminStore((a) => a.setAdmin);
 
 	// @ts-ignore
 	const from = location.state?.from?.pathname || '/dashboard';
@@ -65,8 +68,9 @@ export const Register = () => {
 				},
 			})
 				.then((res) => {
-					// const { accessToken, refreshToken } = res.data;
-					setTokens(res.data);
+					const { admin, ...tokens } = res.data;
+					setTokens(tokens);
+					// setAdmin(admin);
 				})
 				.then(() => {
 					navigate(from, { replace: true });

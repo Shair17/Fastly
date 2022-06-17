@@ -7,12 +7,9 @@ import { UserService } from '../../modules/user/user.service';
 import { Unauthorized } from 'http-errors';
 import * as jwt from 'jsonwebtoken';
 
-// Creo que tengo que reemplazar todos los throw new con return reply.send(...)...
-export const hasBearerToken: onRequestHookHandler = async (
-	{ headers },
-	reply
-) => {
-	const { authorization } = headers;
+// Creo que tengo que reemplazar todos los throw new con return reply.send(...)
+export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
+	const { authorization } = request.headers;
 	let token: string;
 
 	if (authorization) {
@@ -44,11 +41,11 @@ export const hasBearerToken: onRequestHookHandler = async (
 };
 
 export const adminIsAuthenticated: onRequestHookHandler = async (
-	{ headers, adminId },
+	request,
 	reply
 ) => {
 	try {
-		const token = headers.authorization?.split(' ')[1];
+		const token = request.headers.authorization?.split(' ')[1];
 
 		const decoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
 			id: string;
@@ -69,7 +66,7 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized('inactive_account');
 		}
 
-		adminId = admin.id;
+		request.adminId = admin.id;
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
 			throw new Unauthorized(`token_expired`);
@@ -83,11 +80,11 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
 };
 
 export const userIsAuthenticated: onRequestHookHandler = async (
-	{ headers, userId },
+	request,
 	reply
 ) => {
 	try {
-		const token = headers.authorization?.split(' ')[1];
+		const token = request.headers.authorization?.split(' ')[1];
 
 		const decoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
 			id: string;
@@ -104,7 +101,7 @@ export const userIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized('banned');
 		}
 
-		userId = user.id;
+		request.userId = user.id;
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
 			throw new Unauthorized(`token_expired`);
@@ -119,11 +116,11 @@ export const userIsAuthenticated: onRequestHookHandler = async (
 };
 
 export const customerIsAuthenticated: onRequestHookHandler = async (
-	{ headers, customerId },
+	request,
 	reply
 ) => {
 	try {
-		const token = headers.authorization?.split(' ')[1];
+		const token = request.headers.authorization?.split(' ')[1];
 
 		const decoded = jwt.verify(token!, process.env.JWT_CUSTOMER_SECRET!) as {
 			id: string;
@@ -146,7 +143,7 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
 			throw new Unauthorized('inactive_account');
 		}
 
-		customerId = customer.id;
+		request.customerId = customer.id;
 	} catch (error) {
 		console.log(error);
 		if (error instanceof jwt.TokenExpiredError) {
@@ -161,11 +158,11 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
 };
 
 export const dealerIsAuthenticated: onRequestHookHandler = async (
-	{ headers, dealerId },
+	request,
 	reply
 ) => {
 	try {
-		const token = headers.authorization?.split(' ')[1];
+		const token = request.headers.authorization?.split(' ')[1];
 
 		const decoded = jwt.verify(token!, process.env.JWT_DEALER_SECRET!) as {
 			id: string;
@@ -184,7 +181,7 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 		if (!dealer.isActive) {
 			throw new Unauthorized('inactive_account');
 		}
-		dealerId = dealer.id;
+		request.dealerId = dealer.id;
 	} catch (error) {
 		console.log(error);
 

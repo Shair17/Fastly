@@ -9,7 +9,7 @@ export const IOSBadge: FC<SVGProps> = ({width = 150, height = 45, ...rest}) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...rest}>
-      <g clipPath="url(#a)">
+      <g clipPath="url(#ios-a)">
         <path
           d="M144.663 44.444H5.254C2.358 44.444 0 42.08 0 39.186V5.25A5.26 5.26 0 0 1 5.254 0h139.409C147.559 0 150 2.356 150 5.251v33.935c0 2.894-2.441 5.258-5.337 5.258z"
           fill="#A6A6A6"
@@ -24,7 +24,7 @@ export const IOSBadge: FC<SVGProps> = ({width = 150, height = 45, ...rest}) => {
         />
       </g>
       <defs>
-        <clipPath id="a">
+        <clipPath id="ios-a">
           <path fill="#fff" d="M0 0h150v44.444H0z" />
         </clipPath>
       </defs>

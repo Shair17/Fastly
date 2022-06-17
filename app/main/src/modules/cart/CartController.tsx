@@ -1,11 +1,38 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Div, Text} from 'react-native-magnus';
+import {PullToRefresh} from '../../components/templates/PullToRefresh';
 import {CartScreenProps} from '../../navigation/screens/app/CartScreen';
+import {CartControllerHeader} from './CartControllerHeader';
+import {EmptyCart} from './EmptyCart';
 
-export const CartController: FC<CartScreenProps> = () => {
+export const CartController: FC<CartScreenProps> = ({navigation}) => {
+  const [hasFavorites, setHasFavorites] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  const goToHome = () => {
+    navigation.navigate('HomeStack');
+  };
+
   return (
     <Div flex={1} bg="body">
-      <Text>CartScreen</Text>
+      <CartControllerHeader />
+      {hasFavorites ? (
+        <PullToRefresh refreshing={refreshing} onRefresh={onRefresh}>
+          <Div bg="red" flex={1}>
+            <Text>Hola</Text>
+          </Div>
+        </PullToRefresh>
+      ) : (
+        <EmptyCart goToHome={goToHome} />
+      )}
     </Div>
   );
 };

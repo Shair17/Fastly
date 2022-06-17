@@ -4,6 +4,7 @@ import {
 	ColorScheme,
 } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 import { useHotkeys, useLocalStorage, useColorScheme } from '@mantine/hooks';
 
 import { Routes, Route } from 'react-router-dom';
@@ -67,26 +68,28 @@ function App() {
 				withGlobalStyles
 				withNormalizeCSS
 			>
-				<NotificationsProvider>
-					<Routes>
-						<Route index element={<Index />} />
-						<Route path="/login" element={<Login />} />
-						{data === 0 && <Route path="/register" element={<Register />} />}
-						<Route path="/forgot-password" element={<ForgotPassword />} />
-						<Route path="/new-password" element={<NewPassword />} />
+				<ModalsProvider>
+					<NotificationsProvider>
+						<Routes>
+							<Route index element={<Index />} />
+							<Route path="/login" element={<Login />} />
+							{data === 0 && <Route path="/register" element={<Register />} />}
+							<Route path="/forgot-password" element={<ForgotPassword />} />
+							<Route path="/new-password" element={<NewPassword />} />
 
-						<Route path="/dashboard" element={<Dashboard />} />
-						<Route path="/dashboard/admins" element={<DashboardAdmins />} />
-						<Route path="/dashboard/users" element={<DashboardUsers />} />
-						<Route
-							path="/dashboard/customers"
-							element={<DashboardCustomers />}
-						/>
-						<Route path="/dashboard/dealers" element={<DashboardDealers />} />
+							<Route path="/dashboard" element={<Dashboard />} />
+							<Route path="/dashboard/admins" element={<DashboardAdmins />} />
+							<Route path="/dashboard/users" element={<DashboardUsers />} />
+							<Route
+								path="/dashboard/customers"
+								element={<DashboardCustomers />}
+							/>
+							<Route path="/dashboard/dealers" element={<DashboardDealers />} />
 
-						<Route path="*" element={<NotFound404 />} />
-					</Routes>
-				</NotificationsProvider>
+							<Route path="*" element={<NotFound404 />} />
+						</Routes>
+					</NotificationsProvider>
+				</ModalsProvider>
 			</MantineProvider>
 		</ColorSchemeProvider>
 	);

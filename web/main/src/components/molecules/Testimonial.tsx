@@ -41,9 +41,9 @@ export const Testimonial: FC<Props> = ({
           className="rounded-full"
         />
         <div className="min-w-0 ml-3 mr-auto">
-          <p className="overflow-hidden text-base font-semibold whitespace-nowrap text-ellipsis">
+          <h3 className="overflow-hidden text-base font-semibold whitespace-nowrap text-ellipsis">
             {name}
-          </p>
+          </h3>
           <p className="overflow-hidden text-sm italic text-gray-500 whitespace-nowrap text-ellipsis">
             {type}
           </p>

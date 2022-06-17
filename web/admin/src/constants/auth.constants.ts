@@ -1,3 +1,5 @@
+import { Admin } from '../interfaces/appInterfaces';
+
 export type Tokens = {
 	accessToken: string;
 	refreshToken: string;
@@ -6,9 +8,9 @@ export type Tokens = {
 export const accessTokenKey = '@fastly.admin/token';
 export const refreshTokenKey = '@fastly.admin/refresh-token';
 
-export const userKey = '@fastly/user';
+export const adminKey = '@fastly/admin';
 
-export const user = {};
+export const admin: Admin = {} as Admin;
 
 export const isBanned = false;
 

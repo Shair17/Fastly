@@ -32,6 +32,12 @@ export class AdminService {
 		return restOfAdmin;
 	}
 
+	deleteAdmin(id: string) {
+		return this.adminRepository.update(id, {
+			isActive: false,
+		});
+	}
+
 	getById(id: string): Promise<Admin | null> {
 		return this.adminRepository.findOneBy({ id });
 	}

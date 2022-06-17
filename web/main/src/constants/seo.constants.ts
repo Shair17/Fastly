@@ -8,8 +8,8 @@ export const defaultSEO: DefaultSeoProps = {
     type: 'website',
     locale: 'es_PE',
     url: 'https://fastly.delivery/',
-    site_name: 'Fastly Delivery',
-    title: 'Delivery de lo que quieras en minutos | Fastly Delivery',
+    site_name: 'Fastly Delivery Perú',
+    title: 'Delivery de lo que quieras en minutos | Fastly Delivery Perú',
     description,
   },
   twitter: {
@@ -20,8 +20,8 @@ export const defaultSEO: DefaultSeoProps = {
   facebook: {
     appId: '426666722516954',
   },
-  titleTemplate: '%s | Fastly Delivery',
+  titleTemplate: '%s | Fastly Delivery Perú',
   description,
   canonical: 'https://fastly.delivery/',
-  defaultTitle: 'Delivery de lo que quieras en minutos | Fastly Delivery',
+  defaultTitle: 'Delivery de lo que quieras en minutos | Fastly Delivery Perú',
 };

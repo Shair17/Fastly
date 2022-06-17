@@ -14,11 +14,15 @@ import { useForm, zodResolver } from '@mantine/form';
 import { loginSchema } from '../schemas/login-schema';
 import useAxios from 'axios-hooks';
 import { useAuthStore, ITokens } from '../stores/useAuthStore';
+// import { useAdminStore } from '../stores/useAdminStore';
 import { getLoginErrorMessage } from '../utils/getErrorMessages';
 import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { Admin } from '../interfaces/appInterfaces';
 
 export const Login = () => {
-	const [{ data, loading, error }, executePost] = useAxios<ITokens>(
+	const [{ data, loading, error }, executePost] = useAxios<
+		ITokens & { admin: Admin }
+	>(
 		{
 			url: '/auth/admin/login',
 			method: 'POST',
@@ -35,6 +39,7 @@ export const Login = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const setTokens = useAuthStore((s) => s.setTokens);
+	// const setAdmin = useAdminStore((a) => a.setAdmin);
 
 	// @ts-ignore
 	const from = location.state?.from?.pathname || '/dashboard';
@@ -47,8 +52,9 @@ export const Login = () => {
 			},
 		})
 			.then((res) => {
-				// const { accessToken, refreshToken } = res.data;
-				setTokens(res.data);
+				const { admin, ...tokens } = res.data;
+				setTokens(tokens);
+				// setAdmin(admin);
 			})
 			.then(() => {
 				navigate(from, { replace: true });

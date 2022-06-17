@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Div, Image} from 'react-native-magnus';
+import {Image} from 'react-native-magnus';
 import * as Animatable from 'react-native-animatable';
 
 interface Props {

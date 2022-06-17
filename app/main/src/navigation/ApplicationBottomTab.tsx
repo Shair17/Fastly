@@ -14,6 +14,7 @@ import {SwipeablePanel} from 'rn-swipeable-panel';
 import {AddressesBottomSheet} from '../components/organisms/AddressesBottomSheet';
 import {useAddressesBottomSheetStore} from '../stores/useAddressesBottomSheetStore';
 import useAxios from 'axios-hooks';
+import {useMinigameStore} from '../stores/useMinigameStore';
 
 interface Props
   extends NativeStackScreenProps<RootStackParams, 'ApplicationBottomTab'> {}
@@ -47,6 +48,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
   );
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
+  const keepMinigame = useMinigameStore(m => m.keep);
   const {isConnected} = useNetInfo();
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
 
   if (loading || isConnected === null) return <LoadingScreen />;
 
-  if (!isConnected || error) {
+  if (!isConnected || error || keepMinigame) {
     return <ErrorController />;
   }
 

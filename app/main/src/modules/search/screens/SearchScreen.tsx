@@ -14,17 +14,14 @@ export const SearchScreen: FC<Props> = () => {
   const searches = useRecentSearchesStore(r => r.searches);
   const searchesExists = Object.keys(searches).length > 0;
   const [isLoading, setIsLoading] = useState(true);
-
   const [_search, setSearch] = useState<string>('');
   const [search] = useDebounce(_search, 1000);
-
-  console.log({_search, search});
 
   return (
     <ContainerWithKeyboardAvoidingView flexFull>
       <Div bg="body" flex={1}>
-        <Div p="xl">
-          <Div>
+        <Div py="xl">
+          <Div px="xl">
             <Input
               value={_search}
               onChangeText={setSearch}
@@ -57,6 +54,7 @@ export const SearchScreen: FC<Props> = () => {
               }
             />
           </Div>
+          {/** Search Container */}
           <Div mt="lg">
             {searchesExists && <RecentSearches searches={searches} />}
           </Div>

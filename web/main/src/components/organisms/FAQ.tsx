@@ -4,9 +4,9 @@ export const FAQ = () => {
   return (
     <div className="w-full my-28">
       <div className="max-w-5xl px-1 mx-auto sm:px-3 lg:px-6">
-        <h3 className="text-4xl font-bold text-center">
+        <h2 className="text-4xl font-bold text-center">
           Preguntas Más Frecuentes
-        </h3>
+        </h2>
         <p className="max-w-2xl mx-auto mt-6 text-lg text-center text-gray-700">
           Estas son algunas de las preguntas más frecuentes que puedes
           encontrar, si tienes alguna que no está aquí, puedes escribirnos a{' '}
@@ -24,7 +24,7 @@ export const FAQ = () => {
                 </div>
               </div>
               <div className="flex flex-col space-y-2">
-                <h4 className="text-xl font-bold">{question}</h4>
+                <h3 className="text-xl font-bold">{question}</h3>
                 <p className="text-base text-gray-600">{reply}</p>
               </div>
             </div>

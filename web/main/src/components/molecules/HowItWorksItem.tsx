@@ -12,7 +12,7 @@ export const HowItWorksItem: FC<Props> = ({step, title, description}) => {
       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-50">
         <span className="font-bold text-center text-primary-500">{step}</span>
       </div>
-      <h4 className="text-xl font-bold">{title}</h4>
+      <h3 className="text-xl font-bold">{title}</h3>
       <p className="text-base text-gray-600">{description}</p>
     </div>
   );

@@ -1,5 +1,9 @@
 import React, {FC} from 'react';
-import {TouchableOpacity, TouchableNativeFeedback} from 'react-native';
+import {
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  ScrollView,
+} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
 import {useRecentSearchesStore} from '../../stores/useRecentSearchesStore';
 
@@ -9,8 +13,13 @@ interface RecentSearchItemProps {
 
 const RecentSearchItem: FC<RecentSearchItemProps> = ({search}) => {
   return (
-    <TouchableNativeFeedback>
-      <Div flexDir="row" justifyContent="space-between" py="lg">
+    <TouchableNativeFeedback
+      background={TouchableNativeFeedback.Ripple(
+        'rgba(254, 85, 74, 0.05)',
+        false,
+      )}
+      useForeground>
+      <Div flexDir="row" justifyContent="space-between" py="lg" px="xl">
         <Text fontSize="lg" numberOfLines={1}>
           {search}
         </Text>
@@ -31,7 +40,11 @@ export const RecentSearches: FC<Props> = ({searches}) => {
 
   return (
     <Div>
-      <Div flexDir="row" justifyContent="space-between" alignItems="center">
+      <Div
+        flexDir="row"
+        justifyContent="space-between"
+        alignItems="center"
+        px="xl">
         <Text fontWeight="600" fontSize="lg">
           Búsquedas Recientes
         </Text>
@@ -42,9 +55,11 @@ export const RecentSearches: FC<Props> = ({searches}) => {
         </TouchableOpacity>
       </Div>
       <Div mt="lg">
-        {searches.map((search, key) => (
-          <RecentSearchItem key={key.toString()} search={search} />
-        ))}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {searches.map((search, key) => (
+            <RecentSearchItem key={key.toString()} search={search} />
+          ))}
+        </ScrollView>
       </Div>
     </Div>
   );

@@ -369,12 +369,12 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@mantine/core@^4.2.7":
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-4.2.7.tgz#baf9c01220c75856e63a725eb449c4e620d16fc2"
-  integrity sha512-WlieaDsqsFhtebRhP/pFNCuqTqPCihkNHHPL6tbd02psEqM8crPrktaO9cAJNyHa3Jna8eUthRRMp8737IHDjg==
+"@mantine/core@^4.2.9":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-4.2.9.tgz#395895457a8b616abdb37f16c896e243281cc5fe"
+  integrity sha512-25krgKF7FUFDsF5IYk+A/7GjgAZFzEcaFmGvscXS/7ccOickBmXzENwY9eJpv+MDo/7Sj5eiS0ZBi+WN27tdcw==
   dependencies:
-    "@mantine/styles" "4.2.7"
+    "@mantine/styles" "4.2.9"
     "@popperjs/core" "^2.9.3"
     "@radix-ui/react-scroll-area" "^0.1.1"
     react-popper "^2.2.5"
@@ -390,10 +390,15 @@
   resolved "https://registry.yarnpkg.com/@mantine/form/-/form-4.2.4.tgz#37719262bf5dfe6ba5a6cce23b4b87b12a1a836d"
   integrity sha512-7exttJwSY0yRjzChL6L0NM5i5xxXuGiP4c8quGb7/mxP/hwfUSFMOua3Pme8svP7U8w3gxZL3HWvzGMQQfXqSw==
 
-"@mantine/hooks@^4.2.7":
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-4.2.7.tgz#8b287e03efb59bef78f453e9d8e55bb1f71ff99b"
-  integrity sha512-lBzoVjiqCCbQyr9YIRReFCo2jSXAZGSOgf1QDVa4rq3BxkwVDBsriHOpvG9h4mq2sWh4sjzPvfgy/OK/e2QpYQ==
+"@mantine/hooks@^4.2.9":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-4.2.9.tgz#ada020b0a2820dc208e8dde23374e2f260d9111c"
+  integrity sha512-oLtlSXkl99vPGBTR9yoVCWoCQ25Bc4WhPci31iERMLMM/0fz85CZayQcAC4etq6un6rDiRNu6jq0YB1S5stmPg==
+
+"@mantine/modals@^4.2.9":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@mantine/modals/-/modals-4.2.9.tgz#b3e6c2b489d9c4fee0d7369770d749d3dc0cea3b"
+  integrity sha512-uf4tW5X2xedKU0ykArFhmcOr1H7voi+s/mBAZ+aE+AxiR+MJVymSVmudK636vkZ3v7Ifpenxk1TzdNEiOjd/OQ==
 
 "@mantine/notifications@^4.2.7":
   version "4.2.7"
@@ -402,10 +407,10 @@
   dependencies:
     react-transition-group "^4.4.2"
 
-"@mantine/styles@4.2.7":
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-4.2.7.tgz#0d22c7b7f4187876e23c99ec63a0c4d8b58b762a"
-  integrity sha512-Ox9tgVqACQYAR7U1OvXELIoHUvPQS6ke4hXEa4Lzo6ErPN7kpopbve/HwJbcuipqieomvXkMCY4Fyt1pBt0xSQ==
+"@mantine/styles@4.2.9":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-4.2.9.tgz#97fbc96be5ea970218aab0ad62a8f7c736bc6225"
+  integrity sha512-UT5m1412N20HPl+Mg2zTN7gP34J1GIa3o7eQ+fHThAQkAMm/vBehzX8nkbdxwyYkwuu6+/4kizcbM/Op4jMI3g==
   dependencies:
     "@emotion/cache" "11.7.1"
     "@emotion/react" "11.7.1"

@@ -279,10 +279,20 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del admin
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			...restOfAdmin
+		} = admin;
+
 		return {
 			accessToken,
 			refreshToken,
+			admin: {
+				...restOfAdmin,
+			},
 		};
 	}
 
@@ -341,10 +351,20 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del admin
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			...restOfAdmin
+		} = newAdmin;
+
 		return {
 			accessToken,
 			refreshToken,
+			admin: {
+				...restOfAdmin,
+			},
 		};
 	}
 
@@ -352,7 +372,7 @@ export class AuthService {
 		const admin = await this.adminService.getByEmail(email);
 
 		if (!admin) {
-			throw new BadRequest();
+			throw new Unauthorized();
 		}
 
 		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
@@ -497,7 +517,7 @@ export class AuthService {
 		const admin = await this.adminService.getById(id);
 
 		if (!admin) {
-			throw new BadRequest();
+			throw new Unauthorized();
 		}
 
 		try {
@@ -556,10 +576,21 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del customer
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			stores,
+			...restOfCustomer
+		} = customer;
+
 		return {
 			accessToken,
 			refreshToken,
+			customer: {
+				...restOfCustomer,
+			},
 		};
 	}
 
@@ -580,8 +611,6 @@ export class AuthService {
 		}
 
 		const hashedPassword = await this.passwordService.hash(data.password);
-
-		// birthDate example: new Date("11/29/2001")
 
 		const newCustomer = await this.customerService.save({
 			address,
@@ -613,10 +642,21 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del customer
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			stores,
+			...restOfCustomer
+		} = newCustomer;
+
 		return {
 			accessToken,
 			refreshToken,
+			customer: {
+				...restOfCustomer,
+			},
 		};
 	}
 
@@ -624,7 +664,7 @@ export class AuthService {
 		const customer = await this.customerService.getByEmail(email);
 
 		if (!customer) {
-			throw new BadRequest();
+			throw new Unauthorized();
 		}
 
 		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
@@ -772,7 +812,7 @@ export class AuthService {
 		const customer = await this.customerService.getById(id);
 
 		if (!customer) {
-			throw new BadRequest();
+			throw new Unauthorized();
 		}
 
 		try {
@@ -831,10 +871,24 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del usuario
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			calcDealerRanking,
+			rankings,
+			vehicle,
+			orders,
+			...restOfDealer
+		} = dealer;
+
 		return {
 			accessToken,
 			refreshToken,
+			dealer: {
+				...restOfDealer,
+			},
 		};
 	}
 
@@ -888,10 +942,24 @@ export class AuthService {
 			throw new InternalServerError();
 		}
 
-		// TODO también devolver datos del dealer
+		const {
+			password,
+			refreshToken: _refreshToken,
+			resetPasswordToken,
+			calcUserAge,
+			calcDealerRanking,
+			rankings,
+			vehicle,
+			orders,
+			...restOfDealer
+		} = newDealer;
+
 		return {
 			accessToken,
 			refreshToken,
+			dealer: {
+				...restOfDealer,
+			},
 		};
 	}
 
@@ -899,7 +967,7 @@ export class AuthService {
 		const dealer = await this.dealerService.getByEmail(email);
 
 		if (!dealer) {
-			throw new BadRequest();
+			throw new Unauthorized();
 		}
 
 		const resetPasswordToken = this.tokenService.generateForgotPasswordToken(

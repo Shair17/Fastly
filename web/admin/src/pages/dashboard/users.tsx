@@ -20,6 +20,7 @@ export const DashboardUsers = () => {
 			<MainAccount
 				title="Usuarios 📱"
 				description="Aquí podrás ver la lista de usuarios de la aplicación de Fastly"
+				addButtonDisabled
 			>
 				<Table sx={{ minWidth: 800 }} verticalSpacing="sm">
 					<thead>

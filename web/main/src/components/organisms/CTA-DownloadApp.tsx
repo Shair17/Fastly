@@ -15,9 +15,9 @@ export const CTADownloadApp: FC<Props> = ({}) => {
           <div className="px-4 py-20 mx-auto max-w-7xl sm:px-3 lg:px-6">
             <div className="grid items-center grid-cols-1 gap-12 md:grid-cols-2">
               <div>
-                <h3 className="text-5xl font-bold text-white md:text-6xl">
+                <h2 className="text-5xl font-bold text-white md:text-6xl">
                   Descargar Fastly
-                </h3>
+                </h2>
                 <p className="mt-4 text-base text-gray-200 md:text-xl">
                   Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                   Rerum vel nesciunt voluptatem ut iure iusto obcaecati soluta

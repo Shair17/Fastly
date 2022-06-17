@@ -30,4 +30,8 @@ export class CloudinaryService {
 			filename_override: filename,
 		});
 	}
+
+	async destroy(public_id: string) {
+		return cloudinary.v2.uploader.destroy(public_id);
+	}
 }

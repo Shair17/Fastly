@@ -122,7 +122,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
         }
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       Notifier.showNotification({
         title: 'Error',
         description: 'Ocurrió un error al conectarse a la SDK de Facebook.',
@@ -202,6 +202,8 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
                   bg="facebook"
                   fontWeight="bold"
                   fontSize="xl"
+                  h={50}
+                  loading={loading}
                   prefix={
                     <Icon
                       fontFamily="MaterialCommunityIcons"

@@ -1,18 +1,11 @@
-import useAxios from 'axios-hooks';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { MainAccount } from '../../components/organisms/MainAccount';
 import { UsersTable } from '../../components/organisms/UsersTable';
-import { Admin } from '../../interfaces/appInterfaces';
 import { UserTableItem } from '../../components/organisms/UserTableItem';
+import { useAdminsStore } from '../../stores/useAdminsStore';
 
 export const DashboardAdmins = () => {
-	const [{ data, loading, error }] = useAxios<Admin[]>('/admins');
-
-	if (error) {
-		console.log(error);
-
-		return <p>Error</p>;
-	}
+	const admins = useAdminsStore((a) => a.admins);
 
 	return (
 		<DashboardLayout>
@@ -20,11 +13,15 @@ export const DashboardAdmins = () => {
 				title="Administradores 🛡️"
 				description="Aquí podrás ver la lista de administradores en Fastly"
 			>
-				<UsersTable>
-					{loading && <p>Cargando...</p>}
-					{data &&
-						data.map((admin) => <UserTableItem key={admin.id} {...admin} />)}
-				</UsersTable>
+				{Object.keys(admins).length === 0 ? (
+					<p>Cargando...</p>
+				) : (
+					<UsersTable>
+						{admins.map((admin) => (
+							<UserTableItem key={admin.id} {...admin} type="admin" />
+						))}
+					</UsersTable>
+				)}
 			</MainAccount>
 		</DashboardLayout>
 	);

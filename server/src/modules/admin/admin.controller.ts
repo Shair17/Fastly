@@ -1,7 +1,19 @@
-import { Controller, GET as Get } from 'fastify-decorators';
+import {
+	Controller,
+	GET as Get,
+	POST as Post,
+	PUT as Put,
+	DELETE as Delete,
+} from 'fastify-decorators';
 import { AdminService } from './admin.service';
 import { Request, Reply } from '../../interfaces/http.interfaces';
-import { GetAdminParams, GetAdminParamsType } from './admin.schema';
+import { Unauthorized } from 'http-errors';
+import {
+	GetAdminParams,
+	GetAdminParamsType,
+	DeleteAdminParams,
+	DeleteAdminParamsType,
+} from './admin.schema';
 import {
 	hasBearerToken,
 	adminIsAuthenticated,
@@ -29,6 +41,25 @@ export class AdminController {
 		reply: Reply
 	) {
 		return this.adminService.me(request.params.id);
+	}
+
+	@Delete('/:id', {
+		schema: {
+			params: DeleteAdminParams,
+		},
+		onRequest: [hasBearerToken, adminIsAuthenticated],
+	})
+	async deleteAdmin(
+		request: Request<{
+			Params: DeleteAdminParamsType;
+		}>,
+		reply: Reply
+	) {
+		if (request.adminId === request.params.id) {
+			throw new Unauthorized();
+		}
+
+		return this.adminService.deleteAdmin(request.params.id);
 	}
 
 	@Get('/', {

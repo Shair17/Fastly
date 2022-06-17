@@ -13,7 +13,7 @@ export const Feature: FC<Props> = ({Icon, title, description}) => {
       <div className="self-center p-2 rounded-xl bg-primary-50">
         <Icon size={40} className="text-primary-500" />
       </div>
-      <h4 className="text-xl font-bold">{title}</h4>
+      <h3 className="text-xl font-bold">{title}</h3>
       <p className="text-base text-gray-600">{description}</p>
     </div>
   );
