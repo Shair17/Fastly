@@ -114,6 +114,7 @@ const Physics = (entities: any, {touches, time, dispatch}: any) => {
   let bird = entities.bird.body;
 
   let hadTouches = false;
+
   touches
     .filter((t: any) => t.type === 'press')
     .forEach((t: any) => {

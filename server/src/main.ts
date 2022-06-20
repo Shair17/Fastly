@@ -12,10 +12,6 @@ async function main() {
 		querystringParser: (str) => qs.parse(str),
 	});
 
-	app.log.info(
-		`Starting Fastly server application at ${new Date().toString()}`
-	);
-
 	const endTime = performance.now();
 
 	if (!!(require.main && module.children)) {
@@ -30,7 +26,12 @@ async function main() {
 			app.log.info(
 				`Developed by @Shair17 <hello@shair.dev>, https://shair.dev`
 			);
+
 			await app.listen(+app.config.PORT, serverHost);
+
+			app.log.info(
+				`Websocket server is listening at ws://${serverHost}:${app.config.PORT}`
+			);
 		});
 	}
 }

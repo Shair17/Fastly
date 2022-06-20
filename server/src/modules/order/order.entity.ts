@@ -38,4 +38,11 @@ export class Order extends Base {
 		nullable: true,
 	})
 	message?: string | null;
+
+	// hora de entrega del pedido!!! gracias a iván
+	@Column({
+		type: 'date',
+		nullable: true,
+	})
+	arrivalTime?: Date | null;
 }

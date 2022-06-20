@@ -9,10 +9,7 @@ import { SearchModule } from './modules/search/search.module';
 import { StoreModule } from './modules/store/store.module';
 import { UserModule } from './modules/user/user.module';
 
-import { AppController } from './app.controller';
-
 export const AppModule = [
-	// Others modules
 	...AdminModule,
 	...AuthModule,
 	...CustomerModule,
@@ -23,7 +20,4 @@ export const AppModule = [
 	...SearchModule,
 	...StoreModule,
 	...UserModule,
-
-	// Main Controller
-	AppController,
 ];

@@ -13,6 +13,12 @@ import {
 	GetAdminParamsType,
 	DeleteAdminParams,
 	DeleteAdminParamsType,
+	CreateAdminBody,
+	CreateAdminBodyType,
+	EditAdminBody,
+	EditAdminBodyType,
+	EditAdminParamsType,
+	EditAdminParams,
 } from './admin.schema';
 import {
 	hasBearerToken,
@@ -28,6 +34,20 @@ export class AdminController {
 		return this.adminService.count();
 	}
 
+	@Get('/', {
+		onRequest: [hasBearerToken, adminIsAuthenticated],
+	})
+	async getAdmins() {
+		return this.adminService.getAdmins();
+	}
+
+	@Get('/me', {
+		onRequest: [hasBearerToken, adminIsAuthenticated],
+	})
+	async me(request: Request, reply: Reply) {
+		return this.adminService.me(request.adminId);
+	}
+
 	@Get('/:id', {
 		schema: {
 			params: GetAdminParams,
@@ -41,6 +61,54 @@ export class AdminController {
 		reply: Reply
 	) {
 		return this.adminService.me(request.params.id);
+	}
+
+	@Post('/', {
+		schema: {
+			body: CreateAdminBody,
+		},
+		onRequest: [hasBearerToken, adminIsAuthenticated],
+	})
+	async createAdmin(
+		request: Request<{
+			Body: CreateAdminBodyType;
+		}>,
+		reply: Reply
+	) {
+		await this.adminService.createAdmin(request.body);
+
+		return {
+			statusCode: 200,
+			message: 'Admin Created',
+			success: true,
+		};
+	}
+
+	@Put('/:id', {
+		schema: {
+			body: EditAdminBody,
+			params: EditAdminParams,
+		},
+		onRequest: [hasBearerToken, adminIsAuthenticated],
+	})
+	async EditAdmin(
+		request: Request<{
+			Body: EditAdminBodyType;
+			Params: EditAdminParamsType;
+		}>,
+		reply: Reply
+	) {
+		// if (request.adminId === request.params.id) {
+		// 	throw new Unauthorized();
+		// }
+
+		await this.adminService.editAdmin(request.params.id, request.body);
+
+		return {
+			statusCode: 200,
+			message: 'Admin Edited',
+			success: true,
+		};
 	}
 
 	@Delete('/:id', {
@@ -60,19 +128,5 @@ export class AdminController {
 		}
 
 		return this.adminService.deleteAdmin(request.params.id);
-	}
-
-	@Get('/', {
-		onRequest: [hasBearerToken, adminIsAuthenticated],
-	})
-	async getAdmins(request: Request, reply: Reply) {
-		return this.adminService.getAdmins();
-	}
-
-	@Get('/me', {
-		onRequest: [hasBearerToken, adminIsAuthenticated],
-	})
-	async me(request: Request, reply: Reply) {
-		return this.adminService.me(request.adminId);
 	}
 }

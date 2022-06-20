@@ -8,7 +8,6 @@ import Fastify, {
 import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
-import { bootstrap } from 'fastify-decorators';
 import { AppModule } from './app.module';
 import { AppService } from './app.service';
 import { ConfigSchema, ConfigSchemaType } from './config/config.schema';
@@ -37,6 +36,10 @@ export default async function Server(
 	>
 > {
 	const server: FastifyInstance = Fastify(opts);
+
+	server.log.info(
+		`Starting Fastly server application at ${new Date().toString()}`
+	);
 
 	server.register(import('@fastify/env'), {
 		dotenv: {
@@ -141,7 +144,7 @@ export default async function Server(
 		exposeRoute: true,
 	});*/
 
-	server.register(bootstrap, {
+	server.register((await import('fastify-decorators')).bootstrap, {
 		prefix: '/v1',
 		controllers: [...AppModule],
 	});
@@ -151,6 +154,12 @@ export default async function Server(
 		url: '/',
 		handler: async () => {
 			return new AppService().getApp();
+		},
+	});
+
+	server.register(import('fastify-socket.io'), {
+		cors: {
+			origin: '*',
 		},
 	});
 

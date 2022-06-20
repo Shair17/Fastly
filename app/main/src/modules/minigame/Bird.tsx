@@ -2,24 +2,46 @@ import React, {FC} from 'react';
 import {Animated} from 'react-native';
 import {miniGameImages} from '../../constants/minigame.constants';
 
-interface Props {}
+interface Props {
+  body: {
+    velocity: {
+      x: number;
+      y: number;
+    };
+    bounds: {
+      min: {
+        x: number;
+        y: number;
+      };
+      max: {
+        x: number;
+        y: number;
+      };
+    };
+    position: {
+      x: number;
+      y: number;
+    };
+  };
+  pose: number;
+}
 
-export const Bird: FC<Props> = (props: any) => {
-  const animatedValue = new Animated.Value(props.body.velocity.y);
-  const width = props.body.bounds.max.x - props.body.bounds.min.x;
-  const height = props.body.bounds.max.y - props.body.bounds.min.y;
-  const x = props.body.position.x - width / 2;
-  const y = props.body.position.y - height / 2;
+export const Bird: FC<Props> = ({body, pose}) => {
+  const animatedValue = new Animated.Value(body.velocity.y);
+  const width = body.bounds.max.x - body.bounds.min.x;
+  const height = body.bounds.max.y - body.bounds.min.y;
+  const x = body.position.x - width / 2;
+  const y = body.position.y - height / 2;
 
-  animatedValue.setValue(props.body.velocity.y);
-  let rotation = animatedValue.interpolate({
+  animatedValue.setValue(body.velocity.y);
+
+  const rotation = animatedValue.interpolate({
     inputRange: [-10, 0, 10, 20],
     outputRange: ['-20deg', '0deg', '15deg', '45deg'],
     extrapolate: 'clamp',
   });
 
-  let image =
-    miniGameImages[('bird' + props.pose) as keyof typeof miniGameImages];
+  const image = miniGameImages[('bird' + pose) as keyof typeof miniGameImages];
 
   return (
     <Animated.Image

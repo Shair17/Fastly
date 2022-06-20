@@ -1,5 +1,9 @@
 import { Static, Type } from '@sinclair/typebox';
-import { PASSWORD_REGEX, JWT_REGEX } from '../../constants/regex.constants';
+import {
+	PASSWORD_REGEX,
+	JWT_REGEX,
+	DNI_REGEX,
+} from '../../constants/regex.constants';
 
 // facebook
 export const LogInWithFacebook = Type.Object(
@@ -34,7 +38,7 @@ export const AdminRegister = Type.Object(
 		name: Type.String({ minLength: 5 }),
 		email: Type.String({ format: 'email' }),
 		password: Type.RegEx(PASSWORD_REGEX),
-		dni: Type.RegEx(/^\d{8}(?:[-\s]\d{4})?$/),
+		dni: Type.RegEx(DNI_REGEX),
 		phone: Type.String({ minLength: 9, maxLength: 9 }),
 		address: Type.String({ minLength: 5 }),
 		avatar: Type.Optional(Type.String()),
@@ -85,7 +89,7 @@ export const CustomerRegister = Type.Object(
 		name: Type.String(),
 		email: Type.String({ format: 'email' }),
 		password: Type.RegEx(PASSWORD_REGEX),
-		dni: Type.RegEx(/^\d{8}(?:[-\s]\d{4})?$/),
+		dni: Type.RegEx(DNI_REGEX),
 		phone: Type.String({ minLength: 9, maxLength: 9 }),
 		address: Type.String(),
 		avatar: Type.Optional(Type.String()),
@@ -136,7 +140,7 @@ export const DealerRegister = Type.Object(
 		name: Type.String(),
 		email: Type.String({ format: 'email' }),
 		password: Type.RegEx(PASSWORD_REGEX),
-		dni: Type.RegEx(/^\d{8}(?:[-\s]\d{4})?$/),
+		dni: Type.RegEx(DNI_REGEX),
 		phone: Type.String({ minLength: 9, maxLength: 9 }),
 		address: Type.String(),
 		avatar: Type.Optional(Type.String()),

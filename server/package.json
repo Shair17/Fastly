@@ -36,6 +36,7 @@
 		"fastify-favicon": "^3.1.0",
 		"fastify-healthcheck": "^3.1.0",
 		"fastify-multer": "^2.0.2",
+		"fastify-socket.io": "^3.0.0",
 		"http-errors": "^2.0.0",
 		"http-status-codes": "^2.2.0",
 		"jsonwebtoken": "^8.5.1",
@@ -44,6 +45,7 @@
 		"nodemailer": "^6.7.5",
 		"qs": "^6.10.3",
 		"reflect-metadata": "^0.1.13",
+		"socket.io": "^4.5.1",
 		"typeorm": "^0.3.6"
 	},
 	"devDependencies": {

@@ -1,5 +1,5 @@
 import React, {FC, useState, useRef} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, StatusBar} from 'react-native';
 import {GameEngine} from 'react-native-game-engine';
 import {Div, Text, Image} from 'react-native-magnus';
 import Matter from 'matter-js';
@@ -35,13 +35,16 @@ export const MiniGameController: FC<Props> = ({}) => {
   const {
     screen: {width: screenWidth, height: screenHeight},
   } = useDimensions();
+
   const setupWorld = () => {
     // @ts-ignore
     let engine = Matter.Engine.create({
       enableSleeping: false,
     });
-    let world = engine.world;
-    world.gravity.y = 0.0;
+
+    const world = engine.world;
+
+    engine.gravity.y = 0.0;
 
     let bird = Matter.Bodies.rectangle(
       MAX_WIDTH / 2,
@@ -75,13 +78,15 @@ export const MiniGameController: FC<Props> = ({}) => {
     });
 
     return {
-      physics: {engine: engine, world: world},
+      physics: {engine, world},
       floor1: {body: floor1, renderer: Floor},
       floor2: {body: floor2, renderer: Floor},
       bird: {body: bird, pose: 1, renderer: Bird},
     };
   };
+
   const entities = setupWorld();
+
   const onEvent = (e: any) => {
     if (e.type === 'game-over') {
       setRunning(false);
@@ -89,7 +94,11 @@ export const MiniGameController: FC<Props> = ({}) => {
       setScore(score + 1);
     }
   };
+
   const reset = () => {
+    if (score > maxScore) {
+      setMiniGameMaxScore(score);
+    }
     resetPipes();
     // @ts-ignore
     gameEngineRef.current.swap(setupWorld());
@@ -99,6 +108,7 @@ export const MiniGameController: FC<Props> = ({}) => {
 
   return (
     <ContainerWithCredits>
+      <StatusBar backgroundColor="transparent" translucent />
       <Image
         position="absolute"
         top={0}
@@ -122,7 +132,8 @@ export const MiniGameController: FC<Props> = ({}) => {
         systems={[Physics]}
         running={running}
         onEvent={onEvent}
-        entities={entities}></GameEngine>
+        entities={entities}
+      />
       <Div position="absolute" top={50} left={MAX_WIDTH / 2 - 20}>
         <Text color="white" fontSize={72} fontWeight="bold">
           {score}

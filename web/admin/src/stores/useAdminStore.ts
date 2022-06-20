@@ -17,5 +17,17 @@ const getDefaultValues = async (): Promise<Admin> => {
 };
 
 export const useAdminStore = create(
-	combine(await getDefaultValues(), (set, get) => ({}))
+	combine(await getDefaultValues(), (set, get) => ({
+		fetchAdmin: async () => {
+			const isAuthenticated = isLoggedIn();
+
+			if (!isAuthenticated) {
+				return {} as Admin;
+			}
+
+			const response = await http.get<Admin>('/admins/me');
+
+			set(response.data);
+		},
+	}))
 );

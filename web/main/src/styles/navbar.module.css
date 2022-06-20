@@ -1,6 +1,3 @@
-.nav__listitem {
-  /* padding: 1rem; */
-}
 .nav__listitem:hover ul,
 .nav__listitem:focus ul {
   opacity: 1;

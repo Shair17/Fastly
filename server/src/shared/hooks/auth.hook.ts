@@ -5,6 +5,7 @@ import { CustomerService } from '../../modules/customer/customer.service';
 import { DealerService } from '../../modules/dealer/dealer.service';
 import { UserService } from '../../modules/user/user.service';
 import { Unauthorized } from 'http-errors';
+import { BEARER_SCHEME_REGEX } from '../../constants/regex.constants';
 import * as jwt from 'jsonwebtoken';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)
@@ -12,14 +13,15 @@ export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
 	const { authorization } = request.headers;
 	let token: string;
 
-	if (authorization) {
+	// TODO: Validar que el token tenga un formato válido
+	if (!!authorization) {
 		const parts = authorization.split(' ');
 
 		if (parts.length === 2 && parts[1].split('.').length === 3) {
 			const scheme = parts[0];
 			token = parts[1];
 
-			if (!/^Bearer$/i.test(scheme)) {
+			if (!BEARER_SCHEME_REGEX.test(scheme)) {
 				throw new Unauthorized('malformed_token');
 			}
 		} else {
@@ -195,3 +197,4 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 		throw new Unauthorized();
 	}
 };
+

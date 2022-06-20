@@ -23,6 +23,21 @@ const getDefaultValues = async (): Promise<{ admins: Admin[] }> => {
 
 export const useAdminsStore = create(
 	combine(await getDefaultValues(), (set, get) => ({
+		fetchAdmins: async () => {
+			const isAuthenticated = isLoggedIn();
+
+			if (!isAuthenticated) {
+				return {
+					admins: [] as Admin[],
+				};
+			}
+
+			const response = await http.get<Admin[]>('/admins');
+
+			set({
+				admins: [...response.data],
+			});
+		},
 		removeAdmin: async (id: string, name: string) => {
 			try {
 				const response = await http.delete(`/admins/${id}`);

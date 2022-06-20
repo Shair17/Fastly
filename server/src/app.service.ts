@@ -5,6 +5,7 @@ import {
 	appName,
 	appVersion,
 	appDeveloper,
+	appUpdateNeeded,
 } from './constants/app.constants';
 
 @Service('AppServiceToken')
@@ -16,6 +17,7 @@ export class AppService {
 			appName,
 			appVersion,
 			appDeveloper,
+			appUpdateNeeded,
 			date: new Date().toISOString(),
 		};
 	}

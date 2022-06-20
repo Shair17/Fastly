@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Div, Image} from 'react-native-magnus';
+import {Div, Image, Text} from 'react-native-magnus';
 import {miniGameImages} from '../../constants/minigame.constants';
 
 interface Props {}

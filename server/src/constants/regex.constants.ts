@@ -14,3 +14,5 @@ export const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 export const LATITUDE_REGEX = /^((\-?|\+?)?\d+(\.\d+)?)$/;
 export const LONGITUDE_REGEX = /\s*((\-?|\+?)?\d+(\.\d+)?)$/;
+
+export const BEARER_SCHEME_REGEX = /^Bearer$/i;

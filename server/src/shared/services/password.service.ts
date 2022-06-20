@@ -1,9 +1,14 @@
 import { Service } from 'fastify-decorators';
 import * as argon2 from 'argon2';
+import { PASSWORD_REGEX } from '../../constants/regex.constants';
 
 @Service('PasswordServiceToken')
 export class PasswordService {
 	private readonly argon2: typeof argon2 = argon2;
+
+	isValidPassword(password: string): boolean {
+		return PASSWORD_REGEX.test(password);
+	}
 
 	hash(password: string) {
 		try {

@@ -2,13 +2,19 @@ import { Initializer, Service } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
-import { Unauthorized } from 'http-errors';
+import { Unauthorized, BadRequest, NotFound } from 'http-errors';
+import { CreateAdminBodyType, EditAdminBodyType } from './admin.schema';
+import { PasswordService } from '../../shared/services/password.service';
+import { trimStrings } from '../../utils/trimStrings';
 
 @Service('AdminServiceToken')
 export class AdminService {
 	private adminRepository: Repository<Admin>;
 
-	constructor(private readonly dataSourceProvider: DataSourceProvider) {}
+	constructor(
+		private readonly dataSourceProvider: DataSourceProvider,
+		private readonly passwordService: PasswordService
+	) {}
 
 	@Initializer([DataSourceProvider])
 	async init(): Promise<void> {
@@ -30,6 +36,70 @@ export class AdminService {
 		const { password, calcUserAge, ...restOfAdmin } = admin;
 
 		return restOfAdmin;
+	}
+
+	async createAdmin(data: CreateAdminBodyType) {
+		const [address, dni, email, name, phone, birthDate] = trimStrings(
+			data.address,
+			data.dni,
+			data.email,
+			data.name,
+			data.phone,
+			data.birthDate
+		);
+
+		const foundAdmin = await this.getByEmail(email);
+
+		if (foundAdmin) {
+			throw new BadRequest('account_taken');
+		}
+
+		const numberOfAdmins = await this.count();
+
+		const hashedPassword = await this.passwordService.hash(data.password);
+
+		return this.save({
+			address,
+			avatar: data.avatar,
+			birthDate: new Date(birthDate),
+			dni,
+			email,
+			name,
+			phone,
+			password: hashedPassword,
+			isActive: numberOfAdmins === 0,
+		});
+	}
+
+	async editAdmin(adminId: string, data: EditAdminBodyType) {
+		const [address, dni, email, name, phone, birthDate] = trimStrings(
+			data.address,
+			data.dni,
+			data.email,
+			data.name,
+			data.phone,
+			data.birthDate
+		);
+
+		const foundAdmin = await this.getById(adminId);
+
+		if (!foundAdmin) {
+			throw new NotFound('admin_not_found');
+		}
+
+		const hashedPassword = await this.passwordService.hash(data.password);
+
+		foundAdmin.address = address;
+		foundAdmin.avatar = data.avatar;
+		foundAdmin.birthDate = new Date(birthDate);
+		foundAdmin.dni = dni;
+		foundAdmin.email = email;
+		foundAdmin.name = name;
+		foundAdmin.phone = phone;
+		foundAdmin.password = hashedPassword;
+		foundAdmin.isActive = data.isActive;
+
+		return this.save(foundAdmin);
 	}
 
 	deleteAdmin(id: string) {

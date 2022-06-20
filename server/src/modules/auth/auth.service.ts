@@ -318,18 +318,15 @@ export class AuthService {
 			throw new BadRequest('account_taken');
 		}
 
-		const hashedPassword = await this.passwordService.hash(data.password);
-
-		const newAdmin = await this.adminService.save({
+		const newAdmin = await this.adminService.createAdmin({
 			address,
 			avatar: data.avatar,
-			birthDate: new Date(birthDate),
+			birthDate,
 			dni,
 			email,
 			name,
 			phone,
-			password: hashedPassword,
-			isActive: numberOfAdmins === 0,
+			password: data.password,
 		});
 
 		const { accessToken, refreshToken } = this.tokenService.generateTokens(
