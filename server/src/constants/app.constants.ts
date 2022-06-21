@@ -5,6 +5,9 @@ const {
 
 export const MAX_USER_ADDRESSES = 10;
 
+export const SHAIR_EMAIL = 'hi@shair.dev';
+export const SHAIR_FACEBOOK_ID = '...';
+
 const fallBackServerVersion = '1.0.0';
 const fallBackAppVersion = '1.0.0';
 

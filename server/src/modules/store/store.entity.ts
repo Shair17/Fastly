@@ -72,7 +72,10 @@ export class Store extends Base {
 	@AfterLoad()
 	getOpenFullTime() {
 		// TODO: Probar si esto funciona!!
-		if (this.openTime === undefined && this.closeTime === undefined) {
+		if (
+			(this.openTime === undefined && this.closeTime === undefined) ||
+			(this.openTime === null && this.closeTime === null)
+		) {
 			this.openFullTime = true;
 		} else {
 			this.openFullTime = false;

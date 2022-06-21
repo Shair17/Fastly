@@ -98,10 +98,6 @@ export class AdminController {
 		}>,
 		reply: Reply
 	) {
-		// if (request.adminId === request.params.id) {
-		// 	throw new Unauthorized();
-		// }
-
 		await this.adminService.editAdmin(request.params.id, request.body);
 
 		return {

@@ -198,3 +198,703 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
 	}
 };
 
+export const adminOrUserIsAuthenticated: onRequestHookHandler = async (
+	request,
+	reply
+) => {
+	try {
+		const token = request.headers.authorization?.split(' ')[1];
+
+		const adminDecoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
+			id: string;
+		};
+
+		const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+			id: string;
+		};
+
+		if (adminDecoded && adminDecoded.id) {
+			// is admin
+			const adminService =
+				getInstanceByToken<AdminService>('AdminServiceToken');
+			const admin = await adminService.getById(adminDecoded.id);
+
+			if (!admin) {
+				throw new Unauthorized();
+			}
+
+			if (admin.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (!admin.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.adminId = admin.id;
+		} else if (userDecoded && userDecoded.id) {
+			// is user
+			const userService = getInstanceByToken<UserService>('UserServiceToken');
+			const user = await userService.getById(userDecoded.id);
+
+			if (!user) {
+				throw new Unauthorized();
+			}
+
+			if (user.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			request.userId = user.id;
+		} else {
+			// idk what is it
+			throw new Unauthorized();
+		}
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+
+		throw new Unauthorized();
+	}
+};
+
+export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
+	request,
+	reply
+) => {
+	try {
+		const token = request.headers.authorization?.split(' ')[1];
+
+		const adminDecoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
+			id: string;
+		};
+
+		const customerDecoded = jwt.verify(
+			token!,
+			process.env.JWT_CUSTOMER_SECRET!
+		) as {
+			id: string;
+		};
+
+		if (adminDecoded && adminDecoded.id) {
+			// is admin
+			const adminService =
+				getInstanceByToken<AdminService>('AdminServiceToken');
+			const admin = await adminService.getById(adminDecoded.id);
+
+			if (!admin) {
+				throw new Unauthorized();
+			}
+
+			if (admin.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (!admin.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.adminId = admin.id;
+		} else if (customerDecoded && customerDecoded.id) {
+			// is user
+			const customerService = getInstanceByToken<CustomerService>(
+				'CustomerServiceToken'
+			);
+			const customer = await customerService.getById(customerDecoded.id);
+
+			if (!customer) {
+				throw new Unauthorized();
+			}
+
+			if (customer.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (customer.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.customerId = customer.id;
+		} else {
+			// idk what is it
+			throw new Unauthorized();
+		}
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+
+		throw new Unauthorized();
+	}
+};
+
+export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
+	request,
+	reply
+) => {
+	try {
+		const token = request.headers.authorization?.split(' ')[1];
+
+		const adminDecoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
+			id: string;
+		};
+
+		const dealerDecoded = jwt.verify(
+			token!,
+			process.env.JWT_DEALER_SECRET!
+		) as {
+			id: string;
+		};
+
+		if (adminDecoded && adminDecoded.id) {
+			// is admin
+			const adminService =
+				getInstanceByToken<AdminService>('AdminServiceToken');
+			const admin = await adminService.getById(adminDecoded.id);
+
+			if (!admin) {
+				throw new Unauthorized();
+			}
+
+			if (admin.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (!admin.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.adminId = admin.id;
+		} else if (dealerDecoded && dealerDecoded.id) {
+			// is user
+			const dealerService =
+				getInstanceByToken<DealerService>('DealerServiceToken');
+			const dealer = await dealerService.getById(dealerDecoded.id);
+
+			if (!dealer) {
+				throw new Unauthorized();
+			}
+
+			if (dealer.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (dealer.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.dealerId = dealer.id;
+		} else {
+			// idk what is it
+			throw new Unauthorized();
+		}
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+
+		throw new Unauthorized();
+	}
+};
+
+export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
+	async (request, reply) => {
+		try {
+			const token = request.headers.authorization?.split(' ')[1];
+
+			const adminDecoded = jwt.verify(
+				token!,
+				process.env.JWT_ADMIN_SECRET!
+			) as {
+				id: string;
+			};
+
+			const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+				id: string;
+			};
+
+			const customerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_CUSTOMER_SECRET!
+			) as {
+				id: string;
+			};
+
+			if (adminDecoded && adminDecoded.id) {
+				// is admin
+				const adminService =
+					getInstanceByToken<AdminService>('AdminServiceToken');
+				const admin = await adminService.getById(adminDecoded.id);
+
+				if (!admin) {
+					throw new Unauthorized();
+				}
+
+				if (admin.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!admin.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.adminId = admin.id;
+			} else if (userDecoded && userDecoded.id) {
+				// is user
+				const userService = getInstanceByToken<UserService>('UserServiceToken');
+				const user = await userService.getById(userDecoded.id);
+
+				if (!user) {
+					throw new Unauthorized();
+				}
+
+				if (user.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				request.userId = user.id;
+			} else if (customerDecoded && customerDecoded.id) {
+				// is customer
+				const customerService = getInstanceByToken<CustomerService>(
+					'CustomerServiceToken'
+				);
+				const customer = await customerService.getById(customerDecoded.id);
+
+				if (!customer) {
+					throw new Unauthorized();
+				}
+
+				if (customer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!customer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.customerId = customer.id;
+			} else {
+				// idk what is it
+				throw new Unauthorized();
+			}
+		} catch (error) {
+			if (error instanceof jwt.TokenExpiredError) {
+				throw new Unauthorized(`token_expired`);
+			}
+			if (error instanceof jwt.JsonWebTokenError) {
+				throw new Unauthorized(`invalid_token`);
+			}
+
+			throw new Unauthorized();
+		}
+	};
+
+export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
+	request,
+	reply
+) => {
+	try {
+		const token = request.headers.authorization?.split(' ')[1];
+
+		const adminDecoded = jwt.verify(token!, process.env.JWT_ADMIN_SECRET!) as {
+			id: string;
+		};
+
+		const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+			id: string;
+		};
+
+		const dealerDecoded = jwt.verify(
+			token!,
+			process.env.JWT_DEALER_SECRET!
+		) as {
+			id: string;
+		};
+
+		if (adminDecoded && adminDecoded.id) {
+			// is admin
+			const adminService =
+				getInstanceByToken<AdminService>('AdminServiceToken');
+			const admin = await adminService.getById(adminDecoded.id);
+
+			if (!admin) {
+				throw new Unauthorized();
+			}
+
+			if (admin.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (!admin.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.adminId = admin.id;
+		} else if (userDecoded && userDecoded.id) {
+			// is user
+			const userService = getInstanceByToken<UserService>('UserServiceToken');
+			const user = await userService.getById(userDecoded.id);
+
+			if (!user) {
+				throw new Unauthorized();
+			}
+
+			if (user.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			request.userId = user.id;
+		} else if (dealerDecoded && dealerDecoded.id) {
+			// is dealer
+			const dealerService =
+				getInstanceByToken<DealerService>('DealerServiceToken');
+			const dealer = await dealerService.getById(dealerDecoded.id);
+
+			if (!dealer) {
+				throw new Unauthorized();
+			}
+
+			if (dealer.isBanned) {
+				throw new Unauthorized('banned');
+			}
+
+			if (!dealer.isActive) {
+				throw new Unauthorized('inactive_account');
+			}
+
+			request.dealerId = dealer.id;
+		} else {
+			// idk what is it
+			throw new Unauthorized();
+		}
+	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			throw new Unauthorized(`token_expired`);
+		}
+		if (error instanceof jwt.JsonWebTokenError) {
+			throw new Unauthorized(`invalid_token`);
+		}
+
+		throw new Unauthorized();
+	}
+};
+
+export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
+	async (request, reply) => {
+		try {
+			const token = request.headers.authorization?.split(' ')[1];
+
+			const adminDecoded = jwt.verify(
+				token!,
+				process.env.JWT_ADMIN_SECRET!
+			) as {
+				id: string;
+			};
+
+			const dealerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_DEALER_SECRET!
+			) as {
+				id: string;
+			};
+
+			const customerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_CUSTOMER_SECRET!
+			) as {
+				id: string;
+			};
+
+			if (adminDecoded && adminDecoded.id) {
+				// is admin
+				const adminService =
+					getInstanceByToken<AdminService>('AdminServiceToken');
+				const admin = await adminService.getById(adminDecoded.id);
+
+				if (!admin) {
+					throw new Unauthorized();
+				}
+
+				if (admin.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!admin.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.adminId = admin.id;
+			} else if (dealerDecoded && dealerDecoded.id) {
+				// is dealer
+				const dealerService =
+					getInstanceByToken<DealerService>('DealerServiceToken');
+				const dealer = await dealerService.getById(dealerDecoded.id);
+
+				if (!dealer) {
+					throw new Unauthorized();
+				}
+
+				if (dealer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!dealer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.dealerId = dealer.id;
+			} else if (customerDecoded && customerDecoded.id) {
+				// is customer
+				const customerService = getInstanceByToken<CustomerService>(
+					'CustomerServiceToken'
+				);
+				const customer = await customerService.getById(customerDecoded.id);
+
+				if (!customer) {
+					throw new Unauthorized();
+				}
+
+				if (customer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!customer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.customerId = customer.id;
+			} else {
+				// idk what is it
+				throw new Unauthorized();
+			}
+		} catch (error) {
+			if (error instanceof jwt.TokenExpiredError) {
+				throw new Unauthorized(`token_expired`);
+			}
+			if (error instanceof jwt.JsonWebTokenError) {
+				throw new Unauthorized(`invalid_token`);
+			}
+
+			throw new Unauthorized();
+		}
+	};
+
+export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
+	async (request, reply) => {
+		try {
+			const token = request.headers.authorization?.split(' ')[1];
+
+			const customerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_CUSTOMER_SECRET!
+			) as {
+				id: string;
+			};
+
+			const dealerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_DEALER_SECRET!
+			) as {
+				id: string;
+			};
+
+			const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+				id: string;
+			};
+
+			if (customerDecoded && customerDecoded.id) {
+				// is customer
+				const customerService = getInstanceByToken<CustomerService>(
+					'CustomerServiceToken'
+				);
+				const customer = await customerService.getById(customerDecoded.id);
+
+				if (!customer) {
+					throw new Unauthorized();
+				}
+
+				if (customer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!customer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.customerId = customer.id;
+			} else if (dealerDecoded && dealerDecoded.id) {
+				// is dealer
+				const dealerService =
+					getInstanceByToken<DealerService>('DealerServiceToken');
+				const dealer = await dealerService.getById(dealerDecoded.id);
+
+				if (!dealer) {
+					throw new Unauthorized();
+				}
+
+				if (dealer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!dealer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.dealerId = dealer.id;
+			} else if (userDecoded && userDecoded.id) {
+				// is user
+				const userService = getInstanceByToken<UserService>('UserServiceToken');
+				const user = await userService.getById(userDecoded.id);
+
+				if (!user) {
+					throw new Unauthorized();
+				}
+
+				if (user.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				request.userId = user.id;
+			} else {
+				// idk what is it
+				throw new Unauthorized();
+			}
+		} catch (error) {
+			if (error instanceof jwt.TokenExpiredError) {
+				throw new Unauthorized(`token_expired`);
+			}
+			if (error instanceof jwt.JsonWebTokenError) {
+				throw new Unauthorized(`invalid_token`);
+			}
+
+			throw new Unauthorized();
+		}
+	};
+
+export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
+	async (request, reply) => {
+		try {
+			const token = request.headers.authorization?.split(' ')[1];
+
+			const adminDecoded = jwt.verify(
+				token!,
+				process.env.JWT_ADMIN_SECRET!
+			) as {
+				id: string;
+			};
+
+			const customerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_CUSTOMER_SECRET!
+			) as {
+				id: string;
+			};
+
+			const dealerDecoded = jwt.verify(
+				token!,
+				process.env.JWT_DEALER_SECRET!
+			) as {
+				id: string;
+			};
+
+			const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+				id: string;
+			};
+
+			if (adminDecoded && adminDecoded.id) {
+				// is admin
+				const adminService =
+					getInstanceByToken<AdminService>('AdminServiceToken');
+				const admin = await adminService.getById(adminDecoded.id);
+
+				if (!admin) {
+					throw new Unauthorized();
+				}
+
+				if (admin.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!admin.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.adminId = admin.id;
+			} else if (customerDecoded && customerDecoded.id) {
+				// is customer
+				const customerService = getInstanceByToken<CustomerService>(
+					'CustomerServiceToken'
+				);
+				const customer = await customerService.getById(customerDecoded.id);
+
+				if (!customer) {
+					throw new Unauthorized();
+				}
+
+				if (customer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!customer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.customerId = customer.id;
+			} else if (dealerDecoded && dealerDecoded.id) {
+				// is dealer
+				const dealerService =
+					getInstanceByToken<DealerService>('DealerServiceToken');
+				const dealer = await dealerService.getById(dealerDecoded.id);
+
+				if (!dealer) {
+					throw new Unauthorized();
+				}
+
+				if (dealer.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				if (!dealer.isActive) {
+					throw new Unauthorized('inactive_account');
+				}
+
+				request.dealerId = dealer.id;
+			} else if (userDecoded && userDecoded.id) {
+				// is user
+				const userService = getInstanceByToken<UserService>('UserServiceToken');
+				const user = await userService.getById(userDecoded.id);
+
+				if (!user) {
+					throw new Unauthorized();
+				}
+
+				if (user.isBanned) {
+					throw new Unauthorized('banned');
+				}
+
+				request.userId = user.id;
+			} else {
+				// idk what is it
+				throw new Unauthorized();
+			}
+		} catch (error) {
+			if (error instanceof jwt.TokenExpiredError) {
+				throw new Unauthorized(`token_expired`);
+			}
+			if (error instanceof jwt.JsonWebTokenError) {
+				throw new Unauthorized(`invalid_token`);
+			}
+
+			throw new Unauthorized();
+		}
+	};

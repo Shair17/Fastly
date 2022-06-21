@@ -6,6 +6,7 @@ import { Unauthorized, BadRequest, NotFound } from 'http-errors';
 import { CreateAdminBodyType, EditAdminBodyType } from './admin.schema';
 import { PasswordService } from '../../shared/services/password.service';
 import { trimStrings } from '../../utils/trimStrings';
+import { SHAIR_EMAIL } from '../../constants/app.constants';
 
 @Service('AdminServiceToken')
 export class AdminService {
@@ -102,7 +103,17 @@ export class AdminService {
 		return this.save(foundAdmin);
 	}
 
-	deleteAdmin(id: string) {
+	async deleteAdmin(id: string) {
+		const admin = await this.getById(id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		if (admin.email === SHAIR_EMAIL) {
+			throw new Unauthorized('lol, no puedes eliminar a Shair jajajsda');
+		}
+
 		return this.adminRepository.update(id, {
 			isActive: false,
 		});

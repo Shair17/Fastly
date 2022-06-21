@@ -5,7 +5,6 @@ import {
 	GET as Get,
 	getInstanceByToken,
 } from 'fastify-decorators';
-import { Request } from '../../interfaces/http.interfaces';
 
 @Controller('/orders')
 export class OrderController {
@@ -14,7 +13,6 @@ export class OrderController {
 
 	@Get('/')
 	index() {
-		this.fastify.io.emit('hello from server');
-		// return 'hello from /orders rest or websocket?';
+		return {};
 	}
 }

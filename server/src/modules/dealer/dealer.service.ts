@@ -2,7 +2,7 @@ import { Service, Initializer } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { Dealer } from './dealer.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
-import { Unauthorized } from 'http-errors';
+import { Unauthorized, NotFound } from 'http-errors';
 
 @Service('DealerServiceToken')
 export class DealerService {
@@ -64,6 +64,61 @@ export class DealerService {
 
 	getByEmail(email: string): Promise<Dealer | null> {
 		return this.dealerRepository.findOneBy({ email });
+	}
+
+	async getDealerRanking(id: string): Promise<number> {
+		const dealer = await this.getById(id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		return dealer.ranking;
+	}
+
+	async getDealerRankings(id: string) {
+		const dealer = await this.getById(id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		if (!dealer.rankings) {
+			return {
+				ranking: dealer.ranking,
+				rankings: [],
+			};
+		}
+
+		return {
+			ranking: dealer.ranking,
+			rankings: dealer.rankings,
+		};
+	}
+
+	async getDealerIsAvailable(id: string) {
+		const dealer = await this.getById(id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		return dealer.available;
+	}
+
+	async getAvailableDealers() {
+		const dealers = await this.dealerRepository.findBy({
+			isActive: true,
+			available: true,
+		});
+
+		return dealers;
+	}
+
+	async getActiveDealers() {
+		const dealers = await this.dealerRepository.findBy({ isActive: true });
+
+		return dealers;
 	}
 
 	save(dealer: Partial<Dealer>) {

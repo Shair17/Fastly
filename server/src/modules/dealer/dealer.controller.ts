@@ -5,8 +5,16 @@ import {
 	hasBearerToken,
 	dealerIsAuthenticated,
 	adminIsAuthenticated,
+	adminOrCustomerOrDealerOrUserIsAuthenticated,
 } from '../../shared/hooks/auth.hook';
-import { GetDealerParams, GetDealerParamsType } from './dealer.schema';
+import {
+	GetDealerParams,
+	GetDealerParamsType,
+	GetDealerRankingParams,
+	GetDealerRankingParamsType,
+	GetDealerRankingsParams,
+	GetDealerRankingsParamsType,
+} from './dealer.schema';
 
 @Controller('/dealers')
 export class DealerController {
@@ -29,6 +37,36 @@ export class DealerController {
 		reply: Reply
 	) {
 		return this.dealerService.me(request.params.id);
+	}
+
+	@Get('/:id/ranking', {
+		schema: {
+			params: GetDealerRankingParams,
+		},
+		onRequest: [hasBearerToken, adminOrCustomerOrDealerOrUserIsAuthenticated],
+	})
+	getDealerRanking(
+		request: Request<{
+			Params: GetDealerRankingParamsType;
+		}>,
+		reply: Reply
+	) {
+		return this.dealerService.getDealerRanking(request.params.id);
+	}
+
+	@Get('/:id/rankings', {
+		schema: {
+			params: GetDealerRankingsParams,
+		},
+		onRequest: [hasBearerToken, adminOrCustomerOrDealerOrUserIsAuthenticated],
+	})
+	getDealerRankings(
+		request: Request<{
+			Params: GetDealerRankingsParamsType;
+		}>,
+		reply: Reply
+	) {
+		return this.dealerService.getDealerRankings(request.params.id);
 	}
 
 	@Get('/', {
