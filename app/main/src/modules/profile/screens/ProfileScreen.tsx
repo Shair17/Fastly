@@ -7,6 +7,8 @@ import {ProfileControllerHeader} from '../ProfileControllerHeader';
 import {ProfileItemSetting} from '../../../components/organisms/ProfileItemSetting';
 import {LogOutButton} from '../../../components/molecules/LogOutButton';
 import {CreatedByShair} from '../../../components/molecules/CreatedByShair';
+import {openLink} from '../../../utils/openLink';
+import {FASTLY_PP, FASTLY_TC} from '../../../constants/support.constants';
 
 /**
  * TODO
@@ -19,12 +21,14 @@ export const ProfileScreen = ({navigation}: any) => {
   const name = useUserStore(u => u.name);
   const email = useUserStore(u => u.email);
 
-  const onRefresh = () => {
+  const fetchUser = useUserStore(s => s.fetchUser);
+
+  const onRefresh = async () => {
     setRefreshing(true);
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
+    await fetchUser();
+
+    setRefreshing(false);
   };
 
   return (
@@ -89,9 +93,17 @@ export const ProfileScreen = ({navigation}: any) => {
             <Div my="md" />
 
             <ProfileItemSetting
-              onPress={() => alert('legal')}
+              onPress={() => openLink(FASTLY_PP)}
+              iconName="lock-closed"
+              text="Política de Privacidad"
+            />
+
+            <Div my="md" />
+
+            <ProfileItemSetting
+              onPress={() => openLink(FASTLY_TC)}
               iconName="information-circle"
-              text="Legal"
+              text="Terminos y Condiciones"
             />
 
             <Div my="md" />

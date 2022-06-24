@@ -1,36 +1,28 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon, Avatar} from 'react-native-magnus';
 import {Button} from '../../components/atoms/Button';
 import {Input} from '../../components/atoms/Input';
 import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
 import {AskPersonalInformationScreenProps} from '../../navigation/screens/AskPersonalInformationScreen';
-import {useForm, Controller} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {
-  launchImageLibrary,
-  ImagePickerResponse,
-} from 'react-native-image-picker';
-import {PersonalInformationType} from '../../interfaces/appInterfaces';
-import {AskPersonalInformationSchema} from '../../schemas/ask-personal-information.schema';
-import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {Controller} from 'react-hook-form';
+import {useEditProfile} from '../../hooks/useEditProfile';
 
 const avatarPlaceholderImage = require('../../assets/images/avatar-placeholder.jpg');
 
 export const AskPersonalInformationController: FC<
   AskPersonalInformationScreenProps
 > = ({navigation}) => {
-  const [image, setImage] = useState<ImagePickerResponse>();
-
   const {
-    control,
+    image,
     handleSubmit,
-    formState: {errors},
-  } = useForm<PersonalInformationType>({
-    resolver: zodResolver(AskPersonalInformationSchema),
-  });
-
-  const userPickedAvatar = image !== undefined && image?.assets !== undefined;
+    control,
+    errors,
+    handleChangeAvatar,
+    handleChangeAvatarInfo,
+    handleRemoveAvatar,
+    userPickedAvatar,
+  } = useEditProfile();
 
   const avatarImage =
     image !== undefined && image?.assets !== undefined
@@ -48,37 +40,6 @@ export const AskPersonalInformationController: FC<
       dni,
     });
   });
-
-  const handleChangeAvatar = () => {
-    launchImageLibrary(
-      {
-        maxHeight: 500,
-        maxWidth: 500,
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: true,
-        quality: 0.5,
-      },
-      response => {
-        if (response.didCancel) return;
-        if (!response.assets) return;
-
-        setImage(response);
-      },
-    );
-  };
-
-  const handleRemoveAvatar = () => {
-    setImage(undefined);
-  };
-
-  const handleChangeAvatarInfo = () => {
-    Notifier.showNotification({
-      title: 'Personaliza tu avatar',
-      description: 'Toca el avatar para elegir uno desde tu galería.',
-      Component: NotifierComponents.Notification,
-    });
-  };
 
   return (
     <ContainerWithKeyboardAvoidingView>

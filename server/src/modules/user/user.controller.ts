@@ -14,6 +14,8 @@ import {
 	DeleteAddressParamsType,
 	MyFavoriteParams,
 	MyFavoriteParamsType,
+	UpdateUserProfileBody,
+	UpdateUserProfileBodyType,
 } from './user.schema';
 import {
 	hasBearerToken,
@@ -129,5 +131,20 @@ export class UserController {
 		reply: Reply
 	) {
 		return this.userService.updateNewUser(request.body, request.userId);
+	}
+
+	@Put('/me', {
+		schema: {
+			body: UpdateUserProfileBody,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	updateUserProfile(
+		request: Request<{
+			Body: UpdateUserProfileBodyType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.updateUserProfile(request.userId, request.body);
 	}
 }

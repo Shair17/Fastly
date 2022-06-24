@@ -148,6 +148,22 @@ export class AdminService {
 		return this.adminRepository.findOneBy({ email });
 	}
 
+	async getIsAdminActive(id: string) {
+		const admin = await this.getById(id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		return admin.isActive;
+	}
+
+	async getActiveAdmins() {
+		return this.adminRepository.findBy({
+			isActive: true,
+		});
+	}
+
 	save(admin: Partial<Admin>) {
 		return this.adminRepository.save(admin);
 	}

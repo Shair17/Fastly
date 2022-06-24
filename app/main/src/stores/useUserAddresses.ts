@@ -1,6 +1,8 @@
 import create from 'zustand';
 import {combine} from 'zustand/middleware';
-import {Address} from '../interfaces/appInterfaces';
+import {Address, MyAddressesResponse} from '../interfaces/appInterfaces';
+import {http} from '../services/http.service';
+import {isLoggedIn} from '../services/refresh-token.service';
 
 type UserAddressesType = {
   currentAddress: Address;
@@ -16,7 +18,24 @@ const getDefaultValues = (): UserAddressesType => {
 
 export const useUserAddresses = create(
   combine(getDefaultValues(), (set, get) => ({
+    fetchUser: async () => {
+      const isAuthenticated = isLoggedIn();
+
+      if (!isAuthenticated) {
+        set({});
+      }
+
+      const response = await http.get<MyAddressesResponse>(
+        '/users/me/addresses',
+      );
+
+      set({
+        addresses: response.data.addresses,
+      });
+    },
     setCurrentAddress: (currentAddress: Address) => {
+      if (get().currentAddress.id === currentAddress.id) return;
+
       set({
         currentAddress,
       });

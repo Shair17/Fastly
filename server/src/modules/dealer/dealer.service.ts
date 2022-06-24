@@ -107,18 +107,14 @@ export class DealerService {
 	}
 
 	async getAvailableDealers() {
-		const dealers = await this.dealerRepository.findBy({
+		return this.dealerRepository.findBy({
 			isActive: true,
 			available: true,
 		});
-
-		return dealers;
 	}
 
 	async getActiveDealers() {
-		const dealers = await this.dealerRepository.findBy({ isActive: true });
-
-		return dealers;
+		return this.dealerRepository.findBy({ isActive: true });
 	}
 
 	save(dealer: Partial<Dealer>) {

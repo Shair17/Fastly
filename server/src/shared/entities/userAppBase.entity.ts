@@ -38,9 +38,6 @@ export abstract class UserAppBase extends Base {
 	})
 	dni?: string | null;
 
-	// Nullable porque facebook graph api solo devuelve {id, name} ._.
-	// antes devolvía el correo, ahora ya no...
-	// pediremos el correo al usuario una vez haya iniciado sesión.
 	@Column({
 		nullable: true,
 	})

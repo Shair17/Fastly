@@ -8,57 +8,7 @@ import {AddressBottomSheetItem} from './AddressBottomSheetItem';
 import {getAddressBottomSheetIconName} from '../../utils/getAddressBottomSheetIconName';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ApplicationBottomTabParams} from '../../navigation/ApplicationBottomTab';
-
-const tmpAddresses = [
-  {
-    id: '9b263633-7de7-4ce1-a50b-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi primera dirección',
-    street: 'Ricardo Palma 237',
-    tag: 'casa',
-    current: true,
-  },
-  {
-    id: '9c263633-7de7-4ce1-a50b-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi segunda dirección',
-    street: 'Jr Miraflores 300',
-    tag: 'amigo',
-    current: false,
-  },
-  {
-    id: '9a263633-7de7-4ce1-a50b-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi tercera dirección',
-    street: 'Calle Rivera 237',
-    current: false,
-    tag: 'universidad',
-  },
-  {
-    id: '9d263633-7de7-4ce1-a50b-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi cuarta dirección',
-    street: 'Jr Atahualpa 237',
-    current: false,
-    tag: 'pareja',
-  },
-  {
-    id: '9f263633-7de7-dasmdsakdmsad-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi sexta dirección',
-    street: 'Los Alamos 227',
-    current: false,
-    tag: 'trabajo',
-  },
-  {
-    id: '9a263633e7-4ce1-a50b-d9ea0c7cc4df',
-    city: 'Chepén, La Libertad, Peru',
-    name: 'Mi decima dirección',
-    street: 'Mz Palma Bella 217',
-    current: false,
-    tag: 'otro',
-  },
-];
+import {Address} from '../../interfaces/appInterfaces';
 
 interface Props {}
 
@@ -75,6 +25,12 @@ export const AddressesBottomSheet: FC<Props> = () => {
   const setAddressesBottomSheetActive = useAddressesBottomSheetStore(
     u => u.setIsActive,
   );
+
+  const handleSwitchCurrentAddress = (address: Address) => {
+    if (currentAddress.id === address.id) return;
+
+    setCurrentAddress(address);
+  };
 
   const goToMyAddresses = () => {
     setAddressesBottomSheetActive(false);
@@ -119,19 +75,21 @@ export const AddressesBottomSheet: FC<Props> = () => {
           </Div>
 
           <Radio.Group>
-            {tmpAddresses.map(address => (
-              <Div mb="lg" key={address.id}>
-                <AddressBottomSheetItem
-                  bg={address.current ? 'red50' : 'transparent'}
-                  borderColor={address.current ? 'primary' : 'gray200'}
-                  iconName={getAddressBottomSheetIconName(address.tag)}
-                  color={address.current ? 'primary' : 'gray'}
-                  addressName={address.name}
-                  addressStreet={address.street}
-                  addressCity={address.city}
-                />
-              </Div>
-            ))}
+            {addresses.map(address => {
+              const isCurrent = currentAddress.id === address.id;
+              return (
+                <Div mb="lg" key={address.id}>
+                  <AddressBottomSheetItem
+                    bg={isCurrent ? 'red50' : 'transparent'}
+                    borderColor={isCurrent ? 'primary' : 'gray200'}
+                    iconName={getAddressBottomSheetIconName(address.tag)}
+                    color={isCurrent ? 'primary' : 'gray'}
+                    address={address}
+                    onPress={() => handleSwitchCurrentAddress(address)}
+                  />
+                </Div>
+              );
+            })}
           </Radio.Group>
         </Div>
       </ScrollView>

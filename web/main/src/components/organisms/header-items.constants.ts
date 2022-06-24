@@ -52,7 +52,7 @@ export const headerItems = [
       {
         title: 'Shair',
         description: 'Ponte en contacto con Shair',
-        href: '/contacto-shair',
+        href: '/shair-contacto',
       },
     ],
   },

@@ -38,6 +38,7 @@ import { CustomerService } from '../customer/customer.service';
 import { DealerService } from '../dealer/dealer.service';
 import { TokenService } from '../../shared/services/token.service';
 import { MailService } from '../../shared/services/mail.service';
+import { User } from '../user/user.entity';
 
 /**
  * TODO: Probar la lib ´dayjs´ para manejar las fechas
@@ -113,10 +114,9 @@ export class AuthService {
 			);
 
 			try {
-				await this.userService.save({
-					...user,
-					refreshToken,
-				});
+				user.refreshToken = refreshToken;
+
+				await this.userService.save(user);
 			} catch (error) {
 				console.log(error);
 				throw new InternalServerError();
@@ -139,11 +139,17 @@ export class AuthService {
 		}
 
 		// El usuario es nuevo, vamos a crear uno
-		const newUser = await this.userService.save({
-			facebookId,
-			facebookAccessToken,
-			name,
-		});
+		// const newUser = await this.userService.save({
+		// 	facebookId,
+		// 	facebookAccessToken,
+		// 	name,
+		// });
+		const _newUser = new User();
+		_newUser.facebookId = facebookId;
+		_newUser.facebookAccessToken = facebookAccessToken;
+		_newUser.name = name;
+
+		const newUser = await this.userService.save(_newUser);
 
 		let payload: { id: string; name: string; email?: string } = {
 			id: newUser.id,
@@ -163,10 +169,9 @@ export class AuthService {
 		);
 
 		try {
-			await this.userService.save({
-				...newUser,
-				refreshToken,
-			});
+			newUser.refreshToken = refreshToken;
+
+			await this.userService.save(newUser);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -226,11 +231,11 @@ export class AuthService {
 		}
 
 		try {
-			await this.userService.save({
-				...user,
-				refreshToken: null,
-			});
+			user.refreshToken = null;
+
+			await this.userService.save(user);
 		} catch (error) {
+			console.log(error);
 			throw new InternalServerError();
 		}
 
@@ -271,10 +276,8 @@ export class AuthService {
 		);
 
 		try {
-			await this.adminService.save({
-				...admin,
-				refreshToken,
-			});
+			admin.refreshToken = refreshToken;
+			await this.adminService.save(admin);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -339,10 +342,8 @@ export class AuthService {
 		);
 
 		try {
-			await this.adminService.save({
-				...newAdmin,
-				refreshToken,
-			});
+			newAdmin.refreshToken = refreshToken;
+			await this.adminService.save(newAdmin);
 		} catch (error) {
 			console.log('error?');
 			throw new InternalServerError();
@@ -394,10 +395,9 @@ export class AuthService {
 		}
 
 		try {
-			await this.adminService.save({
-				...admin,
-				resetPasswordToken,
-			});
+			admin.resetPasswordToken = resetPasswordToken;
+
+			await this.adminService.save(admin);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -420,7 +420,6 @@ export class AuthService {
 			'admin',
 			resetPasswordToken
 		);
-		console.log('payload del reset password token ->', decoded);
 
 		const admin = await this.adminService.getById(decoded.id);
 
@@ -438,10 +437,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.adminService.save({
-				...admin,
-				password: hashedPassword,
-			});
+			admin.password = hashedPassword;
+
+			await this.adminService.save(admin);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -470,10 +468,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.adminService.save({
-				...admin,
-				password: hashedPassword,
-			});
+			admin.password = hashedPassword;
+
+			await this.adminService.save(admin);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -487,8 +484,6 @@ export class AuthService {
 
 	async refreshAdminToken({ refreshToken }: RefreshAdminTokenType) {
 		const decoded = this.tokenService.verifyRefreshToken('admin', refreshToken);
-
-		console.log('payload del refresh token de admin ->', decoded);
 
 		const admin = await this.adminService.getById(decoded.id);
 
@@ -518,10 +513,9 @@ export class AuthService {
 		}
 
 		try {
-			await this.adminService.save({
-				...admin,
-				refreshToken: null,
-			});
+			admin.refreshToken = null;
+
+			await this.adminService.save(admin);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -565,10 +559,9 @@ export class AuthService {
 		);
 
 		try {
-			await this.customerService.save({
-				...customer,
-				refreshToken,
-			});
+			customer.refreshToken = refreshToken;
+
+			await this.customerService.save(customer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -631,10 +624,9 @@ export class AuthService {
 		);
 
 		try {
-			await this.customerService.save({
-				...newCustomer,
-				refreshToken,
-			});
+			newCustomer.refreshToken = refreshToken;
+
+			await this.customerService.save(newCustomer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -686,10 +678,9 @@ export class AuthService {
 		}
 
 		try {
-			await this.customerService.save({
-				...customer,
-				resetPasswordToken,
-			});
+			customer.resetPasswordToken = resetPasswordToken;
+
+			await this.customerService.save(customer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -712,7 +703,6 @@ export class AuthService {
 			'customer',
 			resetPasswordToken
 		);
-		console.log('payload del reset password token ->', decoded);
 
 		const customer = await this.customerService.getById(decoded.id);
 
@@ -730,10 +720,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.customerService.save({
-				...customer,
-				password: hashedPassword,
-			});
+			customer.password = hashedPassword;
+
+			await this.customerService.save(customer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -762,10 +751,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.customerService.save({
-				...customer,
-				password: hashedPassword,
-			});
+			customer.password = hashedPassword;
+
+			await this.customerService.save(customer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -782,8 +770,6 @@ export class AuthService {
 			'customer',
 			refreshToken
 		);
-
-		console.log('payload del refresh token de customer ->', decoded);
 
 		const customer = await this.customerService.getById(decoded.id);
 
@@ -813,11 +799,11 @@ export class AuthService {
 		}
 
 		try {
-			await this.customerService.save({
-				...customer,
-				refreshToken: null,
-			});
+			customer.refreshToken = null;
+
+			await this.customerService.save(customer);
 		} catch (error) {
+			console.log(error);
 			throw new InternalServerError();
 		}
 
@@ -860,10 +846,9 @@ export class AuthService {
 		);
 
 		try {
-			await this.dealerService.save({
-				...dealer,
-				refreshToken,
-			});
+			dealer.refreshToken = refreshToken;
+
+			await this.dealerService.save(dealer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -931,10 +916,9 @@ export class AuthService {
 		);
 
 		try {
-			await this.dealerService.save({
-				...newDealer,
-				refreshToken,
-			});
+			newDealer.refreshToken = refreshToken;
+
+			await this.dealerService.save(newDealer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -989,10 +973,9 @@ export class AuthService {
 		}
 
 		try {
-			await this.dealerService.save({
-				...dealer,
-				resetPasswordToken,
-			});
+			dealer.resetPasswordToken = resetPasswordToken;
+
+			await this.dealerService.save(dealer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -1015,7 +998,6 @@ export class AuthService {
 			'dealer',
 			resetPasswordToken
 		);
-		console.log('payload del reset password token ->', decoded);
 
 		const dealer = await this.dealerService.getById(decoded.id);
 
@@ -1033,10 +1015,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.dealerService.save({
-				...dealer,
-				password: hashedPassword,
-			});
+			dealer.password = hashedPassword;
+
+			await this.dealerService.save(dealer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -1065,10 +1046,9 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			await this.dealerService.save({
-				...dealer,
-				password: hashedPassword,
-			});
+			dealer.password = hashedPassword;
+
+			await this.dealerService.save(dealer);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -1085,8 +1065,6 @@ export class AuthService {
 			'dealer',
 			refreshToken
 		);
-
-		console.log('payload del refresh token de dealer ->', decoded);
 
 		const dealer = await this.dealerService.getById(decoded.id);
 
@@ -1116,11 +1094,11 @@ export class AuthService {
 		}
 
 		try {
-			await this.dealerService.save({
-				...dealer,
-				refreshToken: null,
-			});
+			dealer.refreshToken = null;
+
+			await this.dealerService.save(dealer);
 		} catch (error) {
+			console.log(error);
 			throw new InternalServerError();
 		}
 

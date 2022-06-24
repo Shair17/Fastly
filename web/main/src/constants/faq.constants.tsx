@@ -8,7 +8,7 @@ export const faq = [
   {
     question: '¿Fastly es seguro?',
     reply:
-      'Por supuesto, Fastly es seguro, tus datos nunca serán compartidos con nadie. Debido a esto, no hay ningún tipo de riesgo para ti, ya que solo necesitas una cuenta de Facebook para iniciar sesión con un solo clic.',
+      'Por supuesto, Fastly es seguro, tus datos nunca serán compartidos con nadie. Debido a esto, no hay ningún tipo de riesgo para ti, ya que solo necesitas una cuenta de Facebook para iniciar sesión con presionar un solo botón.',
   },
   {
     question: '¿Qué datos debo proporcionar para usar Fastly?',

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, Fragment} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -21,12 +21,12 @@ export const ContainerWithKeyboardAvoidingView: FC<Props> = ({
       style={flexFull ? {flex: 1} : undefined}>
       {flexFull ? (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{flex: 1}}>
-          {children}
+          <Fragment>{children}</Fragment>
         </TouchableWithoutFeedback>
       ) : (
         <ScrollDiv>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            {children}
+            <Fragment>{children}</Fragment>
           </TouchableWithoutFeedback>
         </ScrollDiv>
       )}

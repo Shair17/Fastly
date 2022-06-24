@@ -9,7 +9,11 @@ import {
 	NotFound,
 	BadRequest,
 } from 'http-errors';
-import { AddAddressBodyType, UpdateNewUserBodyType } from './user.schema';
+import {
+	AddAddressBodyType,
+	UpdateNewUserBodyType,
+	UpdateUserProfileBodyType,
+} from './user.schema';
 import { CloudinaryService } from '../../shared/services/cloudinary.service';
 import { trimStrings } from '../../utils/trimStrings';
 import { MAX_USER_ADDRESSES } from '../../constants/app.constants';
@@ -145,11 +149,13 @@ export class UserService {
 		newAddress.tag = address.tag;
 		newAddress.zip = address.zip;
 
-		if (!user.addresses) {
-			user.addresses = [newAddress];
-		} else {
-			user.addresses = [...user.addresses, newAddress];
-		}
+		// if (!user.addresses) {
+		// 	user.addresses = [newAddress];
+		// } else {
+		// 	user.addresses = [...user.addresses, newAddress];
+		// }
+
+		user.addresses = [newAddress];
 
 		await this.save(user);
 
@@ -306,6 +312,55 @@ export class UserService {
 		}
 
 		return user.isNewUser;
+	}
+
+	async updateUserProfile(userId: string, data: UpdateUserProfileBodyType) {
+		const [dni, email, phone] = trimStrings(data.dni, data.email, data.phone);
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (
+			data.avatar === undefined &&
+			user.dni === dni &&
+			user.email === email &&
+			user.phone === phone
+		) {
+			console.log('no hay cambios');
+			return {
+				statusCode: 200,
+				success: true,
+				modified: false,
+			};
+		}
+
+		try {
+			if (data.avatar) {
+				const upload = await this.cloudinaryService.upload(
+					data.avatar,
+					`${user.name.toLowerCase().replace(/\s/g, '_')}@${user.facebookId}`
+				);
+				console.log(upload);
+				user.avatar = upload.secure_url;
+			}
+
+			user.dni = dni;
+			user.email = email;
+			user.phone = phone;
+
+			await this.save(user);
+		} catch (error) {
+			console.log(error);
+			throw new InternalServerError();
+		}
+
+		return {
+			statusCode: 200,
+			success: true,
+			modified: true,
+		};
 	}
 
 	save(user: Partial<User>): Promise<Partial<User> & User> {

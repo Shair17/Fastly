@@ -39,7 +39,7 @@ export class Order extends Base {
 	})
 	message?: string | null;
 
-	// hora de entrega del pedido!!! gracias a iván
+	// hora de entrega del pedido!!!
 	@Column({
 		type: 'date',
 		nullable: true,

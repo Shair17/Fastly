@@ -1,28 +1,27 @@
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Icon, Text} from 'react-native-magnus';
+import {Address} from '../../interfaces/appInterfaces';
 
 interface Props {
-  addressName: string;
-  addressStreet: string;
-  addressCity: string;
   borderColor: string;
   bg: string;
   iconName: string;
   color: string;
+  address: Address;
+  onPress: () => void;
 }
 
 export const AddressBottomSheetItem: FC<Props> = ({
-  addressCity,
-  addressName,
-  addressStreet,
+  address,
   iconName,
   color,
   bg,
   borderColor,
+  onPress,
 }) => {
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <Div
         bg={bg}
         borderWidth={0.8}
@@ -40,13 +39,13 @@ export const AddressBottomSheetItem: FC<Props> = ({
         </Div>
         <Div flex={1}>
           <Text fontSize="sm" fontWeight="500" color={color}>
-            {addressName}
+            {address.name}
           </Text>
           <Text fontSize="2xl" fontWeight="bold" color={color}>
-            {addressStreet}
+            {address.street}
           </Text>
           <Text fontSize="lg" fontWeight="500" color={color}>
-            {addressCity}
+            {address.city}
           </Text>
         </Div>
       </Div>

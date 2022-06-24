@@ -78,3 +78,8 @@ export interface MyProfileResponse {
   refreshToken: string;
   updatedAt: string;
 }
+
+export interface MyAddressesResponse {
+  id: MyProfileResponse['id'];
+  addresses: Address[];
+}

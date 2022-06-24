@@ -18,7 +18,7 @@ const authenticationBackgroundImage = require('../../assets/images/authenticatio
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
-  const [{loading}, executeLogInWithFacebook] = useAxios(
+  const [{loading, error}, executeLogInWithFacebook] = useAxios(
     {
       url: '/auth/facebook',
       method: 'POST',
@@ -90,6 +90,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
               });
             })
             .catch(e => {
+              console.log(error);
               Notifier.showNotification({
                 title: 'Error',
                 description:
@@ -109,7 +110,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
           Notifier.showNotification({
             title: 'Error',
             description:
-              'Los datos necesarios para iniciar sesión no fueron reicibidos correctamente.',
+              'Los datos necesarios para iniciar sesión no fueron recibidos correctamente.',
             Component: NotifierComponents.Alert,
             componentProps: {
               alertType: 'warn',

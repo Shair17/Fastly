@@ -10,8 +10,8 @@ export const FAQ = () => {
         <p className="max-w-2xl mx-auto mt-6 text-lg text-center text-gray-700">
           Estas son algunas de las preguntas más frecuentes que puedes
           encontrar, si tienes alguna que no está aquí, puedes escribirnos a{' '}
-          <a href="mailto:hi@shair.dev" className="text-primary-500">
-            hi@shair.dev
+          <a href="mailto:soporte@fastly.delivery" className="text-primary-500">
+            soporte@fastly.delivery
           </a>
           .
         </p>

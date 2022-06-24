@@ -73,3 +73,14 @@ export const MyFavoriteParams = Type.Object(
 	{ additionalProperties: false }
 );
 export type MyFavoriteParamsType = Static<typeof MyFavoriteParams>;
+
+export const UpdateUserProfileBody = Type.Object(
+	{
+		avatar: Type.Optional(Type.String()),
+		email: Type.String({ format: 'email' }),
+		phone: Type.RegEx(PHONE_NUMBER_REGEX),
+		dni: Type.RegEx(DNI_REGEX),
+	},
+	{ additionalProperties: false }
+);
+export type UpdateUserProfileBodyType = Static<typeof UpdateUserProfileBody>;

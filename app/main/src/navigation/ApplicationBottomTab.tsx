@@ -9,7 +9,10 @@ import {bottomTabs} from './bottomTabs';
 import {ErrorController} from '../modules/error/ErrorController';
 import {useUserAddresses} from '../stores/useUserAddresses';
 import {useUserStore} from '../stores/useUserStore';
-import {MyProfileResponse} from '../interfaces/appInterfaces';
+import {
+  MyProfileResponse,
+  MyAddressesResponse,
+} from '../interfaces/appInterfaces';
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import {AddressesBottomSheet} from '../components/organisms/AddressesBottomSheet';
 import {useAddressesBottomSheetStore} from '../stores/useAddressesBottomSheetStore';
@@ -104,6 +107,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
       <SwipeablePanel
         isActive={addressesBottomSheetActive}
         fullWidth
+        closeOnTouchOutside
         onlyLarge
         openLarge
         showCloseButton
