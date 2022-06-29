@@ -42,6 +42,7 @@ function App() {
   //     setTheme(darkTheme);
   //   }
   // }, [systemTheme, currentTheme, themeStorage]);
+
   useEffect(() => {
     if (systemTheme === ThemesNames.lightTheme) {
       StatusBar.setBarStyle('dark-content');

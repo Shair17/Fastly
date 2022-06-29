@@ -14,4 +14,8 @@ export class ProductService {
 		this.productRepository =
 			this.dataSourceProvider.dataSource.getRepository(Product);
 	}
+
+	async getById(id: string) {
+		return this.productRepository.findOneBy({ id });
+	}
 }

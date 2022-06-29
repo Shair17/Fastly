@@ -84,3 +84,52 @@ export const UpdateUserProfileBody = Type.Object(
 	{ additionalProperties: false }
 );
 export type UpdateUserProfileBodyType = Static<typeof UpdateUserProfileBody>;
+
+export const MyItemCartParams = Type.Object(
+	{
+		id: Type.String({ format: 'uuid' }),
+	},
+	{ additionalProperties: false }
+);
+export type MyItemCartParamsType = Static<typeof MyItemCartParams>;
+
+export const AddItemCartBody = Type.Object(
+	{
+		productId: Type.String({ format: 'uuid' }),
+		quantity: Type.Number({ minimum: 0, default: 0 }),
+	},
+	{ additionalProperties: false }
+);
+export type AddItemCartBodyType = Static<typeof AddItemCartBody>;
+
+export const EditItemCartQuantityParams = Type.Object(
+	{
+		id: Type.String({ format: 'uuid' }),
+	},
+	{ additionalProperties: false }
+);
+export type EditItemCartQuantityParamsType = Static<
+	typeof EditItemCartQuantityParams
+>;
+
+export const EditItemCartQuantityBody = Type.Object(
+	{
+		quantity: Type.Number({ minimum: 0, default: 0 }),
+	},
+	{
+		additionalProperties: false,
+	}
+);
+export type EditItemCartQuantityBodyType = Static<
+	typeof EditItemCartQuantityBody
+>;
+
+export const DeleteFavoriteParams = Type.Object(
+	{
+		id: Type.String({ format: 'uuid' }),
+	},
+	{
+		additionalProperties: false,
+	}
+);
+export type DeleteFavoriteParamsType = Static<typeof DeleteFavoriteParams>;

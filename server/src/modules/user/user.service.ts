@@ -2,6 +2,7 @@ import { Initializer, Service } from 'fastify-decorators';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserAddress } from './user-address.entity';
+import { UserCart } from './user-cart.entity';
 import { DataSourceProvider } from '../../database/DataSourceProvider';
 import {
 	Unauthorized,
@@ -11,12 +12,15 @@ import {
 } from 'http-errors';
 import {
 	AddAddressBodyType,
+	AddItemCartBodyType,
 	UpdateNewUserBodyType,
 	UpdateUserProfileBodyType,
 } from './user.schema';
 import { CloudinaryService } from '../../shared/services/cloudinary.service';
 import { trimStrings } from '../../utils/trimStrings';
 import { MAX_USER_ADDRESSES } from '../../constants/app.constants';
+import { ProductService } from '../product/product.service';
+import { EditItemCartQuantityBodyType } from './user.schema';
 
 @Service('UserServiceToken')
 export class UserService {
@@ -24,6 +28,7 @@ export class UserService {
 
 	constructor(
 		private readonly dataSourceProvider: DataSourceProvider,
+		private readonly productService: ProductService,
 		private readonly cloudinaryService: CloudinaryService
 	) {}
 
@@ -168,6 +173,105 @@ export class UserService {
 		};
 	}
 
+	async myCart(userId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (user.cart === undefined || !user.cart) {
+			return {
+				id: userId,
+				cart: [],
+			};
+		}
+
+		return {
+			id: userId,
+			cart: user.cart,
+		};
+	}
+
+	async myItemCart(userId: string, itemCartId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		const cart = user.cart;
+
+		if (!cart) {
+			throw new NotFound();
+		}
+
+		const foundCart = await this.userRepository.find({
+			where: {
+				id: userId,
+				cart: {
+					id: itemCartId,
+				},
+			},
+			select: {
+				cart: true,
+			},
+		});
+		console.log({ foundCart });
+		console.log(
+			'found address from database',
+			foundCart
+				.find((user) => user.id === userId)
+				?.cart?.find((cart) => cart.id === itemCartId)
+		);
+
+		const foundItemCart = foundCart
+			.find((user) => user.id === userId)
+			?.cart?.find((cart) => cart.id === itemCartId);
+
+		if (!foundItemCart) {
+			throw new NotFound();
+		}
+
+		return {
+			...foundItemCart,
+		};
+	}
+
+	async addItemCart(
+		userId: string,
+		{ productId, quantity }: AddItemCartBodyType
+	) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		const product = await this.productService.getById(productId);
+
+		if (!product) {
+			throw new BadRequest(`Product doesn't exists`);
+		}
+
+		const newCart = new UserCart();
+		newCart.product = product;
+		newCart.quantity = quantity;
+		newCart.user = user;
+
+		user.cart = [newCart];
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			id: userId,
+			cart: user.cart,
+			message: `Item Cart was added`,
+			success: true,
+		};
+	}
+
 	count(): Promise<number> {
 		return this.userRepository.count();
 	}
@@ -248,6 +352,117 @@ export class UserService {
 		};
 	}
 
+	async deleteItemCart(userId: string, itemCartId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (!user.cart) {
+			throw new NotFound();
+		}
+
+		user.cart = user.cart.filter((cart) => cart.id !== itemCartId);
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			success: true,
+			message: `Item Cart with id ${itemCartId} was deleted`,
+		};
+	}
+
+	async editItemCartQuantity(
+		userId: string,
+		itemCartId: string,
+		{ quantity }: EditItemCartQuantityBodyType
+	) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (!user.cart) {
+			throw new NotFound();
+		}
+
+		const itemCart = user.cart.find((cart) => cart.id === itemCartId);
+		itemCart!.quantity = quantity;
+
+		user.cart = itemCart ? [itemCart] : undefined;
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			success: true,
+			message: `Item Cart with id ${itemCartId} was edited quantity set to ${quantity}`,
+		};
+	}
+
+	async deleteCart(userId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		user.cart = undefined;
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			success: true,
+			message: 'Cart was deleted',
+		};
+	}
+
+	async deleteFavorite(userId: string, favoriteId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (!user.favorites) {
+			throw new NotFound();
+		}
+
+		user.favorites = user.favorites.filter(
+			(favorite) => favorite.id !== favoriteId
+		);
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			success: true,
+			message: 'Favorites was deleted',
+		};
+	}
+
+	async deleteFavorites(userId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		user.favorites = undefined;
+
+		await this.save(user);
+
+		return {
+			statusCode: 200,
+			success: true,
+			message: 'Favorites was deleted',
+		};
+	}
+
 	async myFavorites(userId: string) {
 		const user = await this.getById(userId);
 
@@ -277,12 +492,12 @@ export class UserService {
 		const foundFavorites = await this.userRepository.find({
 			where: {
 				id: userId,
-				addresses: {
+				favorites: {
 					id: favoriteId,
 				},
 			},
 			select: {
-				addresses: true,
+				favorites: true,
 			},
 		});
 		console.log({ foundFavorites });
@@ -328,7 +543,6 @@ export class UserService {
 			user.email === email &&
 			user.phone === phone
 		) {
-			console.log('no hay cambios');
 			return {
 				statusCode: 200,
 				success: true,

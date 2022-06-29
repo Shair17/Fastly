@@ -68,6 +68,9 @@ export const ApplicationBottomTab: FC<Props> = () => {
 
         setUser(user);
         setAddresses(addresses);
+
+        console.log(cart);
+        console.log(favorites);
       })
       .catch(console.log);
   }, []);

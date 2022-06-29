@@ -10,10 +10,20 @@ import { Request, Reply } from '../../interfaces/http.interfaces';
 import {
 	AddAddressBody,
 	AddAddressBodyType,
+	AddItemCartBody,
+	AddItemCartBodyType,
 	DeleteAddressParams,
 	DeleteAddressParamsType,
+	DeleteFavoriteParams,
+	DeleteFavoriteParamsType,
+	EditItemCartQuantityBody,
+	EditItemCartQuantityBodyType,
+	EditItemCartQuantityParams,
+	EditItemCartQuantityParamsType,
 	MyFavoriteParams,
 	MyFavoriteParamsType,
+	MyItemCartParams,
+	MyItemCartParamsType,
 	UpdateUserProfileBody,
 	UpdateUserProfileBodyType,
 } from './user.schema';
@@ -96,6 +106,86 @@ export class UserController {
 		return this.userService.deleteAddress(request.userId, request.params.id);
 	}
 
+	@Get('/me/cart', {
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	myCart(request: Request, reply: Reply) {
+		return this.userService.myCart(request.userId);
+	}
+
+	@Get('/me/cart/:id', {
+		schema: {
+			params: MyItemCartParams,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	myItemCart(
+		request: Request<{
+			Params: MyItemCartParamsType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.myItemCart(request.userId, request.params.id);
+	}
+
+	@Post('/me/cart', {
+		schema: {
+			body: AddItemCartBody,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	addItemCart(
+		request: Request<{
+			Body: AddItemCartBodyType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.addItemCart(request.userId, request.body);
+	}
+
+	@Put('/me/cart/:id', {
+		schema: {
+			params: EditItemCartQuantityParams,
+			body: EditItemCartQuantityBody,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	editItemCartQuantity(
+		request: Request<{
+			Params: EditItemCartQuantityParamsType;
+			Body: EditItemCartQuantityBodyType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.editItemCartQuantity(
+			request.userId,
+			request.params.id,
+			request.body
+		);
+	}
+
+	@Delete('/me/cart', {
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	deleteCart(request: Request, reply: Reply) {
+		return this.userService.deleteCart(request.userId);
+	}
+
+	@Delete('/me/cart/:id', {
+		schema: {
+			params: MyFavoriteParams,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	deleteItemCart(
+		request: Request<{
+			Params: MyFavoriteParamsType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.deleteItemCart(request.userId, request.params.id);
+	}
+
 	@Get('/me/favorites', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
@@ -116,6 +206,28 @@ export class UserController {
 		reply: Reply
 	) {
 		return this.userService.myFavorite(request.userId, request.params.id);
+	}
+
+	@Delete('/me/favorites/:id', {
+		schema: {
+			params: DeleteFavoriteParams,
+		},
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	async deleteFavorite(
+		request: Request<{
+			Params: DeleteFavoriteParamsType;
+		}>,
+		reply: Reply
+	) {
+		return this.userService.deleteFavorite(request.userId, request.params.id);
+	}
+
+	@Delete('/me/favorites', {
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	async deleteFavorites(request: Request, reply: Reply) {
+		return this.userService.deleteFavorites(request.userId);
 	}
 
 	@Put('/new-user', {
