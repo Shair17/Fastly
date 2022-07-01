@@ -83,7 +83,7 @@ export default async function Server(
 
 	server.register(import('fastify-healthcheck'), {
 		exposeUptime: true,
-		healthcheckUrl: '/v1/health',
+		healthcheckUrl: '/health',
 	});
 
 	server.register((await import('fastify-decorators')).bootstrap, {

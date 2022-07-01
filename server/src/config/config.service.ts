@@ -13,6 +13,10 @@ export class ConfigService {
 	private readonly fastify =
 		getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
+	configExists(key: keyof ConfigSchemaType): boolean {
+		return !!this.fastify.config[key];
+	}
+
 	get(key: keyof ConfigSchemaType) {
 		return this.fastify.config[key];
 	}

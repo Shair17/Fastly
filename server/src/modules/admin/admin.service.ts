@@ -27,6 +27,16 @@ export class AdminService {
 		return this.adminRepository.count();
 	}
 
+	async getByIdOrThrow(id: string) {
+		const admin = await this.getById(id);
+
+		if (!admin) {
+			throw new Unauthorized();
+		}
+
+		return admin;
+	}
+
 	async me(id: string) {
 		const admin = await this.getById(id);
 

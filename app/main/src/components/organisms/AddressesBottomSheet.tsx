@@ -21,6 +21,7 @@ export const AddressesBottomSheet: FC<Props> = () => {
   const setCurrentAddress = useUserAddresses(u => u.setCurrentAddress);
   const currentAddress = useUserAddresses(u => u.currentAddress);
   const addresses = useUserAddresses(u => u.addresses);
+  const deleteAddress = useUserAddresses(u => u.deleteAddress);
   const navigation = useNavigation<NavigationProps>();
   const setAddressesBottomSheetActive = useAddressesBottomSheetStore(
     u => u.setIsActive,
@@ -86,6 +87,7 @@ export const AddressesBottomSheet: FC<Props> = () => {
                     color={isCurrent ? 'primary' : 'gray'}
                     address={address}
                     onPress={() => handleSwitchCurrentAddress(address)}
+                    onLongPress={() => deleteAddress(address.id)}
                   />
                 </Div>
               );
@@ -93,23 +95,6 @@ export const AddressesBottomSheet: FC<Props> = () => {
           </Radio.Group>
         </Div>
       </ScrollView>
-
-      {/* <Radio.Group>
-        {['Option 1', 'Option 2', 'Option 3'].map((item, key) => (
-          <Radio value={item} key={key.toString()}>
-            {({checked}) => (
-              <Div
-                bg={checked ? 'blue600' : 'blue100'}
-                px="xl"
-                py="md"
-                mr="md"
-                rounded="circle">
-                <Text color={checked ? 'white' : 'zinc800'}>{item}</Text>
-              </Div>
-            )}
-          </Radio>
-        ))}
-      </Radio.Group> */}
     </Div>
   );
 };

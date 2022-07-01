@@ -5,7 +5,7 @@ import {ProfileScreen} from './screens/ProfileScreen';
 import {ThemeScreen} from './screens/ThemeScreen';
 import {EditProfileScreen} from './screens/EditProfileScreen';
 import {SupportScreen} from './screens/SupportScreen';
-import {MyAddressesScreen} from './screens/MyAddressesScreen';
+import {MyAddressesScreen} from './screens/MyAddressesScreen/MyAddressesScreen';
 import {MyOrdersScreen} from './screens/MyOrdersScreen';
 import {ProfileStackParams} from './ProfileStackParams.type';
 

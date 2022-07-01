@@ -61,6 +61,16 @@ export class UserService {
 		};
 	}
 
+	async getByIdOrThrow(id: string) {
+		const user = await this.getById(id);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		return user;
+	}
+
 	async myAddress(userId: string, addressId: string) {
 		const user = await this.getById(userId);
 
@@ -85,7 +95,6 @@ export class UserService {
 				addresses: true,
 			},
 		});
-		console.log({ foundAddresses });
 		console.log(
 			'found address from database',
 			foundAddresses.find((address) => address.id === addressId)
@@ -111,6 +120,10 @@ export class UserService {
 
 		if (!user.addresses) {
 			throw new NotFound();
+		}
+
+		if (user.addresses.length <= 1) {
+			throw new BadRequest();
 		}
 
 		user.addresses = user.addresses.filter(
@@ -153,14 +166,17 @@ export class UserService {
 		newAddress.longitude = address.longitude;
 		newAddress.tag = address.tag;
 		newAddress.zip = address.zip;
+		// newAddress.user = user;
 
-		// if (!user.addresses) {
-		// 	user.addresses = [newAddress];
-		// } else {
-		// 	user.addresses = [...user.addresses, newAddress];
-		// }
+		await this.userRepository.manager.save(newAddress);
 
-		user.addresses = [newAddress];
+		if (!user.addresses) {
+			user.addresses = [newAddress];
+		} else {
+			user.addresses = [...user.addresses, newAddress];
+		}
+
+		// user.addresses = [user.addresses, newAddress];
 
 		await this.save(user);
 
@@ -500,7 +516,6 @@ export class UserService {
 				favorites: true,
 			},
 		});
-		console.log({ foundFavorites });
 		console.log(
 			'found favorites from database',
 			foundFavorites.find((favorite) => favorite.id === favoriteId)

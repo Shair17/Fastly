@@ -10,6 +10,7 @@ interface Props {
   color: string;
   address: Address;
   onPress: () => void;
+  onLongPress: () => void;
 }
 
 export const AddressBottomSheetItem: FC<Props> = ({
@@ -19,9 +20,13 @@ export const AddressBottomSheetItem: FC<Props> = ({
   bg,
   borderColor,
   onPress,
+  onLongPress,
 }) => {
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={onPress}
+      onLongPress={onLongPress}>
       <Div
         bg={bg}
         borderWidth={0.8}

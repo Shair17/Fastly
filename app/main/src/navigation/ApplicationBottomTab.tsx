@@ -51,6 +51,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
   );
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
+  const addresses = useUserAddresses(u => u.addresses);
   const keepMinigame = useMinigameStore(m => m.keep);
   const {isConnected} = useNetInfo();
 
@@ -69,8 +70,8 @@ export const ApplicationBottomTab: FC<Props> = () => {
         setUser(user);
         setAddresses(addresses);
 
-        console.log(cart);
-        console.log(favorites);
+        // console.log(cart);
+        // console.log(favorites);
       })
       .catch(console.log);
   }, []);

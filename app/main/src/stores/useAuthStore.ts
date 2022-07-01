@@ -9,6 +9,7 @@ import {
   refreshTokenKey,
   Tokens,
 } from '../constants/auth.constants';
+import {http} from '../services/http.service';
 import {storage} from '../storage';
 
 export interface ITokens extends Tokens {}
@@ -67,6 +68,9 @@ export const useAuthStore = create(
         accessToken: '',
         refreshToken: '',
       });
+    },
+    logOutFromFastly: async () => {
+      await http.post('/auth/facebook/logout');
     },
   })),
 );

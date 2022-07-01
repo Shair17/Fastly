@@ -20,6 +20,16 @@ export class DealerService {
 		return this.dealerRepository.count();
 	}
 
+	async getByIdOrThrow(id: string) {
+		const dealer = await this.getById(id);
+
+		if (!dealer) {
+			throw new Unauthorized();
+		}
+
+		return dealer;
+	}
+
 	async me(dealerId: string) {
 		const dealer = await this.getById(dealerId);
 

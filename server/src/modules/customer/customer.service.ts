@@ -20,6 +20,16 @@ export class CustomerService {
 		return this.customerRepository.count();
 	}
 
+	async getByIdOrThrow(id: string) {
+		const customer = await this.getById(id);
+
+		if (!customer) {
+			throw new Unauthorized();
+		}
+
+		return customer;
+	}
+
 	async me(customerId: string) {
 		const customer = await this.getById(customerId);
 

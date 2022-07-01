@@ -66,7 +66,6 @@ export const EditProfileScreen: FC<Props> = ({navigation}) => {
       },
     })
       .then(response => {
-        console.log(response.data);
         if (response.status === 200 && response.data) {
           if (response.data.modified) {
             fetchUser();

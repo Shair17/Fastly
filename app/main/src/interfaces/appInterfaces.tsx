@@ -9,6 +9,14 @@ export type PersonalInformationType = {
   dni: string;
 };
 
+export type AddAddressResponseType = {
+  statusCode: number;
+  id: MyProfileResponse['id'];
+  addresses: Address[];
+  message: string;
+  success: boolean;
+};
+
 export type LocationInformationType = {
   name: string;
   street: string;

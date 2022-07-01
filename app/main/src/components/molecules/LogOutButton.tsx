@@ -1,10 +1,46 @@
 import React from 'react';
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from 'react-native-fbsdk-next';
 import {Icon} from 'react-native-magnus';
 import {useAuthStore} from '../../stores/useAuthStore';
 import {Button} from '../atoms/Button';
 
 export const LogOutButton = () => {
-  const logOut = useAuthStore(u => u.removeTokens);
+  const removeTokens = useAuthStore(u => u.removeTokens);
+  const logOutFromFastly = useAuthStore(u => u.logOutFromFastly);
+  const FBLogout = async () => {
+    try {
+      let tokenObj = await AccessToken.getCurrentAccessToken();
+      let current_access_token = tokenObj?.accessToken.toString();
+      let logout = new GraphRequest(
+        'me/permissions/',
+        {
+          accessToken: current_access_token,
+          httpMethod: 'DELETE',
+        },
+        (error, result) => {
+          if (error) {
+            console.log('Error fetching data: ' + error.toString());
+          } else {
+            LoginManager.logOut();
+          }
+        },
+      );
+      new GraphRequestManager().addRequest(logout).start();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const logOut = async () => {
+    await FBLogout();
+    await logOutFromFastly();
+    removeTokens();
+  };
 
   return (
     <Button

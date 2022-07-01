@@ -4,6 +4,35 @@ const description =
   'Con Fastly puedes pedir lo que quieras cuando quieras en tu localidad en unos pocos pasos. Tú tranquilo, nosotros nerviosos. Quchau, ya llegamos! Descarga Fastly en tu plataforma de preferencia y disfruta de todos los servicios y beneficios que tenemos para ti.';
 
 export const defaultSEO: DefaultSeoProps = {
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: 'https://fastly.delivery/favicon.ico',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://fastly.delivery/apple-touch-icon.png',
+      sizes: '180x180',
+    },
+    {
+      rel: 'manifest',
+      href: '/manifest.json',
+    },
+    {
+      rel: 'preload',
+      href: 'https://fastly.delivery/assets/fonts/Inter-italic-latin.var.woff2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'preload',
+      href: 'https://fastly.delivery/assets/fonts/Inter-roman-latin.var.woff2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
+  ],
   openGraph: {
     type: 'website',
     locale: 'es_PE',

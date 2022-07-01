@@ -1,34 +1,26 @@
 import React, {FC, useRef, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {Div, Text, Icon, Radio} from 'react-native-magnus';
-import {ActivityIndicator} from '../../components/atoms/ActivityIndicator';
-import {AskLocationScreenProps} from '../../navigation/screens/AskLocationScreen';
-import {defaultTags} from './defaultTags';
+import {ActivityIndicator} from '../../../../../components/atoms/ActivityIndicator';
 import {useForm, Controller} from 'react-hook-form';
-import {useAuthStore} from '../../stores/useAuthStore';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {useLocation} from '../../hooks/useLocation';
-import {Button} from '../../components/atoms/Button';
-import {RetryPhoneGPS} from '../../components/molecules/RetryPhoneGPS';
+import {useLocation} from '../../../../../hooks/useLocation';
+import {Button} from '../../../../../components/atoms/Button';
+import {RetryPhoneGPS} from '../../../../../components/molecules/RetryPhoneGPS';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {LocationInformationType, TagType} from '../../interfaces/appInterfaces';
-import {LocationInformationSchema} from '../../schemas/ask-location.schema';
-import {Input} from '../../components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
-import useAxios from 'axios-hooks';
+import {
+  LocationInformationType,
+  TagType,
+} from '../../../../../interfaces/appInterfaces';
+import {Input} from '../../../../../components/atoms/Input';
+import {ContainerWithKeyboardAvoidingView} from '../../../../../components/templates/ContainerWithKeyboardAvoidingView';
+import {LocationInformationSchema} from '../../../../../schemas/ask-location.schema';
+import {defaultTags} from '../../../../ask-location/defaultTags';
+import {useUserAddresses} from '../../../../../stores/useUserAddresses';
+import {MAX_USER_ADDRESSES} from '../../../../../constants/app.constants';
 
-export const AskLocationController: FC<AskLocationScreenProps> = ({
-  navigation,
-  route,
-}) => {
-  const [{loading}, executeUpdateNewUser] = useAxios(
-    {
-      url: '/users/new-user',
-      method: 'PUT',
-    },
-    {manual: true},
-  );
+export const AddAddressScreen = () => {
   const [showTagError, setTagError] = useState(false);
   const [tag, setTag] = useState<TagType>();
   const {
@@ -50,7 +42,12 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
     followUserLocation,
     stopFollowUserLocation,
   } = useLocation();
-  const setIsNewUser = useAuthStore(s => s.setIsNewUser);
+  const addAddress = useUserAddresses(u => u.addAddress);
+  const addresses = useUserAddresses(u => u.addresses);
+  const fetchUserAddresses = useUserAddresses(u => u.fetchUserAddresses);
+  const addressLength = MAX_USER_ADDRESSES - addresses.length;
+  const hasOneAddress = MAX_USER_ADDRESSES - addresses.length === 1;
+  const addressLimitReached = MAX_USER_ADDRESSES === addresses.length;
 
   const mapRef = useRef<MapView>();
   const following = useRef<boolean>(true);
@@ -121,28 +118,27 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
         return;
       }
 
-      setTagError(false);
+      addAddress({
+        name,
+        street,
+        instructions,
+        city,
+        zip,
+        tag,
+        ...userLocation,
+      });
+      fetchUserAddresses();
 
-      executeUpdateNewUser({
-        data: {
-          ...route.params,
-          address: {
-            name,
-            street,
-            instructions,
-            city,
-            zip,
-            tag,
-            ...userLocation,
-          },
+      Notifier.showNotification({
+        // title: '',
+        description: 'Dirección agregada con éxito.',
+        Component: NotifierComponents.Alert,
+        componentProps: {
+          alertType: 'success',
         },
-      })
-        .then(response => {
-          if (response.status === 200 && response.data) {
-            setIsNewUser(response.data.isNewUser);
-          }
-        })
-        .catch(e => console.log(e?.response?.data.message));
+      });
+
+      setTagError(false);
     },
   );
 
@@ -152,15 +148,27 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
         <Div p="2xl">
           <Div>
             <Text fontWeight="bold" fontSize="6xl" color="text">
-              Establece tu primera dirección
+              Agrega una nueva dirección
             </Text>
 
             <Div my="md" />
 
-            <Text color="text" textAlign="left" maxW="90%">
-              Estás a un paso de disfrutar todos los beneficios que Fastly te
-              otorga, solo agrega tu primera dirección para poder continuar.
+            <Text
+              maxW="90%"
+              textAlign="left"
+              fontSize="lg"
+              color="text"
+              mb="sm">
+              Puedes tener hasta 10 direcciones, tienes {addressLength}{' '}
+              {hasOneAddress ? 'espacio restante' : 'espacios restantes'}.
             </Text>
+
+            {addressLimitReached ? (
+              <Text color="red" textAlign="left" maxW="90%" mb="sm">
+                Alcanzaste el límite de direcciones, elimina una dirección para
+                poder agregar otra.
+              </Text>
+            ) : null}
           </Div>
 
           <Div my="lg" />
@@ -246,7 +254,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
               }}
               render={({field: {onChange, onBlur, value}}) => (
                 <Input
-                  placeholder="Tu primera dirección"
+                  placeholder="Tu dirección"
                   keyboardType="default"
                   fontSize="lg"
                   maxLength={250}
@@ -275,7 +283,7 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
               }}
               render={({field: {onChange, onBlur, value}}) => (
                 <Input
-                  placeholder="Instrucción o referencia de tu dirección"
+                  placeholder="Instrucción de tu dirección"
                   keyboardType="default"
                   fontSize="lg"
                   maxLength={250}
@@ -420,12 +428,12 @@ export const AskLocationController: FC<AskLocationScreenProps> = ({
           <Button
             block
             shadow="xs"
+            disabled={addressLimitReached}
             fontWeight="bold"
             fontSize="2xl"
-            loading={loading}
             h={50}
             onPress={handleFinish}>
-            Finalizar
+            Agregar
           </Button>
         </Div>
       </Div>
