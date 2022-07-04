@@ -4,21 +4,15 @@ import {
 	FastifyInstanceToken,
 	GET as Get,
 	getInstanceByToken,
+	Service,
 } from 'fastify-decorators';
 
-@Controller('/orders')
-export class OrderController {
+@Service()
+export class IOService {
 	private readonly fastify: FastifyInstance =
 		getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
-	private get io() {
+	public get io() {
 		return this.fastify.io;
-	}
-
-	@Get('/')
-	index() {
-		this.io.on('connection', (socket) => {
-			console.log('a user has been connected');
-		});
 	}
 }
