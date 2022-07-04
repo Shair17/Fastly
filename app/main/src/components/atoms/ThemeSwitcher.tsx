@@ -1,5 +1,4 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
 import {useTheme, Div, Radio, Text, Icon} from 'react-native-magnus';
 import {lightTheme, darkTheme, ThemesNames} from '../../theme';
 import {useMMKVString} from 'react-native-mmkv';

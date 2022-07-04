@@ -43,8 +43,12 @@ export const useEditProfile = (props?: Props) => {
         quality: 0.5,
       },
       response => {
-        if (response.didCancel) return;
-        if (!response.assets) return;
+        if (response.didCancel) {
+          return;
+        }
+        if (!response.assets) {
+          return;
+        }
 
         setImage(response);
       },

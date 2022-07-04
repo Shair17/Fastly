@@ -76,7 +76,9 @@ export const ApplicationBottomTab: FC<Props> = () => {
       .catch(console.log);
   }, []);
 
-  if (loading || isConnected === null) return <LoadingScreen />;
+  if (loading || isConnected === null) {
+    return <LoadingScreen />;
+  }
 
   if (!isConnected || error || keepMinigame) {
     return <ErrorController />;

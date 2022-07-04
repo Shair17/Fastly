@@ -7,6 +7,7 @@ const emptyCoordinates = Object.freeze({
   width: 0,
   height: 0,
 });
+
 const initialValue = {
   start: emptyCoordinates,
   end: emptyCoordinates,
@@ -53,6 +54,7 @@ export const useKeyboard = () => {
       subscriptions.forEach(subscription => subscription.remove());
     };
   }, []);
+
   return {
     keyboardShown: shown,
     coordinates,

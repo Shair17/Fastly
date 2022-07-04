@@ -35,7 +35,9 @@ export const Map: FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    if (!following.current) return;
+    if (!following.current) {
+      return;
+    }
 
     const {latitude, longitude} = userLocation;
     mapRef.current?.animateCamera({

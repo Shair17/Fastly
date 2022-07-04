@@ -28,7 +28,9 @@ export const AddressesBottomSheet: FC<Props> = () => {
   );
 
   const handleSwitchCurrentAddress = (address: Address) => {
-    if (currentAddress.id === address.id) return;
+    if (currentAddress.id === address.id) {
+      return;
+    }
 
     setCurrentAddress(address);
   };

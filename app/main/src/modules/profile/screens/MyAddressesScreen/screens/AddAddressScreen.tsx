@@ -93,7 +93,9 @@ export const AddAddressScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (!following.current) return;
+    if (!following.current) {
+      return;
+    }
 
     const {latitude, longitude} = userLocation;
     mapRef.current?.animateCamera({
@@ -232,7 +234,7 @@ export const AddAddressScreen = () => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  borderColor={!!errors.name ? 'red' : 'gray400'}
+                  borderColor={errors.name ? 'red' : 'gray400'}
                 />
               )}
               name="name"
@@ -262,7 +264,7 @@ export const AddAddressScreen = () => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  borderColor={!!errors.street ? 'red' : 'gray400'}
+                  borderColor={errors.street ? 'red' : 'gray400'}
                 />
               )}
               name="street"
@@ -291,7 +293,7 @@ export const AddAddressScreen = () => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  borderColor={!!errors.instructions ? 'red' : 'gray400'}
+                  borderColor={errors.instructions ? 'red' : 'gray400'}
                 />
               )}
               name="instructions"
@@ -320,7 +322,7 @@ export const AddAddressScreen = () => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  borderColor={!!errors.zip ? 'red' : 'gray400'}
+                  borderColor={errors.zip ? 'red' : 'gray400'}
                 />
               )}
               name="zip"
@@ -351,7 +353,7 @@ export const AddAddressScreen = () => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  borderColor={!!errors.city ? 'red' : 'gray400'}
+                  borderColor={errors.city ? 'red' : 'gray400'}
                 />
               )}
               name="city"

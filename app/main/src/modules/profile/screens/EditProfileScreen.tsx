@@ -176,7 +176,7 @@ export const EditProfileScreen: FC<Props> = ({navigation}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                borderColor={!!errors.email ? 'red' : 'gray400'}
+                borderColor={errors.email ? 'red' : 'gray400'}
               />
             )}
             name="email"
@@ -205,7 +205,7 @@ export const EditProfileScreen: FC<Props> = ({navigation}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                borderColor={!!errors.phone ? 'red' : 'gray400'}
+                borderColor={errors.phone ? 'red' : 'gray400'}
               />
             )}
             name="phone"
@@ -234,7 +234,7 @@ export const EditProfileScreen: FC<Props> = ({navigation}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                borderColor={!!errors.dni ? 'red' : 'gray400'}
+                borderColor={errors.dni ? 'red' : 'gray400'}
               />
             )}
             name="dni"

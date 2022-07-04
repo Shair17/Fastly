@@ -145,14 +145,18 @@ export function useDebouncedCallback<
     };
 
     const startTimer = (pendingFunc: () => void, wait: number) => {
-      if (useRAF) cancelAnimationFrame(timerId.current);
+      if (useRAF) {
+        cancelAnimationFrame(timerId.current);
+      }
       timerId.current = useRAF
         ? requestAnimationFrame(pendingFunc)
         : setTimeout(pendingFunc, wait);
     };
 
     const shouldInvoke = (time: number) => {
-      if (!mounted.current) return false;
+      if (!mounted.current) {
+        return false;
+      }
 
       const timeSinceLastCall = time - lastCallTime.current;
       const timeSinceLastInvoke = time - lastInvokeTime.current;

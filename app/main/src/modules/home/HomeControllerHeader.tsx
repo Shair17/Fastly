@@ -18,7 +18,9 @@ export const HomeControllerHeader: FC<Props> = ({
   goToSearch,
   openAddressesBottomSheet,
 }) => {
-  if (Object.keys(currentAddress).length === 0) return null;
+  if (Object.keys(currentAddress).length === 0) {
+    return null;
+  }
 
   return (
     <HeaderScreen

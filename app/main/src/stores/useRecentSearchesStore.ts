@@ -29,7 +29,9 @@ export const useRecentSearchesStore = create(
     addRecentSearch: (search: string) => {
       const searches = get().searches;
 
-      if (searches.includes(search)) return;
+      if (searches.includes(search)) {
+        return;
+      }
 
       searches.push(search);
 

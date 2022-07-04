@@ -78,7 +78,9 @@ export const applyAuthTokenInterceptor = (
   axios: AxiosInstance,
   config: AuthTokenInterceptorConfig,
 ): void => {
-  if (!axios.interceptors) throw new Error(`invalid axios instance: ${axios}`);
+  if (!axios.interceptors) {
+    throw new Error(`invalid axios instance: ${axios}`);
+  }
   axios.interceptors.request.use(authTokenInterceptor(config));
 };
 
@@ -86,7 +88,9 @@ const getAuthTokens = (): ITokens | undefined => {
   const accessToken = useAuthStore.getState().accessToken;
   const refreshToken = useAuthStore.getState().refreshToken;
 
-  if (!accessToken && !refreshToken) return;
+  if (!accessToken && !refreshToken) {
+    return;
+  }
 
   return {
     accessToken,
@@ -95,7 +99,9 @@ const getAuthTokens = (): ITokens | undefined => {
 };
 
 export const isTokenExpired = (token: Token): boolean => {
-  if (!token) return true;
+  if (!token) {
+    return true;
+  }
   const expiresIn = getExpiresIn(token);
   return !expiresIn || expiresIn <= EXPIRE_FUDGE;
 };
@@ -109,7 +115,9 @@ const getTimestampFromToken = (token: Token): number | undefined => {
 const getExpiresIn = (token: Token): number => {
   const expiration = getTimestampFromToken(token);
 
-  if (!expiration) return -1;
+  if (!expiration) {
+    return -1;
+  }
 
   return expiration - Date.now() / 1000;
 };
@@ -118,7 +126,9 @@ const refreshToken = async (
   requestRefresh: TokenRefreshRequest,
 ): Promise<Token> => {
   const refreshToken = getRefreshToken();
-  if (!refreshToken) throw new Error('No refresh token available');
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
 
   try {
     const newTokens = await requestRefresh(refreshToken);
@@ -130,7 +140,9 @@ const refreshToken = async (
       return newTokens;
     }
   } catch (error) {
-    if (!axios.isAxiosError(error)) throw error;
+    if (!axios.isAxiosError(error)) {
+      throw error;
+    }
 
     // Failed to refresh token
     const status = error.response?.status;
@@ -166,7 +178,9 @@ export const authTokenInterceptor =
   }: AuthTokenInterceptorConfig) =>
   async (requestConfig: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
     const refreshToken = getRefreshToken();
-    if (!refreshToken) return requestConfig;
+    if (!refreshToken) {
+      return requestConfig;
+    }
 
     const authenticateRequest = (token: string | undefined) => {
       if (token) {

@@ -6,7 +6,7 @@ import {ThemeScreen} from './screens/ThemeScreen';
 import {EditProfileScreen} from './screens/EditProfileScreen';
 import {SupportScreen} from './screens/SupportScreen';
 import {MyAddressesScreen} from './screens/MyAddressesScreen/MyAddressesScreen';
-import {MyOrdersScreen} from './screens/MyOrdersScreen';
+import {MyOrdersScreen} from './screens/MyOrdersScreen/MyOrdersScreen';
 import {ProfileStackParams} from './ProfileStackParams.type';
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();

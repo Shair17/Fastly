@@ -11,7 +11,9 @@ export const useCheckLocationPermissions = () => {
     checkLocationPermission();
 
     const listener = (state: AppStateStatus) => {
-      if (state !== 'active') return;
+      if (state !== 'active') {
+        return;
+      }
 
       checkLocationPermission();
     };

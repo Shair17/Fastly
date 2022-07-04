@@ -11,9 +11,13 @@ export const useShowSessionIsExpired = () => {
   useEffect(() => {
     // if (executedRef.current) return;
 
-    if (!refreshToken) return;
+    if (!refreshToken) {
+      return;
+    }
 
-    if (!isValidToken(refreshToken)) return;
+    if (!isValidToken(refreshToken)) {
+      return;
+    }
 
     if (isTokenExpired(refreshToken)) {
       Notifier.showNotification({

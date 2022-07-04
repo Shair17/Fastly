@@ -41,7 +41,9 @@ export const useUserAddresses = create(
       });
     },
     setCurrentAddress: (currentAddress: Address) => {
-      if (get().currentAddress.id === currentAddress.id) return;
+      if (get().currentAddress.id === currentAddress.id) {
+        return;
+      }
 
       set({
         currentAddress,
@@ -59,7 +61,7 @@ export const useUserAddresses = create(
         });
       }
     },
-    // TODO: guardar en el localstorage el id de la address seleccionado
+    // TODO: guardar en el storage el id de la address seleccionado
     setAddresses: (addresses: Address[]) => {
       if (
         addresses.length === 1 &&
