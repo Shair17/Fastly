@@ -20,12 +20,12 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 
 export const RootNavigation = () => {
   useShowSessionIsExpired();
-  const {theme} = useTheme();
-  const locationStatus = usePermissionsStore(s => s.locationStatus);
-  // const refreshToken = useAuthStore(s => s.refreshToken);
   const isNewUser = useAuthStore(s => s.isNewUser);
-
   const isAuthenticated = isLoggedIn();
+
+  const {theme} = useTheme();
+
+  const locationStatus = usePermissionsStore(s => s.locationStatus);
 
   return (
     <Stack.Navigator>

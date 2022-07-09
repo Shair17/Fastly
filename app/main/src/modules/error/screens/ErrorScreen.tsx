@@ -21,6 +21,7 @@ export const ErrorScreen: FC<Props> = ({navigation}) => {
   const {
     window: {width},
   } = useDimensions();
+  // const title = useNetInfo().isConnected === false ? 'Por favor verifica tu conexión a internet.' : useContext(SocketContext).online === false ? 'Fastly está en mantenimiento, vuelve en unos minutos por favor.' : 'Ha ocurrido algo inesperado, vuelve en unos minutos por favor.';
   const title =
     useNetInfo().isConnected === false
       ? 'Por favor verifica tu conexión a internet.'

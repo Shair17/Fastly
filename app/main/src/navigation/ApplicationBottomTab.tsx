@@ -9,10 +9,7 @@ import {bottomTabs} from './bottomTabs';
 import {ErrorController} from '../modules/error/ErrorController';
 import {useUserAddresses} from '../stores/useUserAddresses';
 import {useUserStore} from '../stores/useUserStore';
-import {
-  MyProfileResponse,
-  MyAddressesResponse,
-} from '../interfaces/appInterfaces';
+import {MyProfileResponse} from '../interfaces/appInterfaces';
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import {AddressesBottomSheet} from '../components/organisms/AddressesBottomSheet';
 import {useAddressesBottomSheetStore} from '../stores/useAddressesBottomSheetStore';
@@ -51,7 +48,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
   );
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
-  const addresses = useUserAddresses(u => u.addresses);
+  // const addresses = useUserAddresses(u => u.addresses);
   const keepMinigame = useMinigameStore(m => m.keep);
   const {isConnected} = useNetInfo();
 
@@ -80,6 +77,7 @@ export const ApplicationBottomTab: FC<Props> = () => {
     return <LoadingScreen />;
   }
 
+  // !isConnected || !isSocketOnline || error || keepMinigame
   if (!isConnected || error || keepMinigame) {
     return <ErrorController />;
   }

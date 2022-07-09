@@ -96,6 +96,7 @@ export class AuthService {
 				throw new Unauthorized('banned');
 			}
 
+
 			let payload: { id: string; name: string; email?: string } = {
 				id: user.id,
 				name: user.name,

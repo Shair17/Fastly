@@ -2,6 +2,7 @@ import { Entity, OneToMany, AfterLoad } from 'typeorm';
 import { UserAddress } from './user-address.entity';
 import { UserFavorite } from './user-favorite.entity';
 import { UserCart } from './user-cart.entity';
+import { Order } from '../order/order.entity';
 import { UserAppBase } from '../../shared/entities/userAppBase.entity';
 
 @Entity('users')
@@ -23,6 +24,9 @@ export class User extends UserAppBase {
 		eager: true,
 	})
 	cart?: UserCart[];
+
+	@OneToMany(() => Order, (order) => order.user)
+	orders?: Order[];
 
 	isNewUser: boolean;
 

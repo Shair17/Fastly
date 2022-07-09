@@ -4,6 +4,7 @@ import { Base } from './base.entity';
 import { getDefaultAvatar } from '../../utils/getDefaultAvatar';
 
 const defaultAvatar = getDefaultAvatar(100);
+
 export abstract class UserAppBase extends Base {
 	@Column()
 	name: string;

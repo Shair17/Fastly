@@ -3,11 +3,16 @@ import { Dealer } from '../dealer/dealer.entity';
 import { Base } from '../../shared/entities/base.entity';
 import { Product } from '../product/product.entity';
 import { OrderStatus } from '../../shared/enums/order-status.enum';
+import { User } from '../user/user.entity';
 
 @Entity('orders')
 export class Order extends Base {
-	@ManyToOne(() => Dealer, (dealer) => dealer.orders)
+	// nullable: true ??
+	@ManyToOne(() => Dealer, (dealer) => dealer.orders, { nullable: true })
 	dealer: Dealer;
+
+	@ManyToOne(() => User, (user) => user.orders)
+	user: User;
 
 	@OneToOne(() => Product)
 	@JoinColumn()

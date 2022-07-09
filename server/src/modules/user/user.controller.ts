@@ -230,6 +230,14 @@ export class UserController {
 		return this.userService.deleteFavorites(request.userId);
 	}
 
+	// TODO: agregar paginación
+	@Get('/me/orders', {
+		onRequest: [hasBearerToken, userIsAuthenticated],
+	})
+	async myOrders(request: Request, reply: Reply) {
+		return this.userService.myOrders(request.userId);
+	}
+
 	@Put('/new-user', {
 		schema: {
 			body: UpdateNewUserBody,

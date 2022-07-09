@@ -592,6 +592,27 @@ export class UserService {
 		};
 	}
 
+	// TODO: agregar paginación
+	async myOrders(userId: string) {
+		const user = await this.getById(userId);
+
+		if (!user) {
+			throw new Unauthorized();
+		}
+
+		if (!user.orders) {
+			return {
+				id: userId,
+				orders: [],
+			};
+		}
+
+		return {
+			id: userId,
+			orders: user.orders,
+		};
+	}
+
 	save(user: Partial<User>): Promise<Partial<User> & User> {
 		return this.userRepository.save(user);
 	}

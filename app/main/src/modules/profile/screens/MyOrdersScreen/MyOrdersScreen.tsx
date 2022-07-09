@@ -7,41 +7,13 @@ import {ProfileStackParams} from '../../ProfileStackParams.type';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ContainerWithKeyboardAvoidingView} from '../../../../components/templates/ContainerWithKeyboardAvoidingView';
 import {OngoingOrdersScreen} from './screens/OngoingOrdersScreen';
-import {CompletedOrdersScreen} from './screens/CompletedOrdersScreen';
-import {CanceledOrdersScreen} from './screens/CanceledOrdersScreen';
+import {OrdersHistoryScreen} from './screens/OrdersHistoryScreen';
 import {PulseIndicator} from '../../../../components/atoms/PulseIndicator';
 
 interface Props
   extends NativeStackScreenProps<ProfileStackParams, 'MyAddresses'> {}
 
 const Tab = createMaterialTopTabNavigator();
-
-/*
-import io from 'socket.io-client';
-import {AirbnbRating} from 'react-native-ratings';
-import { ContainerWithKeyboardAvoidingView } from '../../../../components/templates/ContainerWithKeyboardAvoidingView';
-
-const socket = io('http://192.168.1.46:3000', {
-  transports: ['websocket'],
-});
-
-socket.on('connect', () => {
-  console.log('connected --------------- socket ---------------');
-});
-
-socket.on('connect_error', err => {
-  console.log(err.message);
-});
-
-const ratingCompleted = (rating: number) => {
-  console.log('Rating is: ' + rating);
-};
-
-<AirbnbRating
-  reviews={['Terrible', 'Malo', 'Regular', 'Bueno', 'Excelente']}
-  onFinishRating={ratingCompleted}
-/>
-*/
 
 export const MyOrdersScreen: FC<Props> = ({navigation}) => {
   const goBack = () => {
@@ -81,27 +53,19 @@ export const MyOrdersScreen: FC<Props> = ({navigation}) => {
             title: 'En Camino',
             // tabBarLabelStyle: {textTransform: 'capitalize'},
             tabBarLabelStyle: {fontWeight: '500'},
-            tabBarBadge: () => (
-              <Div top={15} right={8}>
-                <PulseIndicator size={20} />
-              </Div>
-            ),
+            tabBarBadge: () =>
+              true ? (
+                <Div top={15} right={40}>
+                  <PulseIndicator size={20} />
+                </Div>
+              ) : null,
           }}
         />
         <Tab.Screen
-          name="CompletedOrdersScreen"
-          component={CompletedOrdersScreen}
+          name="OrdersHistoryScreen"
+          component={OrdersHistoryScreen}
           options={{
-            title: 'Completados',
-            tabBarLabelStyle: {fontWeight: '500'},
-            // tabBarLabelStyle: {textTransform: 'capitalize'},
-          }}
-        />
-        <Tab.Screen
-          name="CanceledOrdersScreen"
-          component={CanceledOrdersScreen}
-          options={{
-            title: 'Cancelados',
+            title: 'Historial',
             tabBarLabelStyle: {fontWeight: '500'},
             // tabBarLabelStyle: {textTransform: 'capitalize'},
           }}
