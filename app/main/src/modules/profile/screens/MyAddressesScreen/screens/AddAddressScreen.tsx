@@ -1,26 +1,23 @@
-import React, {FC, useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
-import {Div, Text, Icon, Radio} from 'react-native-magnus';
-import {ActivityIndicator} from '../../../../../components/atoms/ActivityIndicator';
-import {useForm, Controller} from 'react-hook-form';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {useLocation} from '../../../../../hooks/useLocation';
-import {Button} from '../../../../../components/atoms/Button';
-import {RetryPhoneGPS} from '../../../../../components/molecules/RetryPhoneGPS';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {Div, Text, Icon, Radio} from 'react-native-magnus';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-  LocationInformationType,
-  TagType,
-} from '../../../../../interfaces/appInterfaces';
-import {Input} from '../../../../../components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '../../../../../components/templates/ContainerWithKeyboardAvoidingView';
-import {LocationInformationSchema} from '../../../../../schemas/ask-location.schema';
-import {defaultTags} from '../../../../ask-location/defaultTags';
-import {useUserAddresses} from '../../../../../stores/useUserAddresses';
-import {MAX_USER_ADDRESSES} from '../../../../../constants/app.constants';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {ActivityIndicator} from '@fastly/components/atoms/ActivityIndicator';
+import {RetryPhoneGPS} from '@fastly/components/molecules/RetryPhoneGPS';
+import {Input} from '@fastly/components/atoms/Input';
+import {Button} from '@fastly/components/atoms/Button';
+import {LocationInformationType, TagType} from '@fastly/interfaces/app';
+import {defaultTags} from '@fastly/modules/ask-location/defaultTags';
+import {LocationInformationSchema} from '@fastly/schemas/ask-location';
+import {useLocation} from '@fastly/hooks/useLocation';
+import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
+import {useUserAddresses} from '@fastly/stores/useUserAddresses';
 
-export const AddAddressScreen = () => {
+export const AddAddressScreen: React.FC = () => {
   const [showTagError, setTagError] = useState(false);
   const [tag, setTag] = useState<TagType>();
   const {

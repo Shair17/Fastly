@@ -1,21 +1,20 @@
 import React, {useState} from 'react';
 import {Avatar, Div, Text, Icon} from 'react-native-magnus';
-// import {Skeleton} from '../../components/atoms/Skeleton';
-import {PullToRefresh} from '../../../components/templates/PullToRefresh';
-import {useUserStore} from '../../../stores/useUserStore';
+import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
+import {ProfileItemSetting} from '@fastly/components/organisms/ProfileItemSetting';
+import {LogOutButton} from '@fastly/components/molecules/LogOutButton';
+import {CreatedByShair} from '@fastly/components/molecules/CreatedByShair';
+import {useUserStore} from '@fastly/stores/useUserStore';
+import {FASTLY_PP, FASTLY_TC} from '@fastly/constants/support';
+import {openLink} from '@fastly/utils/openLink';
 import {ProfileControllerHeader} from '../ProfileControllerHeader';
-import {ProfileItemSetting} from '../../../components/organisms/ProfileItemSetting';
-import {LogOutButton} from '../../../components/molecules/LogOutButton';
-import {CreatedByShair} from '../../../components/molecules/CreatedByShair';
-import {openLink} from '../../../utils/openLink';
-import {FASTLY_PP, FASTLY_TC} from '../../../constants/support.constants';
 
 /**
  * TODO
  * agregar cupones
  */
 
-export const ProfileScreen = ({navigation}: any) => {
+export const ProfileScreen: React.FC = ({navigation}: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const avatarUrl = useUserStore(u => u.avatar);
   const name = useUserStore(u => u.name);

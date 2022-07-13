@@ -3,22 +3,22 @@ import {TouchableOpacity, StatusBar} from 'react-native';
 import {GameEngine} from 'react-native-game-engine';
 import {Div, Text, Image} from 'react-native-magnus';
 import Matter from 'matter-js';
-import {miniGameImages} from '../../constants/minigame.constants';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ErrorStackParmas} from '../error/ErrorController';
-import {useMinigameStore} from '../../stores/useMinigameStore';
-import {useBackHandler} from '../../hooks/useBackHandler';
-import {useDimensions} from '../../hooks/useDimensions';
-import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import Physics, {resetPipes} from './Physics';
-import {Floor} from './Floor';
-import {Bird} from './Bird';
 import {
+  miniGameImages,
   BIRD_HEIGHT,
   BIRD_WIDTH,
   MAX_HEIGHT,
   MAX_WIDTH,
-} from '../../constants/minigame.constants';
+} from '@fastly/constants/minigame';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ErrorStackParmas} from '../error/ErrorController';
+import {useMinigameStore} from '@fastly/stores/useMinigameStore';
+import {useBackHandler} from '@fastly/hooks/useBackHandler';
+import {useDimensions} from '@fastly/hooks/useDimensions';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import Physics, {resetPipes} from './Physics';
+import {Floor} from './Floor';
+import {Bird} from './Bird';
 
 interface Props extends NativeStackScreenProps<ErrorStackParmas, 'Minigame'> {}
 

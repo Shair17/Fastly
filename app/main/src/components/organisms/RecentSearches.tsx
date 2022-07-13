@@ -5,7 +5,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
-import {useRecentSearchesStore} from '../../stores/useRecentSearchesStore';
+import {useRecentSearchesStore} from '@fastly/stores/useRecentSearchesStore';
 
 interface RecentSearchItemProps {
   search: string;

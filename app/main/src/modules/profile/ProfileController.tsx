@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
-import {ProfileScreenProps} from '../../navigation/screens/app/ProfileStack';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ProfileStackProps} from '@fastly/navigation/stacks/profile';
 import {ProfileScreen} from './screens/ProfileScreen';
 import {ThemeScreen} from './screens/ThemeScreen';
 import {EditProfileScreen} from './screens/EditProfileScreen';
@@ -11,7 +11,7 @@ import {ProfileStackParams} from './ProfileStackParams.type';
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();
 
-export const ProfileController: FC<ProfileScreenProps> = () => {
+export const ProfileController: React.FC<ProfileStackProps> = () => {
   return (
     <ProfileStack.Navigator
       screenOptions={{

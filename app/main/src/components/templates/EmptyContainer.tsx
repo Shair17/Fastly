@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
+import {ImageSourcePropType} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {ContainerWithCredits} from './ContainerWithCredits';
 import * as Animatable from 'react-native-animatable';
 import {Button} from '../atoms/Button';
-import {ImageSourcePropType} from 'react-native';
 
 interface EmptyContainerProps {
   image: {

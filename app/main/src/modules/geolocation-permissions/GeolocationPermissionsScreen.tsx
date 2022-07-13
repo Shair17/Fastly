@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text, Image} from 'react-native-magnus';
-import {Button} from '../../components/atoms/Button';
-import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import {GeolocationPermissionsScreenProps} from '../../navigation/screens/GeolocationPermissionsScreen';
-import {usePermissionsStore} from '../../stores/usePermissionsStore';
+import {Button} from '@fastly/components/atoms/Button';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {GeolocationPermissionsScreenProps} from '@fastly/navigation/screens/GeolocationPermissionsScreen';
+import {usePermissionsStore} from '@fastly/stores/usePermissionsStore';
 
 const geolocationImage = require('../../assets/images/geolocation/bg@2.png');
 
@@ -17,8 +17,6 @@ export const GeolocationPermissionsController: FC<
   );
 
   StatusBar.setTranslucent(false);
-  // StatusBar.setBarStyle('dark-content');
-  // StatusBar.setBackgroundColor('#fff');
 
   return (
     <ContainerWithCredits>

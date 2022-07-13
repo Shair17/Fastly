@@ -1,21 +1,21 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Div, Text, Icon, Avatar} from 'react-native-magnus';
-import {HeaderScreen} from '../../../components/organisms/HeaderScreen';
-import {ContainerWithKeyboardAvoidingView} from '../../../components/templates/ContainerWithKeyboardAvoidingView';
-import {useUserStore} from '../../../stores/useUserStore';
-import {ProfileStackParams} from '../ProfileStackParams.type';
 import {Controller} from 'react-hook-form';
-import {useEditProfile} from '../../../hooks/useEditProfile';
-import {Button} from '../../../components/atoms/Button';
-import {Input} from '../../../components/atoms/Input';
 import useAxios from 'axios-hooks';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {useUserStore} from '@fastly/stores/useUserStore';
+import {useEditProfile} from '@fastly/hooks/useEditProfile';
+import {Button} from '@fastly/components/atoms/Button';
+import {Input} from '@fastly/components/atoms/Input';
+import {ProfileStackParams} from '../ProfileStackParams.type';
 
 interface Props
   extends NativeStackScreenProps<ProfileStackParams, 'EditProfile'> {}
 
-export const EditProfileScreen: FC<Props> = ({navigation}) => {
+export const EditProfileScreen: React.FC<Props> = ({navigation}) => {
   const [{loading}, executeEditProfile] = useAxios(
     {url: '/users/me', method: 'PUT'},
     {manual: true},

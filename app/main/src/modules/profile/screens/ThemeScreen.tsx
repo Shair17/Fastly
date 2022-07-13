@@ -2,12 +2,12 @@ import React from 'react';
 import {StatusBar, TouchableOpacity} from 'react-native';
 import {Div, Radio, Text, useTheme, Icon} from 'react-native-magnus';
 import {useMMKVString} from 'react-native-mmkv';
-import {HeaderScreen} from '../../../components/organisms/HeaderScreen';
-import {themeStorageKey} from '../../../constants/theme.constants';
-import {useSystemColorScheme} from '../../../hooks/useSystemColorScheme';
-import {storage} from '../../../storage';
-import {darkTheme, lightTheme, ThemesNames} from '../../../theme';
-import {ContainerWithCredits} from '../../../components/templates/ContainerWithCredits';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {useSystemColorScheme} from '@fastly/hooks/useSystemColorScheme';
+import {themeStorageKey} from '@fastly/constants/theme';
+import {storage} from '@fastly/services/';
+import {darkTheme, lightTheme, ThemesNames} from '@fastly/theme';
 
 const ThemeOptions = [
   {
@@ -24,7 +24,7 @@ const ThemeOptions = [
   },
 ];
 
-export const ThemeScreen = ({navigation}: any) => {
+export const ThemeScreen: React.FC = ({navigation}: any) => {
   const {setTheme} = useTheme();
   const systemTheme = useSystemColorScheme();
   const [themeStorage, setThemeStorage] = useMMKVString(

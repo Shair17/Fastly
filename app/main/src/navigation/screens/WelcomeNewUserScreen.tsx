@@ -1,11 +1,13 @@
-import React, {FC} from 'react';
-import {WelcomeNewUserController} from '../../modules/welcome-new-user/WelcomeNewUserController';
+import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParams} from '../RootNavigation.type';
+import {WelcomeNewUserController} from '@fastly/modules/welcome-new-user/WelcomeNewUserController';
+import {RootStackParams} from '../Root';
 
 export interface WelcomeNewUserScreenProps
-  extends NativeStackScreenProps<RootStackParams, 'AskLocationScreen'> {}
+  extends NativeStackScreenProps<RootStackParams, 'WelcomeNewUserScreen'> {}
 
-export const WelcomeNewUserScreen: FC<WelcomeNewUserScreenProps> = props => {
+export const WelcomeNewUserScreen: React.FC<
+  WelcomeNewUserScreenProps
+> = props => {
   return <WelcomeNewUserController {...props} />;
 };

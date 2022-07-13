@@ -1,7 +1,6 @@
 import React from 'react';
 import {Animated, Easing, ViewProps} from 'react-native';
-// import {colors} from '../constants/dogeStyle';
-import {defaultColors as colors} from '../../theme/colors';
+import {defaultColors as colors} from '@fastly/theme/colors';
 
 export type SpinnerProps = ViewProps & {
   size?: 's' | 'm';

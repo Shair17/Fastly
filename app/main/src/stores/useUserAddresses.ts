@@ -1,15 +1,15 @@
 import create from 'zustand';
 import {combine} from 'zustand/middleware';
 import {Alert} from 'react-native';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {
   AddAddressResponseType,
   Address,
   MyAddressesResponse,
-} from '../interfaces/appInterfaces';
-import {http} from '../services/http.service';
-import {isLoggedIn} from '../services/refresh-token.service';
-import {Notifier, NotifierComponents} from 'react-native-notifier';
-import {MAX_USER_ADDRESSES} from '../constants/app.constants';
+} from '@fastly/interfaces/app';
+import {http} from '@fastly/services/http';
+import {isLoggedIn} from '@fastly/services/refresh-token';
+import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
 
 type UserAddressesType = {
   currentAddress: Address;

@@ -1,11 +1,11 @@
 import React, {FC, useState} from 'react';
 import {Div, Text} from 'react-native-magnus';
-import {PullToRefresh} from '../../components/templates/PullToRefresh';
-import {CartScreenProps} from '../../navigation/screens/app/CartScreen';
+import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
+import {CartStackProps} from '@fastly/navigation/stacks/cart';
 import {CartControllerHeader} from './CartControllerHeader';
 import {EmptyCart} from './EmptyCart';
 
-export const CartController: FC<CartScreenProps> = ({navigation}) => {
+export const CartController: FC<CartStackProps> = ({navigation}) => {
   const [hasFavorites, setHasFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 

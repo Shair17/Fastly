@@ -1,11 +1,11 @@
-import React, {FC} from 'react';
-import {HomeScreenProps} from '../../navigation/screens/app/HomeStack';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {HomeStackProps} from '@fastly/navigation/stacks/home';
 import {HomeScreen} from './screens/HomeScreen';
 
 const HomeStack = createNativeStackNavigator();
 
-export const HomeController: FC<HomeScreenProps> = ({navigation}) => {
+export const HomeController: React.FC<HomeStackProps> = ({navigation}) => {
   return (
     <HomeStack.Navigator
       screenOptions={{headerShown: false}}

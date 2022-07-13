@@ -8,9 +8,9 @@ import {
   accessTokenKey,
   refreshTokenKey,
   Tokens,
-} from '../constants/auth.constants';
-import {http} from '../services/http.service';
-import {storage} from '../storage';
+} from '@fastly/constants/auth';
+import {http} from '@fastly/services/http';
+import {storage} from '@fastly/services/storage';
 
 export interface ITokens extends Tokens {}
 

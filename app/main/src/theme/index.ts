@@ -4,8 +4,11 @@ export enum ThemesNames {
   systemTheme = 'system',
 }
 
-export {darkTheme} from './darkTheme';
-export {lightTheme} from './lightTheme';
-
-export {getThemeFromStorage} from './getThemeFromStorage';
-export {setThemeToStorage} from './setThemeToStorage';
+export * from './colors';
+export * from './darkTheme';
+export * from './lightTheme';
+export * from './defaultTheme';
+export * from './fonts';
+export * from './getThemeFromStorage';
+export * from './setThemeToStorage';
+export * from './metrics';

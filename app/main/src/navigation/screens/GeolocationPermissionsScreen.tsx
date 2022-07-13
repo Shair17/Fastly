@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParams} from '../RootNavigation.type';
-import {GeolocationPermissionsController} from '../../modules/geolocation-permissions/GeolocationPermissionsScreen';
+import {GeolocationPermissionsController} from '@fastly/modules/geolocation-permissions/GeolocationPermissionsScreen';
+import {RootStackParams} from '../Root';
 
 export interface GeolocationPermissionsScreenProps
   extends NativeStackScreenProps<
@@ -9,7 +9,7 @@ export interface GeolocationPermissionsScreenProps
     'GeolocationPermissionsScreen'
   > {}
 
-export const GeolocationPermissionsScreen: FC<
+export const GeolocationPermissionsScreen: React.FC<
   GeolocationPermissionsScreenProps
 > = props => {
   return <GeolocationPermissionsController {...props} />;

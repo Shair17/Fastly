@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
 
@@ -9,7 +9,7 @@ interface Props {
   onPress?: () => void;
 }
 
-export const ContactItem: FC<Props> = ({
+export const ContactItem: React.FC<Props> = ({
   description,
   iconName,
   title,

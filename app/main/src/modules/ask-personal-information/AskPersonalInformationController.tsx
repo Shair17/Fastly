@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon, Avatar} from 'react-native-magnus';
-import {Button} from '../../components/atoms/Button';
-import {Input} from '../../components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
-import {AskPersonalInformationScreenProps} from '../../navigation/screens/AskPersonalInformationScreen';
 import {Controller} from 'react-hook-form';
-import {useEditProfile} from '../../hooks/useEditProfile';
+import {useEditProfile} from '@fastly/hooks/useEditProfile';
+import {Button} from '@fastly/components/atoms/Button';
+import {Input} from '@fastly/components/atoms/Input';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {AskPersonalInformationScreenProps} from '@fastly/navigation/screens/AskPersonalInformationScreen';
 
 const avatarPlaceholderImage = require('../../assets/images/avatar-placeholder.jpg');
 

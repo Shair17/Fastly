@@ -1,10 +1,10 @@
 import {AppRegistry} from 'react-native';
-import App from './src/App';
+import App from '@fastly/App';
 import {name as appName} from './app.json';
 
 import {configure} from 'axios-hooks';
-import {cache} from './src/cache';
-import {http as axios} from './src/services/http.service';
+import {http as axios} from '@fastly/services/http';
+import {cache} from '@fastly/services/cache';
 
 configure({axios, cache});
 

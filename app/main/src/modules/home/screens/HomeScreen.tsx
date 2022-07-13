@@ -1,13 +1,13 @@
 import React, {FC, useState} from 'react';
 import {Div} from 'react-native-magnus';
-import {CreatedByShair} from '../../../components/molecules/CreatedByShair';
-import {AdvertisementsCarousel} from '../../../components/organisms/AdvertisementsCarousel';
-import {FeedCarousel} from '../../../components/organisms/FeedCarousel';
-import {ServicesCarousel} from '../../../components/organisms/ServicesCarousel';
-import {PullToRefresh} from '../../../components/templates/PullToRefresh';
-import {HomeScreenProps} from '../../../navigation/screens/app/HomeStack';
-import {useAddressesBottomSheetStore} from '../../../stores/useAddressesBottomSheetStore';
-import {useUserAddresses} from '../../../stores/useUserAddresses';
+import {CreatedByShair} from '@fastly/components/molecules/CreatedByShair';
+import {AdvertisementsCarousel} from '@fastly/components/organisms/AdvertisementsCarousel';
+import {FeedCarousel} from '@fastly/components/organisms/FeedCarousel';
+import {ServicesCarousel} from '@fastly/components/organisms/ServicesCarousel';
+import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
+import {HomeScreenProps} from '@fastly/navigation/stacks/home';
+import {useAddressesBottomSheetStore} from '@fastly/stores/useAddressesBottomSheetStore';
+import {useUserAddresses} from '@fastly/stores/useUserAddresses';
 import {data} from '../dummyData';
 import {HomeControllerHeader} from '../HomeControllerHeader';
 

@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {AppStateStatus, AppState} from 'react-native';
-import {usePermissionsStore} from '../stores/usePermissionsStore';
+import {usePermissionsStore} from '@fastly/stores/usePermissionsStore';
 
 export const useCheckLocationPermissions = () => {
   const checkLocationPermission = usePermissionsStore(

@@ -1,9 +1,9 @@
 import create from 'zustand';
 import {combine} from 'zustand/middleware';
-import {isNewUser, isBanned, userKey} from '../constants/auth.constants';
-import {storage} from '../storage';
-import {http} from '../services/http.service';
-import {isLoggedIn} from '../services/refresh-token.service';
+import {storage} from '@fastly/services/storage';
+import {http} from '@fastly/services/http';
+import {isLoggedIn} from '@fastly/services/refresh-token';
+import {isNewUser, isBanned, userKey} from '@fastly/constants/auth';
 
 type UserType = {
   id: string;

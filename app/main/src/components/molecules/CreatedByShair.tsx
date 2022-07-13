@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Div, Text} from 'react-native-magnus';
-import {openLink} from '../../utils/openLink';
-import {DEVELOPER_INSTAGRAM} from '../../constants/developer.constants';
+import {openLink} from '@fastly/utils/openLink';
+import {DEVELOPER_INSTAGRAM} from '@fastly/constants/developer';
 
 interface Props {
   url?: string;

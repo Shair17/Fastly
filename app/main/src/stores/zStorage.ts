@@ -1,5 +1,5 @@
 import {StateStorage} from 'zustand/middleware';
-import {storage} from '../storage';
+import {storage} from '@fastly/services/storage';
 
 // https://github.com/mrousavy/react-native-mmkv/blob/master/docs/WRAPPER_ZUSTAND_PERSIST_MIDDLEWARE.md
 

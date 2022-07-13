@@ -1,21 +1,21 @@
-import React, {FC} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ProfileStackParams} from '../../ProfileStackParams.type';
-import {AddAddressScreen} from './screens/AddAddressScreen';
-import {ListAddressScreen} from './screens/ListAddressScreen';
-import {HeaderScreen} from '../../../../components/organisms/HeaderScreen';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Icon, Text, Div, Badge} from 'react-native-magnus';
-import {ContainerWithKeyboardAvoidingView} from '../../../../components/templates/ContainerWithKeyboardAvoidingView';
-import {useUserAddresses} from '../../../../stores/useUserAddresses';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {useUserAddresses} from '@fastly/stores/useUserAddresses';
+import {AddAddressScreen} from './screens/AddAddressScreen';
+import {ListAddressScreen} from './screens/ListAddressScreen';
+import {ProfileStackParams} from '../../ProfileStackParams.type';
 
 interface Props
   extends NativeStackScreenProps<ProfileStackParams, 'MyAddresses'> {}
 
 const Tab = createMaterialTopTabNavigator();
 
-export const MyAddressesScreen: FC<Props> = ({navigation}) => {
+export const MyAddressesScreen: React.FC<Props> = ({navigation}) => {
   const {length: addressesLength} = useUserAddresses(u => u.addresses);
 
   const goBack = () => {

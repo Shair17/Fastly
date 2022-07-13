@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Animated} from 'react-native';
-import {miniGameImages} from '../../constants/minigame.constants';
+import {miniGameImages} from '@fastly/constants/minigame';
 
 interface Props {
   body: {

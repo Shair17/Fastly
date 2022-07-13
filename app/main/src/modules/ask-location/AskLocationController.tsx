@@ -1,24 +1,24 @@
-import React, {FC, useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {Div, Text, Icon, Radio} from 'react-native-magnus';
-import {ActivityIndicator} from '../../components/atoms/ActivityIndicator';
-import {AskLocationScreenProps} from '../../navigation/screens/AskLocationScreen';
-import {defaultTags} from './defaultTags';
 import {useForm, Controller} from 'react-hook-form';
-import {useAuthStore} from '../../stores/useAuthStore';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {useLocation} from '../../hooks/useLocation';
-import {Button} from '../../components/atoms/Button';
-import {RetryPhoneGPS} from '../../components/molecules/RetryPhoneGPS';
-import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {LocationInformationType, TagType} from '../../interfaces/appInterfaces';
-import {LocationInformationSchema} from '../../schemas/ask-location.schema';
-import {Input} from '../../components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '../../components/templates/ContainerWithKeyboardAvoidingView';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
 import useAxios from 'axios-hooks';
+import {defaultTags} from './defaultTags';
+import {AskLocationScreenProps} from '@fastly/navigation/screens/AskLocationScreen';
+import {ActivityIndicator} from '@fastly/components/atoms/ActivityIndicator';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useLocation} from '@fastly/hooks/useLocation';
+import {Button} from '@fastly/components/atoms/Button';
+import {RetryPhoneGPS} from '@fastly/components/molecules/RetryPhoneGPS';
+import {LocationInformationSchema} from '@fastly/schemas/ask-location';
+import {Input} from '@fastly/components/atoms/Input';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {LocationInformationType, TagType} from '@fastly/interfaces/app';
 
-export const AskLocationController: FC<AskLocationScreenProps> = ({
+export const AskLocationController: React.FC<AskLocationScreenProps> = ({
   navigation,
   route,
 }) => {

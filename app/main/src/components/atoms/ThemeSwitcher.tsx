@@ -1,10 +1,10 @@
 import React from 'react';
 import {useTheme, Div, Radio, Text, Icon} from 'react-native-magnus';
-import {lightTheme, darkTheme, ThemesNames} from '../../theme';
+import {lightTheme, darkTheme, ThemesNames} from '@fastly/theme';
 import {useMMKVString} from 'react-native-mmkv';
-import {themeStorageKey} from '../../constants/theme.constants';
-import {storage} from '../../storage';
-import {useSystemColorScheme} from '../../hooks/useSystemColorScheme';
+import {themeStorageKey} from '@fastly/constants';
+import {storage} from '@fastly/services';
+import {useSystemColorScheme} from '@fastly/hooks';
 
 const ThemeOptions = [
   {
@@ -42,18 +42,12 @@ export const ThemeSwitcher = () => {
     if (themeName === ThemesNames.systemTheme) {
       setThemeStorage(undefined);
       setTheme(systemTheme === 'light' ? lightTheme : darkTheme);
-      // StatusBar.setBarStyle(systemTheme === 'light' ? 'dark-content' : 'light-content');
-      // StatusBar.setBackgroundColor(systemTheme === 'light' ? '#fff' : '#000');
     } else if (themeName === ThemesNames.lightTheme) {
       setThemeStorage(ThemesNames.lightTheme);
       setTheme(lightTheme);
-      // StatusBar.setBarStyle('dark-content');
-      // StatusBar.setBackgroundColor('#fff');
     } else if (themeName === ThemesNames.darkTheme) {
       setThemeStorage(ThemesNames.darkTheme);
       setTheme(darkTheme);
-      // StatusBar.setBarStyle('light-content');
-      //StatusBar.setBackgroundColor('#000');
     }
   };
 

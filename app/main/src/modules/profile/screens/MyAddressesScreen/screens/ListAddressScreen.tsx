@@ -1,23 +1,21 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
 import {Div, Radio, Text} from 'react-native-magnus';
-import {AddressBottomSheetItem} from '../../../../../components/organisms/AddressBottomSheetItem';
-import {ContainerWithCredits} from '../../../../../components/templates/ContainerWithCredits';
-import {useUserAddresses} from '../../../../../stores/useUserAddresses';
-import {getAddressBottomSheetIconName} from '../../../../../utils/getAddressBottomSheetIconName';
-import {Address} from '../../../../../interfaces/appInterfaces';
-import {MAX_USER_ADDRESSES} from '../../../../../constants/app.constants';
+import {AddressBottomSheetItem} from '@fastly/components/organisms/AddressBottomSheetItem';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {getAddressBottomSheetIconName} from '@fastly/utils/getAddressBottomSheetIconName';
+import {useUserAddresses} from '@fastly/stores/useUserAddresses';
+import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
+import {Address} from '@fastly/interfaces/app';
 
-export const ListAddressScreen = () => {
+export const ListAddressScreen: React.FC = () => {
   const setCurrentAddress = useUserAddresses(u => u.setCurrentAddress);
   const currentAddress = useUserAddresses(u => u.currentAddress);
   const addresses = useUserAddresses(u => u.addresses);
   const deleteAddress = useUserAddresses(u => u.deleteAddress);
 
   const handleSwitchCurrentAddress = (address: Address) => {
-    if (currentAddress.id === address.id) {
-      return;
-    }
+    if (currentAddress.id === address.id) return;
 
     setCurrentAddress(address);
   };

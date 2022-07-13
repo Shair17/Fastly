@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Icon, Text} from 'react-native-magnus';
-import {Address} from '../../interfaces/appInterfaces';
+import {Address} from '@fastly/interfaces/app';
 
 interface Props {
   borderColor: string;

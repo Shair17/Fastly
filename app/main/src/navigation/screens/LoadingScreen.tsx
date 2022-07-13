@@ -1,8 +1,6 @@
-import React, {FC} from 'react';
-import {LoadingTemplate} from '../../components/templates/LoadingTemplate';
+import React from 'react';
+import {LoadingTemplate} from '@fastly/components/templates/LoadingTemplate';
 
-export interface LoadingScreenProps {}
-
-export const LoadingScreen: FC<LoadingScreenProps> = props => {
+export const LoadingScreen: React.FC = () => {
   return <LoadingTemplate />;
 };

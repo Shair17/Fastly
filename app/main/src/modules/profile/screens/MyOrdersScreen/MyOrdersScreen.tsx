@@ -1,21 +1,21 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Div, Text, Icon} from 'react-native-magnus';
-import {HeaderScreen} from '../../../../components/organisms/HeaderScreen';
-import {ProfileStackParams} from '../../ProfileStackParams.type';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ContainerWithKeyboardAvoidingView} from '../../../../components/templates/ContainerWithKeyboardAvoidingView';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {PulseIndicator} from '@fastly/components/atoms/PulseIndicator';
 import {OngoingOrdersScreen} from './screens/OngoingOrdersScreen';
 import {OrdersHistoryScreen} from './screens/OrdersHistoryScreen';
-import {PulseIndicator} from '../../../../components/atoms/PulseIndicator';
+import {ProfileStackParams} from '../../ProfileStackParams.type';
 
 interface Props
   extends NativeStackScreenProps<ProfileStackParams, 'MyAddresses'> {}
 
 const Tab = createMaterialTopTabNavigator();
 
-export const MyOrdersScreen: FC<Props> = ({navigation}) => {
+export const MyOrdersScreen: React.FC<Props> = ({navigation}) => {
   const goBack = () => {
     navigation.goBack();
   };

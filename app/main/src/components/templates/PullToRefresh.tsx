@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {ScrollView, RefreshControl} from 'react-native';
-import {fastlyColors} from '../../theme/colors';
+import {fastlyColors} from '@fastly/theme';
 
 interface Props {
   refreshing: boolean;

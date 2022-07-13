@@ -1,11 +1,13 @@
-import React, {FC, useState} from 'react';
+import React, {useState} from 'react';
 import {Div, Text} from 'react-native-magnus';
+import {FavoritesStackProps} from '@fastly/navigation/stacks/favorites';
+import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
 import {FavoritesControllerHeader} from './FavoritesControllerHeader';
-import {FavoritesScreenProps} from '../../navigation/screens/app/FavoritesScreen';
-import {PullToRefresh} from '../../components/templates/PullToRefresh';
 import {EmptyFavorites} from './EmptyFavorites';
 
-export const FavoritesController: FC<FavoritesScreenProps> = ({navigation}) => {
+export const FavoritesController: React.FC<FavoritesStackProps> = ({
+  navigation,
+}) => {
   const [hasFavorites, setHasFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 

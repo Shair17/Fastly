@@ -1,10 +1,10 @@
 import React from 'react';
 import {TouchableOpacity, ScrollView} from 'react-native';
 import {Div, Text, Icon, Image} from 'react-native-magnus';
-import {ContactItem} from '../../../components/organisms/ContactItem';
-import {HeaderScreen} from '../../../components/organisms/HeaderScreen';
-import {useUserStore} from '../../../stores/useUserStore';
-import {openLink} from '../../../utils/openLink';
+import {ContactItem} from '@fastly/components/organisms/ContactItem';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {useUserStore} from '@fastly/stores/useUserStore';
+import {openLink} from '@fastly/utils/openLink';
 import {
   FASTLY_FACEBOOK,
   FASTLY_INSTAGRAM,
@@ -17,13 +17,13 @@ import {
   SHAIR_WEB,
   FASTLY_SUPPORT_EMAIL,
   SHAIR_WHATSAPP,
-} from '../../../constants/support.constants';
+} from '@fastly/constants/support';
 import {useClipboard} from '@react-native-clipboard/clipboard';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 
 const supportImageBackground = require('../../../assets/images/support/support-bg.png');
 
-export const SupportScreen = ({navigation}: any) => {
+export const SupportScreen: React.FC = ({navigation}: any) => {
   const [data, setString] = useClipboard();
 
   const name = useUserStore(user => user.name);

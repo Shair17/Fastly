@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
 import {TouchableNativeFeedback, TouchableOpacity} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
-import {HeaderScreen} from '../../components/organisms/HeaderScreen';
 import TextTicker from 'react-native-text-ticker';
-import {Address} from '../../interfaces/appInterfaces';
+import {HeaderScreen} from '@fastly/components/organisms/HeaderScreen';
+import {Address} from '@fastly/interfaces/app';
 
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 

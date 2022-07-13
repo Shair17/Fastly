@@ -6,8 +6,8 @@ import {
   ImagePickerResponse,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import {PersonalInformationType} from '../interfaces/appInterfaces';
-import {AskPersonalInformationSchema} from '../schemas/ask-personal-information.schema';
+import {PersonalInformationType} from '@fastly/interfaces/app';
+import {AskPersonalInformationSchema} from '@fastly/schemas/ask-personal-information';
 
 interface Props {
   email?: string;

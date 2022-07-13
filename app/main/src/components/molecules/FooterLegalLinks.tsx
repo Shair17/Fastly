@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
-import {openLink} from '../../utils/openLink';
+import {openLink} from '@fastly/utils/openLink';
 
 interface Props {}
 

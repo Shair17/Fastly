@@ -6,7 +6,7 @@ import {
   LoginManager,
 } from 'react-native-fbsdk-next';
 import {Icon} from 'react-native-magnus';
-import {useAuthStore} from '../../stores/useAuthStore';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {Button} from '../atoms/Button';
 
 export const LogOutButton = () => {

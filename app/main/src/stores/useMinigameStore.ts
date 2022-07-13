@@ -3,8 +3,8 @@ import {combine} from 'zustand/middleware';
 import {
   miniGameMaxScore as maxScore,
   miniGameMaxScoreKey as maxScoreKey,
-} from '../constants/minigame.constants';
-import {storage} from '../storage';
+} from '@fastly/constants/minigame';
+import {storage} from '@fastly/services/storage';
 
 type MinigameType = {
   keep: boolean;

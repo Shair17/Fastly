@@ -1,16 +1,13 @@
 import {useEffect} from 'react';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
-import {isTokenExpired} from '../services/refresh-token.service';
-import {useAuthStore} from '../stores/useAuthStore';
-import {isValidToken} from '../utils/isValidToken';
+import {isTokenExpired} from '@fastly/services/refresh-token';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {isValidToken} from '@fastly/utils/isValidToken';
 
 export const useShowSessionIsExpired = () => {
-  // const executedRef = useRef<boolean>(false);
   const refreshToken = useAuthStore(s => s.refreshToken);
 
   useEffect(() => {
-    // if (executedRef.current) return;
-
     if (!refreshToken) {
       return;
     }
@@ -32,7 +29,5 @@ export const useShowSessionIsExpired = () => {
         },
       });
     }
-
-    // executedRef.current = true;
-  }, [refreshToken /* executedRef.current */]);
+  }, [refreshToken]);
 };

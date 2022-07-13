@@ -1,12 +1,11 @@
 import React, {FC, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
-import {Input} from '../../../components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '../../../components/templates/ContainerWithKeyboardAvoidingView';
-import {RecentSearches} from '../../../components/organisms/RecentSearches';
-import {RNActivityIndicator} from '../../../components/atoms/RNActivityIndicator';
-import {useRecentSearchesStore} from '../../../stores/useRecentSearchesStore';
-import {useDebounce} from '../../../hooks/useDebounced';
+import {Input} from '@fastly/components/atoms/Input';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
+import {RecentSearches} from '@fastly/components/organisms/RecentSearches';
+import {RNActivityIndicator} from '@fastly/components/atoms/RNActivityIndicator';
+import {useRecentSearchesStore} from '@fastly/stores/useRecentSearchesStore';
 
 interface Props {}
 
@@ -15,7 +14,6 @@ export const SearchScreen: FC<Props> = () => {
   const searchesExists = Object.keys(searches).length > 0;
   const [isLoading, setIsLoading] = useState(true);
   const [_search, setSearch] = useState<string>('');
-  const [search] = useDebounce(_search, 1000);
 
   return (
     <ContainerWithKeyboardAvoidingView flexFull>

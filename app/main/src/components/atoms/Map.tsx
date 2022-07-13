@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, FC} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Div, Icon, Text} from 'react-native-magnus';
 import {ActivityIndicator} from './ActivityIndicator';
 import MapView, {
@@ -7,12 +7,12 @@ import MapView, {
   MapViewProps,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
-import {useLocation} from '../../hooks/useLocation';
+import {useLocation} from '@fastly/hooks/useLocation';
 import {Button} from './Button';
 
 interface Props {}
 
-export const Map: FC<Props> = () => {
+export const Map: React.FC<Props> = () => {
   const {
     hasLocation,
     gpsAccessDenied,

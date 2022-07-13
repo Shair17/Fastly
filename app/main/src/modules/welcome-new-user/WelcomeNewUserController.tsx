@@ -1,21 +1,19 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import * as Animatable from 'react-native-animatable';
-import {WelcomeNewUserScreenProps} from '../../navigation/screens/WelcomeNewUserScreen';
-import {Button} from '../../components/atoms/Button';
-import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import {useUserStore} from '../../stores/useUserStore';
+import {WelcomeNewUserScreenProps} from '@fastly/navigation/screens/WelcomeNewUserScreen';
+import {Button} from '@fastly/components/atoms/Button';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {useUserStore} from '@fastly/stores/useUserStore';
 
-export const WelcomeNewUserController: FC<WelcomeNewUserScreenProps> = ({
+export const WelcomeNewUserController: React.FC<WelcomeNewUserScreenProps> = ({
   navigation,
 }) => {
   const name = useUserStore(user => user.name);
   const firstName = name.split(' ')[0];
 
   StatusBar.setTranslucent(false);
-  // StatusBar.setBackgroundColor('#fff');
-  // StatusBar.setBarStyle('dark-content');
 
   const handleNext = () => {
     navigation.navigate('AskPersonalInformationScreen');

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {Div} from 'react-native-magnus';
 import {Carousel} from '../atoms/Carousel';
 
@@ -6,7 +6,7 @@ interface Props {
   data: {image: any}[];
 }
 
-export const AdvertisementsCarousel: FC<Props> = ({data}) => {
+export const AdvertisementsCarousel: React.FC<Props> = ({data}) => {
   return (
     <Div>
       <Carousel>

@@ -6,7 +6,7 @@ import {
   MAX_HEIGHT,
   GAP_SIZE,
   PIPE_WIDTH,
-} from '../../constants/minigame.constants';
+} from '@fastly/constants/minigame';
 
 let tick = 0;
 let pose = 1;

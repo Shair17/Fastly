@@ -1,7 +1,7 @@
 import create from 'zustand';
 import {combine} from 'zustand/middleware';
-import {http} from '../services/http.service';
-import {isLoggedIn} from '../services/refresh-token.service';
+import {http} from '@fastly/services/http';
+import {isLoggedIn} from '@fastly/services/refresh-token';
 
 type CartType = {};
 

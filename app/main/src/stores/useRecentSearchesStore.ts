@@ -3,8 +3,8 @@ import {combine} from 'zustand/middleware';
 import {
   recentSearchesKey,
   defaultRecentSearches,
-} from '../constants/search.constants';
-import {storage} from '../storage';
+} from '@fastly/constants/search';
+import {storage} from '@fastly/services/storage';
 
 type RecentSearchesType = {
   searches: string[];

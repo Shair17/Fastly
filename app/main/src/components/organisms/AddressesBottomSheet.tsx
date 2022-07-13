@@ -1,23 +1,22 @@
-import React, {FC, useState} from 'react';
+import React from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Div, Text, Radio, Icon} from 'react-native-magnus';
 import {useNavigation} from '@react-navigation/native';
-import {useUserAddresses} from '../../stores/useUserAddresses';
-import {useAddressesBottomSheetStore} from '../../stores/useAddressesBottomSheetStore';
-import {AddressBottomSheetItem} from './AddressBottomSheetItem';
-import {getAddressBottomSheetIconName} from '../../utils/getAddressBottomSheetIconName';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ApplicationBottomTabParams} from '../../navigation/ApplicationBottomTab';
-import {Address} from '../../interfaces/appInterfaces';
+import {ApplicationParams} from '@fastly/navigation/bottom-tabs/Root';
+import {getAddressBottomSheetIconName} from '@fastly/utils/getAddressBottomSheetIconName';
+import {useUserAddresses, useAddressesBottomSheetStore} from '@fastly/stores';
+import {Address} from '@fastly/interfaces/app';
+import {AddressBottomSheetItem} from './AddressBottomSheetItem';
 
 interface Props {}
 
 type NavigationProps = NativeStackNavigationProp<
-  ApplicationBottomTabParams,
+  ApplicationParams,
   'ProfileStack'
 >;
 
-export const AddressesBottomSheet: FC<Props> = () => {
+export const AddressesBottomSheet: React.FC<Props> = () => {
   const setCurrentAddress = useUserAddresses(u => u.setCurrentAddress);
   const currentAddress = useUserAddresses(u => u.currentAddress);
   const addresses = useUserAddresses(u => u.addresses);

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import Pinar, {Props as PinarProps} from 'pinar';
+import Pinar from 'pinar';
 
 interface Props {
   height?: number;
