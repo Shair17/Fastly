@@ -5,5 +5,5 @@ interface IOrderQueue {}
 
 @Service('OrderQueueServiceToken')
 export class OrderQueue implements IOrderQueue {
-	constructor(private readonly orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService) {}
 }

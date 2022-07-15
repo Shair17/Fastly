@@ -1,3 +1,3 @@
-import { CustomerController } from "./customer.controller";
+import { CustomerController } from './customer.controller';
 
 export const CustomerModule = [CustomerController];

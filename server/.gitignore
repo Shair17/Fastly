@@ -6,3 +6,8 @@ node_modules
 dist
 
 public/assets/*
+
+prisma/docs
+prisma/dmbl
+prisma/migrations
+

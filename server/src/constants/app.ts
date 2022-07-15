@@ -1,7 +1,7 @@
 const { version: currentServerVersion } = require('../../package.json');
- const {
- 	version: currentAppVersion,
- } = require('../../../app/main/package.json');
+const {
+  version: currentAppVersion,
+} = require('../../../app/main/package.json');
 
 export const MAX_USER_ADDRESSES = 10;
 
@@ -14,7 +14,7 @@ const fallBackAppVersion = '1.0.0';
 export const serverHost = '0.0.0.0';
 export const serverName = 'Fastly-Shair@Server-Root/Main';
 export const serverVersion =
-	(currentServerVersion as string) || fallBackServerVersion;
+  (currentServerVersion as string) || fallBackServerVersion;
 
 export const appDeveloper = 'Shair <hello@shair.dev>';
 export const appName = 'Fastly Delivery Perú ⚡';
@@ -24,4 +24,4 @@ export const appVersion = (currentAppVersion as string) || fallBackAppVersion;
 // x.V.x -> minor updates
 // x.x.V -> patch updates
 export const appUpdateNeeded =
-	+serverVersion.split('.')[0] > +appVersion.split('.')[0];
+  +serverVersion.split('.')[0] > +appVersion.split('.')[0];

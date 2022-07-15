@@ -8,153 +8,153 @@ import { ProductService } from '../product/product.service';
 
 @Service('OrderServiceToken')
 export class OrderService {
-	constructor(
-		private readonly databaseService: DatabaseService,
-		private readonly dealerService: DealerService,
-		private readonly userService: UserService,
-		private readonly productService: ProductService
-	) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly dealerService: DealerService,
+    private readonly userService: UserService,
+    private readonly productService: ProductService,
+  ) {}
 
-	getById(id: string) {
-		return this.databaseService.order.findUnique({ where: { id } });
-	}
+  getById(id: string) {
+    return this.databaseService.order.findUnique({ where: { id } });
+  }
 
-	async getByIdOrThrow(id: string) {
-		const order = await this.getById(id);
+  async getByIdOrThrow(id: string) {
+    const order = await this.getById(id);
 
-		if (!order) {
-			throw new NotFound();
-		}
+    if (!order) {
+      throw new NotFound();
+    }
 
-		return order;
-	}
+    return order;
+  }
 
-	async getOrdersByStatus(status: OrderStatus) {
-		return this.databaseService.order.findMany({ where: { status } });
-	}
+  async getOrdersByStatus(status: OrderStatus) {
+    return this.databaseService.order.findMany({ where: { status } });
+  }
 
-	async createOrder(order: Order) {
-		const {
-			arrivalTime,
-			dealerId,
-			deliveryPrice,
-			message,
-			productId,
-			quantity,
-			status,
-			userId,
-		} = order;
+  async createOrder(order: Order) {
+    const {
+      arrivalTime,
+      dealerId,
+      deliveryPrice,
+      message,
+      productId,
+      quantity,
+      status,
+      userId,
+    } = order;
 
-		const user = await this.userService.getByIdOrThrow(userId);
-		const product = await this.productService.getByIdOrThrow(productId);
+    const user = await this.userService.getByIdOrThrow(userId);
+    const product = await this.productService.getByIdOrThrow(productId);
 
-		return this.databaseService.order.create({
-			data: {
-				arrivalTime,
-				quantity,
-				status,
-				deliveryPrice,
-				message,
-				dealer: {
-					connect: {
-						id: dealerId || undefined,
-					},
-				},
-				product: {
-					connect: {
-						id: product.id,
-					},
-				},
-				user: {
-					connect: {
-						id: user.id,
-					},
-				},
-			},
-		});
-	}
+    return this.databaseService.order.create({
+      data: {
+        arrivalTime,
+        quantity,
+        status,
+        deliveryPrice,
+        message,
+        dealer: {
+          connect: {
+            id: dealerId || undefined,
+          },
+        },
+        product: {
+          connect: {
+            id: product.id,
+          },
+        },
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+  }
 
-	async setDealerToOrder(dealerId: string, orderId: string) {
-		const dealer = await this.dealerService.getByIdOrThrow(dealerId);
-		const order = await this.getByIdOrThrow(orderId);
+  async setDealerToOrder(dealerId: string, orderId: string) {
+    const dealer = await this.dealerService.getByIdOrThrow(dealerId);
+    const order = await this.getByIdOrThrow(orderId);
 
-		return this.databaseService.order.update({
-			where: {
-				id: order.id,
-			},
-			data: {
-				dealer: {
-					connect: {
-						id: dealer.id,
-					},
-				},
-			},
-		});
-	}
+    return this.databaseService.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        dealer: {
+          connect: {
+            id: dealer.id,
+          },
+        },
+      },
+    });
+  }
 
-	async setArrivalTimeToOrder(arrivalTime: Date, orderId: string) {
-		const order = await this.getByIdOrThrow(orderId);
+  async setArrivalTimeToOrder(arrivalTime: Date, orderId: string) {
+    const order = await this.getByIdOrThrow(orderId);
 
-		return this.databaseService.order.update({
-			where: { id: order.id },
-			data: { arrivalTime },
-		});
-	}
+    return this.databaseService.order.update({
+      where: { id: order.id },
+      data: { arrivalTime },
+    });
+  }
 
-	async setDeliveryPriceToOrder(deliveryPrice: number, orderId: string) {
-		const order = await this.getByIdOrThrow(orderId);
+  async setDeliveryPriceToOrder(deliveryPrice: number, orderId: string) {
+    const order = await this.getByIdOrThrow(orderId);
 
-		return this.databaseService.order.update({
-			where: {
-				id: order.id,
-			},
-			data: {
-				deliveryPrice,
-			},
-		});
-	}
+    return this.databaseService.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        deliveryPrice,
+      },
+    });
+  }
 
-	async setMessageToOrder(message: string, orderId: string) {
-		const order = await this.getByIdOrThrow(orderId);
+  async setMessageToOrder(message: string, orderId: string) {
+    const order = await this.getByIdOrThrow(orderId);
 
-		return this.databaseService.order.update({
-			where: {
-				id: order.id,
-			},
-			data: {
-				message,
-			},
-		});
-	}
+    return this.databaseService.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        message,
+      },
+    });
+  }
 
-	async updateOrderStatus(id: string, status: OrderStatus) {
-		return this.databaseService.order.update({
-			where: { id },
-			data: {
-				status,
-			},
-		});
-	}
+  async updateOrderStatus(id: string, status: OrderStatus) {
+    return this.databaseService.order.update({
+      where: { id },
+      data: {
+        status,
+      },
+    });
+  }
 
-	async deleteOrder(orderId: string) {
-		return this.databaseService.order.delete({ where: { id: orderId } });
-	}
+  async deleteOrder(orderId: string) {
+    return this.databaseService.order.delete({ where: { id: orderId } });
+  }
 
-	async getOrdersFromUser(userId: string) {
-		const user = await this.userService.getByIdOrThrow(userId);
+  async getOrdersFromUser(userId: string) {
+    const user = await this.userService.getByIdOrThrow(userId);
 
-		return user.orders;
-	}
+    return user.orders;
+  }
 
-	async getOrdersFromDealer(dealerId: string) {
-		const dealer = await this.dealerService.getByIdOrThrow(dealerId);
+  async getOrdersFromDealer(dealerId: string) {
+    const dealer = await this.dealerService.getByIdOrThrow(dealerId);
 
-		return this.databaseService.order.findMany({
-			where: {
-				dealer: {
-					id: dealer.id,
-				},
-			},
-		});
-	}
+    return this.databaseService.order.findMany({
+      where: {
+        dealer: {
+          id: dealer.id,
+        },
+      },
+    });
+  }
 }
