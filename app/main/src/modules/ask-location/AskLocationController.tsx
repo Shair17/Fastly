@@ -7,22 +7,22 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import useAxios from 'axios-hooks';
 import {defaultTags} from './defaultTags';
-import {AskLocationScreenProps} from '@fastly/navigation/screens/AskLocationScreen';
+import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
 import {ActivityIndicator} from '@fastly/components/atoms/ActivityIndicator';
+import {RetryPhoneGPS} from '@fastly/components/molecules/RetryPhoneGPS';
+import {Button} from '@fastly/components/atoms/Button';
+import {Input} from '@fastly/components/atoms/Input';
+import {AskLocationScreenProps} from '@fastly/navigation/screens/AskLocationScreen';
+import {LocationInformationSchema} from '@fastly/schemas/ask-location';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {useLocation} from '@fastly/hooks/useLocation';
-import {Button} from '@fastly/components/atoms/Button';
-import {RetryPhoneGPS} from '@fastly/components/molecules/RetryPhoneGPS';
-import {LocationInformationSchema} from '@fastly/schemas/ask-location';
-import {Input} from '@fastly/components/atoms/Input';
-import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/ContainerWithKeyboardAvoidingView';
 import {LocationInformationType, TagType} from '@fastly/interfaces/app';
 
 export const AskLocationController: React.FC<AskLocationScreenProps> = ({
   navigation,
   route,
 }) => {
-  const [{loading}, executeUpdateNewUser] = useAxios(
+  const [{loading}, executeUpdateNewUser] = useAxios<{isNewUser: boolean}>(
     {
       url: '/users/new-user',
       method: 'PUT',

@@ -1,11 +1,11 @@
 export const getAddressBottomSheetIconName = (iconName: string): string => {
   return (
     {
-      casa: 'home',
-      amigo: 'people',
-      pareja: 'heart',
-      trabajo: 'ios-briefcase',
-      universidad: 'school',
+      CASA: 'home',
+      AMIGO: 'people',
+      PAREJA: 'heart',
+      TRABAJO: 'ios-briefcase',
+      UNIVERSIDAD: 'school',
     }[iconName] || 'ellipsis-horizontal'
   );
 };

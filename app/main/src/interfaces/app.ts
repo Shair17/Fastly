@@ -46,12 +46,12 @@ export enum StoreCategory {
 }
 
 export type TagType =
-  | 'casa'
-  | 'amigo'
-  | 'pareja'
-  | 'trabajo'
-  | 'universidad'
-  | 'otro';
+  | 'CASA'
+  | 'AMIGO'
+  | 'PAREJA'
+  | 'TRABAJO'
+  | 'UNIVERSIDAD'
+  | 'OTRO';
 
 export interface Address {
   city: string;
