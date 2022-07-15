@@ -3,7 +3,7 @@ export const trimStrings = (...strings: string[]) => {
 
 	strings.forEach((v) => {
 		// Verify this
-		if (v === undefined || v === null) v = '';
+		if (!v || v === undefined || v === null) v = '';
 
 		s.push(v.trim());
 	});

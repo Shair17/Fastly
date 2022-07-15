@@ -1,4 +1,5 @@
 import { customAlphabet } from 'nanoid';
+import { replaceAt } from './replaceAt';
 
 const nanoid = customAlphabet('0123456789', 9);
 
@@ -6,5 +7,7 @@ const nanoid = customAlphabet('0123456789', 9);
  * Useful for phone
  */
 export const generateRandomPhone = (): string => {
-	return nanoid(9);
+	const random = nanoid(9);
+
+	return replaceAt(random, 0, '9');
 };

@@ -1,11 +1,11 @@
 import { Type, Static } from '@sinclair/typebox';
-import { UserAddressTag } from '../../shared/enums/user-address-tag.enum';
+import { UserAddressTag } from '@prisma/client';
 import {
 	LATITUDE_REGEX,
 	LONGITUDE_REGEX,
 	PHONE_NUMBER_REGEX,
 	DNI_REGEX,
-} from '../../constants/regex.constants';
+} from '@fastly/constants/regex';
 
 export const UpdateNewUserBody = Type.Object(
 	{
@@ -114,7 +114,7 @@ export type EditItemCartQuantityParamsType = Static<
 
 export const EditItemCartQuantityBody = Type.Object(
 	{
-		quantity: Type.Number({ minimum: 0, default: 0 }),
+		quantity: Type.Number({ minimum: 0, default: 1 }),
 	},
 	{
 		additionalProperties: false,

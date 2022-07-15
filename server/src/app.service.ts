@@ -6,11 +6,11 @@ import {
 	appVersion,
 	appDeveloper,
 	appUpdateNeeded,
-} from './constants/app.constants';
+} from '@fastly/constants/app';
 
 @Service('AppServiceToken')
 export class AppService {
-	getApp() {
+	async getApp() {
 		return {
 			serverName,
 			serverVersion,

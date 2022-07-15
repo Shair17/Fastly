@@ -1,29 +1,20 @@
-import { Service, Initializer } from 'fastify-decorators';
-import { DataSourceProvider } from '../../database/DataSourceProvider';
-import { Repository } from 'typeorm';
-import { Store, StoreCategory } from './store.entity';
-import { NotFound, BadRequest } from 'http-errors';
+import { Service } from 'fastify-decorators';
+import { NotFound, BadRequest, Unauthorized } from 'http-errors';
+import { DatabaseService } from '@fastly/database/DatabaseService';
+import { trimStrings } from '@fastly/utils/trimStrings';
 import { CreateStoreBodyType } from './store.schema';
-import { trimStrings } from '../../utils/trimStrings';
 import { AdminService } from '../admin/admin.service';
+import { StoreCategory } from '@prisma/client';
 
 @Service('StoreServiceToken')
 export class StoreService {
-	private storeRepository: Repository<Store>;
-
 	constructor(
-		private readonly dataSourceProvider: DataSourceProvider,
+		private readonly databaseService: DatabaseService,
 		private readonly adminService: AdminService
 	) {}
 
-	@Initializer([DataSourceProvider])
-	async init(): Promise<void> {
-		this.storeRepository =
-			this.dataSourceProvider.dataSource.getRepository(Store);
-	}
-
-	getStores(): Promise<Store[]> {
-		return this.storeRepository.find();
+	getStores() {
+		return this.databaseService.store.findMany();
 	}
 
 	getCategories() {
@@ -32,17 +23,21 @@ export class StoreService {
 		};
 	}
 
-	async getById(id: string): Promise<Store> {
-		const store = await this.storeRepository.findOneBy({ id });
+	getById(id: string) {
+		return this.databaseService.store.findUnique({ where: { id } });
+	}
+
+	async getByIdOrThrow(id: string) {
+		const store = await this.getById(id);
 
 		if (!store) {
-			throw new NotFound();
+			throw new NotFound(`Store with id ${id} doesn't exists.`);
 		}
 
 		return store;
 	}
 
-	async getByCategory(category: string): Promise<Store[]> {
+	async getStoresByCategory(category: string) {
 		const match = Object.keys(StoreCategory)
 			.map((c) => c.toLowerCase())
 			.includes(category);
@@ -51,35 +46,47 @@ export class StoreService {
 			throw new BadRequest();
 		}
 
-		return this.storeRepository.findBy({
-			category:
-				StoreCategory[category.toUpperCase() as keyof typeof StoreCategory],
+		return this.databaseService.store.findMany({
+			where: {
+				category:
+					StoreCategory[category.toUpperCase() as keyof typeof StoreCategory],
+			},
 		});
 	}
 
 	async createStore(data: CreateStoreBodyType) {
-		const [owner, address, name] = trimStrings(
+		const [ownerId, address, name] = trimStrings(
 			data.owner,
 			data.address,
 			data.name
 		);
+		const {
+			category,
+			categoryDescription,
+			closeTime,
+			description,
+			logo,
+			openTime,
+		} = data;
 
-		const ownerFound = await this.adminService.getById(owner);
+		const owner = await this.adminService.getByIdOrThrow(ownerId);
 
-		if (!ownerFound) {
-			throw new BadRequest();
-		}
-
-		const newStore = await this.storeRepository.save({
-			address,
-			category: data.category,
-			categoryDescription: data.categoryDescription,
-			closeTime: data.closeTime,
-			openTime: data.openTime,
-			description: data.description,
-			logo: data.logo,
-			name,
-			owner: ownerFound,
+		const newStore = await this.databaseService.store.create({
+			data: {
+				address,
+				category,
+				categoryDescription,
+				closeTime,
+				openTime,
+				description,
+				logo,
+				name,
+				Owner: {
+					connect: {
+						id: owner.id,
+					},
+				},
+			},
 		});
 
 		return {
@@ -87,9 +94,5 @@ export class StoreService {
 			store: newStore,
 			success: true,
 		};
-	}
-
-	save(store: Partial<Store>): Promise<Partial<Store> & Store> {
-		return this.storeRepository.save(store);
 	}
 }

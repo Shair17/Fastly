@@ -1,5 +1,22 @@
 import { Service } from 'fastify-decorators';
 import {
+	Unauthorized,
+	NotFound,
+	BadRequest,
+	InternalServerError,
+} from 'http-errors';
+import { MailService } from '@fastly/shared/services/mail.service';
+import { TokenService } from '@fastly/shared/services/token.service';
+import { HttpService } from '@fastly/shared/services/http.service';
+import { PasswordService } from '@fastly/shared/services/password.service';
+import { trimStrings } from '@fastly/utils/trimStrings';
+import { buildFacebookUri } from '@fastly/utils/buildFacebookUri';
+import { UserService } from '../user/user.service';
+import { AdminService } from '../admin/admin.service';
+import { CustomerService } from '../customer/customer.service';
+import { DealerService } from '../dealer/dealer.service';
+import { FacebookGraphApiResponse } from './dto/facebookGraphApiResponse.dto';
+import {
 	LogInWithFacebookType,
 	AdminLoginType,
 	AdminRegisterType,
@@ -21,28 +38,9 @@ import {
 	RefreshCustomerTokenType,
 	RefreshDealerTokenType,
 } from './auth.schema';
-import { HttpService } from '../../shared/services/http.service';
-import { PasswordService } from '../../shared/services/password.service';
-import { trimStrings } from '../../utils/trimStrings';
-import { UserService } from '../user/user.service';
-import { AdminService } from '../admin/admin.service';
-import { buildFacebookUri } from '../../utils/buildFacebookUri';
-import { FacebookGraphApiResponse } from './dto/facebookGraphApiResponse.dto';
-import {
-	Unauthorized,
-	NotFound,
-	BadRequest,
-	InternalServerError,
-} from 'http-errors';
-import { CustomerService } from '../customer/customer.service';
-import { DealerService } from '../dealer/dealer.service';
-import { TokenService } from '../../shared/services/token.service';
-import { MailService } from '../../shared/services/mail.service';
-import { User } from '../user/user.entity';
-
-/**
- * TODO: Probar la lib ´dayjs´ para manejar las fechas
- */
+import { AvatarService } from '@fastly/shared/services/avatar.service';
+import { ImageService } from '@fastly/shared/services/image.service';
+import { isString } from '@fastly/utils';
 
 @Service('AuthServiceToken')
 export class AuthService {
@@ -54,7 +52,9 @@ export class AuthService {
 		private readonly dealerService: DealerService,
 		private readonly tokenService: TokenService,
 		private readonly mailService: MailService,
-		private readonly passwordService: PasswordService
+		private readonly passwordService: PasswordService,
+		private readonly avatarService: AvatarService,
+		private readonly imageService: ImageService
 	) {}
 
 	async logInWithFacebook(data: LogInWithFacebookType) {
@@ -84,27 +84,22 @@ export class AuthService {
 
 		const user = await this.userService.getByFacebookUserID(facebookId);
 
-		if (user !== null) {
-			if (user.isBanned) {
-				console.log('usuario baneado');
-				console.log(
-					'benado?',
-					user.isBanned ? 'si' : 'no',
-					'razón:',
-					user.banReason
-				);
-				throw new Unauthorized('banned');
-			}
+		if (!user) {
+			const newUser = await this.userService.createUser({
+				name,
+				facebookId,
+				facebookAccessToken,
+			});
 
 			let payload: { id: string; name: string; email?: string } = {
-				id: user.id,
-				name: user.name,
+				id: newUser.id,
+				name: newUser.name,
 			};
 
-			if (user.email) {
+			if (newUser.email) {
 				payload = {
 					...payload,
-					email: user.email,
+					email: newUser.email,
 				};
 			}
 
@@ -114,52 +109,48 @@ export class AuthService {
 			);
 
 			try {
-				user.refreshToken = refreshToken;
-
-				await this.userService.save(user);
+				await this.userService.updateUserRefreshToken(newUser.id, refreshToken);
 			} catch (error) {
-				console.log(error);
 				throw new InternalServerError();
 			}
 
 			const {
-				checkIsNewUser,
-				facebookAccessToken,
-				refreshToken: userRefreshToken,
-				...restOfUser
-			} = user;
+				facebookAccessToken: newUserFacebookAccessToken,
+				refreshToken: newUserRefreshToken,
+				...restOfNewUser
+			} = newUser;
 
 			return {
 				accessToken,
 				refreshToken,
 				user: {
-					...restOfUser,
+					...restOfNewUser,
+					// @ts-ignore
+					isNewUser: this.userService.isNewUser(newUser),
 				},
 			};
 		}
 
-		// El usuario es nuevo, vamos a crear uno
-		// const newUser = await this.userService.save({
-		// 	facebookId,
-		// 	facebookAccessToken,
-		// 	name,
-		// });
-		const _newUser = new User();
-		_newUser.facebookId = facebookId;
-		_newUser.facebookAccessToken = facebookAccessToken;
-		_newUser.name = name;
-
-		const newUser = await this.userService.save(_newUser);
+		if (user.isBanned) {
+			console.log('usuario baneado');
+			console.log(
+				'benado?',
+				user.isBanned ? 'si' : 'no',
+				'razón:',
+				user.banReason
+			);
+			throw new Unauthorized('banned');
+		}
 
 		let payload: { id: string; name: string; email?: string } = {
-			id: newUser.id,
-			name: newUser.name,
+			id: user.id,
+			name: user.name,
 		};
 
-		if (newUser.email) {
+		if (user.email) {
 			payload = {
 				...payload,
-				email: newUser.email,
+				email: user.email,
 			};
 		}
 
@@ -169,25 +160,24 @@ export class AuthService {
 		);
 
 		try {
-			newUser.refreshToken = refreshToken;
-
-			await this.userService.save(newUser);
+			await this.userService.updateUserRefreshToken(user.id, refreshToken);
 		} catch (error) {
+			console.log(error);
 			throw new InternalServerError();
 		}
 
 		const {
-			checkIsNewUser,
-			facebookAccessToken: newUserFacebookAccessToken,
-			refreshToken: newUserRefreshToken,
-			...restOfNewUser
-		} = newUser;
+			facebookAccessToken: _facebookAccessToken,
+			refreshToken: userRefreshToken,
+			...restOfUser
+		} = user;
 
 		return {
 			accessToken,
 			refreshToken,
 			user: {
-				...restOfNewUser,
+				...restOfUser,
+				isNewUser: this.userService.isNewUser(user),
 			},
 		};
 	}
@@ -195,11 +185,7 @@ export class AuthService {
 	async refreshFacebookToken({ refreshToken }: RefreshFacebookTokenType) {
 		const decoded = this.tokenService.verifyRefreshToken('user', refreshToken);
 
-		const user = await this.userService.getById(decoded.id);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
+		const user = await this.userService.getByIdOrThrow(decoded.id);
 
 		let payload: { id: string; name: string; email?: string } = {
 			id: user.id,
@@ -224,16 +210,10 @@ export class AuthService {
 	}
 
 	async logOutFromFacebook(id: string) {
-		const user = await this.userService.getById(id);
-
-		if (!user) {
-			throw new BadRequest();
-		}
+		const user = await this.userService.getByIdOrThrow(id);
 
 		try {
-			user.refreshToken = null;
-
-			await this.userService.save(user);
+			await this.userService.updateUserRefreshToken(user.id, null);
 		} catch (error) {
 			console.log(error);
 			throw new InternalServerError();
@@ -276,8 +256,7 @@ export class AuthService {
 		);
 
 		try {
-			admin.refreshToken = refreshToken;
-			await this.adminService.save(admin);
+			await this.adminService.updateAdminRefreshToken(admin.id, refreshToken);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -286,7 +265,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
 			...restOfAdmin
 		} = admin;
 
@@ -308,6 +286,7 @@ export class AuthService {
 			data.phone,
 			data.birthDate
 		);
+		let { avatar } = data;
 
 		const numberOfAdmins = await this.adminService.count();
 
@@ -321,9 +300,15 @@ export class AuthService {
 			throw new BadRequest('account_taken');
 		}
 
+		if (avatar && isString(avatar)) {
+			avatar = await this.imageService.saveJpgFromBase64(avatar, 'admins');
+		}
+
+		const defaultAvatar = this.avatarService.getDefaultAvatar();
+
 		const newAdmin = await this.adminService.createAdmin({
 			address,
-			avatar: data.avatar,
+			avatar: avatar || defaultAvatar,
 			birthDate,
 			dni,
 			email,
@@ -342,8 +327,10 @@ export class AuthService {
 		);
 
 		try {
-			newAdmin.refreshToken = refreshToken;
-			await this.adminService.save(newAdmin);
+			await this.adminService.updateAdminRefreshToken(
+				newAdmin.id,
+				refreshToken
+			);
 		} catch (error) {
 			console.log('error?');
 			throw new InternalServerError();
@@ -353,7 +340,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
 			...restOfAdmin
 		} = newAdmin;
 
@@ -395,9 +381,10 @@ export class AuthService {
 		}
 
 		try {
-			admin.resetPasswordToken = resetPasswordToken;
-
-			await this.adminService.save(admin);
+			await this.adminService.updateAdminResetPasswordToken(
+				admin.id,
+				resetPasswordToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -421,11 +408,7 @@ export class AuthService {
 			resetPasswordToken
 		);
 
-		const admin = await this.adminService.getById(decoded.id);
-
-		if (!admin) {
-			throw new Unauthorized();
-		}
+		const admin = await this.adminService.getByIdOrThrow(decoded.id);
 
 		if (
 			admin.resetPasswordToken &&
@@ -437,9 +420,7 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			admin.password = hashedPassword;
-
-			await this.adminService.save(admin);
+			await this.adminService.updateAdminPassword(admin.id, hashedPassword);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -468,9 +449,7 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			admin.password = hashedPassword;
-
-			await this.adminService.save(admin);
+			await this.adminService.updateAdminPassword(admin.id, hashedPassword);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -485,11 +464,7 @@ export class AuthService {
 	async refreshAdminToken({ refreshToken }: RefreshAdminTokenType) {
 		const decoded = this.tokenService.verifyRefreshToken('admin', refreshToken);
 
-		const admin = await this.adminService.getById(decoded.id);
-
-		if (!admin) {
-			throw new Unauthorized();
-		}
+		const admin = await this.adminService.getByIdOrThrow(decoded.id);
 
 		const accessToken = this.tokenService.generateAccessToken('admin', {
 			id: admin.id,
@@ -506,16 +481,10 @@ export class AuthService {
 	}
 
 	async logOutAdmin(id: string) {
-		const admin = await this.adminService.getById(id);
-
-		if (!admin) {
-			throw new Unauthorized();
-		}
+		const admin = await this.adminService.getByIdOrThrow(id);
 
 		try {
-			admin.refreshToken = null;
-
-			await this.adminService.save(admin);
+			await this.adminService.updateAdminRefreshToken(admin.id, null);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -559,9 +528,10 @@ export class AuthService {
 		);
 
 		try {
-			customer.refreshToken = refreshToken;
-
-			await this.customerService.save(customer);
+			await this.customerService.updateCustomerRefreshToken(
+				customer.id,
+				refreshToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -570,8 +540,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
-			stores,
 			...restOfCustomer
 		} = customer;
 
@@ -593,6 +561,7 @@ export class AuthService {
 			data.phone,
 			data.birthDate
 		);
+		let { avatar } = data;
 
 		const foundCustomer = await this.customerService.getByEmail(email);
 
@@ -602,9 +571,15 @@ export class AuthService {
 
 		const hashedPassword = await this.passwordService.hash(data.password);
 
-		const newCustomer = await this.customerService.save({
+		if (avatar && isString(avatar)) {
+			avatar = await this.imageService.saveJpgFromBase64(avatar, 'customers');
+		}
+
+		const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+		const newCustomer = await this.customerService.create({
 			address,
-			avatar: data.avatar,
+			avatar: avatar || defaultAvatar,
 			birthDate: new Date(birthDate),
 			dni,
 			email,
@@ -624,9 +599,10 @@ export class AuthService {
 		);
 
 		try {
-			newCustomer.refreshToken = refreshToken;
-
-			await this.customerService.save(newCustomer);
+			await this.customerService.updateCustomerRefreshToken(
+				newCustomer.id,
+				refreshToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -635,8 +611,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
-			stores,
 			...restOfCustomer
 		} = newCustomer;
 
@@ -678,9 +652,10 @@ export class AuthService {
 		}
 
 		try {
-			customer.resetPasswordToken = resetPasswordToken;
-
-			await this.customerService.save(customer);
+			await this.customerService.updateCustomerResetPasswordToken(
+				customer.id,
+				resetPasswordToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -704,11 +679,7 @@ export class AuthService {
 			resetPasswordToken
 		);
 
-		const customer = await this.customerService.getById(decoded.id);
-
-		if (!customer) {
-			throw new Unauthorized();
-		}
+		const customer = await this.customerService.getByIdOrThrow(decoded.id);
 
 		if (
 			customer.resetPasswordToken &&
@@ -720,9 +691,10 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			customer.password = hashedPassword;
-
-			await this.customerService.save(customer);
+			await this.customerService.updateCustomerPassword(
+				customer.id,
+				hashedPassword
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -751,9 +723,10 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			customer.password = hashedPassword;
-
-			await this.customerService.save(customer);
+			await this.customerService.updateCustomerPassword(
+				customer.id,
+				hashedPassword
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -771,11 +744,7 @@ export class AuthService {
 			refreshToken
 		);
 
-		const customer = await this.customerService.getById(decoded.id);
-
-		if (!customer) {
-			throw new Unauthorized();
-		}
+		const customer = await this.customerService.getByIdOrThrow(decoded.id);
 
 		const accessToken = this.tokenService.generateAccessToken('customer', {
 			id: customer.id,
@@ -792,16 +761,11 @@ export class AuthService {
 	}
 
 	async logOutCustomer(id: string) {
-		const customer = await this.customerService.getById(id);
-
-		if (!customer) {
-			throw new Unauthorized();
-		}
+		const customer = await this.customerService.getByIdOrThrow(id);
 
 		try {
 			customer.refreshToken = null;
-
-			await this.customerService.save(customer);
+			await this.customerService.updateCustomerRefreshToken(customer.id, null);
 		} catch (error) {
 			console.log(error);
 			throw new InternalServerError();
@@ -819,12 +783,10 @@ export class AuthService {
 		const dealer = await this.dealerService.getByEmail(email);
 
 		if (!dealer) {
-			console.log('no hay el dealer');
 			throw new Unauthorized('invalid_credentials');
 		}
 
 		if (!(await this.passwordService.verify(dealer.password, data.password))) {
-			console.log('contraseña incorrecta del dealer');
 			throw new Unauthorized('invalid_credentials');
 		}
 
@@ -846,9 +808,10 @@ export class AuthService {
 		);
 
 		try {
-			dealer.refreshToken = refreshToken;
-
-			await this.dealerService.save(dealer);
+			await this.dealerService.updateDealerRefreshToken(
+				dealer.id,
+				refreshToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -857,11 +820,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
-			calcDealerRanking,
-			rankings,
-			vehicle,
-			orders,
 			...restOfDealer
 		} = dealer;
 
@@ -883,6 +841,7 @@ export class AuthService {
 			data.phone,
 			data.birthDate
 		);
+		let { avatar } = data;
 
 		const foundDealer = await this.dealerService.getByEmail(email);
 
@@ -892,11 +851,15 @@ export class AuthService {
 
 		const hashedPassword = await this.passwordService.hash(data.password);
 
-		// birthDate example: new Date("11/29/2001")
+		if (avatar && isString(avatar)) {
+			avatar = await this.imageService.saveJpgFromBase64(avatar, 'dealers');
+		}
 
-		const newDealer = await this.dealerService.save({
+		const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+		const newDealer = await this.dealerService.create({
 			address,
-			avatar: data.avatar,
+			avatar: avatar || defaultAvatar,
 			birthDate: new Date(birthDate),
 			dni,
 			email,
@@ -916,9 +879,10 @@ export class AuthService {
 		);
 
 		try {
-			newDealer.refreshToken = refreshToken;
-
-			await this.dealerService.save(newDealer);
+			await this.dealerService.updateDealerRefreshToken(
+				newDealer.id,
+				refreshToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -927,11 +891,6 @@ export class AuthService {
 			password,
 			refreshToken: _refreshToken,
 			resetPasswordToken,
-			calcUserAge,
-			calcDealerRanking,
-			rankings,
-			vehicle,
-			orders,
 			...restOfDealer
 		} = newDealer;
 
@@ -973,9 +932,10 @@ export class AuthService {
 		}
 
 		try {
-			dealer.resetPasswordToken = resetPasswordToken;
-
-			await this.dealerService.save(dealer);
+			await this.dealerService.updateDealerResetPasswordToken(
+				dealer.id,
+				resetPasswordToken
+			);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -999,11 +959,7 @@ export class AuthService {
 			resetPasswordToken
 		);
 
-		const dealer = await this.dealerService.getById(decoded.id);
-
-		if (!dealer) {
-			throw new Unauthorized();
-		}
+		const dealer = await this.dealerService.getByIdOrThrow(decoded.id);
 
 		if (
 			dealer.resetPasswordToken &&
@@ -1015,9 +971,7 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			dealer.password = hashedPassword;
-
-			await this.dealerService.save(dealer);
+			await this.dealerService.updateDealerPassword(dealer.id, hashedPassword);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -1046,9 +1000,7 @@ export class AuthService {
 		const hashedPassword = await this.passwordService.hash(newPassword);
 
 		try {
-			dealer.password = hashedPassword;
-
-			await this.dealerService.save(dealer);
+			await this.dealerService.updateDealerPassword(dealer.id, hashedPassword);
 		} catch (error) {
 			throw new InternalServerError();
 		}
@@ -1066,11 +1018,7 @@ export class AuthService {
 			refreshToken
 		);
 
-		const dealer = await this.dealerService.getById(decoded.id);
-
-		if (!dealer) {
-			throw new Unauthorized();
-		}
+		const dealer = await this.dealerService.getByIdOrThrow(decoded.id);
 
 		const accessToken = this.tokenService.generateAccessToken('dealer', {
 			id: dealer.id,
@@ -1087,16 +1035,10 @@ export class AuthService {
 	}
 
 	async logOutDealer(id: string) {
-		const dealer = await this.dealerService.getById(id);
-
-		if (!dealer) {
-			throw new BadRequest();
-		}
+		const dealer = await this.dealerService.getByIdOrThrow(id);
 
 		try {
-			dealer.refreshToken = null;
-
-			await this.dealerService.save(dealer);
+			await this.dealerService.updateDealerRefreshToken(dealer.id, null);
 		} catch (error) {
 			console.log(error);
 			throw new InternalServerError();

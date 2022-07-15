@@ -2,12 +2,11 @@ import { FastifyInstance } from 'fastify';
 import {
 	Controller,
 	FastifyInstanceToken,
-	GET as Get,
+	GET,
 	getInstanceByToken,
 } from 'fastify-decorators';
-import { OrderStatus } from '../../shared/enums/order-status.enum';
+import { Request, Reply } from '@fastly/interfaces/http';
 import { OrderService } from './order.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
 
 @Controller('/orders')
 export class OrderController {
@@ -20,7 +19,7 @@ export class OrderController {
 		return this.fastify.io;
 	}
 
-	@Get('/')
+	@GET('/')
 	async getOrders(request: Request, reply: Reply) {
 		return {};
 	}

@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { PASSWORD_REGEX, DNI_REGEX } from '../../constants/regex.constants';
+import { PASSWORD_REGEX, DNI_REGEX } from '@fastly/constants/regex';
 
 export const GetAdminParams = Type.Object({
 	id: Type.String({ format: 'uuid' }),

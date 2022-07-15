@@ -1,12 +1,6 @@
-import {
-	Controller,
-	GET as Get,
-	POST as Post,
-	PUT as Put,
-	DELETE as Delete,
-} from 'fastify-decorators';
+import { Controller, GET, POST, PUT, DELETE } from 'fastify-decorators';
 import { UserService } from './user.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
+import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	AddAddressBody,
 	AddAddressBodyType,
@@ -27,10 +21,7 @@ import {
 	UpdateUserProfileBody,
 	UpdateUserProfileBodyType,
 } from './user.schema';
-import {
-	hasBearerToken,
-	userIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
+import { hasBearerToken, userIsAuthenticated } from '@fastly/shared/hooks/auth';
 import {
 	UpdateNewUserBody,
 	UpdateNewUserBodyType,
@@ -42,26 +33,26 @@ import {
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	@Get('/count')
+	@GET('/count')
 	count() {
 		return this.userService.count();
 	}
 
-	@Get('/me', {
+	@GET('/me', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	me(request: Request, reply: Reply) {
 		return this.userService.me(request.userId);
 	}
 
-	@Get('/me/addresses', {
+	@GET('/me/addresses', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	myAddresses(request: Request, reply: Reply) {
 		return this.userService.myAddresses(request.userId);
 	}
 
-	@Get('/me/addresses/:id', {
+	@GET('/me/addresses/:id', {
 		schema: {
 			params: MyAddressParams,
 		},
@@ -76,7 +67,7 @@ export class UserController {
 		return this.userService.myAddress(request.userId, request.params.id);
 	}
 
-	@Post('/me/addresses', {
+	@POST('/me/addresses', {
 		schema: {
 			body: AddAddressBody,
 		},
@@ -91,7 +82,7 @@ export class UserController {
 		return this.userService.addAddress(request.userId, request.body);
 	}
 
-	@Delete('/me/addresses/:id', {
+	@DELETE('/me/addresses/:id', {
 		schema: {
 			params: DeleteAddressParams,
 		},
@@ -106,14 +97,14 @@ export class UserController {
 		return this.userService.deleteAddress(request.userId, request.params.id);
 	}
 
-	@Get('/me/cart', {
+	@GET('/me/cart', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	myCart(request: Request, reply: Reply) {
 		return this.userService.myCart(request.userId);
 	}
 
-	@Get('/me/cart/:id', {
+	@GET('/me/cart/:id', {
 		schema: {
 			params: MyItemCartParams,
 		},
@@ -128,7 +119,7 @@ export class UserController {
 		return this.userService.myItemCart(request.userId, request.params.id);
 	}
 
-	@Post('/me/cart', {
+	@POST('/me/cart', {
 		schema: {
 			body: AddItemCartBody,
 		},
@@ -143,7 +134,7 @@ export class UserController {
 		return this.userService.addItemCart(request.userId, request.body);
 	}
 
-	@Put('/me/cart/:id', {
+	@PUT('/me/cart/:id', {
 		schema: {
 			params: EditItemCartQuantityParams,
 			body: EditItemCartQuantityBody,
@@ -164,14 +155,14 @@ export class UserController {
 		);
 	}
 
-	@Delete('/me/cart', {
+	@DELETE('/me/cart', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	deleteCart(request: Request, reply: Reply) {
 		return this.userService.deleteCart(request.userId);
 	}
 
-	@Delete('/me/cart/:id', {
+	@DELETE('/me/cart/:id', {
 		schema: {
 			params: MyFavoriteParams,
 		},
@@ -186,14 +177,14 @@ export class UserController {
 		return this.userService.deleteItemCart(request.userId, request.params.id);
 	}
 
-	@Get('/me/favorites', {
+	@GET('/me/favorites', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	myFavorites(request: Request, reply: Reply) {
 		return this.userService.myFavorites(request.userId);
 	}
 
-	@Get('/me/favorites/:id', {
+	@GET('/me/favorites/:id', {
 		schema: {
 			params: MyFavoriteParams,
 		},
@@ -208,7 +199,7 @@ export class UserController {
 		return this.userService.myFavorite(request.userId, request.params.id);
 	}
 
-	@Delete('/me/favorites/:id', {
+	@DELETE('/me/favorites/:id', {
 		schema: {
 			params: DeleteFavoriteParams,
 		},
@@ -223,7 +214,7 @@ export class UserController {
 		return this.userService.deleteFavorite(request.userId, request.params.id);
 	}
 
-	@Delete('/me/favorites', {
+	@DELETE('/me/favorites', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async deleteFavorites(request: Request, reply: Reply) {
@@ -231,14 +222,14 @@ export class UserController {
 	}
 
 	// TODO: agregar paginación
-	@Get('/me/orders', {
+	@GET('/me/orders', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async myOrders(request: Request, reply: Reply) {
 		return this.userService.myOrders(request.userId);
 	}
 
-	@Put('/new-user', {
+	@PUT('/new-user', {
 		schema: {
 			body: UpdateNewUserBody,
 		},
@@ -253,7 +244,7 @@ export class UserController {
 		return this.userService.updateNewUser(request.body, request.userId);
 	}
 
-	@Put('/me', {
+	@PUT('/me', {
 		schema: {
 			body: UpdateUserProfileBody,
 		},

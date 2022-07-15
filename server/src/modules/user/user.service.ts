@@ -1,9 +1,5 @@
-import { Initializer, Service } from 'fastify-decorators';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { UserAddress } from './user-address.entity';
-import { UserCart } from './user-cart.entity';
-import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Service } from 'fastify-decorators';
+import { DatabaseService } from '@fastly/database/DatabaseService';
 import {
 	Unauthorized,
 	InternalServerError,
@@ -16,29 +12,26 @@ import {
 	UpdateNewUserBodyType,
 	UpdateUserProfileBodyType,
 } from './user.schema';
-import { CloudinaryService } from '../../shared/services/cloudinary.service';
-import { trimStrings } from '../../utils/trimStrings';
-import { MAX_USER_ADDRESSES } from '../../constants/app.constants';
+import { trimStrings } from '@fastly/utils/trimStrings';
+import { MAX_USER_ADDRESSES } from '@fastly/constants/app';
 import { ProductService } from '../product/product.service';
 import { EditItemCartQuantityBodyType } from './user.schema';
+import { User, UserAddress, UserCart, Product } from '@prisma/client';
+import { checkIsNewUser } from '@fastly/utils/checkIsNewUser';
+import { AvatarService } from '@fastly/shared/services/avatar.service';
+import { isString } from '@fastly/utils';
+import { ImageService } from '@fastly/shared/services/image.service';
 
 @Service('UserServiceToken')
 export class UserService {
-	private userRepository: Repository<User>;
-
 	constructor(
-		private readonly dataSourceProvider: DataSourceProvider,
+		private readonly databaseService: DatabaseService,
 		private readonly productService: ProductService,
-		private readonly cloudinaryService: CloudinaryService
+		private readonly imageService: ImageService,
+		private readonly avatarService: AvatarService
 	) {}
 
-	@Initializer([DataSourceProvider])
-	async init(): Promise<void> {
-		this.userRepository =
-			this.dataSourceProvider.dataSource.getRepository(User);
-	}
-
-	async me(userId: string): Promise<User> {
+	async me(userId: string) {
 		const user = await this.getById(userId);
 
 		if (!user) {
@@ -49,11 +42,7 @@ export class UserService {
 	}
 
 	async myAddresses(userId: string) {
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
+		const user = await this.getByIdOrThrow(userId);
 
 		return {
 			id: user.id,
@@ -72,51 +61,25 @@ export class UserService {
 	}
 
 	async myAddress(userId: string, addressId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		const addresses = user.addresses;
-
-		if (!addresses) {
+		if (user.addresses.length === 0) {
 			throw new NotFound();
 		}
 
-		const foundAddresses = await this.userRepository.find({
-			where: {
-				id: userId,
-				addresses: {
-					id: addressId,
-				},
-			},
-			select: {
-				addresses: true,
-			},
-		});
-		console.log(
-			'found address from database',
-			foundAddresses.find((address) => address.id === addressId)
+		const foundAddress = user.addresses.find(
+			(address) => address.id === addressId
 		);
-
-		const foundAddress = addresses.find((address) => address.id === addressId);
 
 		if (!foundAddress) {
 			throw new NotFound();
 		}
 
-		return {
-			...foundAddress,
-		};
+		return foundAddress;
 	}
 
 	async deleteAddress(userId: string, addressId: string) {
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
+		const user = await this.getByIdOrThrow(userId);
 
 		if (!user.addresses) {
 			throw new NotFound();
@@ -126,11 +89,11 @@ export class UserService {
 			throw new BadRequest();
 		}
 
-		user.addresses = user.addresses.filter(
-			(address) => address.id !== addressId
-		);
-
-		await this.save(user);
+		await this.databaseService.userAddress.delete({
+			where: {
+				id: addressId,
+			},
+		});
 
 		return {
 			statusCode: 200,
@@ -140,13 +103,14 @@ export class UserService {
 	}
 
 	async addAddress(userId: string, address: AddAddressBodyType) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (user.addresses && user.addresses.length >= MAX_USER_ADDRESSES) {
+		if (
+			user.addresses !== undefined &&
+			user.addresses !== null &&
+			user.addresses &&
+			user.addresses.length >= MAX_USER_ADDRESSES
+		) {
 			throw new BadRequest('too_many_addresses');
 		}
 
@@ -157,51 +121,40 @@ export class UserService {
 			address.street
 		);
 
-		const newAddress = new UserAddress();
-		newAddress.city = city;
-		newAddress.instructions = instructions;
-		newAddress.name = name;
-		newAddress.street = street;
-		newAddress.latitude = address.latitude;
-		newAddress.longitude = address.longitude;
-		newAddress.tag = address.tag;
-		newAddress.zip = address.zip;
-		// newAddress.user = user;
-
-		await this.userRepository.manager.save(newAddress);
-
-		if (!user.addresses) {
-			user.addresses = [newAddress];
-		} else {
-			user.addresses = [...user.addresses, newAddress];
-		}
-
-		// user.addresses = [user.addresses, newAddress];
-
-		await this.save(user);
+		const updatedUser = await this.databaseService.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				addresses: {
+					create: {
+						city,
+						instructions,
+						name,
+						street,
+						latitude: address.latitude,
+						longitude: address.longitude,
+						tag: address.tag,
+						zip: address.zip,
+					},
+				},
+			},
+			include: {
+				addresses: true,
+			},
+		});
 
 		return {
 			statusCode: 200,
 			id: userId,
-			addresses: user.addresses,
+			addresses: updatedUser.addresses,
 			message: `Address was added`,
 			success: true,
 		};
 	}
 
 	async myCart(userId: string) {
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (user.cart === undefined || !user.cart) {
-			return {
-				id: userId,
-				cart: [],
-			};
-		}
+		const user = await this.getByIdOrThrow(userId);
 
 		return {
 			id: userId,
@@ -210,183 +163,184 @@ export class UserService {
 	}
 
 	async myItemCart(userId: string, itemCartId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		const cart = user.cart;
-
-		if (!cart) {
+		if (user.cart.length === 0) {
 			throw new NotFound();
 		}
 
-		const foundCart = await this.userRepository.find({
-			where: {
-				id: userId,
-				cart: {
-					id: itemCartId,
-				},
-			},
-			select: {
-				cart: true,
-			},
-		});
-		console.log({ foundCart });
-		console.log(
-			'found address from database',
-			foundCart
-				.find((user) => user.id === userId)
-				?.cart?.find((cart) => cart.id === itemCartId)
-		);
+		const foundCart = user.cart.find((cart) => cart.id === itemCartId);
 
-		const foundItemCart = foundCart
-			.find((user) => user.id === userId)
-			?.cart?.find((cart) => cart.id === itemCartId);
-
-		if (!foundItemCart) {
+		if (!foundCart) {
 			throw new NotFound();
 		}
 
-		return {
-			...foundItemCart,
-		};
+		return foundCart;
 	}
 
 	async addItemCart(
 		userId: string,
 		{ productId, quantity }: AddItemCartBodyType
 	) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
+		const product = await this.productService.getByIdOrThrow(productId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		const product = await this.productService.getById(productId);
-
-		if (!product) {
-			throw new BadRequest(`Product doesn't exists`);
-		}
-
-		const newCart = new UserCart();
-		newCart.product = product;
-		newCart.quantity = quantity;
-		newCart.user = user;
-
-		user.cart = [newCart];
-
-		await this.save(user);
+		const updatedUser = await this.databaseService.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				cart: {
+					create: {
+						product: {
+							connect: {
+								id: product.id,
+							},
+						},
+						quantity,
+					},
+				},
+			},
+			include: {
+				cart: true,
+			},
+		});
 
 		return {
 			statusCode: 200,
-			id: userId,
-			cart: user.cart,
+			id: updatedUser.id,
+			cart: updatedUser.cart,
 			message: `Item Cart was added`,
 			success: true,
 		};
 	}
 
-	count(): Promise<number> {
-		return this.userRepository.count();
+	async count() {
+		return this.databaseService.user.count();
 	}
 
-	getById(id: string): Promise<User | null> {
-		return this.userRepository.findOneBy({ id });
-	}
-
-	getByFacebookUserID(facebookUserID: string): Promise<User | null> {
-		return this.userRepository.findOne({
-			where: { facebookId: facebookUserID },
+	async getById(id: string) {
+		return this.databaseService.user.findUnique({
+			where: {
+				id,
+			},
+			include: {
+				addresses: true,
+				favorites: true,
+				cart: true,
+				orders: true,
+			},
 		});
 	}
 
-	getByEmail(email: string): Promise<User | null> {
-		return this.userRepository.findOneBy({ email });
+	async getByFacebookUserID(facebookId: string) {
+		return this.databaseService.user.findUnique({
+			where: {
+				facebookId,
+			},
+			include: {
+				addresses: true,
+				favorites: true,
+				cart: true,
+			},
+		});
+	}
+
+	async getByEmail(email: string) {
+		return this.databaseService.user.findFirst({ where: { email } });
 	}
 
 	async updateNewUser(data: UpdateNewUserBodyType, userId: string) {
-		const { avatar, email, phone, dni, address } = data;
-		const user = await this.getById(userId);
+		const [email, phone, dni] = trimStrings(data.email, data.phone, data.dni);
+		let {
+			avatar,
+			address: {
+				city,
+				instructions,
+				latitude,
+				longitude,
+				name,
+				street,
+				tag,
+				zip,
+			},
+		} = data;
+		const user = await this.getByIdOrThrow(userId);
+		const isNewUser = this.isNewUser(user);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (user.addresses === undefined) {
+		if (!isNewUser) {
 			return {
 				statusCode: 200,
 				success: true,
-				isNewUser: user.isNewUser,
+				isNewUser,
 			};
 		}
 
-		try {
-			// avatar should be base64 encode image
-			if (avatar) {
-				const upload = await this.cloudinaryService.upload(
-					avatar,
-					`${user.name.toLowerCase().replace(/\s/g, '_')}@${user.facebookId}`
-				);
-				console.log(upload);
-				user.avatar = upload.secure_url;
-			}
-			user.email = email;
-			user.phone = phone;
-			user.dni = dni;
-
-			const userAddress = new UserAddress();
-
-			userAddress.name = address.name;
-			userAddress.street = address.street;
-			userAddress.instructions = address.instructions;
-			userAddress.zip = address.zip;
-			userAddress.city = address.city;
-			userAddress.tag = address.tag;
-			userAddress.latitude = address.latitude;
-			userAddress.longitude = address.longitude;
-
-			await this.userRepository.manager.save(userAddress);
-
-			user.addresses = [userAddress];
-
-			await this.save(user);
-		} catch (error) {
-			console.log(error);
-			throw new InternalServerError();
+		if (avatar && isString(avatar)) {
+			avatar = await this.imageService.saveJpgFromBase64(
+				avatar,
+				'users',
+				user.id
+			);
 		}
 
-		const updatedUser = await this.getById(userId);
+		const defaultAvatar = this.avatarService.getDefaultAvatar();
 
-		if (!updatedUser) throw new Unauthorized();
+		const updatedUser = await this.databaseService.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				email,
+				phone,
+				dni,
+				avatar: avatar || defaultAvatar,
+				addresses: {
+					create: {
+						city,
+						instructions,
+						latitude,
+						longitude,
+						name,
+						street,
+						tag,
+						zip,
+					},
+				},
+			},
+			include: {
+				addresses: true,
+			},
+		});
 
 		return {
 			statusCode: 200,
 			success: true,
-			isNewUser: updatedUser.isNewUser,
+			isNewUser: this.isNewUser(updatedUser),
 		};
 	}
 
 	async deleteItemCart(userId: string, itemCartId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (!user.cart) {
+		if (user.cart.length === 0) {
 			throw new NotFound();
 		}
 
-		user.cart = user.cart.filter((cart) => cart.id !== itemCartId);
+		if (!user.cart.find((itemCart) => itemCart.id === itemCartId)) {
+			throw new BadRequest();
+		}
 
-		await this.save(user);
+		const updatedCart = await this.databaseService.userCart.delete({
+			where: {
+				id: itemCartId,
+			},
+		});
 
 		return {
 			statusCode: 200,
 			success: true,
-			message: `Item Cart with id ${itemCartId} was deleted`,
+			message: `Item Cart with id ${updatedCart.id} was deleted`,
 		};
 	}
 
@@ -395,82 +349,83 @@ export class UserService {
 		itemCartId: string,
 		{ quantity }: EditItemCartQuantityBodyType
 	) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (!user.cart) {
+		if (user.cart.length === 0) {
 			throw new NotFound();
 		}
 
-		const itemCart = user.cart.find((cart) => cart.id === itemCartId);
-		itemCart!.quantity = quantity;
+		if (!user.cart.find((itemCart) => itemCart.id === itemCartId)) {
+			throw new BadRequest();
+		}
 
-		user.cart = itemCart ? [itemCart] : undefined;
-
-		await this.save(user);
+		const updatedCart = await this.databaseService.userCart.update({
+			where: {
+				id: itemCartId,
+			},
+			data: {
+				quantity,
+			},
+		});
 
 		return {
 			statusCode: 200,
 			success: true,
-			message: `Item Cart with id ${itemCartId} was edited quantity set to ${quantity}`,
+			message: `Item Cart with id ${updatedCart.id} was edited quantity set from ${quantity} to ${updatedCart.quantity}`,
 		};
 	}
 
 	async deleteCart(userId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		user.cart = undefined;
-
-		await this.save(user);
+		const updatedCart = await this.databaseService.userCart.deleteMany({
+			where: {
+				User: {
+					id: user.id,
+				},
+			},
+		});
 
 		return {
 			statusCode: 200,
+			id: user.id,
 			success: true,
-			message: 'Cart was deleted',
+			message: `${updatedCart.count} items from cart was deleted.`,
 		};
 	}
 
 	async deleteFavorite(userId: string, favoriteId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		if (!user.favorites) {
+		if (user.favorites.length === 0) {
 			throw new NotFound();
 		}
 
-		user.favorites = user.favorites.filter(
-			(favorite) => favorite.id !== favoriteId
-		);
+		if (!user.favorites.find((favorite) => favorite.id === favoriteId)) {
+			throw new BadRequest();
+		}
 
-		await this.save(user);
+		const deletedFavorite = await this.databaseService.userFavorite.delete({
+			where: { id: favoriteId },
+		});
 
 		return {
 			statusCode: 200,
 			success: true,
-			message: 'Favorites was deleted',
+			message: `Favorite with id ${deletedFavorite.id} was deleted`,
 		};
 	}
 
 	async deleteFavorites(userId: string) {
-		const user = await this.getById(userId);
+		await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		user.favorites = undefined;
-
-		await this.save(user);
+		await this.databaseService.userFavorite.deleteMany({
+			where: {
+				User: {
+					id: userId,
+				},
+			},
+		});
 
 		return {
 			statusCode: 200,
@@ -480,48 +435,22 @@ export class UserService {
 	}
 
 	async myFavorites(userId: string) {
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
+		const user = await this.getByIdOrThrow(userId);
 
 		return {
-			id: userId,
+			id: user.id,
 			favorites: user.favorites,
 		};
 	}
 
 	async myFavorite(userId: string, favoriteId: string) {
-		const user = await this.getById(userId);
+		const user = await this.getByIdOrThrow(userId);
 
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		const favorites = user.favorites;
-
-		if (!favorites) {
+		if (user.favorites.length === 0) {
 			throw new NotFound();
 		}
 
-		const foundFavorites = await this.userRepository.find({
-			where: {
-				id: userId,
-				favorites: {
-					id: favoriteId,
-				},
-			},
-			select: {
-				favorites: true,
-			},
-		});
-		console.log(
-			'found favorites from database',
-			foundFavorites.find((favorite) => favorite.id === favoriteId)
-		);
-
-		const foundFavorite = favorites.find(
+		const foundFavorite = user.favorites.find(
 			(favorite) => favorite.id === favoriteId
 		);
 
@@ -529,31 +458,20 @@ export class UserService {
 			throw new NotFound();
 		}
 
-		return {
-			...foundFavorite,
-		};
+		return foundFavorite;
 	}
 
-	async isNewUser(userId: string): Promise<boolean> {
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
-
-		return user.isNewUser;
+	isNewUser(user: User & { addresses: UserAddress[] }) {
+		return checkIsNewUser(user);
 	}
 
 	async updateUserProfile(userId: string, data: UpdateUserProfileBodyType) {
 		const [dni, email, phone] = trimStrings(data.dni, data.email, data.phone);
-		const user = await this.getById(userId);
-
-		if (!user) {
-			throw new Unauthorized();
-		}
+		let { avatar } = data;
+		const user = await this.getByIdOrThrow(userId);
 
 		if (
-			data.avatar === undefined &&
+			!avatar &&
 			user.dni === dni &&
 			user.email === email &&
 			user.phone === phone
@@ -565,25 +483,27 @@ export class UserService {
 			};
 		}
 
-		try {
-			if (data.avatar) {
-				const upload = await this.cloudinaryService.upload(
-					data.avatar,
-					`${user.name.toLowerCase().replace(/\s/g, '_')}@${user.facebookId}`
-				);
-				console.log(upload);
-				user.avatar = upload.secure_url;
-			}
-
-			user.dni = dni;
-			user.email = email;
-			user.phone = phone;
-
-			await this.save(user);
-		} catch (error) {
-			console.log(error);
-			throw new InternalServerError();
+		if (avatar && isString(avatar)) {
+			avatar = await this.imageService.saveJpgFromBase64(
+				avatar,
+				'users',
+				user.id
+			);
 		}
+
+		const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+		await this.databaseService.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				dni,
+				email,
+				phone,
+				avatar: avatar || defaultAvatar,
+			},
+		});
 
 		return {
 			statusCode: 200,
@@ -594,26 +514,57 @@ export class UserService {
 
 	// TODO: agregar paginación
 	async myOrders(userId: string) {
-		const user = await this.getById(userId);
+		const user = await this.databaseService.user.findUnique({
+			where: { id: userId },
+			include: {
+				orders: true,
+			},
+		});
 
 		if (!user) {
 			throw new Unauthorized();
 		}
 
-		if (!user.orders) {
-			return {
-				id: userId,
-				orders: [],
-			};
-		}
-
 		return {
-			id: userId,
+			id: user.id,
 			orders: user.orders,
 		};
 	}
 
-	save(user: Partial<User>): Promise<Partial<User> & User> {
-		return this.userRepository.save(user);
+	async createUser({
+		name,
+		facebookId,
+		facebookAccessToken,
+	}: Pick<User, 'name' | 'facebookId' | 'facebookAccessToken'>) {
+		return this.databaseService.user.create({
+			data: {
+				name,
+				facebookId,
+				facebookAccessToken,
+			},
+		});
+	}
+
+	async updateUserRefreshToken(userId: string, refreshToken: string | null) {
+		return this.databaseService.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				refreshToken,
+			},
+		});
+	}
+
+	async banUser(userId: string, banReason?: string) {
+		return this.databaseService.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				isBanned: true,
+				banReason,
+			},
+		});
 	}
 }

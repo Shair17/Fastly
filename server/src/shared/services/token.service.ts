@@ -4,12 +4,12 @@ import {
 	FastifyInstanceToken,
 	getInstanceByToken,
 } from 'fastify-decorators';
+import { Unauthorized, InternalServerError } from 'http-errors';
 import {
 	JwtService,
 	JsonWebTokenError,
 	TokenExpiredError,
 } from './jwt.service';
-import { Unauthorized, InternalServerError } from 'http-errors';
 import {
 	AuthTokenPayload,
 	AuthTokenType,

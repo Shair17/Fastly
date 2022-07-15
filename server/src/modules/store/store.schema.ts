@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { StoreCategory } from '../../shared/enums/store-categories.enum';
+import { StoreCategory } from '@prisma/client';
 
 export const GetStoreParams = Type.Object({
 	id: Type.String({ format: 'uuid' }),

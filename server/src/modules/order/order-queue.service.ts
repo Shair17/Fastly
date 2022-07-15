@@ -1,5 +1,4 @@
 import { Service } from 'fastify-decorators';
-import { Order } from './order.entity';
 import { OrderService } from './order.service';
 
 interface IOrderQueue {}

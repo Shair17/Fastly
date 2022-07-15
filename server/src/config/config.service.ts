@@ -1,8 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import {
 	Service,
-	Initializer,
-	Destructor,
 	FastifyInstanceToken,
 	getInstanceByToken,
 } from 'fastify-decorators';
@@ -24,7 +22,7 @@ export class ConfigService {
 	getOrThrow(key: keyof ConfigSchemaType) {
 		const config = this.fastify.config[key];
 
-		if (config === undefined || config === null) {
+		if (!config) {
 			throw new Error(`Config with key ${key} doesn't exists.`);
 		}
 

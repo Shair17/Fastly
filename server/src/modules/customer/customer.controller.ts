@@ -1,23 +1,23 @@
-import { Controller, GET as Get } from 'fastify-decorators';
+import { Controller, GET } from 'fastify-decorators';
 import { CustomerService } from './customer.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
 import { GetCustomerParams, GetCustomerParamsType } from './customer.schema';
+import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	hasBearerToken,
 	customerIsAuthenticated,
 	adminIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
+} from '@fastly/shared/hooks/auth';
 
 @Controller('/customers')
 export class CustomerController {
 	constructor(private readonly customerService: CustomerService) {}
 
-	@Get('/count')
+	@GET('/count')
 	async count() {
 		return this.customerService.count();
 	}
 
-	@Get('/:id', {
+	@GET('/:id', {
 		schema: {
 			params: GetCustomerParams,
 		},
@@ -31,14 +31,14 @@ export class CustomerController {
 		return this.customerService.me(request.params.id);
 	}
 
-	@Get('/', {
+	@GET('/', {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async getCustomers(request: Request, reply: Reply) {
 		return this.customerService.getCustomers();
 	}
 
-	@Get('/me', {
+	@GET('/me', {
 		onRequest: [hasBearerToken, customerIsAuthenticated],
 	})
 	async me({ customerId }: Request, reply: Reply) {

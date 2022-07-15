@@ -1,23 +1,28 @@
-import { AdminModule } from './modules/admin/admin.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { CustomerModule } from './modules/customer/customer.module';
-import { DealerModule } from './modules/dealer/dealer.module';
-import { OrderModule } from './modules/order/order.module';
-import { ProductModule } from './modules/product/product.module';
-import { CouponModule } from './modules/coupon/coupon.module';
-import { SearchModule } from './modules/search/search.module';
-import { StoreModule } from './modules/store/store.module';
-import { UserModule } from './modules/user/user.module';
+import { AppController } from '@fastly/app.controller';
+import {
+	AuthModule,
+	UserModule,
+	AdminModule,
+	CustomerModule,
+	DealerModule,
+	OrderModule,
+	SearchModule,
+	ProductModule,
+	CouponModule,
+	StoreModule,
+} from '@fastly/modules';
 
 export const AppModule = [
-	...AdminModule,
+	AppController,
+
 	...AuthModule,
+	...AdminModule,
 	...CustomerModule,
 	...DealerModule,
+	...UserModule,
 	...OrderModule,
+	...SearchModule,
 	...ProductModule,
 	...CouponModule,
-	...SearchModule,
 	...StoreModule,
-	...UserModule,
 ];

@@ -1,13 +1,6 @@
-import { Controller, POST as Post, PUT as Put } from 'fastify-decorators';
+import { Controller, POST, PUT } from 'fastify-decorators';
 import { AuthService } from './auth.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
-import {
-	hasBearerToken,
-	adminIsAuthenticated,
-	customerIsAuthenticated,
-	dealerIsAuthenticated,
-	userIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
+import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	LogInWithFacebook,
 	LogInWithFacebookType,
@@ -50,12 +43,19 @@ import {
 	RefreshDealerToken,
 	RefreshDealerTokenType,
 } from './auth.schema';
+import {
+	hasBearerToken,
+	adminIsAuthenticated,
+	customerIsAuthenticated,
+	dealerIsAuthenticated,
+	userIsAuthenticated,
+} from '@fastly/shared/hooks/auth';
 
 @Controller('/auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@Post('/facebook', {
+	@POST('/facebook', {
 		schema: {
 			body: LogInWithFacebook,
 		},
@@ -69,7 +69,7 @@ export class AuthController {
 		return this.authService.logInWithFacebook(request.body);
 	}
 
-	@Post('/facebook/refresh', {
+	@POST('/facebook/refresh', {
 		schema: {
 			body: RefreshFacebookToken,
 		},
@@ -83,7 +83,7 @@ export class AuthController {
 		return this.authService.refreshFacebookToken(request.body);
 	}
 
-	@Post('/facebook/logout', {
+	@POST('/facebook/logout', {
 		onRequest: [hasBearerToken, userIsAuthenticated],
 	})
 	async logOutFromFacebook(request: Request, reply: Reply) {
@@ -92,7 +92,7 @@ export class AuthController {
 		return this.authService.logOutFromFacebook(request.userId);
 	}
 
-	@Post('/admin/login', {
+	@POST('/admin/login', {
 		schema: {
 			body: AdminLogin,
 		},
@@ -106,7 +106,7 @@ export class AuthController {
 		return this.authService.logInAdmin(request.body);
 	}
 
-	@Post('/admin/register', {
+	@POST('/admin/register', {
 		schema: {
 			body: AdminRegister,
 		},
@@ -120,7 +120,7 @@ export class AuthController {
 		return this.authService.registerAdmin(request.body);
 	}
 
-	@Post('/admin/forgot-password', {
+	@POST('/admin/forgot-password', {
 		schema: {
 			body: ForgotAdminPassword,
 		},
@@ -134,7 +134,7 @@ export class AuthController {
 		return this.authService.forgotAdminPassword(request.body);
 	}
 
-	@Post('/admin/new-password', {
+	@POST('/admin/new-password', {
 		schema: {
 			body: NewAdminPassword,
 		},
@@ -148,7 +148,7 @@ export class AuthController {
 		return this.authService.newAdminPassword(request.body);
 	}
 
-	@Post('/admin/change-password', {
+	@POST('/admin/change-password', {
 		schema: {
 			body: ChangeAdminPassword,
 		},
@@ -163,7 +163,7 @@ export class AuthController {
 		return this.authService.changeAdminPassword(request.adminId, request.body);
 	}
 
-	@Post('/admin/refresh', {
+	@POST('/admin/refresh', {
 		schema: {
 			body: RefreshAdminToken,
 		},
@@ -177,7 +177,7 @@ export class AuthController {
 		return this.authService.refreshAdminToken(request.body);
 	}
 
-	@Post('/admin/logout', {
+	@POST('/admin/logout', {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async logOutAdmin(request: Request, reply: Reply) {
@@ -186,7 +186,7 @@ export class AuthController {
 		return this.authService.logOutAdmin(request.adminId);
 	}
 
-	@Post('/customer/login', {
+	@POST('/customer/login', {
 		schema: {
 			body: CustomerLogin,
 		},
@@ -200,7 +200,7 @@ export class AuthController {
 		return this.authService.loginCustomer(request.body);
 	}
 
-	@Post('/customer/register', {
+	@POST('/customer/register', {
 		schema: {
 			body: CustomerRegister,
 		},
@@ -214,7 +214,7 @@ export class AuthController {
 		return this.authService.registerCustomer(request.body);
 	}
 
-	@Put('/customer/forgot-password', {
+	@PUT('/customer/forgot-password', {
 		schema: {
 			body: ForgotCustomerPassword,
 		},
@@ -228,7 +228,7 @@ export class AuthController {
 		return this.authService.forgotCustomerPassword(request.body);
 	}
 
-	@Post('/customer/new-password', {
+	@POST('/customer/new-password', {
 		schema: {
 			body: NewCustomerPassword,
 		},
@@ -242,7 +242,7 @@ export class AuthController {
 		return this.authService.newCustomerPassword(request.body);
 	}
 
-	@Post('/customer/change-password', {
+	@POST('/customer/change-password', {
 		schema: {
 			body: ChangeCustomerPassword,
 		},
@@ -260,7 +260,7 @@ export class AuthController {
 		);
 	}
 
-	@Post('/customer/refresh', {
+	@POST('/customer/refresh', {
 		schema: {
 			body: RefreshCustomerToken,
 		},
@@ -274,7 +274,7 @@ export class AuthController {
 		return this.authService.refreshCustomerToken(request.body);
 	}
 
-	@Post('/customer/logout', {
+	@POST('/customer/logout', {
 		onRequest: [hasBearerToken, customerIsAuthenticated],
 	})
 	async logOutCustomer(request: Request, reply: Reply) {
@@ -283,7 +283,7 @@ export class AuthController {
 		return this.authService.logOutCustomer(request.customerId);
 	}
 
-	@Post('/dealer/login', {
+	@POST('/dealer/login', {
 		schema: {
 			body: DealerLogin,
 		},
@@ -297,7 +297,7 @@ export class AuthController {
 		return this.authService.loginDealer(request.body);
 	}
 
-	@Post('/dealer/register', {
+	@POST('/dealer/register', {
 		schema: {
 			body: DealerRegister,
 		},
@@ -311,7 +311,7 @@ export class AuthController {
 		return this.authService.registerDealer(request.body);
 	}
 
-	@Put('/dealer/forgot-password', {
+	@PUT('/dealer/forgot-password', {
 		schema: {
 			body: ForgotDealerPassword,
 		},
@@ -325,7 +325,7 @@ export class AuthController {
 		return this.authService.forgotDealerPassword(request.body);
 	}
 
-	@Post('/dealer/new-password', {
+	@POST('/dealer/new-password', {
 		schema: {
 			body: NewDealerPassword,
 		},
@@ -339,7 +339,7 @@ export class AuthController {
 		return this.authService.newDealerPassword(request.body);
 	}
 
-	@Post('/dealer/change-password', {
+	@POST('/dealer/change-password', {
 		schema: {
 			body: ChangeDealerPassword,
 		},
@@ -357,7 +357,7 @@ export class AuthController {
 		);
 	}
 
-	@Post('/dealer/refresh', {
+	@POST('/dealer/refresh', {
 		schema: {
 			body: RefreshDealerToken,
 		},
@@ -371,7 +371,7 @@ export class AuthController {
 		return this.authService.refreshDealerToken(request.body);
 	}
 
-	@Post('/dealer/logout', {
+	@POST('/dealer/logout', {
 		onRequest: [hasBearerToken, dealerIsAuthenticated],
 	})
 	async logOutDealer(request: Request, reply: Reply) {

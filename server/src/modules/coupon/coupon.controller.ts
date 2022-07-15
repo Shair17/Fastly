@@ -1,11 +1,11 @@
-import { Controller } from 'fastify-decorators';
-import { CouponService } from './coupon.service';
+import { Controller, GET, POST, PUT, DELETE } from 'fastify-decorators';
+import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	hasBearerToken,
 	adminIsAuthenticated,
 	customerIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
-import { Request, Reply } from '../../interfaces/http.interfaces';
+} from '@fastly/shared/hooks/auth';
+import { CouponService } from './coupon.service';
 
 @Controller('/stores')
 export class CouponController {

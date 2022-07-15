@@ -1,8 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import {
-	Controller,
 	FastifyInstanceToken,
-	GET as Get,
+	GET,
 	getInstanceByToken,
 	Service,
 } from 'fastify-decorators';

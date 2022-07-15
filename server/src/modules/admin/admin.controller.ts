@@ -1,13 +1,11 @@
-import {
-	Controller,
-	GET as Get,
-	POST as Post,
-	PUT as Put,
-	DELETE as Delete,
-} from 'fastify-decorators';
-import { AdminService } from './admin.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
+import { Controller, GET, POST, PUT, DELETE } from 'fastify-decorators';
+import { Request, Reply } from '@fastly/interfaces/http';
 import { Unauthorized } from 'http-errors';
+import {
+	hasBearerToken,
+	adminIsAuthenticated,
+} from '@fastly/shared/hooks/auth';
+import { AdminService } from './admin.service';
 import {
 	GetAdminParams,
 	GetAdminParamsType,
@@ -20,35 +18,31 @@ import {
 	EditAdminParamsType,
 	EditAdminParams,
 } from './admin.schema';
-import {
-	hasBearerToken,
-	adminIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
 
 @Controller('/admins')
 export class AdminController {
 	constructor(private readonly adminService: AdminService) {}
 
-	@Get('/count')
+	@GET('/count')
 	async count() {
 		return this.adminService.count();
 	}
 
-	@Get('/', {
+	@GET('/', {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async getAdmins() {
 		return this.adminService.getAdmins();
 	}
 
-	@Get('/me', {
+	@GET('/me', {
 		onRequest: [hasBearerToken, adminIsAuthenticated],
 	})
 	async me(request: Request, reply: Reply) {
 		return this.adminService.me(request.adminId);
 	}
 
-	@Get('/:id', {
+	@GET('/:id', {
 		schema: {
 			params: GetAdminParams,
 		},
@@ -63,7 +57,7 @@ export class AdminController {
 		return this.adminService.me(request.params.id);
 	}
 
-	@Post('/', {
+	@POST('/', {
 		schema: {
 			body: CreateAdminBody,
 		},
@@ -84,7 +78,7 @@ export class AdminController {
 		};
 	}
 
-	@Put('/:id', {
+	@PUT('/:id', {
 		schema: {
 			body: EditAdminBody,
 			params: EditAdminParams,
@@ -107,7 +101,7 @@ export class AdminController {
 		};
 	}
 
-	@Delete('/:id', {
+	@DELETE('/:id', {
 		schema: {
 			params: DeleteAdminParams,
 		},
@@ -123,6 +117,12 @@ export class AdminController {
 			throw new Unauthorized();
 		}
 
-		return this.adminService.deleteAdmin(request.params.id);
+		await this.adminService.deleteAdmin(request.params.id);
+
+		return {
+			statusCode: 200,
+			message: 'Admin Deleted',
+			success: true,
+		};
 	}
 }

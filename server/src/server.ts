@@ -9,8 +9,7 @@ import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { AppModule } from './app.module';
-import { AppService } from './app.service';
-import { ConfigSchema, ConfigSchemaType } from './config/config.schema';
+import { ConfigSchema, ConfigSchemaType } from '@fastly/config/config.schema';
 
 declare module 'fastify' {
 	interface FastifyRequest {
@@ -44,7 +43,7 @@ export default async function Server(
 	server.register(import('@fastify/env'), {
 		dotenv: {
 			path: resolve(__dirname, '../.env'),
-			debug: true,
+			// debug: true,
 		},
 		confKey: 'config',
 		schema: ConfigSchema,
@@ -87,16 +86,8 @@ export default async function Server(
 	});
 
 	server.register((await import('fastify-decorators')).bootstrap, {
-		prefix: '/v1',
+		prefix: 'v1',
 		controllers: [...AppModule],
-	});
-
-	server.route({
-		method: 'GET',
-		url: '/',
-		handler: async () => {
-			return new AppService().getApp();
-		},
 	});
 
 	server.register(import('fastify-socket.io'), {
@@ -104,6 +95,8 @@ export default async function Server(
 			origin: '*',
 		},
 	});
+
+	server.register(import('@fastly/plugins/map-routes'));
 
 	return server;
 }

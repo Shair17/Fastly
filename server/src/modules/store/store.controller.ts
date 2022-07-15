@@ -1,11 +1,11 @@
-import { Controller, GET as Get, POST as Post } from 'fastify-decorators';
+import { Controller, GET, POST } from 'fastify-decorators';
 import { StoreService } from './store.service';
-import { Request, Reply } from '../../interfaces/http.interfaces';
+import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	hasBearerToken,
 	userIsAuthenticated,
 	customerIsAuthenticated,
-} from '../../shared/hooks/auth.hook';
+} from '@fastly/shared/hooks/auth';
 import {
 	CreateStoreBody,
 	GetStoreParams,
@@ -19,7 +19,7 @@ import {
 export class StoreController {
 	constructor(private readonly storeService: StoreService) {}
 
-	@Get('/', {
+	@GET('/', {
 		schema: {
 			querystring: GetStoresQueryString,
 		},
@@ -32,14 +32,14 @@ export class StoreController {
 		reply: Reply
 	) {
 		if (request.query.category) {
-			return this.storeService.getByCategory(request.query.category);
+			return this.storeService.getStoresByCategory(request.query.category);
 		}
 
 		// fallback
 		return this.storeService.getStores();
 	}
 
-	@Get('/:id', {
+	@GET('/:id', {
 		schema: {
 			params: GetStoreParams,
 		},
@@ -54,12 +54,12 @@ export class StoreController {
 		return this.storeService.getById(request.params.id);
 	}
 
-	@Get('/categories')
+	@GET('/categories')
 	async getCategories() {
 		return this.storeService.getCategories();
 	}
 
-	@Post('/create', {
+	@POST('/create', {
 		schema: {
 			body: CreateStoreBody,
 		},

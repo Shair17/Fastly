@@ -1,23 +1,15 @@
-import { Service, Initializer } from 'fastify-decorators';
-import { Repository } from 'typeorm';
-import { Dealer } from './dealer.entity';
-import { DataSourceProvider } from '../../database/DataSourceProvider';
+import { Service } from 'fastify-decorators';
+import { DatabaseService } from '@fastly/database/DatabaseService';
 import { Unauthorized, NotFound } from 'http-errors';
+import { Dealer, DealerRanking, Order } from '@prisma/client';
+import { calcDealerRanking as _calcDealerRanking } from '@fastly/utils/calcDealerRanking';
 
 @Service('DealerServiceToken')
 export class DealerService {
-	private dealerRepository: Repository<Dealer>;
-
-	constructor(private readonly dataSourceProvider: DataSourceProvider) {}
-
-	@Initializer([DataSourceProvider])
-	async init(): Promise<void> {
-		this.dealerRepository =
-			this.dataSourceProvider.dataSource.getRepository(Dealer);
-	}
+	constructor(private readonly databaseService: DatabaseService) {}
 
 	count() {
-		return this.dealerRepository.count();
+		return this.databaseService.dealer.count();
 	}
 
 	async getByIdOrThrow(id: string) {
@@ -37,97 +29,160 @@ export class DealerService {
 			throw new Unauthorized();
 		}
 
-		const { password, calcUserAge, ...restOfDealer } = dealer;
+		const { password, ...restOfDealer } = dealer;
 
 		return restOfDealer;
 	}
 
-	async getDealers(): Promise<Dealer[]> {
-		return this.dealerRepository.find({
-			select: [
-				'address',
-				'age',
-				'available',
-				'avatar',
-				'banReason',
-				'birthDate',
-				'createdAt',
-				'dni',
-				'email',
-				'id',
-				'isActive',
-				'isBanned',
-				'name',
-				'orders',
-				'phone',
-				'ranking',
-				'rankings',
-				'updatedAt',
-				'vehicle',
-			],
+	async create({
+		address,
+		avatar,
+		birthDate,
+		dni,
+		name,
+		email,
+		phone,
+		password,
+		isActive,
+	}: Pick<
+		Dealer,
+		| 'phone'
+		| 'password'
+		| 'isActive'
+		| 'email'
+		| 'address'
+		| 'avatar'
+		| 'birthDate'
+		| 'dni'
+		| 'name'
+	>) {
+		return this.databaseService.dealer.create({
+			data: {
+				address,
+				avatar,
+				birthDate: new Date(birthDate),
+				dni,
+				email,
+				name,
+				phone,
+				password,
+				isActive,
+			},
 		});
 	}
 
+	async getDealers() {
+		return this.databaseService.dealer.findMany();
+	}
+
 	getById(id: string) {
-		return this.dealerRepository.findOneBy({ id });
+		return this.databaseService.dealer.findUnique({
+			where: {
+				id,
+			},
+			include: {
+				orders: true,
+				rankings: true,
+			},
+		});
 	}
 
-	getByEmail(email: string): Promise<Dealer | null> {
-		return this.dealerRepository.findOneBy({ email });
+	getByEmail(email: string) {
+		return this.databaseService.admin.findUnique({ where: { email } });
 	}
 
-	async getDealerRanking(id: string): Promise<number> {
-		const dealer = await this.getById(id);
+	async getDealerRanking(id: string) {
+		const dealer = await this.getByIdOrThrow(id);
 
-		if (!dealer) {
-			throw new Unauthorized();
-		}
-
-		return dealer.ranking;
+		return this.calcDealerRanking(dealer.rankings);
 	}
 
 	async getDealerRankings(id: string) {
-		const dealer = await this.getById(id);
-
-		if (!dealer) {
-			throw new Unauthorized();
-		}
-
-		if (!dealer.rankings) {
-			return {
-				ranking: dealer.ranking,
-				rankings: [],
-			};
-		}
+		const dealer = await this.getByIdOrThrow(id);
 
 		return {
-			ranking: dealer.ranking,
+			ranking: this.calcDealerRanking(dealer.rankings),
 			rankings: dealer.rankings,
 		};
 	}
 
-	async getDealerIsAvailable(id: string) {
-		const dealer = await this.getById(id);
+	async getDealerIsAvailable(dealerId: string) {
+		const dealer = await this.getByIdOrThrow(dealerId);
 
-		if (!dealer) {
-			throw new Unauthorized();
-		}
+		return dealer.available && dealer.isActive && !dealer.isBanned;
+	}
 
-		return dealer.available;
+	async banDealer(dealerId: string, banReason?: string) {
+		return this.databaseService.dealer.update({
+			where: {
+				id: dealerId,
+			},
+			data: {
+				isBanned: true,
+				banReason,
+			},
+		});
 	}
 
 	async getAvailableDealers() {
-		return this.dealerRepository.findBy({
-			isActive: true,
-			available: true,
+		return this.databaseService.dealer.findMany({
+			where: {
+				isActive: true,
+				available: true,
+				isBanned: false,
+			},
 		});
 	}
 
 	async getActiveDealers() {
-		return this.dealerRepository.findBy({ isActive: true });
+		return this.databaseService.dealer.findMany({
+			where: {
+				isActive: true,
+				isBanned: false,
+			},
+		});
 	}
 
-	save(dealer: Partial<Dealer>) {
-		return this.dealerRepository.save(dealer);
+	async updateDealerRefreshToken(
+		dealerId: string,
+		refreshToken: string | null
+	) {
+		return this.databaseService.dealer.update({
+			where: {
+				id: dealerId,
+			},
+			data: {
+				refreshToken,
+			},
+		});
+	}
+
+	async updateDealerResetPasswordToken(
+		dealerId: string,
+		resetPasswordToken: string | null
+	) {
+		return this.databaseService.dealer.update({
+			where: {
+				id: dealerId,
+			},
+			data: {
+				resetPasswordToken,
+			},
+		});
+	}
+
+	async updateDealerPassword(dealerId: string, password: string) {
+		return this.databaseService.dealer.update({
+			where: {
+				id: dealerId,
+			},
+			data: {
+				password,
+			},
+		});
+	}
+
+	async calcDealerRanking(rankings: DealerRanking[]) {
+		return _calcDealerRanking(rankings);
 	}
 }

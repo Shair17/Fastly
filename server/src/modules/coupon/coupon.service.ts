@@ -1,17 +1,27 @@
-import { Initializer, Service } from 'fastify-decorators';
-import { Repository } from 'typeorm';
-import { DataSourceProvider } from '../../database/DataSourceProvider';
-import { Coupon } from './coupon.entity';
+import { Service } from 'fastify-decorators';
+import { DatabaseService } from '@fastly/database/DatabaseService';
+import { NotFound } from 'http-errors';
+import { generateCouponCode as _generateCouponCode } from '@fastly/utils/generateCouponCode';
 
 @Service('CouponServiceToken')
 export class CouponService {
-	private couponRepository: Repository<Coupon>;
+	constructor(private readonly databaseService: DatabaseService) {}
 
-	constructor(private readonly dataSourceProvider: DataSourceProvider) {}
+	getById(id: string) {
+		return this.databaseService.coupon.findUnique({ where: { id } });
+	}
 
-	@Initializer([DataSourceProvider])
-	async init(): Promise<void> {
-		this.couponRepository =
-			this.dataSourceProvider.dataSource.getRepository(Coupon);
+	async getByIdOrThrow(id: string) {
+		const coupon = await this.getById(id);
+
+		if (!coupon) {
+			throw new NotFound();
+		}
+
+		return coupon;
+	}
+
+	public generateCouponCode() {
+		return _generateCouponCode();
 	}
 }
