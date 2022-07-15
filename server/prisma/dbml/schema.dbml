@@ -82,7 +82,7 @@ Table users {
   email String
   phone String
   dni String
-  avatar String
+  avatar String [not null]
   refreshToken String
   facebookId String [unique, not null]
   facebookAccessToken String [not null]

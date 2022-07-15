@@ -535,12 +535,14 @@ export class UserService {
 		name,
 		facebookId,
 		facebookAccessToken,
-	}: Pick<User, 'name' | 'facebookId' | 'facebookAccessToken'>) {
+		avatar,
+	}: Pick<User, 'name' | 'facebookId' | 'facebookAccessToken' | 'avatar'>) {
 		return this.databaseService.user.create({
 			data: {
 				name,
 				facebookId,
 				facebookAccessToken,
+				avatar,
 			},
 		});
 	}

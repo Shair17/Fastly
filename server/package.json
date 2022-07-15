@@ -25,7 +25,6 @@
 		"@fastify/swagger": "^6.1.0",
 		"@prisma/client": "^4.0.0",
 		"@sinclair/typebox": "^0.23.5",
-		"ajv": "^8.6.1",
 		"argon2": "^0.28.7",
 		"axios": "^0.27.2",
 		"cross-env": "^7.0.3",

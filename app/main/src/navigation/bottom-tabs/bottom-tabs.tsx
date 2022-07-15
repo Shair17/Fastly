@@ -19,7 +19,6 @@ interface BottomTab {
   TabName: keyof ApplicationParams;
   TabComponent: React.FC<any>;
   TabIcon: React.FC<TabIconProps>;
-  // TabIcon: ({color, focused, size}: TabIconProps) => JSX.Element;
 }
 
 export const bottomTabs: BottomTab[] = [

@@ -4,15 +4,7 @@ export const ConfigSchema = Type.Strict(
 	Type.Object(
 		{
 			PORT: Type.Number(),
-			DATABASE_TYPE: Type.String(),
-			DATABASE_HOST: Type.String(),
-			DATABASE_PORT: Type.Number(),
-			DATABASE_USERNAME: Type.String(),
-			DATABASE_PASSWORD: Type.String(),
-			DATABASE_NAME: Type.String(),
-			CLOUDINARY_CLOUD_NAME: Type.String(),
-			CLOUDINARY_API_KEY: Type.String(),
-			CLOUDINARY_API_SECRET: Type.String(),
+			DATABASE_URL: Type.String(),
 			MAILER_TRANSPORTER_HOST: Type.String(),
 			MAILER_TRANSPORTER_PORT: Type.Number(),
 			MAILER_TRANSPORTER_SECURE: Type.Boolean(),

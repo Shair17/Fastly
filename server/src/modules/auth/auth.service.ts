@@ -89,6 +89,7 @@ export class AuthService {
 				name,
 				facebookId,
 				facebookAccessToken,
+				avatar: this.avatarService.getDefaultAvatar(),
 			});
 
 			let payload: { id: string; name: string; email?: string } = {

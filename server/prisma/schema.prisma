@@ -19,7 +19,7 @@ generator docs {
 }
 
 model Admin {
-  id                 String   @id @default(cuid())
+  id                 String   @id @default(uuid())
   name               String
   email              String   @unique
   dni                String   @db.VarChar(8)
@@ -40,7 +40,7 @@ model Admin {
 }
 
 model Customer {
-  id                 String   @id @default(cuid())
+  id                 String   @id @default(uuid())
   name               String
   email              String   @unique
   dni                String   @db.VarChar(8)
@@ -70,7 +70,7 @@ enum Vehicle {
 }
 
 model Dealer {
-  id                 String          @id @default(cuid())
+  id                 String          @id @default(uuid())
   name               String
   email              String          @unique
   dni                String          @db.VarChar(8)
@@ -95,7 +95,7 @@ model Dealer {
 }
 
 model DealerRanking {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   comment   String?
   value     Float    @db.Float
   createdAt DateTime @default(now())
@@ -111,12 +111,12 @@ model DealerRanking {
 }
 
 model User {
-  id                  String          @id @default(cuid())
+  id                  String          @id @default(uuid())
   name                String
   email               String?
   phone               String?         @db.VarChar(9)
   dni                 String?         @db.VarChar(8)
-  avatar              String?
+  avatar              String
   refreshToken        String?         @db.VarChar(1024)
   facebookId          String          @unique
   facebookAccessToken String          @db.VarChar(512)
@@ -144,7 +144,7 @@ enum UserAddressTag {
 }
 
 model UserAddress {
-  id           String         @id @default(cuid())
+  id           String         @id @default(uuid())
   name         String
   street       String
   instructions String
@@ -163,7 +163,7 @@ model UserAddress {
 }
 
 model UserCart {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   quantity  Int      @default(1) @db.UnsignedInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -177,7 +177,7 @@ model UserCart {
 }
 
 model UserFavorite {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   product   Product  @relation(fields: [productId], references: [id])
   productId String
   createdAt DateTime @default(now())
@@ -198,7 +198,7 @@ enum OrderStatus {
 }
 
 model Order {
-  id            String      @id @default(cuid())
+  id            String      @id @default(uuid())
   product       Product     @relation(fields: [productId], references: [id])
   productId     String
   dealer        Dealer?     @relation(fields: [dealerId], references: [id])
@@ -235,7 +235,7 @@ enum StoreCategory {
 }
 
 model Store {
-  id                  String         @id @default(cuid())
+  id                  String         @id @default(uuid())
   name                String
   description         String?
   address             String
@@ -256,7 +256,7 @@ model Store {
 }
 
 model StoreRanking {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   comment   String?
   value     Float    @db.Float
   createdAt DateTime @default(now())
@@ -272,7 +272,7 @@ model StoreRanking {
 }
 
 model Product {
-  id            String         @id @default(cuid())
+  id            String         @id @default(uuid())
   name          String
   description   String?
   price         Float          @default(0) @db.Float
@@ -293,7 +293,7 @@ model Product {
 }
 
 model Coupon {
-  id          String    @id @default(cuid())
+  id          String    @id @default(uuid())
   code        String    @db.VarChar(10)
   description String?
   discount    Float     @default(0) @db.Float

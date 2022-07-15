@@ -1,11 +1,11 @@
 import { Controller, GET, POST } from 'fastify-decorators';
-import { StoreService } from './store.service';
 import { Request, Reply } from '@fastly/interfaces/http';
 import {
 	hasBearerToken,
 	userIsAuthenticated,
 	customerIsAuthenticated,
 } from '@fastly/shared/hooks/auth';
+import { StoreService } from './store.service';
 import {
 	CreateStoreBody,
 	GetStoreParams,
