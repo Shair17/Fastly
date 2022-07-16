@@ -1,8 +1,10 @@
-import { FastifyInstance } from 'fastify';
-import { StatusCodes } from 'http-status-codes';
+import { FastifyPluginAsync } from 'fastify';
+// import { StatusCodes } from 'http-status-codes';
 
-export default async function noFavicon(fastify: FastifyInstance) {
-  fastify.get('/favicon.ico', (_, reply) => {
-    reply.code(StatusCodes.NOT_FOUND).send();
-  });
-}
+const NoFavicon: FastifyPluginAsync = async (server, options) => {
+  // server.get('/favicon.ico', (_, reply) => {
+  //   reply.code(StatusCodes.NOT_FOUND).send();
+  // });
+};
+
+export default NoFavicon;

@@ -25,7 +25,7 @@ export class StoreController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  async getStoresByQueryString(
+  async getStores(
     request: Request<{
       Querystring: GetStoresQueryStringType;
     }>,
@@ -43,7 +43,7 @@ export class StoreController {
     schema: {
       params: GetStoreParams,
     },
-    // onRequest: [hasBearerToken, userIsAuthenticated],
+    onRequest: [hasBearerToken, userIsAuthenticated],
   })
   async getById(
     request: Request<{
@@ -51,7 +51,7 @@ export class StoreController {
     }>,
     reply: Reply,
   ) {
-    return this.storeService.getById(request.params.id);
+    return this.storeService.getByIdOrThrow(request.params.id);
   }
 
   @GET('/categories')
@@ -59,7 +59,7 @@ export class StoreController {
     return this.storeService.getCategories();
   }
 
-  @POST('/create', {
+  @POST('/', {
     schema: {
       body: CreateStoreBody,
     },

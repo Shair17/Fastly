@@ -6,26 +6,49 @@ import {
 } from 'fastify-decorators';
 import { ConfigSchemaType } from './config.schema';
 
+type Config = string | number | boolean;
+type ConfigKey = keyof ConfigSchemaType;
+type ConfigKeyOrString = ConfigKey | string;
+
 @Service('ConfigServiceToken')
 export class ConfigService {
   private readonly fastify =
     getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
-  configExists(key: keyof ConfigSchemaType): boolean {
+  configExists(key: ConfigKey): boolean {
     return !!this.fastify.config[key];
   }
 
-  get(key: keyof ConfigSchemaType) {
+  set(key: ConfigKeyOrString, value: Config, overwrite: boolean = false): void {
+    if (this.configExists(key as ConfigKey) && !overwrite) {
+      throw new Error(
+        `Config with key ${key} already exists. Please set overwrite param to true to overwrite.`,
+      );
+    }
+
+    if (this.configExists(key as ConfigKey) && overwrite) {
+      // @ts-ignore
+      this.fastify.config[key] = value;
+
+      return;
+    }
+
+    // @ts-ignore
+    this.fastify.config[key] = value;
+
+    return;
+  }
+
+  get<T = any>(key: ConfigKey): T {
+    // @ts-ignore
     return this.fastify.config[key];
   }
 
-  getOrThrow(key: keyof ConfigSchemaType) {
-    const config = this.fastify.config[key];
-
-    if (!config) {
+  getOrThrow<T>(key: ConfigKey): T {
+    if (!this.configExists(key)) {
       throw new Error(`Config with key ${key} doesn't exists.`);
     }
 
-    return config;
+    return this.get(key);
   }
 }

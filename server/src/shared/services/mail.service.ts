@@ -1,10 +1,5 @@
-import { FastifyInstance } from 'fastify';
-import {
-  Service,
-  Initializer,
-  getInstanceByToken,
-  FastifyInstanceToken,
-} from 'fastify-decorators';
+import { Service, Initializer } from 'fastify-decorators';
+import { ConfigService } from '@fastly/config/config.service';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
@@ -13,20 +8,22 @@ import internal from 'stream';
 @Service('MailServiceToken')
 export class MailService {
   private readonly nodemailer: typeof nodemailer = nodemailer;
-  private readonly fastify =
-    getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
   private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
+
+  constructor(private readonly configService: ConfigService) {}
 
   @Initializer()
   init(): void {
     this.transporter = this.nodemailer.createTransport({
-      host: this.fastify.config.MAILER_TRANSPORTER_HOST,
-      port: +this.fastify.config.MAILER_TRANSPORTER_PORT,
-      secure: this.fastify.config.MAILER_TRANSPORTER_SECURE,
+      host: this.configService.getOrThrow<string>('MAILER_TRANSPORTER_HOST'),
+      port: +this.configService.getOrThrow<number>('MAILER_TRANSPORTER_PORT'),
+      secure: this.configService.getOrThrow<boolean>(
+        'MAILER_TRANSPORTER_SECURE',
+      ),
       auth: {
-        user: this.fastify.config.MAILER_TRANSPORTER_USER,
-        pass: this.fastify.config.MAILER_TRANSPORTER_PASS,
+        user: this.configService.getOrThrow<string>('MAILER_TRANSPORTER_USER'),
+        pass: this.configService.getOrThrow<string>('MAILER_TRANSPORTER_PASS'),
       },
     });
   }

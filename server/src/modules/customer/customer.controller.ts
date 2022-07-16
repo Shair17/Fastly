@@ -3,6 +3,7 @@ import { CustomerService } from './customer.service';
 import { GetCustomerParams, GetCustomerParamsType } from './customer.schema';
 import { Request, Reply } from '@fastly/interfaces/http';
 import {
+  adminOrCustomerIsAuthenticated,
   hasBearerToken,
   customerIsAuthenticated,
   adminIsAuthenticated,
@@ -21,8 +22,9 @@ export class CustomerController {
     schema: {
       params: GetCustomerParams,
     },
+    onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
   })
-  async getAdmin(
+  async getCustomer(
     request: Request<{
       Params: GetCustomerParamsType;
     }>,
@@ -32,7 +34,7 @@ export class CustomerController {
   }
 
   @GET('/', {
-    onRequest: [hasBearerToken, adminIsAuthenticated],
+    onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
   })
   async getCustomers(request: Request, reply: Reply) {
     return this.customerService.getCustomers();
@@ -41,7 +43,7 @@ export class CustomerController {
   @GET('/me', {
     onRequest: [hasBearerToken, customerIsAuthenticated],
   })
-  async me({ customerId }: Request, reply: Reply) {
-    return this.customerService.me(customerId);
+  async me(request: Request, reply: Reply) {
+    return this.customerService.me(request.customerId);
   }
 }

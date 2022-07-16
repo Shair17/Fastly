@@ -10,6 +10,7 @@ import {
   ProductModule,
   CouponModule,
   StoreModule,
+  FeedModule,
 } from '@fastly/modules';
 
 export const AppModule = [
@@ -25,4 +26,5 @@ export const AppModule = [
   ...ProductModule,
   ...CouponModule,
   ...StoreModule,
+  ...FeedModule,
 ];

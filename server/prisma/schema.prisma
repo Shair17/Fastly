@@ -101,10 +101,10 @@ model DealerRanking {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Dealer   Dealer? @relation(fields: [dealerId], references: [id])
+  dealer   Dealer? @relation(fields: [dealerId], references: [id])
   dealerId String?
 
-  User   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
   @@map("dealers_rankings")
@@ -156,7 +156,7 @@ model UserAddress {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  User   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
   @@map("users_addresses")
@@ -170,7 +170,7 @@ model UserCart {
 
   product   Product @relation(fields: [productId], references: [id])
   productId String
-  User      User?   @relation(fields: [userId], references: [id])
+  user      User?   @relation(fields: [userId], references: [id])
   userId    String?
 
   @@map("users_cart")
@@ -183,7 +183,7 @@ model UserFavorite {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  User   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
   @@map("users_favorites")
@@ -249,7 +249,7 @@ model Store {
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 
-  Owner   Customer? @relation(fields: [ownerId], references: [id])
+  owner   Customer? @relation(fields: [ownerId], references: [id])
   ownerId String?
 
   @@map("stores")
@@ -265,7 +265,7 @@ model StoreRanking {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  Store   Store?  @relation(fields: [storeId], references: [id])
+  store   Store?  @relation(fields: [storeId], references: [id])
   storeId String?
 
   @@map("stores_rankings")
@@ -294,7 +294,7 @@ model Product {
 
 model Coupon {
   id          String    @id @default(uuid())
-  code        String    @db.VarChar(10)
+  code        String    @unique @db.VarChar(10)
   description String?
   discount    Float     @default(0) @db.Float
   expiration  DateTime?

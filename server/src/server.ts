@@ -5,11 +5,23 @@ import Fastify, {
   FastifyInstance,
   FastifyLoggerInstance,
 } from 'fastify';
-import { Server as IServer, IncomingMessage, ServerResponse } from 'http';
+import { bootstrap } from 'fastify-decorators';
+import type { Server as IServer, IncomingMessage, ServerResponse } from 'http';
 import { resolve } from 'path';
 import { StatusCodes } from 'http-status-codes';
-import { AppModule } from './app.module';
+import Env from '@fastify/env';
+import Compress from '@fastify/compress';
+import Helmet from '@fastify/helmet';
+import Cors from '@fastify/cors';
+import HealthCheck from 'fastify-healthcheck';
+import Static from '@fastify/static';
+import Favicon from 'fastify-favicon';
+import Routes from '@fastify/routes';
+import RateLimit from '@fastify/rate-limit';
+import IO from 'fastify-socket.io';
 import { ConfigSchema, ConfigSchemaType } from '@fastly/config/config.schema';
+import { AppModule } from '@fastly/app.module';
+import { MapRoutes } from '@fastly/plugins';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -35,68 +47,56 @@ export default async function Server(
   >
 > {
   const server: FastifyInstance = Fastify(opts);
+  const publicDir = resolve(__dirname, '../public');
 
-  server.log.info(
-    `Starting Fastly server application at ${new Date().toString()}`,
-  );
+  server.log.info(`Starting Fastly server application at ${new Date()}`);
 
-  server.register(import('@fastify/env'), {
+  server.register(Env, {
     dotenv: {
       path: resolve(__dirname, '../.env'),
-      // debug: true,
+      debug: false,
     },
     confKey: 'config',
     schema: ConfigSchema,
   });
-
-  server.register(import('@fastify/rate-limit'), {
+  server.register(RateLimit, {
     max: 100,
     timeWindow: '1 minute',
   });
-
   server.setErrorHandler((error, _, reply) => {
     if (reply.statusCode === StatusCodes.TOO_MANY_REQUESTS) {
       error.message = `¡Llegaste al límite de velocidad! ¡Más despacio, por favor!`;
     }
     reply.send(error);
   });
-
-  server.register(import('@fastify/cors'));
-
-  server.register(import('@fastify/compress'));
-
-  server.register(import('@fastify/helmet'), {
+  server.register(Cors);
+  server.register(Compress);
+  server.register(Helmet, {
     global: true,
     hidePoweredBy: true,
   });
-
-  server.register(import('@fastify/routes'));
-
-  server.register(import('@fastify/static'), {
-    root: resolve(__dirname, '../public'),
+  server.register(Routes);
+  server.register(Static, {
+    root: publicDir,
   });
-
-  server.register(import('fastify-favicon'), {
-    path: './public',
+  server.register(Favicon, {
+    path: publicDir,
+    name: 'favicon.ico',
   });
-
-  server.register(import('fastify-healthcheck'), {
+  server.register(HealthCheck, {
     exposeUptime: true,
     healthcheckUrl: '/health',
   });
-
-  server.register((await import('fastify-decorators')).bootstrap, {
+  server.register(bootstrap, {
     prefix: 'v1',
     controllers: [...AppModule],
   });
-
-  server.register(import('fastify-socket.io'), {
+  server.register(IO, {
     cors: {
       origin: '*',
     },
   });
-
-  server.register(import('@fastly/plugins/map-routes'));
+  server.register(MapRoutes);
 
   return server;
 }

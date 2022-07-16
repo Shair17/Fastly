@@ -8,3 +8,4 @@ export * from './product';
 export * from './search';
 export * from './store';
 export * from './user';
+export * from './feed';

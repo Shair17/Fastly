@@ -1,10 +1,6 @@
-import { FastifyInstance } from 'fastify';
-import {
-  Service,
-  FastifyInstanceToken,
-  getInstanceByToken,
-} from 'fastify-decorators';
+import { Service } from 'fastify-decorators';
 import { Unauthorized, InternalServerError } from 'http-errors';
+import { ConfigService } from '@fastly/config/config.service';
 import {
   JwtService,
   JsonWebTokenError,
@@ -20,55 +16,10 @@ import {
 
 @Service('TokenServiceToken')
 export class TokenService {
-  private readonly fastify: FastifyInstance =
-    getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
-
-  private readonly JWT_USER_SECRET: string =
-    this.fastify.config.JWT_USER_SECRET;
-  private readonly JWT_USER_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_USER_SECRET_EXPIRES_IN;
-  private readonly JWT_USER_REFRESH_SECRET: string =
-    this.fastify.config.JWT_USER_REFRESH_SECRET;
-  private readonly JWT_USER_REFRESH_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_USER_REFRESH_SECRET_EXPIRES_IN;
-  private readonly JWT_ADMIN_SECRET: string =
-    this.fastify.config.JWT_ADMIN_SECRET;
-  private readonly JWT_ADMIN_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_ADMIN_SECRET_EXPIRES_IN;
-  private readonly JWT_ADMIN_REFRESH_SECRET: string =
-    this.fastify.config.JWT_ADMIN_REFRESH_SECRET;
-  private readonly JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN;
-  private readonly JWT_FORGOT_ADMIN_PASSWORD_SECRET: string =
-    this.fastify.config.JWT_FORGOT_ADMIN_PASSWORD_SECRET;
-  private readonly JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN;
-  private readonly JWT_CUSTOMER_SECRET: string =
-    this.fastify.config.JWT_CUSTOMER_SECRET;
-  private readonly JWT_CUSTOMER_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_CUSTOMER_SECRET_EXPIRES_IN;
-  private readonly JWT_CUSTOMER_REFRESH_SECRET: string =
-    this.fastify.config.JWT_CUSTOMER_REFRESH_SECRET;
-  private readonly JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN;
-  private readonly JWT_FORGOT_CUSTOMER_PASSWORD_SECRET: string =
-    this.fastify.config.JWT_FORGOT_CUSTOMER_PASSWORD_SECRET;
-  private readonly JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN;
-  private readonly JWT_DEALER_SECRET: string =
-    this.fastify.config.JWT_DEALER_SECRET;
-  private readonly JWT_DEALER_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_DEALER_SECRET_EXPIRES_IN;
-  private readonly JWT_DEALER_REFRESH_SECRET: string =
-    this.fastify.config.JWT_DEALER_REFRESH_SECRET;
-  private readonly JWT_DEALER_REFRESH_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_DEALER_REFRESH_SECRET_EXPIRES_IN;
-  private readonly JWT_FORGOT_DEALER_PASSWORD_SECRET: string =
-    this.fastify.config.JWT_FORGOT_DEALER_PASSWORD_SECRET;
-  private readonly JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN: string =
-    this.fastify.config.JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN;
-
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   generateForgotPasswordToken(
     type: ForgotPasswordTokenType,
@@ -78,22 +29,40 @@ export class TokenService {
       case 'admin':
         return this.jwtService.sign(
           payload,
-          this.JWT_FORGOT_ADMIN_PASSWORD_SECRET,
-          { expiresIn: this.JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN },
+          this.configService.getOrThrow<string>(
+            'JWT_FORGOT_ADMIN_PASSWORD_SECRET',
+          ),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_FORGOT_ADMIN_PASSWORD_SECRET_EXPIRES_IN',
+            ),
+          },
         );
 
       case 'customer':
         return this.jwtService.sign(
           payload,
-          this.JWT_FORGOT_CUSTOMER_PASSWORD_SECRET,
-          { expiresIn: this.JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN },
+          this.configService.getOrThrow<string>(
+            'JWT_FORGOT_CUSTOMER_PASSWORD_SECRET',
+          ),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_FORGOT_CUSTOMER_PASSWORD_SECRET_EXPIRES_IN',
+            ),
+          },
         );
 
       case 'dealer':
         return this.jwtService.sign(
           payload,
-          this.JWT_FORGOT_DEALER_PASSWORD_SECRET,
-          { expiresIn: this.JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN },
+          this.configService.getOrThrow<string>(
+            'JWT_FORGOT_DEALER_PASSWORD_SECRET',
+          ),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN',
+            ),
+          },
         );
 
       default:
@@ -106,43 +75,9 @@ export class TokenService {
       case 'user':
         try {
           return <AuthTokenPayload>(
-            this.jwtService.verify(refreshToken, this.JWT_USER_REFRESH_SECRET)
-          );
-        } catch (error) {
-          if (error instanceof TokenExpiredError) {
-            throw new Unauthorized(`token_expired`);
-          }
-
-          if (error instanceof JsonWebTokenError) {
-            throw new Unauthorized(`invalid_token`);
-          }
-
-          throw new InternalServerError();
-        }
-
-      case 'admin':
-        try {
-          return <AuthTokenPayload>(
-            this.jwtService.verify(refreshToken, this.JWT_ADMIN_REFRESH_SECRET)
-          );
-        } catch (error) {
-          if (error instanceof TokenExpiredError) {
-            throw new Unauthorized(`token_expired`);
-          }
-
-          if (error instanceof JsonWebTokenError) {
-            throw new Unauthorized(`invalid_token`);
-          }
-
-          throw new InternalServerError();
-        }
-
-      case 'customer':
-        try {
-          return <AuthTokenPayload>(
             this.jwtService.verify(
               refreshToken,
-              this.JWT_CUSTOMER_REFRESH_SECRET,
+              this.configService.getOrThrow<string>('JWT_USER_REFRESH_SECRET'),
             )
           );
         } catch (error) {
@@ -157,10 +92,56 @@ export class TokenService {
           throw new InternalServerError();
         }
 
+      case 'admin':
+        try {
+          return <AuthTokenPayload>(
+            this.jwtService.verify(
+              refreshToken,
+              this.configService.getOrThrow<string>('JWT_ADMIN_REFRESH_SECRET'),
+            )
+          );
+        } catch (error) {
+          if (error instanceof TokenExpiredError) {
+            throw new Unauthorized(`token_expired`);
+          }
+
+          if (error instanceof JsonWebTokenError) {
+            throw new Unauthorized(`invalid_token`);
+          }
+
+          throw new InternalServerError();
+        }
+
+      case 'customer':
+        try {
+          return <AuthTokenPayload>this.jwtService.verify(
+            refreshToken,
+
+            this.configService.getOrThrow<string>(
+              'JWT_CUSTOMER_REFRESH_SECRET',
+            ),
+          );
+        } catch (error) {
+          if (error instanceof TokenExpiredError) {
+            throw new Unauthorized(`token_expired`);
+          }
+
+          if (error instanceof JsonWebTokenError) {
+            throw new Unauthorized(`invalid_token`);
+          }
+
+          throw new InternalServerError();
+        }
+
       case 'dealer':
         try {
           return <AuthTokenPayload>(
-            this.jwtService.verify(refreshToken, this.JWT_DEALER_REFRESH_SECRET)
+            this.jwtService.verify(
+              refreshToken,
+              this.configService.getOrThrow<string>(
+                'JWT_DEALER_REFRESH_SECRET',
+              ),
+            )
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -186,11 +167,12 @@ export class TokenService {
     switch (type) {
       case 'admin':
         try {
-          return <ForgotPasswordTokenPayload>(
-            this.jwtService.verify(
-              resetPasswordToken,
-              this.JWT_FORGOT_ADMIN_PASSWORD_SECRET,
-            )
+          return <ForgotPasswordTokenPayload>this.jwtService.verify(
+            resetPasswordToken,
+
+            this.configService.getOrThrow<string>(
+              'JWT_FORGOT_ADMIN_PASSWORD_SECRET',
+            ),
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -206,11 +188,12 @@ export class TokenService {
 
       case 'customer':
         try {
-          return <ForgotPasswordTokenPayload>(
-            this.jwtService.verify(
-              resetPasswordToken,
-              this.JWT_FORGOT_CUSTOMER_PASSWORD_SECRET,
-            )
+          return <ForgotPasswordTokenPayload>this.jwtService.verify(
+            resetPasswordToken,
+
+            this.configService.getOrThrow<string>(
+              'JWT_FORGOT_CUSTOMER_PASSWORD_SECRET',
+            ),
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -226,11 +209,12 @@ export class TokenService {
 
       case 'dealer':
         try {
-          return <ForgotPasswordTokenPayload>(
-            this.jwtService.verify(
-              resetPasswordToken,
-              this.JWT_FORGOT_DEALER_PASSWORD_SECRET,
-            )
+          return <ForgotPasswordTokenPayload>this.jwtService.verify(
+            resetPasswordToken,
+
+            this.configService.getOrThrow<string>(
+              'JWT_FORGOT_DEALER_PASSWORD_SECRET',
+            ),
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -252,24 +236,48 @@ export class TokenService {
   generateAccessToken(type: AuthTokenType, payload: AuthTokenPayload): string {
     switch (type) {
       case 'user':
-        return this.jwtService.sign(payload, this.JWT_USER_SECRET, {
-          expiresIn: this.JWT_USER_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_USER_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_USER_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'admin':
-        return this.jwtService.sign(payload, this.JWT_ADMIN_SECRET, {
-          expiresIn: this.JWT_ADMIN_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_ADMIN_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_ADMIN_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'customer':
-        return this.jwtService.sign(payload, this.JWT_CUSTOMER_SECRET, {
-          expiresIn: this.JWT_CUSTOMER_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_CUSTOMER_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_CUSTOMER_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'dealer':
-        return this.jwtService.sign(payload, this.JWT_DEALER_SECRET, {
-          expiresIn: this.JWT_DEALER_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_DEALER_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_DEALER_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       default:
         throw new Error('Invalid token type');
@@ -279,24 +287,48 @@ export class TokenService {
   generateRefreshToken(type: AuthTokenType, payload: AuthTokenPayload): string {
     switch (type) {
       case 'user':
-        return this.jwtService.sign(payload, this.JWT_USER_REFRESH_SECRET, {
-          expiresIn: this.JWT_USER_REFRESH_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_USER_REFRESH_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_USER_REFRESH_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'admin':
-        return this.jwtService.sign(payload, this.JWT_ADMIN_REFRESH_SECRET, {
-          expiresIn: this.JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_ADMIN_REFRESH_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_ADMIN_REFRESH_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'customer':
-        return this.jwtService.sign(payload, this.JWT_CUSTOMER_REFRESH_SECRET, {
-          expiresIn: this.JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_CUSTOMER_REFRESH_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_CUSTOMER_REFRESH_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       case 'dealer':
-        return this.jwtService.sign(payload, this.JWT_DEALER_REFRESH_SECRET, {
-          expiresIn: this.JWT_DEALER_REFRESH_SECRET_EXPIRES_IN,
-        });
+        return this.jwtService.sign(
+          payload,
+          this.configService.getOrThrow<string>('JWT_DEALER_REFRESH_SECRET'),
+          {
+            expiresIn: this.configService.getOrThrow<string>(
+              'JWT_DEALER_REFRESH_SECRET_EXPIRES_IN',
+            ),
+          },
+        );
 
       default:
         throw new Error('Invalid token type');

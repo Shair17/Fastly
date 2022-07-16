@@ -380,7 +380,7 @@ export class UserService {
 
     const updatedCart = await this.databaseService.userCart.deleteMany({
       where: {
-        User: {
+        user: {
           id: user.id,
         },
       },
@@ -421,7 +421,7 @@ export class UserService {
 
     await this.databaseService.userFavorite.deleteMany({
       where: {
-        User: {
+        user: {
           id: userId,
         },
       },

@@ -24,7 +24,14 @@ export class StoreService {
   }
 
   getById(id: string) {
-    return this.databaseService.store.findUnique({ where: { id } });
+    return this.databaseService.store.findUnique({
+      where: { id },
+      include: {
+        products: true,
+        owner: true,
+        rankings: true,
+      },
+    });
   }
 
   async getByIdOrThrow(id: string) {
@@ -81,7 +88,7 @@ export class StoreService {
         description,
         logo,
         name,
-        Owner: {
+        owner: {
           connect: {
             id: owner.id,
           },
