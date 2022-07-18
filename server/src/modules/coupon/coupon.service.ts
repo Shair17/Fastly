@@ -1,13 +1,13 @@
-import { Service } from 'fastify-decorators';
-import { DatabaseService } from '@fastly/database/DatabaseService';
-import { NotFound } from 'http-errors';
-import { generateCouponCode as getCouponCode } from '@fastly/utils/generateCouponCode';
+import {Service} from 'fastify-decorators';
+import {DatabaseService} from '@fastly/database/DatabaseService';
+import {NotFound} from 'http-errors';
+import {generateCouponCode as getCouponCode} from '@fastly/utils/generateCouponCode';
 import {
   CreateCouponBodyType,
   EditCouponByCodeBodyType,
   EditCouponByIdBodyType,
 } from './coupon.schema';
-import { ProductService } from '@fastly/modules/product/product.service';
+import {ProductService} from '@fastly/modules/product/product.service';
 
 @Service('CouponServiceToken')
 export class CouponService {
@@ -17,7 +17,7 @@ export class CouponService {
   ) {}
 
   getById(id: string) {
-    return this.databaseService.coupon.findUnique({ where: { id } });
+    return this.databaseService.coupon.findUnique({where: {id}});
   }
 
   async getByIdOrThrow(id: string) {
@@ -36,7 +36,7 @@ export class CouponService {
 
   async couponExists(code: string) {
     const coupon = await this.databaseService.coupon.findUnique({
-      where: { code },
+      where: {code},
     });
 
     if (!coupon) {
@@ -47,7 +47,7 @@ export class CouponService {
   }
 
   async deleteCouponByCode(code: string) {
-    await this.databaseService.coupon.delete({ where: { code } });
+    await this.databaseService.coupon.delete({where: {code}});
 
     return {
       statusCode: 200,
@@ -57,7 +57,7 @@ export class CouponService {
   }
 
   async createCoupon(data: CreateCouponBodyType) {
-    const { discount, productId, description, expiration } = data;
+    const {discount, productId, description, expiration} = data;
     const code = await this.generateCouponCode();
     const product = await this.productService.getByIdOrThrow(productId);
 
@@ -79,12 +79,12 @@ export class CouponService {
   }
 
   async editCouponByCode(couponCode: string, data: EditCouponByCodeBodyType) {
-    const { description, discount, expiration, productId } = data;
+    const {description, discount, expiration, productId} = data;
     const coupon = await this.getCouponByCode(couponCode);
     const product = await this.productService.getByIdOrThrow(productId);
 
     const updatedCoupon = await this.databaseService.coupon.update({
-      where: { id: coupon.id },
+      where: {id: coupon.id},
       data: {
         description,
         discount,
@@ -107,12 +107,12 @@ export class CouponService {
   }
 
   async editCouponById(couponId: string, data: EditCouponByIdBodyType) {
-    const { description, discount, expiration, productId } = data;
+    const {description, discount, expiration, productId} = data;
     const coupon = await this.getByIdOrThrow(couponId);
     const product = await this.productService.getByIdOrThrow(productId);
 
     const updatedCoupon = await this.databaseService.coupon.update({
-      where: { id: coupon.id },
+      where: {id: coupon.id},
       data: {
         description,
         discount,
@@ -135,7 +135,7 @@ export class CouponService {
   }
 
   async deleteCouponById(id: string) {
-    await this.databaseService.coupon.delete({ where: { id } });
+    await this.databaseService.coupon.delete({where: {id}});
 
     return {
       statusCode: 200,
@@ -146,7 +146,7 @@ export class CouponService {
 
   async getCouponByCode(code: string) {
     const coupon = await this.databaseService.coupon.findUnique({
-      where: { code },
+      where: {code},
     });
 
     if (!coupon) {

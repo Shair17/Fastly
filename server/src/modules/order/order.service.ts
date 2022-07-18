@@ -1,10 +1,10 @@
-import { Service } from 'fastify-decorators';
-import { Unauthorized, NotFound } from 'http-errors';
-import { Order, OrderStatus } from '@prisma/client';
-import { DatabaseService } from '@fastly/database/DatabaseService';
-import { UserService } from '../user/user.service';
-import { DealerService } from '../dealer/dealer.service';
-import { ProductService } from '../product/product.service';
+import {Service} from 'fastify-decorators';
+import {Unauthorized, NotFound} from 'http-errors';
+import {Order, OrderStatus} from '@prisma/client';
+import {DatabaseService} from '@fastly/database/DatabaseService';
+import {UserService} from '../user/user.service';
+import {DealerService} from '../dealer/dealer.service';
+import {ProductService} from '../product/product.service';
 
 @Service('OrderServiceToken')
 export class OrderService {
@@ -16,7 +16,7 @@ export class OrderService {
   ) {}
 
   getById(id: string) {
-    return this.databaseService.order.findUnique({ where: { id } });
+    return this.databaseService.order.findUnique({where: {id}});
   }
 
   async getByIdOrThrow(id: string) {
@@ -30,7 +30,7 @@ export class OrderService {
   }
 
   async getOrdersByStatus(status: OrderStatus) {
-    return this.databaseService.order.findMany({ where: { status } });
+    return this.databaseService.order.findMany({where: {status}});
   }
 
   async createOrder(order: Order) {
@@ -96,8 +96,8 @@ export class OrderService {
     const order = await this.getByIdOrThrow(orderId);
 
     return this.databaseService.order.update({
-      where: { id: order.id },
-      data: { arrivalTime },
+      where: {id: order.id},
+      data: {arrivalTime},
     });
   }
 
@@ -129,7 +129,7 @@ export class OrderService {
 
   async updateOrderStatus(id: string, status: OrderStatus) {
     return this.databaseService.order.update({
-      where: { id },
+      where: {id},
       data: {
         status,
       },
@@ -137,7 +137,7 @@ export class OrderService {
   }
 
   async deleteOrder(orderId: string) {
-    return this.databaseService.order.delete({ where: { id: orderId } });
+    return this.databaseService.order.delete({where: {id: orderId}});
   }
 
   async getOrdersFromUser(userId: string) {

@@ -9,11 +9,35 @@ import {
 	Table,
 	Text,
 	useMantineTheme,
+	Modal,
+	Button,
+	Paper,
+	TextInput,
+	PasswordInput,
 } from '@mantine/core';
 import { Pencil, Trash } from 'tabler-icons-react';
+import { useForm, zodResolver } from '@mantine/form';
+import { UsersTable } from '../../components/organisms/UsersTable';
+import { UserTableItem } from '../../components/organisms/UserTableItem';
+import { useAdminsStore } from '../../stores/useAdminsStore';
+import { registerSchema } from '../../schemas/register-schema';
+import { DatePicker } from '@mantine/dates';
+import useAxios from 'axios-hooks';
+import { showNotification } from '@mantine/notifications';
+import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
 
 export const DashboardUsers = () => {
 	const theme = useMantineTheme();
+	const [{ error, loading, data, response }, executePost] = useAxios({
+		url: '/users',
+		method: 'GET',
+	});
+
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p>Error!</p>;
+
+	console.log({ data });
+	console.log({ response });
 
 	return (
 		<DashboardLayout>

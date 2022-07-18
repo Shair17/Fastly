@@ -27,6 +27,7 @@ import useAxios from 'axios-hooks';
 import { showNotification } from '@mantine/notifications';
 import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
 import { DatePicker } from '@mantine/dates';
+import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
 
 interface Props extends Admin {
 	type: 'admin' | 'user' | 'customer' | 'dealer';
@@ -50,6 +51,7 @@ export const UserTableItem = ({
 
 	type,
 }: Props) => {
+	age = calcAgeFromDate(new Date(birthDate));
 	const theme = useMantineTheme();
 	const selfId = useAdminStore((a) => a.id);
 	const removeAdmin = useAdminsStore((a) => a.removeAdmin);
@@ -284,7 +286,7 @@ export const UserTableItem = ({
 				</td>
 				<td>
 					<Text size="sm" color="gray" title={age.toString()}>
-						{age}
+						{age.toString()}
 					</Text>
 				</td>
 				<td>

@@ -14,3 +14,17 @@ export interface Admin {
 	phone: string;
 	updatedAt: string;
 }
+
+export interface User {
+	id: string;
+	name: string;
+	email?: string;
+	phone?: string;
+	dni?: string;
+	avatar: string;
+	facebookId: string;
+	isBanned: boolean;
+	banReason?: string;
+	createdAt: Date;
+	updatedAt: Date;
+}

@@ -1,6 +1,6 @@
-import { Controller, GET, POST, PUT, DELETE } from 'fastify-decorators';
-import { UserService } from './user.service';
-import { Request, Reply } from '@fastly/interfaces/http';
+import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
+import {UserService} from './user.service';
+import {Request, Reply} from '@fastly/interfaces/http';
 import {
   AddAddressBody,
   AddAddressBodyType,
@@ -20,35 +20,44 @@ import {
   MyItemCartParamsType,
   UpdateUserProfileBody,
   UpdateUserProfileBodyType,
-} from './user.schema';
-import { hasBearerToken, userIsAuthenticated } from '@fastly/shared/hooks/auth';
-import {
   UpdateNewUserBody,
   UpdateNewUserBodyType,
   MyAddressParams,
   MyAddressParamsType,
 } from './user.schema';
+import {
+  hasBearerToken,
+  userIsAuthenticated,
+  adminIsAuthenticated,
+} from '@fastly/shared/hooks/auth';
 
 @Controller('/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @GET('/', {
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async getUsers() {
+    return this.userService.getUsers();
+  }
+
   @GET('/count')
-  count() {
+  async count() {
     return this.userService.count();
   }
 
   @GET('/me', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  me(request: Request, reply: Reply) {
+  async me(request: Request, reply: Reply) {
     return this.userService.me(request.userId);
   }
 
   @GET('/me/addresses', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myAddresses(request: Request, reply: Reply) {
+  async myAddresses(request: Request, reply: Reply) {
     return this.userService.myAddresses(request.userId);
   }
 
@@ -58,7 +67,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myAddress(
+  async myAddress(
     request: Request<{
       Params: MyAddressParamsType;
     }>,
@@ -73,7 +82,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  addAddress(
+  async addAddress(
     request: Request<{
       Body: AddAddressBodyType;
     }>,
@@ -88,7 +97,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  deleteAddress(
+  async deleteAddress(
     request: Request<{
       Params: DeleteAddressParamsType;
     }>,
@@ -100,7 +109,7 @@ export class UserController {
   @GET('/me/cart', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myCart(request: Request, reply: Reply) {
+  async myCart(request: Request, reply: Reply) {
     return this.userService.myCart(request.userId);
   }
 
@@ -110,7 +119,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myItemCart(
+  async myItemCart(
     request: Request<{
       Params: MyItemCartParamsType;
     }>,
@@ -125,7 +134,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  addItemCart(
+  async addItemCart(
     request: Request<{
       Body: AddItemCartBodyType;
     }>,
@@ -141,7 +150,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  editItemCartQuantity(
+  async editItemCartQuantity(
     request: Request<{
       Params: EditItemCartQuantityParamsType;
       Body: EditItemCartQuantityBodyType;
@@ -158,7 +167,7 @@ export class UserController {
   @DELETE('/me/cart', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  deleteCart(request: Request, reply: Reply) {
+  async deleteCart(request: Request, reply: Reply) {
     return this.userService.deleteCart(request.userId);
   }
 
@@ -168,7 +177,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  deleteItemCart(
+  async deleteItemCart(
     request: Request<{
       Params: MyFavoriteParamsType;
     }>,
@@ -180,7 +189,7 @@ export class UserController {
   @GET('/me/favorites', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myFavorites(request: Request, reply: Reply) {
+  async myFavorites(request: Request, reply: Reply) {
     return this.userService.myFavorites(request.userId);
   }
 
@@ -190,7 +199,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  myFavorite(
+  async myFavorite(
     request: Request<{
       Params: MyFavoriteParamsType;
     }>,
@@ -235,7 +244,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  updateNewUser(
+  async updateNewUser(
     request: Request<{
       Body: UpdateNewUserBodyType;
     }>,
@@ -250,7 +259,7 @@ export class UserController {
     },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  updateUserProfile(
+  async updateUserProfile(
     request: Request<{
       Body: UpdateUserProfileBodyType;
     }>,

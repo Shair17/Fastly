@@ -70,10 +70,10 @@ Table dealers_rankings {
   value Float [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  dealer dealers
-  dealerId String
-  user users
-  userId String
+  dealer dealers [not null]
+  dealerId String [not null]
+  user users [not null]
+  userId String [not null]
 }
 
 Table users {
@@ -166,8 +166,8 @@ Table stores {
   closeTime DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  owner customers
-  ownerId String
+  owner customers [not null]
+  ownerId String [not null]
 }
 
 Table stores_rankings {
@@ -178,8 +178,8 @@ Table stores_rankings {
   updatedAt DateTime [not null]
   user users [not null]
   userId String [not null]
-  store stores
-  storeId String
+  store stores [not null]
+  storeId String [not null]
 }
 
 Table products {

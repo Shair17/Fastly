@@ -101,11 +101,11 @@ model DealerRanking {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  dealer   Dealer? @relation(fields: [dealerId], references: [id])
-  dealerId String?
+  dealer   Dealer @relation(fields: [dealerId], references: [id])
+  dealerId String
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   @@map("dealers_rankings")
 }
@@ -249,8 +249,8 @@ model Store {
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 
-  owner   Customer? @relation(fields: [ownerId], references: [id])
-  ownerId String?
+  owner   Customer @relation(fields: [ownerId], references: [id])
+  ownerId String
 
   @@map("stores")
 }
@@ -265,8 +265,8 @@ model StoreRanking {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String?
+  store   Store  @relation(fields: [storeId], references: [id])
+  storeId String
 
   @@map("stores_rankings")
 }

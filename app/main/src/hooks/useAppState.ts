@@ -22,7 +22,7 @@ export const useAppState = () => {
         AppState.removeEventListener('change', onChange);
       }
     };
-  }, []);
+  }, [appState]);
 
   return appState;
 };

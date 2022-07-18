@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance} from 'fastify';
 import {
   Service,
   Initializer,
@@ -6,7 +6,7 @@ import {
   FastifyInstanceToken,
   getInstanceByToken,
 } from 'fastify-decorators';
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
 
 interface OnModuleInit {
   onModuleInit(): any;
@@ -25,7 +25,9 @@ export class DatabaseService
     getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
   constructor() {
-    super({ log: ['query'] });
+    super({
+      log: ['info', 'warn', 'error'],
+    });
   }
 
   @Initializer()

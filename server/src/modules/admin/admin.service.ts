@@ -1,13 +1,13 @@
-import { Service } from 'fastify-decorators';
-import { Unauthorized, BadRequest, NotFound } from 'http-errors';
-import { DatabaseService } from '@fastly/database/DatabaseService';
-import { PasswordService } from '@fastly/shared/services/password.service';
-import { trimStrings } from '@fastly/utils/trimStrings';
-import { SHAIR_EMAIL } from '@fastly/constants/app';
-import { AvatarService } from '@fastly/shared/services/avatar.service';
-import { ImageService } from '@fastly/shared/services/image.service';
-import { CreateAdminBodyType, EditAdminBodyType } from './admin.schema';
-import { isString } from '@fastly/utils';
+import {Service} from 'fastify-decorators';
+import {Unauthorized, BadRequest, NotFound} from 'http-errors';
+import {DatabaseService} from '@fastly/database/DatabaseService';
+import {PasswordService} from '@fastly/shared/services/password.service';
+import {trimStrings} from '@fastly/utils/trimStrings';
+import {SHAIR_EMAIL} from '@fastly/constants/app';
+import {AvatarService} from '@fastly/shared/services/avatar.service';
+import {ImageService} from '@fastly/shared/services/image.service';
+import {CreateAdminBodyType, EditAdminBodyType} from './admin.schema';
+import {isString} from '@fastly/utils';
 
 @Service('AdminServiceToken')
 export class AdminService {
@@ -35,7 +35,7 @@ export class AdminService {
   async me(id: string) {
     const admin = await this.getByIdOrThrow(id);
 
-    const { password, ...restOfAdmin } = admin;
+    const {password, ...restOfAdmin} = admin;
 
     return restOfAdmin;
   }
@@ -49,7 +49,7 @@ export class AdminService {
       data.phone,
       data.birthDate,
     );
-    let { avatar } = data;
+    let {avatar} = data;
 
     const foundAdmin = await this.getByEmail(email);
 
@@ -95,7 +95,7 @@ export class AdminService {
       data.phone,
       data.birthDate,
     );
-    let { avatar } = data;
+    let {avatar} = data;
 
     const foundAdmin = await this.getByIdOrThrow(adminId);
 

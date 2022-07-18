@@ -3,8 +3,6 @@ import {combine} from 'zustand/middleware';
 import {
   accessToken,
   refreshToken,
-  isNewUser,
-  isNewUserKey,
   accessTokenKey,
   refreshTokenKey,
   Tokens,
@@ -14,29 +12,15 @@ import {storage} from '@fastly/services/storage';
 
 export interface ITokens extends Tokens {}
 
-type AuthTypes = Tokens & {
-  isNewUser: boolean;
-};
-
-const getDefaultValues = (): AuthTypes => {
+const getDefaultValues = (): Tokens => {
   return {
-    // accessToken: accessToken,
     accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
-    isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,
   };
 };
 
 export const useAuthStore = create(
   combine(getDefaultValues(), (set, get) => ({
-    // increase: (by: number) => set(state => ({bears: state.bears + by})),
-    setIsNewUser: (isNewUser: boolean) => {
-      storage.set(isNewUserKey, isNewUser);
-
-      set({
-        isNewUser,
-      });
-    },
     setAccessToken: (accessToken: string) => {
       storage.set(accessTokenKey, accessToken);
 
@@ -70,7 +54,7 @@ export const useAuthStore = create(
       });
     },
     logOutFromFastly: async () => {
-      await http.post('/auth/facebook/logout');
+      await http.post('/auth/dealer/logout');
     },
   })),
 );

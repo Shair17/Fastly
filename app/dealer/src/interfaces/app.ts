@@ -1,3 +1,19 @@
+export interface SignUpType {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  dni: string;
+  phone: string;
+  address: string;
+  birthDate: string;
+}
+
+export interface SignInType {
+  email: string;
+  password: string;
+}
+
 export interface LogInWithFacebookType {
   accessToken: string;
   userID: string;

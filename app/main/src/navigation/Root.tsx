@@ -38,7 +38,6 @@ export type RootStackParams = {
 
   Application: undefined;
 };
-
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 export const Root: React.FC = () => {

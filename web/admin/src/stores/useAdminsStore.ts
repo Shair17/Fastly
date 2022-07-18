@@ -34,6 +34,8 @@ export const useAdminsStore = create(
 
 			const response = await http.get<Admin[]>('/admins');
 
+			console.log(response.data);
+
 			set({
 				admins: [...response.data],
 			});

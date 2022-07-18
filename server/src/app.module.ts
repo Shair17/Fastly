@@ -1,4 +1,4 @@
-import { AppController } from '@fastly/app.controller';
+import {AppController} from '@fastly/app.controller';
 import {
   AuthModule,
   UserModule,

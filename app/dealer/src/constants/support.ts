@@ -3,6 +3,8 @@ export const FASTLY_FACEBOOK = 'https://fastly.delivery/app-facebook';
 export const FASTLY_INSTAGRAM = 'https://fastly.delivery/app-instagram';
 export const FASTLY_WEB = 'https://fastly.delivery/';
 
+export const FASTLY_CONTACT = 'https://fastly.delivery/contacto';
+
 export const FASTLY_PP = 'https://fastly.delivery/privacidad';
 export const FASTLY_TC = 'https://fastly.delivery/terminos';
 

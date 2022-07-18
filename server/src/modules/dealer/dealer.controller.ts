@@ -1,13 +1,20 @@
-import { Controller, GET } from 'fastify-decorators';
-import { DealerService } from './dealer.service';
-import { Request, Reply } from '@fastly/interfaces/http';
+import {Controller, GET, POST} from 'fastify-decorators';
+import {DealerService} from './dealer.service';
+import {Request, Reply} from '@fastly/interfaces/http';
+import {
+  CreateDealerRankingBody,
+  CreateDealerRankingBodyType,
+} from './dealer.schema';
 import {
   hasBearerToken,
   dealerIsAuthenticated,
   adminIsAuthenticated,
   adminOrCustomerOrDealerOrUserIsAuthenticated,
+  userIsAuthenticated,
 } from '@fastly/shared/hooks/auth';
 import {
+  CreateDealerRankingParams,
+  CreateDealerRankingParamsType,
   GetDealerParams,
   GetDealerParamsType,
   GetDealerRankingParams,
@@ -37,6 +44,26 @@ export class DealerController {
     reply: Reply,
   ) {
     return this.dealerService.me(request.params.id);
+  }
+
+  @POST('/:id/ranking', {
+    schema: {
+      params: CreateDealerRankingParams,
+      body: CreateDealerRankingBody,
+    },
+    onRequest: [hasBearerToken, userIsAuthenticated],
+  })
+  createDealerRanking(
+    request: Request<{
+      Params: CreateDealerRankingParamsType;
+      Body: CreateDealerRankingBodyType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.dealerService.createDealerRanking(
+      request.params.id,
+      request.body,
+    );
   }
 
   @GET('/:id/ranking', {
@@ -79,7 +106,7 @@ export class DealerController {
   @GET('/me', {
     onRequest: [hasBearerToken, dealerIsAuthenticated],
   })
-  async me({ dealerId }: Request, reply: Reply) {
+  async me({dealerId}: Request, reply: Reply) {
     return this.dealerService.me(dealerId);
   }
 }

@@ -1,7 +1,7 @@
-import { Service } from 'fastify-decorators';
-import { Unauthorized } from 'http-errors';
-import { DatabaseService } from '@fastly/database/DatabaseService';
-import { Customer } from '@prisma/client';
+import {Service} from 'fastify-decorators';
+import {Unauthorized} from 'http-errors';
+import {DatabaseService} from '@fastly/database/DatabaseService';
+import {Customer} from '@prisma/client';
 
 @Service('CustomerServiceToken')
 export class CustomerService {
@@ -28,7 +28,7 @@ export class CustomerService {
       throw new Unauthorized();
     }
 
-    const { password, ...restOfCustomer } = customer;
+    const {password, ...restOfCustomer} = customer;
 
     return restOfCustomer;
   }
@@ -114,7 +114,7 @@ export class CustomerService {
   }
 
   getByEmail(email: string) {
-    return this.databaseService.customer.findUnique({ where: { email } });
+    return this.databaseService.customer.findUnique({where: {email}});
   }
 
   async updateCustomerRefreshToken(

@@ -9,3 +9,6 @@ export const PHONE_NUMBER_REGEX = /^[9]\d{8}$/;
 
 export const LATITUDE_REGEX = /^((\-?|\+?)?\d+(\.\d+)?)$/;
 export const LONGITUDE_REGEX = /\s*((\-?|\+?)?\d+(\.\d+)?)$/;
+
+export const PASSWORD_REGEX =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;

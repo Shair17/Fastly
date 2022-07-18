@@ -7,7 +7,7 @@ export const http = Axios.create({baseURL});
 const requestRefresh: TokenRefreshRequest = async (
   refreshToken: string,
 ): Promise<string> => {
-  const response = await Axios.post(`${baseURL}/auth/facebook/refresh`, {
+  const response = await Axios.post(`${baseURL}/auth/dealer/refresh`, {
     refreshToken,
   });
 

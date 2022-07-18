@@ -1,8 +1,8 @@
-import { Service } from 'fastify-decorators';
-import { DatabaseService } from '@fastly/database/DatabaseService';
-import { NotFound } from 'http-errors';
-import { Product } from '@prisma/client';
-import { StoreService } from '../store/store.service';
+import {Service} from 'fastify-decorators';
+import {DatabaseService} from '@fastly/database/DatabaseService';
+import {NotFound} from 'http-errors';
+import {Product} from '@prisma/client';
+import {StoreService} from '../store/store.service';
 
 @Service('ProductServiceToken')
 export class ProductService {
@@ -12,7 +12,7 @@ export class ProductService {
   ) {}
 
   async getById(id: string) {
-    return this.databaseService.product.findUnique({ where: { id } });
+    return this.databaseService.product.findUnique({where: {id}});
   }
 
   async getByIdOrThrow(id: string) {
@@ -27,7 +27,7 @@ export class ProductService {
 
   async createProduct(data: Product) {
     const store = await this.storeService.getByIdOrThrow(data.storeId);
-    const { blurHash, image, name, description, price } = data;
+    const {blurHash, image, name, description, price} = data;
 
     return this.databaseService.product.create({
       data: {

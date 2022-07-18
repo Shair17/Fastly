@@ -1,16 +1,16 @@
-import { onRequestHookHandler } from 'fastify';
-import { getInstanceByToken } from 'fastify-decorators';
-import { AdminService } from '@fastly/modules/admin/admin.service';
-import { CustomerService } from '@fastly/modules/customer/customer.service';
-import { DealerService } from '@fastly/modules/dealer/dealer.service';
-import { UserService } from '@fastly/modules/user/user.service';
-import { Unauthorized } from 'http-errors';
-import { BEARER_SCHEME_REGEX } from '@fastly/constants/regex';
+import {onRequestHookHandler} from 'fastify';
+import {getInstanceByToken} from 'fastify-decorators';
+import {AdminService} from '@fastly/modules/admin/admin.service';
+import {CustomerService} from '@fastly/modules/customer/customer.service';
+import {DealerService} from '@fastly/modules/dealer/dealer.service';
+import {UserService} from '@fastly/modules/user/user.service';
+import {Unauthorized} from 'http-errors';
+import {BEARER_SCHEME_REGEX} from '@fastly/constants/regex';
 import * as jwt from 'jsonwebtoken';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)
 export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
-  const { authorization } = request.headers;
+  const {authorization} = request.headers;
   let token: string;
 
   // TODO: Validar que el token tenga un formato válido

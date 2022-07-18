@@ -14,9 +14,10 @@ import {
 	Settings,
 	Logout,
 	Motorbike,
+	Home,
 } from 'tabler-icons-react';
 import { useAuthStore } from '../../stores/useAuthStore';
-import { isLoggedIn } from '../../services/refresh-token.service';
+import { useAdminStore } from '../../stores/useAdminStore';
 
 const useStyles = createStyles((theme, _params, getRef) => {
 	const icon = getRef('icon');
@@ -141,6 +142,7 @@ export const Navbar = ({ hidden }: Props) => {
 	const { pathname } = useLocation();
 	const removeTokens = useAuthStore((s) => s.removeTokens);
 	const navigate = useNavigate();
+	const email = useAdminStore((s) => s.email);
 
 	const logOut = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 		event.preventDefault();
@@ -174,6 +176,18 @@ export const Navbar = ({ hidden }: Props) => {
 			className={classes.navbar}
 		>
 			<MantineNavbar.Section>
+				<Link
+					to="/dashboard"
+					className={cx(classes.link, {
+						[classes.linkActive]: pathname === '/dashboard',
+					})}
+				>
+					<Home className={classes.linkIcon} />
+					<span>Inicio</span>
+				</Link>
+			</MantineNavbar.Section>
+
+			<MantineNavbar.Section mt="xl">
 				<Text
 					weight={500}
 					size="sm"
@@ -181,7 +195,7 @@ export const Navbar = ({ hidden }: Props) => {
 					color="dimmed"
 					mb="xs"
 				>
-					bgluesticker@mantine.dev
+					{email}
 				</Text>
 
 				<SegmentedControl

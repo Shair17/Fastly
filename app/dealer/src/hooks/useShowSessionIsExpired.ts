@@ -16,18 +16,20 @@ export const useShowSessionIsExpired = () => {
       return;
     }
 
-    if (isTokenExpired(refreshToken)) {
-      Notifier.showNotification({
-        title: 'Sesión Expirada',
-        description:
-          'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
-        Component: NotifierComponents.Alert,
-        duration: 3000,
-        componentProps: {
-          alertType: 'error',
-          backgroundColor: 'red',
-        },
-      });
+    // TODO: probar si así está mejor
+    if (!isTokenExpired(refreshToken)) {
+      return;
     }
+
+    Notifier.showNotification({
+      title: 'Sesión Expirada',
+      description: 'Tu sesión ha expirado, por favor vuelve a iniciar sesión.',
+      Component: NotifierComponents.Alert,
+      duration: 3000,
+      componentProps: {
+        alertType: 'error',
+        backgroundColor: 'red',
+      },
+    });
   }, [refreshToken]);
 };

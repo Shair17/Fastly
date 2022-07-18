@@ -1,5 +1,5 @@
-import { Service } from 'fastify-decorators';
-import { DatabaseService } from '@fastly/database/DatabaseService';
+import {Service} from 'fastify-decorators';
+import {DatabaseService} from '@fastly/database/DatabaseService';
 import {
   Unauthorized,
   InternalServerError,
@@ -12,15 +12,15 @@ import {
   UpdateNewUserBodyType,
   UpdateUserProfileBodyType,
 } from './user.schema';
-import { trimStrings } from '@fastly/utils/trimStrings';
-import { MAX_USER_ADDRESSES } from '@fastly/constants/app';
-import { ProductService } from '../product/product.service';
-import { EditItemCartQuantityBodyType } from './user.schema';
-import { User, UserAddress, UserCart, Product } from '@prisma/client';
-import { checkIsNewUser } from '@fastly/utils/checkIsNewUser';
-import { AvatarService } from '@fastly/shared/services/avatar.service';
-import { isString } from '@fastly/utils';
-import { ImageService } from '@fastly/shared/services/image.service';
+import {trimStrings} from '@fastly/utils/trimStrings';
+import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
+import {ProductService} from '../product/product.service';
+import {EditItemCartQuantityBodyType} from './user.schema';
+import {User, UserAddress, UserCart, Product} from '@prisma/client';
+import {checkIsNewUser} from '@fastly/utils/checkIsNewUser';
+import {AvatarService} from '@fastly/shared/services/avatar.service';
+import {isString} from '@fastly/utils';
+import {ImageService} from '@fastly/shared/services/image.service';
 
 @Service('UserServiceToken')
 export class UserService {
@@ -30,6 +30,10 @@ export class UserService {
     private readonly imageService: ImageService,
     private readonly avatarService: AvatarService,
   ) {}
+
+  async getUsers() {
+    return this.databaseService.user.findMany();
+  }
 
   async me(userId: string) {
     const user = await this.getById(userId);
@@ -68,7 +72,7 @@ export class UserService {
     }
 
     const foundAddress = user.addresses.find(
-      (address) => address.id === addressId,
+      address => address.id === addressId,
     );
 
     if (!foundAddress) {
@@ -169,7 +173,7 @@ export class UserService {
       throw new NotFound();
     }
 
-    const foundCart = user.cart.find((cart) => cart.id === itemCartId);
+    const foundCart = user.cart.find(cart => cart.id === itemCartId);
 
     if (!foundCart) {
       throw new NotFound();
@@ -180,7 +184,7 @@ export class UserService {
 
   async addItemCart(
     userId: string,
-    { productId, quantity }: AddItemCartBodyType,
+    {productId, quantity}: AddItemCartBodyType,
   ) {
     const user = await this.getByIdOrThrow(userId);
     const product = await this.productService.getByIdOrThrow(productId);
@@ -247,7 +251,7 @@ export class UserService {
   }
 
   async getByEmail(email: string) {
-    return this.databaseService.user.findFirst({ where: { email } });
+    return this.databaseService.user.findFirst({where: {email}});
   }
 
   async updateNewUser(data: UpdateNewUserBodyType, userId: string) {
@@ -327,7 +331,7 @@ export class UserService {
       throw new NotFound();
     }
 
-    if (!user.cart.find((itemCart) => itemCart.id === itemCartId)) {
+    if (!user.cart.find(itemCart => itemCart.id === itemCartId)) {
       throw new BadRequest();
     }
 
@@ -347,7 +351,7 @@ export class UserService {
   async editItemCartQuantity(
     userId: string,
     itemCartId: string,
-    { quantity }: EditItemCartQuantityBodyType,
+    {quantity}: EditItemCartQuantityBodyType,
   ) {
     const user = await this.getByIdOrThrow(userId);
 
@@ -355,7 +359,7 @@ export class UserService {
       throw new NotFound();
     }
 
-    if (!user.cart.find((itemCart) => itemCart.id === itemCartId)) {
+    if (!user.cart.find(itemCart => itemCart.id === itemCartId)) {
       throw new BadRequest();
     }
 
@@ -401,12 +405,12 @@ export class UserService {
       throw new NotFound();
     }
 
-    if (!user.favorites.find((favorite) => favorite.id === favoriteId)) {
+    if (!user.favorites.find(favorite => favorite.id === favoriteId)) {
       throw new BadRequest();
     }
 
     const deletedFavorite = await this.databaseService.userFavorite.delete({
-      where: { id: favoriteId },
+      where: {id: favoriteId},
     });
 
     return {
@@ -451,7 +455,7 @@ export class UserService {
     }
 
     const foundFavorite = user.favorites.find(
-      (favorite) => favorite.id === favoriteId,
+      favorite => favorite.id === favoriteId,
     );
 
     if (!foundFavorite) {
@@ -461,13 +465,13 @@ export class UserService {
     return foundFavorite;
   }
 
-  isNewUser(user: User & { addresses: UserAddress[] }) {
+  isNewUser(user: User & {addresses: UserAddress[]}) {
     return checkIsNewUser(user);
   }
 
   async updateUserProfile(userId: string, data: UpdateUserProfileBodyType) {
     const [dni, email, phone] = trimStrings(data.dni, data.email, data.phone);
-    let { avatar } = data;
+    let {avatar} = data;
     const user = await this.getByIdOrThrow(userId);
 
     if (
@@ -515,7 +519,7 @@ export class UserService {
   // TODO: agregar paginación
   async myOrders(userId: string) {
     const user = await this.databaseService.user.findUnique({
-      where: { id: userId },
+      where: {id: userId},
       include: {
         orders: true,
       },

@@ -1,21 +1,21 @@
-import { Service } from 'fastify-decorators';
+import {Service} from 'fastify-decorators';
 import {
   Unauthorized,
   NotFound,
   BadRequest,
   InternalServerError,
 } from 'http-errors';
-import { MailService } from '@fastly/shared/services/mail.service';
-import { TokenService } from '@fastly/shared/services/token.service';
-import { HttpService } from '@fastly/shared/services/http.service';
-import { PasswordService } from '@fastly/shared/services/password.service';
-import { trimStrings } from '@fastly/utils/trimStrings';
-import { buildFacebookUri } from '@fastly/utils/buildFacebookUri';
-import { UserService } from '../user/user.service';
-import { AdminService } from '../admin/admin.service';
-import { CustomerService } from '../customer/customer.service';
-import { DealerService } from '../dealer/dealer.service';
-import { FacebookGraphApiResponse } from './dto/facebookGraphApiResponse.dto';
+import {MailService} from '@fastly/shared/services/mail.service';
+import {TokenService} from '@fastly/shared/services/token.service';
+import {HttpService} from '@fastly/shared/services/http.service';
+import {PasswordService} from '@fastly/shared/services/password.service';
+import {trimStrings} from '@fastly/utils/trimStrings';
+import {buildFacebookUri} from '@fastly/utils/buildFacebookUri';
+import {UserService} from '../user/user.service';
+import {AdminService} from '../admin/admin.service';
+import {CustomerService} from '../customer/customer.service';
+import {DealerService} from '../dealer/dealer.service';
+import {FacebookGraphApiResponse} from './auth.dto';
 import {
   LogInWithFacebookType,
   AdminLoginType,
@@ -38,9 +38,9 @@ import {
   RefreshCustomerTokenType,
   RefreshDealerTokenType,
 } from './auth.schema';
-import { AvatarService } from '@fastly/shared/services/avatar.service';
-import { ImageService } from '@fastly/shared/services/image.service';
-import { isString } from '@fastly/utils';
+import {AvatarService} from '@fastly/shared/services/avatar.service';
+import {ImageService} from '@fastly/shared/services/image.service';
+import {isString} from '@fastly/utils';
 
 @Service('AuthServiceToken')
 export class AuthService {
@@ -69,7 +69,7 @@ export class AuthService {
     const FACEBOOK_API_URI = buildFacebookUri(facebookAccessToken);
 
     try {
-      const { data } = await this.httpService.get<FacebookGraphApiResponse>(
+      const {data} = await this.httpService.get<FacebookGraphApiResponse>(
         FACEBOOK_API_URI,
       );
       facebookId = data.id;
@@ -92,7 +92,7 @@ export class AuthService {
         avatar: this.avatarService.getDefaultAvatar(),
       });
 
-      let payload: { id: string; name: string; email?: string } = {
+      let payload: {id: string; name: string; email?: string} = {
         id: newUser.id,
         name: newUser.name,
       };
@@ -104,7 +104,7 @@ export class AuthService {
         };
       }
 
-      const { accessToken, refreshToken } = this.tokenService.generateTokens(
+      const {accessToken, refreshToken} = this.tokenService.generateTokens(
         'user',
         payload,
       );
@@ -143,7 +143,7 @@ export class AuthService {
       throw new Unauthorized('banned');
     }
 
-    let payload: { id: string; name: string; email?: string } = {
+    let payload: {id: string; name: string; email?: string} = {
       id: user.id,
       name: user.name,
     };
@@ -155,7 +155,7 @@ export class AuthService {
       };
     }
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'user',
       payload,
     );
@@ -183,12 +183,12 @@ export class AuthService {
     };
   }
 
-  async refreshFacebookToken({ refreshToken }: RefreshFacebookTokenType) {
+  async refreshFacebookToken({refreshToken}: RefreshFacebookTokenType) {
     const decoded = this.tokenService.verifyRefreshToken('user', refreshToken);
 
     const user = await this.userService.getByIdOrThrow(decoded.id);
 
-    let payload: { id: string; name: string; email?: string } = {
+    let payload: {id: string; name: string; email?: string} = {
       id: user.id,
       name: user.name,
     };
@@ -247,7 +247,7 @@ export class AuthService {
       throw new Unauthorized('inactive_account');
     }
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'admin',
       {
         id: admin.id,
@@ -287,7 +287,7 @@ export class AuthService {
       data.phone,
       data.birthDate,
     );
-    let { avatar } = data;
+    let {avatar} = data;
 
     const numberOfAdmins = await this.adminService.count();
 
@@ -301,7 +301,7 @@ export class AuthService {
       throw new BadRequest('account_taken');
     }
 
-    if (avatar && isString(avatar)) {
+    if (avatar) {
       avatar = await this.imageService.saveJpgFromBase64(avatar, 'admins');
     }
 
@@ -318,7 +318,7 @@ export class AuthService {
       password: data.password,
     });
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'admin',
       {
         id: newAdmin.id,
@@ -353,7 +353,7 @@ export class AuthService {
     };
   }
 
-  async forgotAdminPassword({ email }: ForgotAdminPasswordType) {
+  async forgotAdminPassword({email}: ForgotAdminPasswordType) {
     const admin = await this.adminService.getByEmail(email);
 
     if (!admin) {
@@ -435,7 +435,7 @@ export class AuthService {
 
   async changeAdminPassword(
     adminId: string,
-    { oldPassword, newPassword }: ChangeAdminPasswordType,
+    {oldPassword, newPassword}: ChangeAdminPasswordType,
   ) {
     const admin = await this.adminService.getById(adminId);
 
@@ -462,7 +462,7 @@ export class AuthService {
     };
   }
 
-  async refreshAdminToken({ refreshToken }: RefreshAdminTokenType) {
+  async refreshAdminToken({refreshToken}: RefreshAdminTokenType) {
     const decoded = this.tokenService.verifyRefreshToken('admin', refreshToken);
 
     const admin = await this.adminService.getByIdOrThrow(decoded.id);
@@ -519,7 +519,7 @@ export class AuthService {
       throw new Unauthorized('inactive_account');
     }
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'customer',
       {
         id: customer.id,
@@ -562,7 +562,7 @@ export class AuthService {
       data.phone,
       data.birthDate,
     );
-    let { avatar } = data;
+    let {avatar} = data;
 
     const foundCustomer = await this.customerService.getByEmail(email);
 
@@ -590,7 +590,7 @@ export class AuthService {
       isActive: false,
     });
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'customer',
       {
         id: newCustomer.id,
@@ -624,7 +624,7 @@ export class AuthService {
     };
   }
 
-  async forgotCustomerPassword({ email }: ForgotCustomerPasswordType) {
+  async forgotCustomerPassword({email}: ForgotCustomerPasswordType) {
     const customer = await this.customerService.getByEmail(email);
 
     if (!customer) {
@@ -709,7 +709,7 @@ export class AuthService {
 
   async changeCustomerPassword(
     customerId: string,
-    { oldPassword, newPassword }: ChangeCustomerPasswordType,
+    {oldPassword, newPassword}: ChangeCustomerPasswordType,
   ) {
     const customer = await this.customerService.getById(customerId);
 
@@ -739,7 +739,7 @@ export class AuthService {
     };
   }
 
-  async refreshCustomerToken({ refreshToken }: RefreshCustomerTokenType) {
+  async refreshCustomerToken({refreshToken}: RefreshCustomerTokenType) {
     const decoded = this.tokenService.verifyRefreshToken(
       'customer',
       refreshToken,
@@ -799,7 +799,7 @@ export class AuthService {
       throw new Unauthorized('inactive_account');
     }
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'dealer',
       {
         id: dealer.id,
@@ -842,7 +842,7 @@ export class AuthService {
       data.phone,
       data.birthDate,
     );
-    let { avatar } = data;
+    let {avatar} = data;
 
     const foundDealer = await this.dealerService.getByEmail(email);
 
@@ -870,7 +870,7 @@ export class AuthService {
       isActive: false,
     });
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+    const {accessToken, refreshToken} = this.tokenService.generateTokens(
       'dealer',
       {
         id: newDealer.id,
@@ -904,7 +904,7 @@ export class AuthService {
     };
   }
 
-  async forgotDealerPassword({ email }: ForgotDealerPasswordType) {
+  async forgotDealerPassword({email}: ForgotDealerPasswordType) {
     const dealer = await this.dealerService.getByEmail(email);
 
     if (!dealer) {
@@ -986,7 +986,7 @@ export class AuthService {
 
   async changeDealerPassword(
     dealerId: string,
-    { oldPassword, newPassword }: ChangeDealerPasswordType,
+    {oldPassword, newPassword}: ChangeDealerPasswordType,
   ) {
     const dealer = await this.dealerService.getById(dealerId);
 
@@ -1013,7 +1013,7 @@ export class AuthService {
     };
   }
 
-  async refreshDealerToken({ refreshToken }: RefreshDealerTokenType) {
+  async refreshDealerToken({refreshToken}: RefreshDealerTokenType) {
     const decoded = this.tokenService.verifyRefreshToken(
       'dealer',
       refreshToken,
