@@ -10,6 +10,7 @@ import {useAutoSwitchTheme} from '@fastly/hooks/useAutoSwitchTheme';
 
 function App() {
   useCheckLocationPermissions();
+
   const {theme, isDarkTheme} = useAutoSwitchTheme();
 
   return (

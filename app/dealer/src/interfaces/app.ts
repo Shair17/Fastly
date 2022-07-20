@@ -1,3 +1,7 @@
+export interface ForgotPasswordType {
+  email: string;
+}
+
 export interface SignUpType {
   fullName: string;
   email: string;
@@ -6,7 +10,50 @@ export interface SignUpType {
   dni: string;
   phone: string;
   address: string;
+  // birthDate: string;
+}
+
+export interface SignUpBody {
+  avatar?: string;
+  email: string;
+  password: string;
+  name: string;
+  dni: string;
+  phone: string;
+  address: string;
   birthDate: string;
+}
+
+enum Vehicle {
+  CARRO = 'CARRO',
+  MOTO = 'MOTO',
+  BICICLETA = 'BICICLETA',
+  PIE = 'PIE',
+  NONE = 'NONE',
+}
+
+interface Dealer {
+  id: string;
+  name: string;
+  email: string;
+  dni: string;
+  phone: string;
+  address: string;
+  avatar: string;
+  isBanned: boolean;
+  banReason?: string;
+  isActive: boolean;
+  birthDate: Date;
+  vehicle: Vehicle;
+  available: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SignUpResponse {
+  accessToken: string;
+  refreshToken: string;
+  dealer: Dealer;
 }
 
 export interface SignInType {

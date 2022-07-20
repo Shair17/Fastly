@@ -1,10 +1,10 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance} from 'fastify';
 import {
   Service,
   FastifyInstanceToken,
   getInstanceByToken,
 } from 'fastify-decorators';
-import { ConfigSchemaType } from './config.schema';
+import {ConfigSchemaType} from './config.schema';
 
 type Config = string | number | boolean;
 type ConfigKey = keyof ConfigSchemaType;

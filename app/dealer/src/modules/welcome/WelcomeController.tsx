@@ -30,7 +30,8 @@ export const WelcomeController: React.FC<WelcomeScreenProps> = ({
             fontSize="xl"
             h={55}
             bg="primary"
-            onPress={() => navigation.navigate('SignUpScreen')}>
+            onPress={() => navigation.navigate('SignUpScreen')}
+            shadow="xs">
             Crear una Cuenta
           </Button>
 

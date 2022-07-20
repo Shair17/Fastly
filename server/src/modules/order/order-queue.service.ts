@@ -1,5 +1,5 @@
-import { Service } from 'fastify-decorators';
-import { OrderService } from './order.service';
+import {Service} from 'fastify-decorators';
+import {OrderService} from './order.service';
 
 interface IOrderQueue {}
 

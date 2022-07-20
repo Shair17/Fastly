@@ -1,7 +1,7 @@
 export const trimStrings = (...strings: string[]) => {
   let s: string[] = [];
 
-  strings.forEach((v) => {
+  strings.forEach(v => {
     // Verify this
     if (!v || v === undefined || v === null) v = '';
 

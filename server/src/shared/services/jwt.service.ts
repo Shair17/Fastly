@@ -1,4 +1,4 @@
-import { Service } from 'fastify-decorators';
+import {Service} from 'fastify-decorators';
 import * as jwt from 'jsonwebtoken';
 
 export class JsonWebTokenError extends jwt.JsonWebTokenError {}
@@ -20,12 +20,12 @@ export class JwtService {
   verify(
     token: string,
     secretOrPublicKey: jwt.Secret,
-    options?: jwt.VerifyOptions & { complete: true },
+    options?: jwt.VerifyOptions & {complete: true},
   ) {
     return this.jwt.verify(token, secretOrPublicKey, options);
   }
 
-  decode(token: string, options: jwt.DecodeOptions & { complete: true }) {
+  decode(token: string, options: jwt.DecodeOptions & {complete: true}) {
     return this.jwt.decode(token, options);
   }
 }

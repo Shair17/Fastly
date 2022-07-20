@@ -4,6 +4,10 @@ import {Request, Reply} from '@fastly/interfaces/http';
 import {
   CreateDealerRankingBody,
   CreateDealerRankingBodyType,
+  GetMyOrdersQueryString,
+  GetMyOrdersQueryStringType,
+  GetMyRankingsQueryString,
+  GetMyRankingsQueryStringType,
 } from './dealer.schema';
 import {
   hasBearerToken,
@@ -108,5 +112,42 @@ export class DealerController {
   })
   async me({dealerId}: Request, reply: Reply) {
     return this.dealerService.me(dealerId);
+  }
+
+  @GET('/me/orders', {
+    schema: {
+      querystring: GetMyOrdersQueryString,
+    },
+    onRequest: [hasBearerToken, dealerIsAuthenticated],
+  })
+  async getMyOrders(
+    request: Request<{
+      Querystring: GetMyOrdersQueryStringType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.dealerService.getMyOrders(request.dealerId, request.query);
+  }
+
+  @GET('/me/ranking', {
+    onRequest: [hasBearerToken, dealerIsAuthenticated],
+  })
+  async getMyRanking(request: Request, reply: Reply) {
+    return this.dealerService.getMyRanking(request.dealerId);
+  }
+
+  @GET('/me/rankings', {
+    schema: {
+      querystring: GetMyRankingsQueryString,
+    },
+    onRequest: [hasBearerToken, dealerIsAuthenticated],
+  })
+  async getMyRankings(
+    request: Request<{
+      Querystring: GetMyRankingsQueryStringType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.dealerService.getMyRankings(request.dealerId, request.query);
   }
 }

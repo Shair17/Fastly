@@ -1,5 +1,5 @@
-import { Controller, GET } from 'fastify-decorators';
-import { AppService } from './app.service';
+import {Controller, GET} from 'fastify-decorators';
+import {AppService} from './app.service';
 
 @Controller('/')
 export class AppController {

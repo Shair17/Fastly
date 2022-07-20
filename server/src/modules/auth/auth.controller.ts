@@ -1,6 +1,6 @@
-import { Controller, POST, PUT } from 'fastify-decorators';
-import { AuthService } from './auth.service';
-import { Request, Reply } from '@fastly/interfaces/http';
+import {Controller, POST, PUT} from 'fastify-decorators';
+import {AuthService} from './auth.service';
+import {Request, Reply} from '@fastly/interfaces/http';
 import {
   LogInWithFacebook,
   LogInWithFacebookType,

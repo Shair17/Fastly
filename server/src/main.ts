@@ -1,6 +1,6 @@
 import Server from './server';
 import qs from 'qs';
-import { serverHost } from '@fastly/constants/app';
+import {serverHost} from '@fastly/constants/app';
 
 async function main() {
   const startTime = performance.now();
@@ -8,7 +8,7 @@ async function main() {
     logger: true,
     disableRequestLogging: true,
     ignoreTrailingSlash: true,
-    querystringParser: (str) => qs.parse(str),
+    querystringParser: str => qs.parse(str),
   });
   const endTime = performance.now();
 

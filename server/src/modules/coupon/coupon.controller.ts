@@ -1,11 +1,11 @@
-import { Controller, GET, POST, PUT, DELETE } from 'fastify-decorators';
-import { Request, Reply } from '@fastly/interfaces/http';
+import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
+import {Request, Reply} from '@fastly/interfaces/http';
 import {
   hasBearerToken,
   adminOrCustomerOrDealerOrUserIsAuthenticated,
   adminOrCustomerIsAuthenticated,
 } from '@fastly/shared/hooks/auth';
-import { CouponService } from './coupon.service';
+import {CouponService} from './coupon.service';
 import {
   EditCouponByCodeBodyType,
   EditCouponByCodeBody,

@@ -1,10 +1,10 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance} from 'fastify';
 import {
   Service,
   getInstanceByToken,
   FastifyInstanceToken,
 } from 'fastify-decorators';
-import { AddressInfo } from 'net';
+import {AddressInfo} from 'net';
 
 @Service()
 export class AvatarService {
@@ -20,7 +20,7 @@ export class AvatarService {
 
     if (typeof address === 'string') console.log(address);
 
-    const { address: _address, port } = address as AddressInfo;
+    const {address: _address, port} = address as AddressInfo;
 
     return _address === '0.0.0.0'
       ? fallBackUrl

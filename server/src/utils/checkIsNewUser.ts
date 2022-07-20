@@ -1,4 +1,4 @@
-import { User, UserAddress } from '@prisma/client';
+import {User, UserAddress} from '@prisma/client';
 
 type FullUser = User & {
   addresses: UserAddress[];

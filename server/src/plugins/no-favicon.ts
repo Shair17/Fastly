@@ -1,4 +1,4 @@
-import { FastifyPluginAsync } from 'fastify';
+import {FastifyPluginAsync} from 'fastify';
 // import { StatusCodes } from 'http-status-codes';
 
 const NoFavicon: FastifyPluginAsync = async (server, options) => {

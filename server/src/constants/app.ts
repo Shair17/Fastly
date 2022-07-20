@@ -1,7 +1,5 @@
-const { version: currentServerVersion } = require('../../package.json');
-const {
-  version: currentAppVersion,
-} = require('../../../app/main/package.json');
+const {version: currentServerVersion} = require('../../package.json');
+const {version: currentAppVersion} = require('../../../app/main/package.json');
 
 export const MAX_USER_ADDRESSES = 10;
 

@@ -1,5 +1,5 @@
-import { Service } from 'fastify-decorators';
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {Service} from 'fastify-decorators';
+import Axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 
 @Service('HttpServiceToken')
 export class HttpService {

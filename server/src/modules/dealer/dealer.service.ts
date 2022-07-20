@@ -3,7 +3,11 @@ import {DatabaseService} from '@fastly/database/DatabaseService';
 import {Unauthorized, NotFound} from 'http-errors';
 import {Dealer, DealerRanking, Order} from '@prisma/client';
 import {calcDealerRanking} from '@fastly/utils/calcDealerRanking';
-import {CreateDealerRankingBodyType} from './dealer.schema';
+import {
+  CreateDealerRankingBodyType,
+  GetMyOrdersQueryStringType,
+  GetMyRankingsQueryStringType,
+} from './dealer.schema';
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
 import {OrderService} from '../order/order.service';
@@ -95,7 +99,7 @@ export class DealerService {
   }
 
   getByEmail(email: string) {
-    return this.databaseService.admin.findUnique({where: {email}});
+    return this.databaseService.dealer.findUnique({where: {email}});
   }
 
   async createDealerRanking(
@@ -242,5 +246,65 @@ export class DealerService {
         password,
       },
     });
+  }
+
+  async getMyOrders(
+    dealerId: string,
+    {skip, take, orderBy = 'desc'}: GetMyOrdersQueryStringType,
+  ) {
+    const dealer = await this.getByIdOrThrow(dealerId);
+    const orders = await this.databaseService.order.findMany({
+      where: {
+        dealer: {
+          id: dealer.id,
+        },
+      },
+      take: Number(take) || undefined,
+      skip: Number(skip) || undefined,
+      orderBy: {
+        createdAt: orderBy,
+      },
+    });
+
+    return orders;
+  }
+
+  async getMyRanking(dealerId: string) {
+    const dealer = await this.getByIdOrThrow(dealerId);
+
+    return calcDealerRanking(dealer.rankings);
+  }
+
+  async getMyRankings(
+    dealerId: string,
+    {orderBy = 'desc', skip, take}: GetMyRankingsQueryStringType,
+  ) {
+    const dealer = await this.getByIdOrThrow(dealerId);
+
+    const rankings = await this.databaseService.dealerRanking.findMany({
+      where: {
+        dealer: {
+          id: dealer.id,
+        },
+      },
+      take: Number(take) || undefined,
+      skip: Number(skip) || undefined,
+      orderBy: {
+        createdAt: orderBy,
+      },
+      select: {
+        comment: true,
+        createdAt: true,
+        dealer: true,
+        dealerId: true,
+        id: true,
+        updatedAt: true,
+        user: false,
+        userId: false,
+        value: true,
+      },
+    });
+
+    return rankings;
   }
 }

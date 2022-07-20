@@ -18,7 +18,11 @@ export type RootStackParams = {
   WelcomeScreen: undefined;
   SignInScreen: undefined;
   SignUpScreen: undefined;
-  ForgotPasswordScreen: undefined;
+  ForgotPasswordScreen:
+    | {
+        email?: string;
+      }
+    | undefined;
 
   LoadingScreen: undefined;
   GeolocationPermissionsScreen: undefined;

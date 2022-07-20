@@ -1,12 +1,12 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance} from 'fastify';
 import {
   Controller,
   FastifyInstanceToken,
   GET,
   getInstanceByToken,
 } from 'fastify-decorators';
-import { Request, Reply } from '@fastly/interfaces/http';
-import { OrderService } from './order.service';
+import {Request, Reply} from '@fastly/interfaces/http';
+import {OrderService} from './order.service';
 
 @Controller('/orders')
 export class OrderController {

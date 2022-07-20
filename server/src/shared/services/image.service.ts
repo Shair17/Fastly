@@ -1,12 +1,12 @@
-import { FastifyInstance } from 'fastify';
+import {FastifyInstance} from 'fastify';
 import {
   FastifyInstanceToken,
   getInstanceByToken,
   Service,
 } from 'fastify-decorators';
 import fs from 'fs-extra';
-import { AddressInfo } from 'net';
-import { resolve } from 'path';
+import {AddressInfo} from 'net';
+import {resolve} from 'path';
 
 type TEntity =
   | 'admins'
@@ -36,7 +36,7 @@ export class ImageService {
       `../../../public/assets/images/${entity}/${fileName}`,
     );
 
-    await fs.writeFile(path, data, { encoding: 'base64' });
+    await fs.writeFile(path, data, {encoding: 'base64'});
 
     return this.buildServerUri(`/assets/images/${entity}/${fileName}`);
   }
@@ -47,7 +47,7 @@ export class ImageService {
 
     if (!address) return fallBackUri;
 
-    const { address: _address, port } = address as AddressInfo;
+    const {address: _address, port} = address as AddressInfo;
 
     return _address === '0.0.0.0'
       ? fallBackUri

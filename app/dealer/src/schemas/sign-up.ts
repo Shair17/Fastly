@@ -14,7 +14,7 @@ export const SignUpSchema = z
     dni: z.string().min(8).max(8).regex(DNI_REGEX, {message: 'DNI inválido'}),
     phone: z.string().min(9).max(9, {message: 'Número de celular inválido'}),
     address: z.string().min(5, {message: 'Dirección inválida'}),
-    birthDate: z.date(),
+    // birthDate: z.date(),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden',

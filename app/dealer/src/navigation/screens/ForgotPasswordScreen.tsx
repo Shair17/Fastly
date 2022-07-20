@@ -7,5 +7,6 @@ export interface ForgotPasswordScreenProps
   extends NativeStackScreenProps<RootStackParams, 'ForgotPasswordScreen'> {}
 
 export const ForgotPasswordScreen: React.FC = props => {
+  // @ts-ignore
   return <ForgotPasswordController {...props} />;
 };

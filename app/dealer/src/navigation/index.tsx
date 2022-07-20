@@ -1,1 +1,1 @@
-export {Root as RootNavigation} from './Root';
+export {Root as RootNavigation, type RootStackParams} from './Root';

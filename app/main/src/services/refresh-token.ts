@@ -1,4 +1,4 @@
-import jwtDecode, {JwtPayload} from 'jwt-decode';
+import jwtDecode, {type JwtPayload} from 'jwt-decode';
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import {useAuthStore, ITokens} from '@fastly/stores/useAuthStore';
 import {isValidToken} from '@fastly/utils/isValidToken';

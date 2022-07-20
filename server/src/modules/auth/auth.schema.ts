@@ -1,5 +1,5 @@
-import { Static, Type } from '@sinclair/typebox';
-import { PASSWORD_REGEX, JWT_REGEX, DNI_REGEX } from '@fastly/constants/regex';
+import {Static, Type} from '@sinclair/typebox';
+import {PASSWORD_REGEX, JWT_REGEX, DNI_REGEX} from '@fastly/constants/regex';
 
 // facebook
 export const LogInWithFacebook = Type.Object(
@@ -20,7 +20,7 @@ export type RefreshFacebookTokenType = Static<typeof RefreshFacebookToken>;
 // admin
 export const AdminLogin = Type.Object(
   {
-    email: Type.String({ format: 'email' }),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
   },
   {
@@ -31,14 +31,14 @@ export type AdminLoginType = Static<typeof AdminLogin>;
 
 export const AdminRegister = Type.Object(
   {
-    name: Type.String({ minLength: 5 }),
-    email: Type.String({ format: 'email' }),
+    name: Type.String({minLength: 5}),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
     dni: Type.RegEx(DNI_REGEX),
-    phone: Type.String({ minLength: 9, maxLength: 9 }),
-    address: Type.String({ minLength: 5 }),
+    phone: Type.String({minLength: 9, maxLength: 9}),
+    address: Type.String({minLength: 5}),
     avatar: Type.Optional(Type.String()),
-    birthDate: Type.String({ format: 'date-time' }),
+    birthDate: Type.String({format: 'date-time'}),
   },
   {
     additionalProperties: false,
@@ -46,7 +46,7 @@ export const AdminRegister = Type.Object(
 );
 export type AdminRegisterType = Static<typeof AdminRegister>;
 export const ForgotAdminPassword = Type.Object({
-  email: Type.String({ format: 'email' }),
+  email: Type.String({format: 'email'}),
 });
 export type ForgotAdminPasswordType = Static<typeof ForgotAdminPassword>;
 export const NewAdminPassword = Type.Object({
@@ -72,7 +72,7 @@ export type RefreshAdminTokenType = Static<typeof RefreshAdminToken>;
 // customer
 export const CustomerLogin = Type.Object(
   {
-    email: Type.String({ format: 'email' }),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
   },
   {
@@ -83,10 +83,10 @@ export type CustomerLoginType = Static<typeof CustomerLogin>;
 export const CustomerRegister = Type.Object(
   {
     name: Type.String(),
-    email: Type.String({ format: 'email' }),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
     dni: Type.RegEx(DNI_REGEX),
-    phone: Type.String({ minLength: 9, maxLength: 9 }),
+    phone: Type.String({minLength: 9, maxLength: 9}),
     address: Type.String(),
     avatar: Type.Optional(Type.String()),
     birthDate: Type.String(),
@@ -97,7 +97,7 @@ export const CustomerRegister = Type.Object(
 );
 export type CustomerRegisterType = Static<typeof CustomerRegister>;
 export const ForgotCustomerPassword = Type.Object({
-  email: Type.String({ format: 'email' }),
+  email: Type.String({format: 'email'}),
 });
 export type ForgotCustomerPasswordType = Static<typeof ForgotCustomerPassword>;
 export const NewCustomerPassword = Type.Object({
@@ -123,7 +123,7 @@ export type RefreshCustomerTokenType = Static<typeof RefreshCustomerToken>;
 // dealer
 export const DealerLogin = Type.Object(
   {
-    email: Type.String({ format: 'email' }),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
   },
   {
@@ -134,10 +134,10 @@ export type DealerLoginType = Static<typeof DealerLogin>;
 export const DealerRegister = Type.Object(
   {
     name: Type.String(),
-    email: Type.String({ format: 'email' }),
+    email: Type.String({format: 'email'}),
     password: Type.RegEx(PASSWORD_REGEX),
     dni: Type.RegEx(DNI_REGEX),
-    phone: Type.String({ minLength: 9, maxLength: 9 }),
+    phone: Type.String({minLength: 9, maxLength: 9}),
     address: Type.String(),
     avatar: Type.Optional(Type.String()),
     birthDate: Type.String(),
@@ -148,7 +148,7 @@ export const DealerRegister = Type.Object(
 );
 export type DealerRegisterType = Static<typeof DealerRegister>;
 export const ForgotDealerPassword = Type.Object({
-  email: Type.String({ format: 'email' }),
+  email: Type.String({format: 'email'}),
 });
 export type ForgotDealerPasswordType = Static<typeof ForgotDealerPassword>;
 export const NewDealerPassword = Type.Object({

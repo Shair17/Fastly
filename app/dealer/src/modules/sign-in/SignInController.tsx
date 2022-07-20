@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import {Div, Text, Button, Input, Icon} from 'react-native-magnus';
 import {SignInScreenProps} from '@fastly/navigation/screens/SignInScreen';
@@ -17,13 +18,20 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
     control,
     handleSubmit,
     formState: {errors},
+    watch,
+    getValues,
   } = useForm<SignInType>({
     resolver: zodResolver(SignInSchema),
   });
+  const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
 
   const handleFinish = handleSubmit(({email, password}) => {
     console.log({email, password});
   });
+
+  const emailState = watch('email') || getValues('email');
+
+  const togglePasswordVisibility = () => setPasswordHidden(!passwordHidden);
 
   return (
     <KeyboardAvoidingView
@@ -58,6 +66,7 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                       placeholder="Correo electrónico"
                       rounded="lg"
                       onBlur={onBlur}
+                      keyboardType="email-address"
                       onChangeText={onChange}
                       value={value}
                       borderColor={errors.email ? 'red' : 'gray400'}
@@ -88,7 +97,7 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                       focusBorderColor="primary"
                       fontWeight="500"
                       placeholder="Contraseña"
-                      secureTextEntry
+                      secureTextEntry={passwordHidden}
                       rounded="lg"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -100,6 +109,17 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                           color="text"
                           fontFamily="Ionicons"
                         />
+                      }
+                      suffix={
+                        <TouchableOpacity
+                          onPress={togglePasswordVisibility}
+                          activeOpacity={0.6}>
+                          <Icon
+                            name={passwordHidden ? 'eye' : 'eye-off'}
+                            color="text"
+                            fontFamily="Ionicons"
+                          />
+                        </TouchableOpacity>
                       }
                     />
                   )}
@@ -119,7 +139,11 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                   textAlign="right"
                   color="primary"
                   fontWeight="500"
-                  onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+                  onPress={() =>
+                    navigation.navigate('ForgotPasswordScreen', {
+                      email: emailState,
+                    })
+                  }>
                   ¿Olvidaste tu contraseña?
                 </Text>
               </Div>
@@ -132,7 +156,8 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                 fontSize="xl"
                 h={55}
                 bg="primary"
-                onPress={handleFinish}>
+                onPress={handleFinish}
+                shadow="sm">
                 Iniciar Sesión
               </Button>
 

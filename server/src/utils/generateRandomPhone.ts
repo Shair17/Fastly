@@ -1,5 +1,5 @@
-import { customAlphabet } from 'nanoid';
-import { replaceAt } from './replaceAt';
+import {customAlphabet} from 'nanoid';
+import {replaceAt} from './replaceAt';
 
 const nanoid = customAlphabet('0123456789', 9);
 

@@ -1,5 +1,21 @@
 import {Static, Type} from '@sinclair/typebox';
 
+export const GetMyOrdersQueryString = Type.Object({
+  skip: Type.Optional(Type.Number({minimum: 0})),
+  take: Type.Optional(Type.Number({minimum: 0})),
+  orderBy: Type.Union([Type.Literal('asc'), Type.Literal('desc')]),
+});
+export type GetMyOrdersQueryStringType = Static<typeof GetMyOrdersQueryString>;
+
+export const GetMyRankingsQueryString = Type.Object({
+  skip: Type.Optional(Type.Number({minimum: 0})),
+  take: Type.Optional(Type.Number({minimum: 0})),
+  orderBy: Type.Union([Type.Literal('asc'), Type.Literal('desc')]),
+});
+export type GetMyRankingsQueryStringType = Static<
+  typeof GetMyRankingsQueryString
+>;
+
 export const CreateDealerRankingParams = Type.Object({
   id: Type.String({format: 'uuid'}),
 });

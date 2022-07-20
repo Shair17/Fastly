@@ -1,7 +1,7 @@
-import { Controller, GET } from 'fastify-decorators';
-import { CustomerService } from './customer.service';
-import { GetCustomerParams, GetCustomerParamsType } from './customer.schema';
-import { Request, Reply } from '@fastly/interfaces/http';
+import {Controller, GET} from 'fastify-decorators';
+import {CustomerService} from './customer.service';
+import {GetCustomerParams, GetCustomerParamsType} from './customer.schema';
+import {Request, Reply} from '@fastly/interfaces/http';
 import {
   adminOrCustomerIsAuthenticated,
   hasBearerToken,

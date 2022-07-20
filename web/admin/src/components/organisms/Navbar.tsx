@@ -138,7 +138,6 @@ interface Props {
 export const Navbar = ({ hidden }: Props) => {
 	const { classes, cx } = useStyles();
 	const [section, setSection] = useState('accounts');
-	// const [active, setActive] = useState('Billing');
 	const { pathname } = useLocation();
 	const removeTokens = useAuthStore((s) => s.removeTokens);
 	const navigate = useNavigate();
@@ -158,9 +157,6 @@ export const Navbar = ({ hidden }: Props) => {
 			className={cx(classes.link, {
 				[classes.linkActive]: pathname === item.link,
 			})}
-			// onClick={(event) => {
-			// setActive(item.label);
-			// }}
 		>
 			<item.icon className={classes.linkIcon} />
 			<span>{item.label}</span>

@@ -1,4 +1,4 @@
-import { DealerRanking } from '@prisma/client';
+import {DealerRanking} from '@prisma/client';
 
 export const calcDealerRanking = (rankings: DealerRanking[]) => {
   let sum = 0;

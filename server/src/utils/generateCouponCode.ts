@@ -1,3 +1,3 @@
-import { generateRandomId } from './generateRandomId';
+import {generateRandomId} from './generateRandomId';
 
 export const generateCouponCode = generateRandomId;
