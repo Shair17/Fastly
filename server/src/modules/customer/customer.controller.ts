@@ -9,7 +9,7 @@ import {
   adminIsAuthenticated,
 } from '@fastly/shared/hooks/auth';
 
-@Controller('/customers')
+@Controller('/v1/customers')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 

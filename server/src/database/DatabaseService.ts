@@ -7,14 +7,7 @@ import {
   getInstanceByToken,
 } from 'fastify-decorators';
 import {PrismaClient} from '@prisma/client';
-
-interface OnModuleInit {
-  onModuleInit(): any;
-}
-
-interface OnModuleDestroy {
-  onModuleDestroy(): any;
-}
+import type {OnModuleDestroy, OnModuleInit} from '@fastly/interfaces/module';
 
 @Service('DatabaseServiceToken')
 export class DatabaseService

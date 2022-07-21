@@ -1,4 +1,4 @@
 import {Controller} from 'fastify-decorators';
 
-@Controller('/search')
+@Controller('/v1/search')
 export class SearchController {}

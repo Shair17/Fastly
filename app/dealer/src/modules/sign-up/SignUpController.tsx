@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {TouchableOpacity} from 'react-native';
 import {Div, Text, Button, Input, Icon} from 'react-native-magnus';
 import {SignUpScreenProps} from '@fastly/navigation/screens/SignUpScreen';
 import {useForm, Controller} from 'react-hook-form';
@@ -21,6 +22,9 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
     },
     {manual: true},
   );
+  const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
+  const [passwordConfirmationHidden, setPasswordConfirmationHidden] =
+    useState<boolean>(true);
   const [showDateError, setDateError] = useState(false);
   const [date, setDate] = useState(new Date());
   const {
@@ -30,6 +34,10 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
   } = useForm<SignUpType>({
     resolver: zodResolver(SignUpSchema),
   });
+
+  const togglePasswordVisibility = () => setPasswordHidden(!passwordHidden);
+  const togglePasswordConfirmationVisibility = () =>
+    setPasswordConfirmationHidden(!passwordConfirmationHidden);
 
   const handleFinish = handleSubmit(
     ({address, dni, email, fullName: name, password, phone}) => {
@@ -150,7 +158,7 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                     focusBorderColor="primary"
                     fontWeight="500"
                     placeholder="Contraseña"
-                    secureTextEntry
+                    secureTextEntry={passwordHidden}
                     rounded="lg"
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -162,6 +170,17 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                         color="text"
                         fontFamily="Ionicons"
                       />
+                    }
+                    suffix={
+                      <TouchableOpacity
+                        onPress={togglePasswordVisibility}
+                        activeOpacity={0.6}>
+                        <Icon
+                          name={passwordHidden ? 'eye' : 'eye-off'}
+                          color="text"
+                          fontFamily="Ionicons"
+                        />
+                      </TouchableOpacity>
                     }
                   />
                 )}
@@ -189,7 +208,7 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                     focusBorderColor="primary"
                     fontWeight="500"
                     placeholder="Confirmar contraseña"
-                    secureTextEntry
+                    secureTextEntry={passwordConfirmationHidden}
                     rounded="lg"
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -205,6 +224,17 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                         color="text"
                         fontFamily="Ionicons"
                       />
+                    }
+                    suffix={
+                      <TouchableOpacity
+                        onPress={togglePasswordVisibility}
+                        activeOpacity={0.6}>
+                        <Icon
+                          name={passwordHidden ? 'eye' : 'eye-off'}
+                          color="text"
+                          fontFamily="Ionicons"
+                        />
+                      </TouchableOpacity>
                     }
                   />
                 )}
@@ -342,7 +372,7 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
               h={55}
               bg="primary"
               onPress={handleFinish}>
-              Crear una Cuenta
+              Siguiente
             </Button>
 
             <Div my="xl" />

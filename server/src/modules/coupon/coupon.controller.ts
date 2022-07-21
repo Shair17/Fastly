@@ -27,7 +27,7 @@ import {
   GetCouponByCodeParamsType,
 } from './coupon.schema';
 
-@Controller('/coupons')
+@Controller('/v1/coupons')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 

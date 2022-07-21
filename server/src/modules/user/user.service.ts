@@ -11,6 +11,7 @@ import {
   AddItemCartBodyType,
   UpdateNewUserBodyType,
   UpdateUserProfileBodyType,
+  GetMyUserOrdersQueryStringType,
 } from './user.schema';
 import {trimStrings} from '@fastly/utils/trimStrings';
 import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
@@ -516,23 +517,26 @@ export class UserService {
     };
   }
 
-  // TODO: agregar paginación
-  async myOrders(userId: string) {
-    const user = await this.databaseService.user.findUnique({
-      where: {id: userId},
-      include: {
-        orders: true,
+  async myOrders(
+    userId: string,
+    {orderBy = 'desc', skip, take}: GetMyUserOrdersQueryStringType,
+  ) {
+    const user = await this.getByIdOrThrow(userId);
+
+    const orders = await this.databaseService.order.findMany({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+      take: Number(take) || undefined,
+      skip: Number(skip) || undefined,
+      orderBy: {
+        createdAt: orderBy,
       },
     });
 
-    if (!user) {
-      throw new Unauthorized();
-    }
-
-    return {
-      id: user.id,
-      orders: user.orders,
-    };
+    return orders;
   }
 
   async createUser({

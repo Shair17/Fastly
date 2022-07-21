@@ -16,7 +16,7 @@ import {
   EditAdminParams,
 } from './admin.schema';
 
-@Controller('/admins')
+@Controller('/v1/admins')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 

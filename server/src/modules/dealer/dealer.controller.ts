@@ -8,15 +8,6 @@ import {
   GetMyOrdersQueryStringType,
   GetMyRankingsQueryString,
   GetMyRankingsQueryStringType,
-} from './dealer.schema';
-import {
-  hasBearerToken,
-  dealerIsAuthenticated,
-  adminIsAuthenticated,
-  adminOrCustomerOrDealerOrUserIsAuthenticated,
-  userIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
-import {
   CreateDealerRankingParams,
   CreateDealerRankingParamsType,
   GetDealerParams,
@@ -26,8 +17,15 @@ import {
   GetDealerRankingsParams,
   GetDealerRankingsParamsType,
 } from './dealer.schema';
+import {
+  hasBearerToken,
+  dealerIsAuthenticated,
+  adminIsAuthenticated,
+  adminOrCustomerOrDealerOrUserIsAuthenticated,
+  userIsAuthenticated,
+} from '@fastly/shared/hooks/auth';
 
-@Controller('/dealers')
+@Controller('/v1/dealers')
 export class DealerController {
   constructor(private readonly dealerService: DealerService) {}
 

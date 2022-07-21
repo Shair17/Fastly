@@ -11,7 +11,7 @@ export const WelcomeNewUserController: React.FC<WelcomeNewUserScreenProps> = ({
   navigation,
 }) => {
   const name = useUserStore(user => user.name);
-  const firstName = name.split(' ')[0];
+  const firstName = name.split(' ')[0] ?? 'usuario';
 
   StatusBar.setTranslucent(false);
 

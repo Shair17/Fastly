@@ -7,6 +7,15 @@ import {
   DNI_REGEX,
 } from '@fastly/constants/regex';
 
+export const GetMyUserOrdersQueryString = Type.Object({
+  skip: Type.Optional(Type.Number({minimum: 0})),
+  take: Type.Optional(Type.Number({minimum: 0})),
+  orderBy: Type.Union([Type.Literal('asc'), Type.Literal('desc')]),
+});
+export type GetMyUserOrdersQueryStringType = Static<
+  typeof GetMyUserOrdersQueryString
+>;
+
 export const UpdateNewUserBody = Type.Object(
   {
     avatar: Type.Optional(Type.String()),

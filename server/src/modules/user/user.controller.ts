@@ -24,6 +24,8 @@ import {
   UpdateNewUserBodyType,
   MyAddressParams,
   MyAddressParamsType,
+  GetMyUserOrdersQueryString,
+  GetMyUserOrdersQueryStringType,
 } from './user.schema';
 import {
   hasBearerToken,
@@ -31,7 +33,7 @@ import {
   adminIsAuthenticated,
 } from '@fastly/shared/hooks/auth';
 
-@Controller('/users')
+@Controller('/v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -230,12 +232,19 @@ export class UserController {
     return this.userService.deleteFavorites(request.userId);
   }
 
-  // TODO: agregar paginación
   @GET('/me/orders', {
+    schema: {
+      querystring: GetMyUserOrdersQueryString,
+    },
     onRequest: [hasBearerToken, userIsAuthenticated],
   })
-  async myOrders(request: Request, reply: Reply) {
-    return this.userService.myOrders(request.userId);
+  async myOrders(
+    request: Request<{
+      Querystring: GetMyUserOrdersQueryStringType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.userService.myOrders(request.userId, request.query);
   }
 
   @PUT('/new-user', {

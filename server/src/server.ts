@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 
+import type {Server as IServer, IncomingMessage, ServerResponse} from 'http';
 import Fastify, {
   FastifyServerOptions,
   FastifyInstance,
   FastifyLoggerInstance,
 } from 'fastify';
 import {bootstrap} from 'fastify-decorators';
-import type {Server as IServer, IncomingMessage, ServerResponse} from 'http';
 import {resolve} from 'path';
 import {StatusCodes} from 'http-status-codes';
 import Env from '@fastify/env';
@@ -87,15 +87,17 @@ export default async function Server(
     exposeUptime: true,
     healthcheckUrl: '/health',
   });
-  server.register(bootstrap, {
-    prefix: 'v1',
-    controllers: [...AppModule],
-  });
   server.register(IO, {
     cors: {
       origin: '*',
     },
   });
+  server.register(bootstrap, {
+    // prefix: 'v1',
+    controllers: [...AppModule],
+  });
+
+  /** Al final para que coja todas las rutas */
   server.register(MapRoutes);
 
   return server;

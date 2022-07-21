@@ -157,4 +157,36 @@ export class OrderService {
       },
     });
   }
+
+  async userHasOngoingOrders(userId: string) {
+    const user = await this.userService.getById(userId);
+
+    if (!user) {
+      return false;
+    }
+
+    const OngoingOrdersCount = await this.databaseService.order.count({
+      where: {
+        user: {
+          id: user.id,
+        },
+        status: {
+          notIn: ['CANCELLED', 'DELIVERED'],
+        },
+      },
+    });
+
+    // const orders = await this.databaseService.order.findMany({
+    //   where: {
+    //     user: {
+    //       id: user.id,
+    //     },
+    //     status:{
+    //       notIn: ['CANCELLED', 'DELIVERED']
+    //     }
+    //   },
+    // });
+
+    return OngoingOrdersCount > 0;
+  }
 }

@@ -1,4 +1,4 @@
 import {Controller} from 'fastify-decorators';
 
-@Controller('/products')
+@Controller('/v1/products')
 export class ProductController {}

@@ -28,7 +28,7 @@ import {
   CreateRankingByStoreIdBodyType,
 } from './store.schema';
 
-@Controller('/stores')
+@Controller('/v1/stores')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
