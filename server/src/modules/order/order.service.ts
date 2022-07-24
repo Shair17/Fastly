@@ -158,6 +158,12 @@ export class OrderService {
     });
   }
 
+  /**
+   * NUNCA lanzar un error http en este tipo de métodos
+   * ya que, estos métodos se usarán en los sockets
+   * devolver solo tipos de datos...
+   * en este caso, devuelvo true o false, dadas las circunstancias
+   */
   async userHasOngoingOrders(userId: string) {
     const user = await this.userService.getById(userId);
 
