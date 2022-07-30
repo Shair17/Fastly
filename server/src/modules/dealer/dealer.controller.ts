@@ -1,6 +1,7 @@
 import {Controller, GET, POST} from 'fastify-decorators';
 import {DealerService} from './dealer.service';
 import {Request, Reply} from '@fastly/interfaces/http';
+import {GetIsActiveDealerParamsType} from './dealer.schema';
 import {
   CreateDealerRankingBody,
   CreateDealerRankingBodyType,
@@ -16,6 +17,7 @@ import {
   GetDealerRankingParamsType,
   GetDealerRankingsParams,
   GetDealerRankingsParamsType,
+  GetIsActiveDealerParams,
 } from './dealer.schema';
 import {
   hasBearerToken,
@@ -147,5 +149,23 @@ export class DealerController {
     reply: Reply,
   ) {
     return this.dealerService.getMyRankings(request.dealerId, request.query);
+  }
+
+  @GET('/is-active/:id', {
+    // Quité estos hooks porque si no está activo el dealer
+    // directamente desde el hook te lanza un Unauthorized, entonces...
+    // solo recibiré el dealerId por parametros
+    // onRequest: [hasBearerToken, dealerIsAuthenticated],
+    schema: {
+      params: GetIsActiveDealerParams,
+    },
+  })
+  async getIsActive(
+    request: Request<{
+      Params: GetIsActiveDealerParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.dealerService.getIsActive(request.params);
   }
 }

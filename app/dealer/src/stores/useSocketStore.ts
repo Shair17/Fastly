@@ -11,11 +11,13 @@ const getDefaultValues = () => {
   return {
     socket,
     online: false,
+    dealerIsOnline: false,
   };
 };
 
 export const useSocketStore = create(
   combine(getDefaultValues(), (set, get) => ({
     setOnline: (online: boolean) => set({online}),
+    setDealerIsOnline: (dealerIsOnline: boolean) => set({dealerIsOnline}),
   })),
 );

@@ -29,7 +29,6 @@ const getDefaultValues = (): AuthTypes => {
 
 export const useAuthStore = create(
   combine(getDefaultValues(), (set, get) => ({
-    // increase: (by: number) => set(state => ({bears: state.bears + by})),
     setIsNewUser: (isNewUser: boolean) => {
       storage.set(isNewUserKey, isNewUser);
 

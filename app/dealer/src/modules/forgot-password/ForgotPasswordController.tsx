@@ -4,19 +4,35 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  TouchableOpacity,
 } from 'react-native';
 import {Div, Text, Button, Input, Icon} from 'react-native-magnus';
 import {ForgotPasswordScreenProps} from '@fastly/navigation/screens/ForgotPasswordScreen';
 import {useForm, Controller} from 'react-hook-form';
-import {ForgotPasswordType} from '@fastly/interfaces/app';
+import {
+  ForgotPasswordBody,
+  ForgotPasswordResponse,
+  ForgotPasswordType,
+} from '@fastly/interfaces/app';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {ForgotPasswordSchema} from '@fastly/schemas/forgot-password';
+import useAxios from 'axios-hooks';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {getForgotPasswordErrorMessage} from '@fastly/utils/getErrorMessage';
 
 export const ForgotPasswordController: React.FC<ForgotPasswordScreenProps> = ({
   navigation,
   route,
 }) => {
+  const [{loading}, executeDealerForgotPassword] = useAxios<
+    ForgotPasswordResponse,
+    ForgotPasswordBody
+  >(
+    {
+      url: '/auth/dealer/forgot-password',
+      method: 'PUT',
+    },
+    {manual: true},
+  );
   const {
     control,
     handleSubmit,
@@ -29,7 +45,48 @@ export const ForgotPasswordController: React.FC<ForgotPasswordScreenProps> = ({
   });
 
   const handleFinish = handleSubmit(({email}) => {
-    console.log({email});
+    executeDealerForgotPassword({
+      data: {email},
+    })
+      .then(response => {
+        const {message, statusCode, success} = response.data;
+
+        if (success && statusCode === 200 && message) {
+          Notifier.showNotification({
+            title: 'Recuperación de Contraseña',
+            description: message,
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'success',
+            },
+            duration: 5000,
+          });
+        } else {
+          Notifier.showNotification({
+            title: 'Error!',
+            description: 'Ha ocurrido un error inesperado',
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'error',
+            },
+            duration: 5000,
+          });
+        }
+      })
+      .catch(error => {
+        if (error?.response?.data.message) {
+          Notifier.showNotification({
+            title: 'Error!',
+            description: getForgotPasswordErrorMessage(
+              error.response.data.message,
+            ),
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'error',
+            },
+          });
+        }
+      });
   });
 
   return (
@@ -91,6 +148,7 @@ export const ForgotPasswordController: React.FC<ForgotPasswordScreenProps> = ({
                 rounded="lg"
                 fontSize="xl"
                 h={55}
+                loading={loading}
                 bg="primary"
                 onPress={handleFinish}
                 shadow="sm">

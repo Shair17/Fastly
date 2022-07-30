@@ -2,15 +2,16 @@ import React, {Fragment, useEffect} from 'react';
 import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {useUserStore} from '@fastly/stores/useUserStore';
+import {isLoggedIn} from '@fastly/services/refresh-token';
 
 export const SocketProvider: React.FC = ({children}) => {
   const userId = useUserStore(u => u.id);
   const socket = useSocketStore(s => s.socket);
   const setOnline = useSocketStore(s => s.setOnline);
-  const userHasOngoingOrders = useSocketStore(s => s.userHasOngoingOrders);
   const setUserHasOngoingOrders = useSocketStore(
     s => s.setUserHasOngoingOrders,
   );
+  const isAuthenticated = isLoggedIn();
 
   useEffect(() => {
     setOnline(socket.connected);
@@ -55,6 +56,25 @@ export const SocketProvider: React.FC = ({children}) => {
       });
     });
   }, [socket]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !userId) {
+      return;
+    }
+
+    // funcionará bien esto? xd
+    // si no, separar el .emit del .on por socket.emit y socket.on respectivamente
+    socket.emit('sendUserIdToGetIfHasOngoingOrders', userId);
+    socket.on('userHasOngoingOrders', (userHasOngoingOrders: boolean) => {
+      // solo modificar el estado en caso sea boleano
+      if (typeof userHasOngoingOrders === 'boolean')
+        setUserHasOngoingOrders(userHasOngoingOrders);
+    });
+
+    return () => {
+      socket.off('userHasOngoingOrders');
+    };
+  }, [socket, isAuthenticated, userId]);
 
   return <Fragment>{children}</Fragment>;
 };

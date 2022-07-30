@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useShowSessionIsExpired} from '@fastly/hooks/useShowSessionIsExpired';
 import {isLoggedIn} from '@fastly/services/refresh-token';
 import {usePermissionsStore} from '@fastly/stores/usePermissionsStore';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {BasicHeaderScreen} from '@fastly/components/molecules/BasicHeaderScreen';
 import {
   WelcomeScreen,
@@ -12,12 +13,15 @@ import {
   ForgotPasswordScreen,
   LoadingScreen,
   GeolocationPermissionsScreen,
+  InactiveAccountScreen,
 } from './screens';
+import {Application} from './drawer/Root';
 
 export type RootStackParams = {
   WelcomeScreen: undefined;
   SignInScreen: undefined;
   SignUpScreen: undefined;
+  InactiveAccountScreen: undefined;
   ForgotPasswordScreen:
     | {
         email?: string;
@@ -36,6 +40,7 @@ export const Root: React.FC = () => {
 
   const {theme} = useTheme();
   const isAuthenticated = isLoggedIn();
+  const isActive = useAuthStore(z => z.isActive);
   const locationStatus = usePermissionsStore(z => z.locationStatus);
 
   return (
@@ -49,7 +54,20 @@ export const Root: React.FC = () => {
           {locationStatus === 'unavailable' ? (
             <RootStack.Screen name="LoadingScreen" component={LoadingScreen} />
           ) : locationStatus === 'granted' ? (
-            <RootStack.Screen name="Application" component={() => null} />
+            !isActive ? (
+              <RootStack.Screen
+                options={{
+                  animation: 'slide_from_right',
+                  headerShown: true,
+                  header: () => <BasicHeaderScreen />,
+                  contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
+                }}
+                name="InactiveAccountScreen"
+                component={InactiveAccountScreen}
+              />
+            ) : (
+              <RootStack.Screen name="Application" component={Application} />
+            )
           ) : (
             <RootStack.Screen
               name="GeolocationPermissionsScreen"

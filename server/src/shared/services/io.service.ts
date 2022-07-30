@@ -26,18 +26,25 @@ export class IOService implements OnModuleInit {
   }
 
   @Initializer([UserService, DealerService, OrderService])
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     const {io} = this;
 
     io.on('connection', async socket => {
-      socket.on('userHasOngoingOrders', cb => {
-        // const userHasOngoingOrders = await this.orderService.userHasOngoingOrders(userId);
+      /** Ordenes */
 
-        cb(true);
+      /** Repartidores */
+
+      /** Usuarios */
+      socket.on('sendUserIdToGetIfHasOngoingOrders', async (userId: string) => {
+        const userHasOngoingOrders =
+          await this.orderService.userHasOngoingOrders(userId);
+
+        // io.emit o socket.emit ??
+        // aún no lo sé, io es para emitir a todos los clientes pero eso no necesito
+        // socket.emit es para emitir al cliente que hizo la petición
+        // creo que es socket.emit ... pero bueno, hay que verificar eso
+        socket.emit('userHasOngoingOrders', userHasOngoingOrders);
       });
-      // socket.on('siguiente-ticket-trabajar', data => {
-      //   server.io.emit('ticket-asignado', 'dasdasd');
-      // });
     });
   }
 }

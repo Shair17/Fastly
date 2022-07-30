@@ -45,18 +45,6 @@ const getDefaultValues = (): UserType => {
     createdAt: '',
     updatedAt: '',
   };
-
-  // const isAuthenticated = isLoggedIn();
-
-  // if (!isAuthenticated) {
-  //   return {} as UserType;
-  // }
-
-  // const response = await http.get<UserType>('/users/me');
-
-  // console.log(response.data);
-
-  // return response.data;
 };
 
 export const useUserStore = create(

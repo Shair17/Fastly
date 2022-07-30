@@ -2,10 +2,10 @@ import React, {FC} from 'react';
 import {StatusBar} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import {useNetInfo} from '@react-native-community/netinfo';
-import {BasicHeaderScreen} from '../../../components/molecules/BasicHeaderScreen';
-import {useDimensions} from '../../../hooks/useDimensions';
-import {ContainerWithCredits} from '../../../components/templates/ContainerWithCredits';
-import {Button} from '../../../components/atoms/Button';
+import {BasicHeaderScreen} from '@fastly/components/molecules/BasicHeaderScreen';
+import {useDimensions} from '@fastly/hooks/useDimensions';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {Button} from '@fastly/components/atoms/Button';
 import {ErrorStackParmas} from '../ErrorController';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 

@@ -182,17 +182,6 @@ export class OrderService {
       },
     });
 
-    // const orders = await this.databaseService.order.findMany({
-    //   where: {
-    //     user: {
-    //       id: user.id,
-    //     },
-    //     status:{
-    //       notIn: ['CANCELLED', 'DELIVERED']
-    //     }
-    //   },
-    // });
-
     return OngoingOrdersCount > 0;
   }
 }

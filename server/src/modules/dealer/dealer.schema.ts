@@ -7,6 +7,13 @@ export const GetMyOrdersQueryString = Type.Object({
 });
 export type GetMyOrdersQueryStringType = Static<typeof GetMyOrdersQueryString>;
 
+export const GetIsActiveDealerParams = Type.Object({
+  id: Type.String({format: 'uuid'}),
+});
+export type GetIsActiveDealerParamsType = Static<
+  typeof GetIsActiveDealerParams
+>;
+
 export const GetMyRankingsQueryString = Type.Object({
   skip: Type.Optional(Type.Number({minimum: 0})),
   take: Type.Optional(Type.Number({minimum: 0})),

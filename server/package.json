@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "yarn env:dev && node scripts/clear && nodemon | pino-pretty -c",
-    "dev": "yarn build && node scripts/clear && node -r tsconfig-paths/register dist/main",
+    "start": "yarn build && node scripts/clear && node -r tsconfig-paths/register dist/main",
+    "dev": "yarn env:dev && node scripts/clear && nodemon | pino-pretty -c",
     "env:dev": "cross-env NODE_ENV=development",
     "build": "yarn clean && tsc",
     "clean": "rimraf dist",
@@ -27,6 +27,7 @@
     "@sinclair/typebox": "^0.23.5",
     "argon2": "^0.28.7",
     "axios": "^0.27.2",
+    "cloudinary": "^1.30.1",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.2",
     "fastify": "3.29.1",

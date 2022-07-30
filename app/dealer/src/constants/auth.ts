@@ -3,14 +3,18 @@ export type Tokens = {
   refreshToken: string;
 };
 
-export const accessTokenKey = '@fastly/token';
-export const refreshTokenKey = '@fastly/refresh-token';
+export const accessTokenKey = '@fastly-dealer/token';
+export const refreshTokenKey = '@fastly-dealer/refresh-token';
 
-export const userKey = '@fastly/user';
+export const dealerKey = '@fastly-dealer/dealer';
 
-export const user = {};
+export const dealer = {};
 
 export const isBanned = false;
+export const isActive = false;
+export const available = false;
+
+export const isActiveKey = '@fastly-dealer/isActive';
 
 export const accessToken = '';
 export const refreshToken = '';

@@ -10,14 +10,15 @@ import {ContainerWithKeyboardAvoidingView} from '@fastly/components/templates/Co
 import DatePicker from 'react-native-date-picker';
 import {calcAgeFromDate} from '@fastly/utils/calcAgeFromDate';
 import useAxios from 'axios-hooks';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {getRegisterErrorMessage} from '@fastly/utils/getErrorMessage';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useDealerStore} from '@fastly/stores/useDealerStore';
 
 export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
-  const [{loading, error}, executeSignUpDealer] = useAxios<
-    SignUpResponse,
-    SignUpBody
-  >(
+  const [{loading}, executeSignUpDealer] = useAxios<SignUpResponse, SignUpBody>(
     {
-      url: '/auth/dealer',
+      url: '/auth/dealer/register',
       method: 'POST',
     },
     {manual: true},
@@ -34,6 +35,9 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
   } = useForm<SignUpType>({
     resolver: zodResolver(SignUpSchema),
   });
+  const setTokens = useAuthStore(s => s.setTokens);
+  const setIsActive = useAuthStore(s => s.setIsActive);
+  const setDealer = useDealerStore(d => d.setDealer);
 
   const togglePasswordVisibility = () => setPasswordHidden(!passwordHidden);
   const togglePasswordConfirmationVisibility = () =>
@@ -61,8 +65,28 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
           birthDate: String(date),
         },
       })
-        .then(console.log)
-        .catch(console.log);
+        .then(response => {
+          const {accessToken, refreshToken, dealer} = response.data;
+
+          setTokens({
+            accessToken,
+            refreshToken,
+          });
+          setDealer(dealer);
+          setIsActive(dealer.isActive);
+        })
+        .catch(error => {
+          if (error?.response?.data.message) {
+            Notifier.showNotification({
+              title: 'Error!',
+              description: getRegisterErrorMessage(error.response.data.message),
+              Component: NotifierComponents.Alert,
+              componentProps: {
+                alertType: 'error',
+              },
+            });
+          }
+        });
     },
   );
 
@@ -179,6 +203,7 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                           name={passwordHidden ? 'eye' : 'eye-off'}
                           color="text"
                           fontFamily="Ionicons"
+                          fontSize="xl"
                         />
                       </TouchableOpacity>
                     }
@@ -227,12 +252,13 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
                     }
                     suffix={
                       <TouchableOpacity
-                        onPress={togglePasswordVisibility}
+                        onPress={togglePasswordConfirmationVisibility}
                         activeOpacity={0.6}>
                         <Icon
-                          name={passwordHidden ? 'eye' : 'eye-off'}
+                          name={passwordConfirmationHidden ? 'eye' : 'eye-off'}
                           color="text"
                           fontFamily="Ionicons"
+                          fontSize="xl"
                         />
                       </TouchableOpacity>
                     }
@@ -352,12 +378,14 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
 
               <Div my="md" />
 
-              <DatePicker date={date} onDateChange={setDate} mode="date" />
-              {showDateError && (
-                <Text color="red" mt={2} fontWeight="500">
-                  Tienes que ser mayor de edad para poder registrarte.
-                </Text>
-              )}
+              <Div alignItems="center">
+                <DatePicker date={date} onDateChange={setDate} mode="date" />
+                {showDateError && (
+                  <Text color="red" mt={2} fontWeight="500">
+                    Tienes que ser mayor de edad para poder registrarte.
+                  </Text>
+                )}
+              </Div>
             </Div>
           </Div>
 
@@ -371,6 +399,7 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
               fontSize="xl"
               h={55}
               bg="primary"
+              loading={loading}
               onPress={handleFinish}>
               Siguiente
             </Button>

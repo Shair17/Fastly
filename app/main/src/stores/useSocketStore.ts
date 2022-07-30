@@ -1,6 +1,6 @@
 import create from 'zustand';
 import {combine} from 'zustand/middleware';
-import {SOCKET_URL} from '@fastly/constants';
+import {SOCKET_URL} from '@fastly/constants/socket';
 import io from 'socket.io-client';
 
 const getDefaultValues = () => {

@@ -24,7 +24,7 @@ export interface SignUpBody {
   birthDate: string;
 }
 
-enum Vehicle {
+export enum Vehicle {
   CARRO = 'CARRO',
   MOTO = 'MOTO',
   BICICLETA = 'BICICLETA',
@@ -32,7 +32,7 @@ enum Vehicle {
   NONE = 'NONE',
 }
 
-interface Dealer {
+export interface Dealer {
   id: string;
   name: string;
   email: string;
@@ -43,18 +43,37 @@ interface Dealer {
   isBanned: boolean;
   banReason?: string;
   isActive: boolean;
-  birthDate: Date;
+  birthDate: string;
   vehicle: Vehicle;
   available: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface SignUpResponse {
+export interface ForgotPasswordResponse {
+  statusCode: number;
+  message: string;
+  success: boolean;
+  // link: string;
+  // resetPasswordToken: string;
+}
+
+export interface ForgotPasswordBody {
+  email: string;
+}
+
+export interface SignInResponse {
   accessToken: string;
   refreshToken: string;
   dealer: Dealer;
 }
+
+export interface SignInBody {
+  email: string;
+  password: string;
+}
+
+export interface SignUpResponse extends SignInResponse {}
 
 export interface SignInType {
   email: string;
@@ -131,23 +150,21 @@ export interface Address {
 }
 
 export interface MyProfileResponse {
-  addresses: Address[];
-  avatar: string;
-  banReason?: string;
-  cart: [];
-  createdAt: string;
-  dni: string;
-  email: string;
-  facebookAccessToken: string;
-  facebookId: string;
-  favorites: [];
   id: string;
-  isBanned: boolean;
-  isNewUser: boolean;
   name: string;
+  email: string;
   phone: string;
-  refreshToken: string;
+  dni: string;
+  avatar: string;
+  address: string;
+  available: boolean;
+  banReason?: string;
+  birthDate: string;
+  isActive: boolean;
+  isBanned: boolean;
   updatedAt: string;
+  createdAt: string;
+  vehicle: Vehicle;
 }
 
 export interface MyAddressesResponse {

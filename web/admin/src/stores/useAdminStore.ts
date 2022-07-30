@@ -29,5 +29,7 @@ export const useAdminStore = create(
 
 			set(response.data);
 		},
+		setAdmin: (admin: Admin) => set(admin)
+			
 	}))
 );

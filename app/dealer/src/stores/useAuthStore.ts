@@ -6,21 +6,35 @@ import {
   accessTokenKey,
   refreshTokenKey,
   Tokens,
+  isActive,
+  isActiveKey,
 } from '@fastly/constants/auth';
 import {http} from '@fastly/services/http';
 import {storage} from '@fastly/services/storage';
 
 export interface ITokens extends Tokens {}
 
-const getDefaultValues = (): Tokens => {
+type AuthTypes = Tokens & {
+  isActive: boolean;
+};
+
+const getDefaultValues = (): AuthTypes => {
   return {
     accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
+    isActive: storage.getBoolean(isActiveKey) ?? isActive,
   };
 };
 
 export const useAuthStore = create(
   combine(getDefaultValues(), (set, get) => ({
+    setIsActive: (isActive: boolean) => {
+      storage.set(isActiveKey, isActive);
+
+      set({
+        isActive,
+      });
+    },
     setAccessToken: (accessToken: string) => {
       storage.set(accessTokenKey, accessToken);
 

@@ -11,6 +11,7 @@ import {
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
 import {OrderService} from '../order/order.service';
+import {GetIsActiveDealerParamsType} from './dealer.schema';
 
 @Service('DealerServiceToken')
 export class DealerService {
@@ -18,6 +19,15 @@ export class DealerService {
     private readonly databaseService: DatabaseService,
     private readonly userService: UserService,
   ) {}
+
+  async getIsActive({id: dealerId}: GetIsActiveDealerParamsType) {
+    const dealer = await this.getByIdOrThrow(dealerId);
+
+    return {
+      id: dealer.id,
+      isActive: dealer.isActive,
+    };
+  }
 
   count() {
     return this.databaseService.dealer.count();
@@ -40,7 +50,14 @@ export class DealerService {
       throw new Unauthorized();
     }
 
-    const {password, ...restOfDealer} = dealer;
+    const {
+      password,
+      resetPasswordToken,
+      refreshToken,
+      rankings,
+      orders,
+      ...restOfDealer
+    } = dealer;
 
     return restOfDealer;
   }

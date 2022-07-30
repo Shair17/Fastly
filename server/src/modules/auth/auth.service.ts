@@ -133,13 +133,7 @@ export class AuthService {
     }
 
     if (user.isBanned) {
-      console.log('usuario baneado');
-      console.log(
-        'benado?',
-        user.isBanned ? 'si' : 'no',
-        'razón:',
-        user.banReason,
-      );
+      console.log(`Usuario con id ${user.id} baneado por ${user.banReason}`);
       throw new Unauthorized('banned');
     }
 
@@ -908,7 +902,7 @@ export class AuthService {
     const dealer = await this.dealerService.getByEmail(email);
 
     if (!dealer) {
-      throw new Unauthorized();
+      throw new Unauthorized('account_not_found');
     }
 
     const resetPasswordToken = this.tokenService.generateForgotPasswordToken(
@@ -943,11 +937,10 @@ export class AuthService {
 
     return {
       statusCode: 200,
-      message: 'Verifica tu correo para resetear tu contraseña',
+      message: 'Verifica tu correo para resetear tu contraseña.',
       success: true,
-      // TODO: borrar esto, solo me servirá de prueba
-      link: `https://dealer.fastly.delivery/new-password/${resetPasswordToken}`,
-      resetPasswordToken,
+      // link: `https://dealer.fastly.delivery/new-password/${resetPasswordToken}`,
+      // resetPasswordToken,
     };
   }
 

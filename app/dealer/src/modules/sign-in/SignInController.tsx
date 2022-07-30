@@ -11,9 +11,21 @@ import {SignInScreenProps} from '@fastly/navigation/screens/SignInScreen';
 import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {SignInSchema} from '@fastly/schemas/sign-in';
-import {SignInType} from '@fastly/interfaces/app';
+import {SignInBody, SignInResponse, SignInType} from '@fastly/interfaces/app';
+import useAxios from 'axios-hooks';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {getLoginErrorMessage} from '@fastly/utils/getErrorMessage';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useDealerStore} from '@fastly/stores/useDealerStore';
 
 export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
+  const [{loading}, executeSignInDealer] = useAxios<SignInResponse, SignInBody>(
+    {
+      url: '/auth/dealer/login',
+      method: 'POST',
+    },
+    {manual: true},
+  );
   const {
     control,
     handleSubmit,
@@ -24,14 +36,43 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
     resolver: zodResolver(SignInSchema),
   });
   const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
-
-  const handleFinish = handleSubmit(({email, password}) => {
-    console.log({email, password});
-  });
+  const togglePasswordVisibility = () => setPasswordHidden(!passwordHidden);
+  const setTokens = useAuthStore(s => s.setTokens);
+  const setIsActive = useAuthStore(s => s.setIsActive);
+  const setDealer = useDealerStore(d => d.setDealer);
 
   const emailState = watch('email') || getValues('email');
 
-  const togglePasswordVisibility = () => setPasswordHidden(!passwordHidden);
+  const handleFinish = handleSubmit(({email, password}) => {
+    executeSignInDealer({
+      data: {
+        email,
+        password,
+      },
+    })
+      .then(response => {
+        const {accessToken, refreshToken, dealer} = response.data;
+
+        setTokens({
+          accessToken,
+          refreshToken,
+        });
+        setDealer(dealer);
+        setIsActive(dealer.isActive);
+      })
+      .catch(error => {
+        if (error?.response?.data.message) {
+          Notifier.showNotification({
+            title: 'Error!',
+            description: getLoginErrorMessage(error.response.data.message),
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'error',
+            },
+          });
+        }
+      });
+  });
 
   return (
     <KeyboardAvoidingView
@@ -118,6 +159,7 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                             name={passwordHidden ? 'eye' : 'eye-off'}
                             color="text"
                             fontFamily="Ionicons"
+                            fontSize="xl"
                           />
                         </TouchableOpacity>
                       }
@@ -156,6 +198,7 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
                 fontSize="xl"
                 h={55}
                 bg="primary"
+                loading={loading}
                 onPress={handleFinish}
                 shadow="sm">
                 Iniciar Sesión
