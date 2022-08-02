@@ -9,6 +9,7 @@ import type {OnModuleInit} from '@fastly/interfaces/module';
 import {UserService} from '@fastly/modules/user/user.service';
 import {DealerService} from '@fastly/modules/dealer/dealer.service';
 import {OrderService} from '@fastly/modules/order/order.service';
+import {OrderQueue} from '@fastly/modules/order/order-queue';
 
 @Service()
 export class IOService implements OnModuleInit {
@@ -19,6 +20,7 @@ export class IOService implements OnModuleInit {
     private readonly userService: UserService,
     private readonly dealerService: DealerService,
     private readonly orderService: OrderService,
+    private readonly orderQueue: OrderQueue,
   ) {}
 
   public get io() {

@@ -217,6 +217,16 @@ export class DealerService {
     });
   }
 
+  async getAvailableDealersCount() {
+    return this.databaseService.dealer.count({
+      where: {
+        isActive: true,
+        available: true,
+        isBanned: false,
+      },
+    });
+  }
+
   async getActiveDealers() {
     return this.databaseService.dealer.findMany({
       where: {

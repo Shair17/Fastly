@@ -229,6 +229,10 @@ export class AuthService {
       throw new Unauthorized('invalid_credentials');
     }
 
+    if (!this.passwordService.isValidPassword(data.password)) {
+      throw new BadRequest('invalid_password');
+    }
+
     if (!(await this.passwordService.verify(admin.password, data.password))) {
       throw new Unauthorized('invalid_credentials');
     }
@@ -412,6 +416,10 @@ export class AuthService {
       throw new Unauthorized();
     }
 
+    if (!this.passwordService.isValidPassword(newPassword)) {
+      throw new BadRequest('invalid_password');
+    }
+
     const hashedPassword = await this.passwordService.hash(newPassword);
 
     try {
@@ -435,6 +443,13 @@ export class AuthService {
 
     if (!admin) {
       throw new Unauthorized();
+    }
+
+    if (
+      !this.passwordService.isValidPassword(oldPassword) ||
+      !this.passwordService.isValidPassword(newPassword)
+    ) {
+      throw new BadRequest('invalid_password');
     }
 
     if (!(await this.passwordService.verify(admin.password, oldPassword))) {

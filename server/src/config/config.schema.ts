@@ -32,6 +32,9 @@ export const ConfigSchema = Type.Strict(
       JWT_DEALER_REFRESH_SECRET_EXPIRES_IN: Type.String(),
       JWT_FORGOT_DEALER_PASSWORD_SECRET: Type.String(),
       JWT_FORGOT_DEALER_PASSWORD_SECRET_EXPIRES_IN: Type.String(),
+      CLOUDINARY_CLOUD_NAME: Type.String(),
+      CLOUDINARY_API_KEY: Type.String(),
+      CLOUDINARY_API_SECRET: Type.String(),
     },
     {
       additionalProperties: false,

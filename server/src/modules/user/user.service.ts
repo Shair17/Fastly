@@ -65,6 +65,18 @@ export class UserService {
     return user;
   }
 
+  async getUserAddressById(id: string) {
+    const userAddress = await this.databaseService.userAddress.findUnique({
+      where: {id},
+    });
+
+    if (!userAddress) {
+      throw new NotFound();
+    }
+
+    return userAddress;
+  }
+
   async myAddress(userId: string, addressId: string) {
     const user = await this.getByIdOrThrow(userId);
 
@@ -222,6 +234,10 @@ export class UserService {
 
   async count() {
     return this.databaseService.user.count();
+  }
+
+  async getByIdOnlyUser(id: string) {
+    return this.databaseService.user.findUnique({where: {id}});
   }
 
   async getById(id: string) {

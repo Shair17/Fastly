@@ -59,6 +59,10 @@ export class AdminService {
 
     const numberOfAdmins = await this.count();
 
+    if (!this.passwordService.isValidPassword(data.password)) {
+      throw new BadRequest('invalid_password');
+    }
+
     const hashedPassword = await this.passwordService.hash(data.password);
 
     if (avatar && isString(avatar)) {
@@ -98,6 +102,10 @@ export class AdminService {
     let {avatar} = data;
 
     const foundAdmin = await this.getByIdOrThrow(adminId);
+
+    if (!this.passwordService.isValidPassword(data.password)) {
+      throw new BadRequest('invalid_password');
+    }
 
     const hashedPassword = await this.passwordService.hash(data.password);
 

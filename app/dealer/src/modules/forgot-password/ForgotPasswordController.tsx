@@ -64,7 +64,7 @@ export const ForgotPasswordController: React.FC<ForgotPasswordScreenProps> = ({
         } else {
           Notifier.showNotification({
             title: 'Error!',
-            description: 'Ha ocurrido un error inesperado',
+            description: 'Ha ocurrido un error inesperado.',
             Component: NotifierComponents.Alert,
             componentProps: {
               alertType: 'error',

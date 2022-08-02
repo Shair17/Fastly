@@ -1,5 +1,15 @@
 import {Type, Static} from '@sinclair/typebox';
 
+export const CreateOrderBody = Type.Object({
+  userId: Type.String({format: 'uri'}),
+  dealerId: Type.Optional(Type.String({format: 'uri'})),
+  addressId: Type.String({format: 'uuid'}),
+  productId: Type.String({format: 'uri'}),
+  quantity: Type.Number(),
+  message: Type.Optional(Type.String()),
+});
+export type CreateOrderBodyType = Static<typeof CreateOrderBody>;
+
 export const GetOrderByIdParams = Type.Object(
   {
     id: Type.String({format: 'uuid'}),

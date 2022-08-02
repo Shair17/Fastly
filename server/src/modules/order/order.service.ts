@@ -1,10 +1,11 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized, NotFound} from 'http-errors';
-import {Order, OrderStatus} from '@prisma/client';
+import {Dealer, Order, OrderStatus} from '@prisma/client';
 import {DatabaseService} from '@fastly/database/DatabaseService';
 import {UserService} from '../user/user.service';
 import {DealerService} from '../dealer/dealer.service';
 import {ProductService} from '../product/product.service';
+import {CreateOrderBodyType} from './order.schema';
 
 @Service('OrderServiceToken')
 export class OrderService {
@@ -33,31 +34,40 @@ export class OrderService {
     return this.databaseService.order.findMany({where: {status}});
   }
 
-  async createOrder(order: Order) {
-    const {
-      arrivalTime,
-      dealerId,
-      deliveryPrice,
-      message,
-      productId,
-      quantity,
-      status,
-      userId,
-    } = order;
+  async getOrdersForQueue() {
+    return this.databaseService.order.findMany({
+      where: {
+        status: {
+          notIn: ['CANCELLED', 'DELIVERED'],
+        },
+      },
+    });
+  }
 
+  async createOrder({
+    addressId,
+    productId,
+    quantity,
+    userId,
+    dealerId,
+    message,
+  }: CreateOrderBodyType) {
     const user = await this.userService.getByIdOrThrow(userId);
+    const address = await this.userService.getUserAddressById(addressId);
     const product = await this.productService.getByIdOrThrow(productId);
+    let dealer: Dealer | null = null;
+
+    if (dealerId) {
+      dealer = await this.dealerService.getByIdOrThrow(dealerId);
+    }
 
     return this.databaseService.order.create({
       data: {
-        arrivalTime,
         quantity,
-        status,
-        deliveryPrice,
         message,
         dealer: {
           connect: {
-            id: dealerId || undefined,
+            id: dealer?.id ?? undefined,
           },
         },
         product: {
@@ -68,6 +78,11 @@ export class OrderService {
         user: {
           connect: {
             id: user.id,
+          },
+        },
+        address: {
+          connect: {
+            id: address.id,
           },
         },
       },

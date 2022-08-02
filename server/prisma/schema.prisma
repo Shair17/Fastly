@@ -155,6 +155,7 @@ model UserAddress {
   longitude    Float          @db.Float()
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  order        Order[]
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
@@ -210,8 +211,10 @@ model Order {
   status        OrderStatus @default(PENDING)
   message       String?
   arrivalTime   DateTime?
+  address       UserAddress @relation(fields: [userAddressId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  userAddressId String
 
   @@map("orders")
 }
