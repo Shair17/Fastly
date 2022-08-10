@@ -2,6 +2,70 @@ export interface ForgotPasswordType {
   email: string;
 }
 
+export type OrderStatus =
+  | 'CANCELLED'
+  | 'PROBLEM'
+  | 'PENDING'
+  | 'SENT'
+  | 'DELIVERED';
+
+export type Product = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  image: string;
+  blurHash: string;
+  couponId: string | null;
+  createdAt: string;
+  updatedAt: string;
+  storeId: string;
+};
+
+export type UserAddressTag =
+  | 'CASA'
+  | 'AMIGO'
+  | 'PAREJA'
+  | 'TRABAJO'
+  | 'UNIVERSIDAD'
+  | 'OTRO';
+
+export type UserAddress = {
+  id: string;
+  name: string;
+  street: string;
+  instructions: string;
+  zip: string;
+  city: string;
+  tag: UserAddressTag;
+  latitude: number;
+  longitude: number;
+  createdAt: string;
+  updatedAt: string;
+  // userId: string | null;
+};
+
+export interface Order {
+  id: string;
+  address: UserAddress;
+  createdAt: string;
+  updatedAt: string;
+  arrivalTime?: string;
+  deliveryPrice: number;
+  message?: string;
+  product: Product;
+  quantity: number;
+  status: OrderStatus;
+}
+
+export interface MyRanking {
+  id: string;
+  comment?: string;
+  value: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SignUpType {
   fullName: string;
   email: string;

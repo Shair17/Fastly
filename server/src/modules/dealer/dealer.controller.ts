@@ -114,6 +114,13 @@ export class DealerController {
     return this.dealerService.me(dealerId);
   }
 
+  @GET('/me/orders-count', {
+    onRequest: [hasBearerToken, dealerIsAuthenticated],
+  })
+  async getMyOrdersCount(request: Request, reply: Reply) {
+    return this.dealerService.getMyOrdersCount(request.dealerId);
+  }
+
   @GET('/me/orders', {
     schema: {
       querystring: GetMyOrdersQueryString,

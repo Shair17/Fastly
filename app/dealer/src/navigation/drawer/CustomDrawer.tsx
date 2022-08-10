@@ -14,14 +14,20 @@ import {useAuthStore} from '@fastly/stores/useAuthStore';
 export const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
   const fullName = useDealerStore(s => s.name);
   const dealerIsOnline = useSocketStore(s => s.dealerIsOnline);
+  const socket = useSocketStore(s => s.socket);
+  const socketOnline = useSocketStore(s => s.online);
+  const setDealerIsOnline = useSocketStore(s => s.setDealerIsOnline);
   const email = useDealerStore(s => s.email);
   const vehicle = useDealerStore(s => s.vehicle);
   const name = `${fullName.split(' ')[0]} ${fullName.split(' ')[1]}`;
   const avatar = useDealerStore(s => s.avatar);
   const removeTokens = useAuthStore(u => u.removeTokens);
   const logOutFromFastly = useAuthStore(u => u.logOutFromFastly);
+  const available = socketOnline && dealerIsOnline;
 
   const logOut = async () => {
+    socket.emit('SET_DEALER_AVAILABLE', false);
+    setDealerIsOnline(false);
     await logOutFromFastly();
     removeTokens();
   };
@@ -33,7 +39,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
         contentContainerStyle={{backgroundColor: '#790E2B'}}>
         <Div py="xl" px={20}>
           <Div flexDir="row" alignItems="center">
-            <Badge bg={dealerIsOnline ? 'green500' : 'red500'} w={12} h={12}>
+            <Badge bg={available ? 'green500' : 'red500'} w={12} h={12}>
               <Avatar source={{uri: avatar}} />
             </Badge>
 
@@ -52,7 +58,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
               Vehículo: {getVehicle(vehicle)}
             </Text>
             <Text color="#fff" fontWeight="500">
-              Disponible: {dealerIsOnline ? 'Sí' : 'No'}
+              Disponible:{' '}
+              {available ? 'Sí' : !socketOnline ? 'Reconectando...' : 'No'}
             </Text>
           </Div>
         </Div>

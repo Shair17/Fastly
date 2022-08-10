@@ -58,8 +58,11 @@ export class CouponService {
 
   async createCoupon(data: CreateCouponBodyType) {
     const {discount, productId, description, expiration} = data;
-    const code = await this.generateCouponCode();
-    const product = await this.productService.getByIdOrThrow(productId);
+
+    const [code, product] = await Promise.all([
+      this.generateCouponCode(),
+      this.productService.getByIdOrThrow(productId),
+    ]);
 
     const createdCoupon = await this.databaseService.coupon.create({
       data: {
@@ -80,8 +83,11 @@ export class CouponService {
 
   async editCouponByCode(couponCode: string, data: EditCouponByCodeBodyType) {
     const {description, discount, expiration, productId} = data;
-    const coupon = await this.getCouponByCode(couponCode);
-    const product = await this.productService.getByIdOrThrow(productId);
+
+    const [coupon, product] = await Promise.all([
+      this.getCouponByCode(couponCode),
+      this.productService.getByIdOrThrow(productId),
+    ]);
 
     const updatedCoupon = await this.databaseService.coupon.update({
       where: {id: coupon.id},
@@ -108,8 +114,11 @@ export class CouponService {
 
   async editCouponById(couponId: string, data: EditCouponByIdBodyType) {
     const {description, discount, expiration, productId} = data;
-    const coupon = await this.getByIdOrThrow(couponId);
-    const product = await this.productService.getByIdOrThrow(productId);
+
+    const [coupon, product] = await Promise.all([
+      this.getByIdOrThrow(couponId),
+      this.productService.getByIdOrThrow(productId),
+    ]);
 
     const updatedCoupon = await this.databaseService.coupon.update({
       where: {id: coupon.id},

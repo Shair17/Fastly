@@ -163,12 +163,13 @@ export class TokenService {
     switch (type) {
       case 'admin':
         try {
-          return <ForgotPasswordTokenPayload>this.jwtService.verify(
-            resetPasswordToken,
-
-            this.configService.getOrThrow<string>(
-              'JWT_FORGOT_ADMIN_PASSWORD_SECRET',
-            ),
+          return <ForgotPasswordTokenPayload>(
+            this.jwtService.verify(
+              resetPasswordToken,
+              this.configService.getOrThrow<string>(
+                'JWT_FORGOT_ADMIN_PASSWORD_SECRET',
+              ),
+            )
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -184,12 +185,13 @@ export class TokenService {
 
       case 'customer':
         try {
-          return <ForgotPasswordTokenPayload>this.jwtService.verify(
-            resetPasswordToken,
-
-            this.configService.getOrThrow<string>(
-              'JWT_FORGOT_CUSTOMER_PASSWORD_SECRET',
-            ),
+          return <ForgotPasswordTokenPayload>(
+            this.jwtService.verify(
+              resetPasswordToken,
+              this.configService.getOrThrow<string>(
+                'JWT_FORGOT_CUSTOMER_PASSWORD_SECRET',
+              ),
+            )
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {
@@ -205,12 +207,13 @@ export class TokenService {
 
       case 'dealer':
         try {
-          return <ForgotPasswordTokenPayload>this.jwtService.verify(
-            resetPasswordToken,
-
-            this.configService.getOrThrow<string>(
-              'JWT_FORGOT_DEALER_PASSWORD_SECRET',
-            ),
+          return <ForgotPasswordTokenPayload>(
+            this.jwtService.verify(
+              resetPasswordToken,
+              this.configService.getOrThrow<string>(
+                'JWT_FORGOT_DEALER_PASSWORD_SECRET',
+              ),
+            )
           );
         } catch (error) {
           if (error instanceof TokenExpiredError) {

@@ -17,6 +17,7 @@ import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {getLoginErrorMessage} from '@fastly/utils/getErrorMessage';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {useDealerStore} from '@fastly/stores/useDealerStore';
+import {useSocketStore} from '@fastly/stores/useSocketStore';
 
 export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
   const [{loading}, executeSignInDealer] = useAxios<SignInResponse, SignInBody>(
@@ -40,6 +41,8 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
   const setTokens = useAuthStore(s => s.setTokens);
   const setIsActive = useAuthStore(s => s.setIsActive);
   const setDealer = useDealerStore(d => d.setDealer);
+  const socket = useSocketStore(s => s.socket);
+  const setDealerIsOnline = useSocketStore(s => s.setDealerIsOnline);
 
   const emailState = watch('email') || getValues('email');
 
@@ -59,6 +62,10 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
         });
         setDealer(dealer);
         setIsActive(dealer.isActive);
+        if (dealer.isActive) {
+          socket.emit('SET_DEALER_AVAILABLE', true);
+          setDealerIsOnline(true);
+        }
       })
       .catch(error => {
         if (error?.response?.data.message) {

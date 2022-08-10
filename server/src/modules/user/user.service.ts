@@ -65,7 +65,7 @@ export class UserService {
     return user;
   }
 
-  async getUserAddressById(id: string) {
+  async getUserAddressByIdOrThrow(id: string) {
     const userAddress = await this.databaseService.userAddress.findUnique({
       where: {id},
     });
@@ -199,8 +199,13 @@ export class UserService {
     userId: string,
     {productId, quantity}: AddItemCartBodyType,
   ) {
-    const user = await this.getByIdOrThrow(userId);
-    const product = await this.productService.getByIdOrThrow(productId);
+    // const user = await this.getByIdOrThrow(userId);
+    // const product = await this.productService.getByIdOrThrow(productId);
+
+    const [user, product] = await Promise.all([
+      this.getByIdOrThrow(userId),
+      this.productService.getByIdOrThrow(productId),
+    ]);
 
     const updatedUser = await this.databaseService.user.update({
       where: {

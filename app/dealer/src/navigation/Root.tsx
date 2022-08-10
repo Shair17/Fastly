@@ -16,6 +16,7 @@ import {
   InactiveAccountScreen,
 } from './screens';
 import {Application} from './drawer/Root';
+import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
 export type RootStackParams = {
   WelcomeScreen: undefined;
@@ -39,13 +40,16 @@ export const Root: React.FC = () => {
   useShowSessionIsExpired();
 
   const {theme} = useTheme();
-  const isAuthenticated = isLoggedIn();
+  // const isAuthenticated = isLoggedIn();
   const isActive = useAuthStore(z => z.isActive);
   const locationStatus = usePermissionsStore(z => z.locationStatus);
+  // TODO: parece que el hook que acabo de hacer es mejor que el otro
+  // lo bueno de este hook es que está suscrito a los cambios del refresh token :)
+  const _isAuth = useIsAuthenticated();
 
   return (
     <RootStack.Navigator>
-      {isAuthenticated ? (
+      {_isAuth ? (
         <RootStack.Group
           screenOptions={{
             headerShown: false,

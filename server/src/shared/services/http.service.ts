@@ -5,14 +5,14 @@ import Axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 export class HttpService {
   private readonly axios: AxiosInstance = Axios.create();
 
-  get<T = any>(
+  async get<T = any>(
     url: string,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {
     return this.axios.get<T>(url, config);
   }
 
-  post<T = any>(
+  async post<T = any>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
@@ -20,7 +20,7 @@ export class HttpService {
     return this.axios.post(url, data, config);
   }
 
-  put<T = any>(
+  async put<T = any>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
@@ -28,7 +28,7 @@ export class HttpService {
     return this.axios.put(url, data, config);
   }
 
-  patch<T = any>(
+  async patch<T = any>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
@@ -36,7 +36,7 @@ export class HttpService {
     return this.axios.patch(url, data, config);
   }
 
-  delete<T = any>(
+  async delete<T = any>(
     url: string,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {

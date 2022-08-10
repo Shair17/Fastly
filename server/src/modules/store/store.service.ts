@@ -120,8 +120,11 @@ export class StoreService {
         data.categoryDescription,
       );
     const {category, closeTime, openTime} = data;
-    const store = await this.getByIdOrThrow(id);
-    const owner = await this.customerService.getByIdOrThrow(ownerId);
+
+    const [store, owner] = await Promise.all([
+      this.getByIdOrThrow(id),
+      this.customerService.getByIdOrThrow(ownerId),
+    ]);
 
     const updatedStore = await this.databaseService.store.update({
       where: {
@@ -182,10 +185,13 @@ export class StoreService {
   ) {
     const [userId] = trimStrings(data.userId);
     const {value, comment} = data;
-    const store = await this.getByIdOrThrow(storeId);
-    const user = await this.databaseService.user.findUnique({
-      where: {id: userId},
-    });
+
+    const [store, user] = await Promise.all([
+      this.getByIdOrThrow(storeId),
+      this.databaseService.user.findUnique({
+        where: {id: userId},
+      }),
+    ]);
 
     if (!user) {
       throw new Unauthorized();

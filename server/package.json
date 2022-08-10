@@ -45,7 +45,8 @@
     "nodemailer": "^6.7.5",
     "qs": "^6.10.3",
     "reflect-metadata": "^0.1.13",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
@@ -54,6 +55,7 @@
     "@types/node": "^16.0.0",
     "@types/nodemailer": "^6.4.4",
     "@types/qs": "^6.9.7",
+    "@types/uuid": "^8.3.4",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "nodemon": "^2.0.14",

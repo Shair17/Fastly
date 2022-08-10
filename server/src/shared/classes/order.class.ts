@@ -1,5 +1,6 @@
 import {nanoid} from 'nanoid';
 import {Order} from '@prisma/client';
+import {validate} from 'uuid';
 
 export interface ICoordinates {
   latitude: number;
@@ -31,7 +32,9 @@ export class OrderClass implements IOrderClass {
   }
 
   get hasDealer() {
-    return typeof this.order.dealerId === 'string';
+    return (
+      typeof this.order.dealerId === 'string' && validate(this.order.dealerId)
+    );
   }
 
   get userId() {

@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "android:start": "yarn android && yarn start"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.5",
@@ -21,6 +22,7 @@
     "axios": "^0.27.2",
     "axios-hooks": "^3.1.4",
     "color": "^4.2.3",
+    "date-fns": "^2.29.1",
     "deepmerge": "^4.2.2",
     "jwt-decode": "^3.1.2",
     "lru-cache": "^7.12.0",
@@ -47,6 +49,7 @@
     "react-native-vector-icons": "^9.2.0",
     "rn-swipeable-panel": "^1.2.7",
     "socket.io-client": "^4.5.1",
+    "timeago.js": "^4.0.2",
     "validate-color": "^2.2.1",
     "zod": "^3.17.3",
     "zustand": "^4.0.0-rc.1"

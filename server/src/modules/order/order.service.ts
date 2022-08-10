@@ -52,9 +52,12 @@ export class OrderService {
     dealerId,
     message,
   }: CreateOrderBodyType) {
-    const user = await this.userService.getByIdOrThrow(userId);
-    const address = await this.userService.getUserAddressById(addressId);
-    const product = await this.productService.getByIdOrThrow(productId);
+    const [user, address, product] = await Promise.all([
+      this.userService.getByIdOrThrow(userId),
+      this.userService.getUserAddressByIdOrThrow(addressId),
+      this.productService.getByIdOrThrow(productId),
+    ]);
+
     let dealer: Dealer | null = null;
 
     if (dealerId) {
@@ -90,8 +93,10 @@ export class OrderService {
   }
 
   async setDealerToOrder(dealerId: string, orderId: string) {
-    const dealer = await this.dealerService.getByIdOrThrow(dealerId);
-    const order = await this.getByIdOrThrow(orderId);
+    const [dealer, order] = await Promise.all([
+      this.dealerService.getByIdOrThrow(dealerId),
+      this.getByIdOrThrow(orderId),
+    ]);
 
     return this.databaseService.order.update({
       where: {
@@ -179,7 +184,7 @@ export class OrderService {
    * devolver solo tipos de datos...
    * en este caso, devuelvo true o false, dadas las circunstancias
    */
-  async userHasOngoingOrders(userId: string) {
+  async userHasOngoingOrders(userId: string): Promise<boolean> {
     const user = await this.userService.getById(userId);
 
     if (!user) {

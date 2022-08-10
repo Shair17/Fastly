@@ -19,7 +19,7 @@ import Favicon from 'fastify-favicon';
 import Routes from '@fastify/routes';
 import RateLimit from '@fastify/rate-limit';
 import IO from 'fastify-socket.io';
-import {ConfigSchema, ConfigSchemaType} from '@fastly/config/config.schema';
+import {ConfigSchema} from '@fastly/config/config.schema';
 import {AppModule} from '@fastly/app.module';
 import {MapRoutes} from '@fastly/plugins';
 
@@ -29,10 +29,6 @@ declare module 'fastify' {
     adminId: string;
     customerId: string;
     dealerId: string;
-  }
-
-  interface FastifyInstance {
-    config: ConfigSchemaType;
   }
 }
 

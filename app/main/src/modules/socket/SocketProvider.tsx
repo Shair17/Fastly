@@ -62,10 +62,10 @@ export const SocketProvider: React.FC = ({children}) => {
       return;
     }
 
-    // funcionará bien esto? xd
+    // funcionará bien esto?
     // si no, separar el .emit del .on por socket.emit y socket.on respectivamente
-    socket.emit('sendUserIdToGetIfHasOngoingOrders', userId);
-    socket.on('userHasOngoingOrders', (userHasOngoingOrders: boolean) => {
+    socket.emit('SEND_USER_ID', userId);
+    socket.on('USER_HAS_ONGOING_ORDERS', (userHasOngoingOrders: boolean) => {
       // solo modificar el estado en caso sea boleano
       if (typeof userHasOngoingOrders === 'boolean')
         setUserHasOngoingOrders(userHasOngoingOrders);

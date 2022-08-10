@@ -6,6 +6,12 @@ import {
 } from 'fastify-decorators';
 import {ConfigSchemaType} from './config.schema';
 
+declare module 'fastify' {
+  interface FastifyInstance {
+    config: ConfigSchemaType;
+  }
+}
+
 type Config = string | number | boolean;
 type ConfigKey = keyof ConfigSchemaType;
 type ConfigKeyOrString = ConfigKey | string;

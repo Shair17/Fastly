@@ -51,6 +51,10 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     );
   }
 
+  getQueue() {
+    return this.queue;
+  }
+
   get cancelledQueue() {
     return this.queue.filter(order => order.status === 'CANCELLED');
   }

@@ -103,6 +103,30 @@ export class DealerService {
     return this.databaseService.dealer.findMany();
   }
 
+  /**
+   * Uso solo para sockets
+   */
+  async setDealerAvailable(dealerId: string, isAvailable: boolean) {
+    const dealer = await this.databaseService.dealer.findUnique({
+      where: {id: dealerId},
+    });
+
+    if (!dealer) {
+      return;
+    }
+
+    if (dealer.isActive && !dealer.isBanned) {
+      await this.databaseService.dealer.update({
+        where: {
+          id: dealer.id,
+        },
+        data: {
+          available: isAvailable,
+        },
+      });
+    }
+  }
+
   getById(id: string) {
     return this.databaseService.dealer.findUnique({
       where: {
@@ -125,8 +149,11 @@ export class DealerService {
   ) {
     const [userId] = trimStrings(data.userId);
     const {value, comment} = data;
-    const dealer = await this.getByIdOrThrow(dealerId);
-    const user = await this.userService.getByIdOrThrow(userId);
+
+    const [dealer, user] = await Promise.all([
+      this.getByIdOrThrow(dealerId),
+      this.userService.getByIdOrThrow(userId),
+    ]);
 
     // TODO: probar si esto funciona bien
     // solo se podrá agregar un ranking si existe una orden, usuario, dealer creados.
@@ -275,6 +302,20 @@ export class DealerService {
     });
   }
 
+  async getMyOrdersCount(dealerId: string) {
+    const dealer = await this.getByIdOrThrow(dealerId);
+
+    const ordersCount = await this.databaseService.order.count({
+      where: {
+        dealer: {
+          id: dealer.id,
+        },
+      },
+    });
+
+    return ordersCount;
+  }
+
   async getMyOrders(
     dealerId: string,
     {skip, take, orderBy = 'desc'}: GetMyOrdersQueryStringType,
@@ -291,6 +332,24 @@ export class DealerService {
       orderBy: {
         createdAt: orderBy,
       },
+      select: {
+        id: true,
+        address: true,
+        arrivalTime: true,
+        createdAt: true,
+        updatedAt: true,
+        dealer: false,
+        dealerId: false,
+        deliveryPrice: true,
+        message: true,
+        product: true,
+        productId: false,
+        quantity: true,
+        status: true,
+        userAddressId: false,
+        user: false,
+        userId: false,
+      },
     });
 
     return orders;
@@ -304,7 +363,7 @@ export class DealerService {
 
   async getMyRankings(
     dealerId: string,
-    {orderBy = 'desc', skip, take}: GetMyRankingsQueryStringType,
+    {orderBy = 'desc', skip = 0, take = 10}: GetMyRankingsQueryStringType,
   ) {
     const dealer = await this.getByIdOrThrow(dealerId);
 
@@ -322,8 +381,8 @@ export class DealerService {
       select: {
         comment: true,
         createdAt: true,
-        dealer: true,
-        dealerId: true,
+        dealer: false,
+        dealerId: false,
         id: true,
         updatedAt: true,
         user: false,
