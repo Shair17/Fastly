@@ -27,12 +27,23 @@ export class IOService implements OnModuleInit {
     return this.app.io;
   }
 
-  @Initializer([UserService, DealerService, OrderService])
+  @Initializer()
   async onModuleInit(): Promise<void> {
     const {io} = this;
 
     io.on('connection', async socket => {
       /** Ordenes */
+      socket.on('SEND_ORDER_ID', async (orderId: string) => {
+        const order = await this.orderService.getById(orderId);
+
+        if (!order) {
+          return socket.disconnect();
+        }
+
+        const orderItem = this.orderQueue.getByOrderId(order.id);
+
+        socket.emit('GET_ORDER', {order, orderItem});
+      });
 
       /** Repartidores */
       socket.on('SEND_DEALER_ID', async (dealerId: string) => {
@@ -45,6 +56,13 @@ export class IOService implements OnModuleInit {
         socket.on('SET_DEALER_AVAILABLE', async (isAvailable: boolean) => {
           await this.dealerService.setDealerAvailable(dealerId, isAvailable);
         });
+
+        io.emit('ORDERS_QUEUE', this.orderQueue.getQueue());
+        io.emit('ORDERS_PENDING_QUEUE', this.orderQueue.pendingQueue);
+        io.emit('ORDERS_DELIVERED_QUEUE', this.orderQueue.deliveredQueue);
+        io.emit('ORDERS_CANCELLED_QUEUE', this.orderQueue.cancelledQueue);
+        io.emit('ORDERS_PROBLEM_QUEUE', this.orderQueue.problemQueue);
+        io.emit('ORDERS_SENT_QUEUE', this.orderQueue.sentQueue);
       });
 
       /** Usuarios */

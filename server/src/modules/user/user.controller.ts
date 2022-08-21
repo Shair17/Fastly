@@ -56,6 +56,13 @@ export class UserController {
     return this.userService.me(request.userId);
   }
 
+  @GET('/me/has-ongoing-orders', {
+    onRequest: [hasBearerToken, userIsAuthenticated],
+  })
+  async getUserHasOngoingOrders(request: Request, reply: Reply) {
+    return this.userService.getUserHasOngoingOrders(request.userId);
+  }
+
   @GET('/me/addresses', {
     onRequest: [hasBearerToken, userIsAuthenticated],
   })

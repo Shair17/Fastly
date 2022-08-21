@@ -45,7 +45,9 @@ export default async function Server(
   const server: FastifyInstance = Fastify(opts);
   const publicDir = resolve(__dirname, '../public');
 
-  server.log.info(`Starting Fastly server application at ${new Date()}`);
+  server.log.info(
+    `Starting Fastly server application at ${new Date().toLocaleString()}`,
+  );
 
   server.register(Env, {
     dotenv: {

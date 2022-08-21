@@ -6,10 +6,12 @@ import {UserService} from '../user/user.service';
 import {DealerService} from '../dealer/dealer.service';
 import {ProductService} from '../product/product.service';
 import {CreateOrderBodyType} from './order.schema';
+// import {OrderQueue} from './order-queue';
 
 @Service('OrderServiceToken')
 export class OrderService {
   constructor(
+    // private readonly orderQueueService: OrderQueue,
     private readonly databaseService: DatabaseService,
     private readonly dealerService: DealerService,
     private readonly userService: UserService,
@@ -60,11 +62,11 @@ export class OrderService {
 
     let dealer: Dealer | null = null;
 
-    if (dealerId) {
+    if (dealerId !== undefined) {
       dealer = await this.dealerService.getByIdOrThrow(dealerId);
     }
 
-    return this.databaseService.order.create({
+    const order = await this.databaseService.order.create({
       data: {
         quantity,
         message,
@@ -90,6 +92,13 @@ export class OrderService {
         },
       },
     });
+
+    // add order to queue
+    // Usar sockets para esto :c
+    // por alguna razón, esto no funca por los decoradores
+    // this.orderQueueService.enqueue(order);
+
+    return order;
   }
 
   async setDealerToOrder(dealerId: string, orderId: string) {

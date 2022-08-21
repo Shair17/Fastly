@@ -1,23 +1,14 @@
-import {FastifyInstance} from 'fastify';
-import {
-  Service,
-  Initializer,
-  Destructor,
-  FastifyInstanceToken,
-  getInstanceByToken,
-} from 'fastify-decorators';
+import {Service, Initializer, Destructor} from 'fastify-decorators';
 import {PrismaClient} from '@prisma/client';
 import type {OnModuleDestroy, OnModuleInit} from '@fastly/interfaces/module';
+import {LoggerService} from '@fastly/shared/services/logger.service';
 
 @Service('DatabaseServiceToken')
 export class DatabaseService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  private readonly fastify =
-    getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
-
-  constructor() {
+  constructor(private readonly loggerService: LoggerService) {
     super({
       log: ['info', 'warn', 'error'],
     });
@@ -29,7 +20,7 @@ export class DatabaseService
     await this.$connect();
     let endTime = performance.now();
 
-    this.fastify.log.info(
+    this.loggerService.info(
       `Prisma Module has established the connection to the database and it took ${Math.floor(
         endTime - startTime,
       )} ms`,
@@ -42,7 +33,7 @@ export class DatabaseService
     await this.$disconnect();
     let endTime = performance.now();
 
-    this.fastify.log.info(
+    this.loggerService.info(
       `Prisma Module has been disconnected from the database and it took ${Math.floor(
         endTime - startTime,
       )} ms`,

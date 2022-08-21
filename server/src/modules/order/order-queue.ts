@@ -4,7 +4,7 @@ import {
   OrderClass,
   type ICoordinates,
 } from '@fastly/shared/classes/order.class';
-import {UserService} from '../user/user.service';
+// import {UserService} from '../user/user.service';
 import {Dealer, Order, User} from '@prisma/client';
 import {DealerService} from '../dealer/dealer.service';
 import type {OnModuleInit} from '@fastly/interfaces/module';
@@ -23,11 +23,11 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   constructor(
     private readonly orderService: OrderService,
     private readonly dealerService: DealerService,
-    private readonly userService: UserService,
+    // private readonly userService: UserService,
     private readonly loggerService: LoggerService,
   ) {}
 
-  @Initializer([OrderService])
+  @Initializer()
   async onModuleInit(): Promise<void> {
     await this.loadOrders();
   }
@@ -35,20 +35,22 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   async loadOrders(): Promise<void> {
     const orders = await this.orderService.getOrdersForQueue();
 
-    this.loggerService.info('Order Queue Module is loading orders...');
+    if (orders.length > 0) {
+      this.loggerService.info('Order Queue Module is loading orders...');
 
-    for (let index = 0; index < orders.length; index++) {
-      const order = orders[index];
-      const orderClass = new OrderClass(order);
+      for (let index = 0; index < orders.length; index++) {
+        const order = orders[index];
+        const orderClass = new OrderClass(order);
+        this.loggerService.info(
+          `Order with id ${order.id} pushed to order queue`,
+        );
+        this.queue.push(orderClass);
+      }
+
       this.loggerService.info(
-        `Order with id ${order.id} pushed to order queue`,
+        `Order Queue Module has been finished, loaded ${orders.length} orders.`,
       );
-      this.queue.push(orderClass);
     }
-
-    this.loggerService.info(
-      `Order Queue Module has been finished, loaded ${orders.length} orders.`,
-    );
   }
 
   getQueue() {
@@ -106,7 +108,11 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   setCoordinatesTo(id: string, coordinates: ICoordinates) {
     const index = this.queue.findIndex(x => x.id === id);
 
-    this.queue[index].coordinates = coordinates;
+    if (index !== -1) {
+      this.queue[index].coordinates = coordinates;
+    } else {
+      this.loggerService.warn(`Order in queue with id='${id}' doesn't exists.`);
+    }
   }
 
   async areThereAvailableDealers(): Promise<boolean> {

@@ -237,6 +237,23 @@ export class UserService {
     };
   }
 
+  async getUserHasOngoingOrders(userId: string) {
+    const user = await this.getByIdOrThrow(userId);
+
+    const ongoingOrdersCount = await this.databaseService.order.count({
+      where: {
+        user: {
+          id: user.id,
+        },
+        status: {
+          notIn: ['CANCELLED', 'DELIVERED'],
+        },
+      },
+    });
+
+    return ongoingOrdersCount > 0;
+  }
+
   async count() {
     return this.databaseService.user.count();
   }

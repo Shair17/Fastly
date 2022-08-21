@@ -2,16 +2,37 @@ import React, {Fragment, useEffect} from 'react';
 import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {useUserStore} from '@fastly/stores/useUserStore';
-import {isLoggedIn} from '@fastly/services/refresh-token';
+// import {isLoggedIn} from '@fastly/services/refresh-token';
+import useAxios from 'axios-hooks';
+import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
 export const SocketProvider: React.FC = ({children}) => {
-  const userId = useUserStore(u => u.id);
+  const [_, executeGetUserHasOngoingOrders] = useAxios<boolean, any, any>(
+    '/me/has-ongoing-orders',
+    {manual: true},
+  );
+  const userId: string = useUserStore<string>(u => u.id);
   const socket = useSocketStore(s => s.socket);
   const setOnline = useSocketStore(s => s.setOnline);
   const setUserHasOngoingOrders = useSocketStore(
     s => s.setUserHasOngoingOrders,
   );
-  const isAuthenticated = isLoggedIn();
+  // const isAuthenticated = isLoggedIn();
+  const isAuthenticated: boolean = useIsAuthenticated();
+
+  useEffect(() => {
+    if (!isAuthenticated || !userId) return;
+
+    executeGetUserHasOngoingOrders()
+      .then(response => {
+        const userHasOngoingOrders = response.data;
+
+        if (typeof userHasOngoingOrders === 'boolean') {
+          setUserHasOngoingOrders(userHasOngoingOrders);
+        }
+      })
+      .catch(console.log);
+  }, []);
 
   useEffect(() => {
     setOnline(socket.connected);

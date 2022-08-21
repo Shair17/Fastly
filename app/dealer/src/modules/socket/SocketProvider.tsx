@@ -1,17 +1,18 @@
 import React, {Fragment, useEffect} from 'react';
 import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {useDealerStore} from '@fastly/stores/useDealerStore';
-import {isLoggedIn} from '@fastly/services/refresh-token';
+// import {isLoggedIn} from '@fastly/services/refresh-token';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {useAppState} from '@fastly/hooks/useAppState';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
 export const SocketProvider: React.FC = ({children}) => {
   const dealerId = useDealerStore(s => s.id);
   const socket = useSocketStore(s => s.socket);
   const setOnline = useSocketStore(s => s.setOnline);
   const setDealerIsOnline = useSocketStore(s => s.setDealerIsOnline);
-  const isAuthenticated = isLoggedIn();
+  const isAuthenticated = useIsAuthenticated();
   const isActive = useAuthStore(z => z.isActive);
   const appState = useAppState();
 

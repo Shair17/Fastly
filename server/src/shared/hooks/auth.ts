@@ -88,7 +88,8 @@ export const userIsAuthenticated: onRequestHookHandler = async (
       id: string;
     };
 
-    const userService = getInstanceByToken<UserService>('UserServiceToken');
+    const userService: UserService =
+      getInstanceByToken<UserService>('UserServiceToken');
     const user = await userService.getByIdOrThrow(decoded.id);
 
     if (user.isBanned) {
