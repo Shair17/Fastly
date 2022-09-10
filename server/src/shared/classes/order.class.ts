@@ -1,5 +1,4 @@
-import {nanoid} from 'nanoid';
-import {Order} from '@prisma/client';
+import {Order, OrderStatus} from '@prisma/client';
 import {validate} from 'uuid';
 
 export interface ICoordinates {
@@ -22,30 +21,30 @@ export class OrderClass implements IOrderClass {
     order: Order,
     coordinates: ICoordinates = {latitude: 0, longitude: 0},
   ) {
-    this.id = nanoid();
+    this.id = order.id;
     this.order = order;
     this.coordinates = coordinates;
   }
 
-  get status() {
+  get status(): OrderStatus {
     return this.order.status;
   }
 
-  get hasDealer() {
+  get hasDealer(): boolean {
     return (
       typeof this.order.dealerId === 'string' && validate(this.order.dealerId)
     );
   }
 
-  get userId() {
+  get userId(): string | null {
     return this.order.userId;
   }
 
-  get dealerId() {
+  get dealerId(): string | null {
     return this.order.dealerId;
   }
 
-  setCoordinates({latitude, longitude}: ICoordinates) {
+  setCoordinates({latitude, longitude}: ICoordinates): void {
     this.coordinates = {latitude, longitude};
   }
 }

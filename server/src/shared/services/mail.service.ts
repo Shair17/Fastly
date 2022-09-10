@@ -1,5 +1,5 @@
 import {Service, Initializer} from 'fastify-decorators';
-import {ConfigService} from '@fastly/config/config.service';
+import {ConfigService} from '../../config/config.service';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';

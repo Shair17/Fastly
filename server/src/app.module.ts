@@ -1,4 +1,4 @@
-import {AppController} from '@fastly/app.controller';
+import {AppController} from './app.controller';
 import {
   AuthModule,
   UserModule,
@@ -11,7 +11,7 @@ import {
   CouponModule,
   StoreModule,
   FeedModule,
-} from '@fastly/modules';
+} from './modules';
 
 export const AppModule = [
   AppController,

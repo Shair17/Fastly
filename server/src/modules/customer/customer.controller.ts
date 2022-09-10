@@ -1,13 +1,13 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET} from 'fastify-decorators';
 import {CustomerService} from './customer.service';
 import {GetCustomerParams, GetCustomerParamsType} from './customer.schema';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {
   adminOrCustomerIsAuthenticated,
   hasBearerToken,
   customerIsAuthenticated,
   adminIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 
 @Controller('/v1/customers')
 export class CustomerController {

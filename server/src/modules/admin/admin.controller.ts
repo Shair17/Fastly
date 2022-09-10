@@ -1,7 +1,7 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {Unauthorized} from 'http-errors';
-import {hasBearerToken, adminIsAuthenticated} from '@fastly/shared/hooks/auth';
+import {hasBearerToken, adminIsAuthenticated} from '../../shared/hooks/auth';
 import {AdminService} from './admin.service';
 import {
   GetAdminParams,

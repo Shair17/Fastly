@@ -1,13 +1,13 @@
 import {Service} from 'fastify-decorators';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {NotFound} from 'http-errors';
-import {generateCouponCode as getCouponCode} from '@fastly/utils/generateCouponCode';
+import {generateCouponCode as getCouponCode} from '../../utils/generateCouponCode';
 import {
   CreateCouponBodyType,
   EditCouponByCodeBodyType,
   EditCouponByIdBodyType,
 } from './coupon.schema';
-import {ProductService} from '@fastly/modules/product/product.service';
+import {ProductService} from '../../modules/product/product.service';
 
 @Service('CouponServiceToken')
 export class CouponService {

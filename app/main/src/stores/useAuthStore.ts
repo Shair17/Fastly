@@ -20,7 +20,6 @@ type AuthTypes = Tokens & {
 
 const getDefaultValues = (): AuthTypes => {
   return {
-    // accessToken: accessToken,
     accessToken: storage.getString(accessTokenKey) ?? accessToken,
     refreshToken: storage.getString(refreshTokenKey) ?? refreshToken,
     isNewUser: storage.getBoolean(isNewUserKey) ?? isNewUser,

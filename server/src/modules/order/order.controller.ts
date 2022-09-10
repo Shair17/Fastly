@@ -1,11 +1,11 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {OrderService} from './order.service';
 import {
   hasBearerToken,
   dealerIsAuthenticated,
   userIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 import {CreateOrderBody, CreateOrderBodyType} from './order.schema';
 
 @Controller('/v1/orders')

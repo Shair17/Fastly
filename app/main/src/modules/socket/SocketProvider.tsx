@@ -2,7 +2,6 @@ import React, {Fragment, useEffect} from 'react';
 import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {useUserStore} from '@fastly/stores/useUserStore';
-// import {isLoggedIn} from '@fastly/services/refresh-token';
 import useAxios from 'axios-hooks';
 import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
@@ -17,7 +16,6 @@ export const SocketProvider: React.FC = ({children}) => {
   const setUserHasOngoingOrders = useSocketStore(
     s => s.setUserHasOngoingOrders,
   );
-  // const isAuthenticated = isLoggedIn();
   const isAuthenticated: boolean = useIsAuthenticated();
 
   useEffect(() => {

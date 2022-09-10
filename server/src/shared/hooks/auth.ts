@@ -1,19 +1,19 @@
 import {onRequestHookHandler} from 'fastify';
 import {getInstanceByToken} from 'fastify-decorators';
-import {AdminService} from '@fastly/modules/admin/admin.service';
-import {CustomerService} from '@fastly/modules/customer/customer.service';
-import {DealerService} from '@fastly/modules/dealer/dealer.service';
-import {UserService} from '@fastly/modules/user/user.service';
+import {AdminService} from '../../modules/admin/admin.service';
+import {CustomerService} from '../../modules/customer/customer.service';
+import {DealerService} from '../../modules/dealer/dealer.service';
+import {UserService} from '../../modules/user/user.service';
 import {Unauthorized} from 'http-errors';
-import {BEARER_SCHEME_REGEX} from '@fastly/constants/regex';
+import {BEARER_SCHEME_REGEX} from '../../constants/regex';
 import * as jwt from 'jsonwebtoken';
+import {isValidToken} from '../../utils/isValidToken';
 
 // Creo que tengo que reemplazar todos los throw new con return reply.send(...)
 export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
   const {authorization} = request.headers;
   let token: string;
 
-  // TODO: Validar que el token tenga un formato válido
   if (!!authorization) {
     const parts = authorization.split(' ');
 
@@ -22,6 +22,10 @@ export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
       token = parts[1];
 
       if (!BEARER_SCHEME_REGEX.test(scheme)) {
+        throw new Unauthorized('malformed_token');
+      }
+
+      if (!isValidToken(token)) {
         throw new Unauthorized('malformed_token');
       }
     } else {
@@ -288,6 +292,65 @@ export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
       }
 
       request.customerId = customer.id;
+    } else {
+      // idk what is it
+      throw new Unauthorized();
+    }
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Unauthorized(`token_expired`);
+    }
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new Unauthorized(`invalid_token`);
+    }
+
+    throw new Unauthorized();
+  }
+};
+
+export const userOrDealerIsAuthenticated: onRequestHookHandler = async (
+  request,
+  reply,
+) => {
+  try {
+    const token = request.headers.authorization?.split(' ')[1];
+
+    const userDecoded = jwt.verify(token!, process.env.JWT_USER_SECRET!) as {
+      id: string;
+    };
+
+    const dealerDecoded = jwt.verify(
+      token!,
+      process.env.JWT_DEALER_SECRET!,
+    ) as {
+      id: string;
+    };
+
+    if (userDecoded && userDecoded.id) {
+      // is user
+      const userService = getInstanceByToken<UserService>('UserServiceToken');
+      const user = await userService.getByIdOrThrow(userDecoded.id);
+
+      if (user.isBanned) {
+        throw new Unauthorized('banned');
+      }
+
+      request.userId = user.id;
+    } else if (dealerDecoded && dealerDecoded.id) {
+      // is dealer
+      const dealerService =
+        getInstanceByToken<DealerService>('DealerServiceToken');
+      const dealer = await dealerService.getByIdOrThrow(dealerDecoded.id);
+
+      if (dealer.isBanned) {
+        throw new Unauthorized('banned');
+      }
+
+      if (dealer.isActive) {
+        throw new Unauthorized('inactive_account');
+      }
+
+      request.dealerId = dealer.id;
     } else {
       // idk what is it
       throw new Unauthorized();

@@ -25,7 +25,7 @@ export class JwtService {
     return this.jwt.verify(token, secretOrPublicKey, options);
   }
 
-  decode(token: string, options: jwt.DecodeOptions & {complete: true}) {
+  decode(token: string, options?: jwt.DecodeOptions & {complete: true}) {
     return this.jwt.decode(token, options);
   }
 }

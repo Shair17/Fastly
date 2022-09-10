@@ -5,7 +5,7 @@ import {
   LONGITUDE_REGEX,
   PHONE_NUMBER_REGEX,
   DNI_REGEX,
-} from '@fastly/constants/regex';
+} from '../../constants/regex';
 
 export const GetMyUserOrdersQueryString = Type.Object({
   skip: Type.Optional(Type.Number({minimum: 0})),

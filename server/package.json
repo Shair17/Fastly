@@ -3,14 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "yarn build && node scripts/clear && node -r tsconfig-paths/register dist/main",
+    "start": "node scripts/clear && node dist/index.js",
     "dev": "yarn env:dev && node scripts/clear && nodemon | pino-pretty -c",
     "env:dev": "cross-env NODE_ENV=development",
     "build": "yarn clean && tsc",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\"",
-    "createSecret": "node scripts/createSecret",
-    "seed:admins": "ts-node ./scripts/seeds/admins.ts"
+    "createSecret": "node scripts/createSecret"
   },
   "license": "MIT",
   "dependencies": {

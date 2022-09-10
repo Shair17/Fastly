@@ -6,8 +6,8 @@ import {
   appVersion,
   appDeveloper,
   appUpdateNeeded,
-} from '@fastly/constants/app';
-import {IOService} from '@fastly/shared/services/io.service';
+} from './constants/app';
+import {IOService} from './shared/services/io.service';
 
 @Service('AppServiceToken')
 export class AppService {

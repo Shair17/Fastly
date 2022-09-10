@@ -1,14 +1,11 @@
 import {Initializer, Service} from 'fastify-decorators';
 import {OrderService} from './order.service';
-import {
-  OrderClass,
-  type ICoordinates,
-} from '@fastly/shared/classes/order.class';
+import {OrderClass, type ICoordinates} from '../../shared/classes/order.class';
 // import {UserService} from '../user/user.service';
-import {Dealer, Order, User} from '@prisma/client';
+import {Order} from '@prisma/client';
 import {DealerService} from '../dealer/dealer.service';
-import type {OnModuleInit} from '@fastly/interfaces/module';
-import {LoggerService} from '@fastly/shared/services/logger.service';
+import type {OnModuleInit} from '../../interfaces/module';
+import {LoggerService} from '../../shared/services/logger.service';
 
 export interface IOrderQueue<OrderClass> {
   enqueue(order: Order): OrderClass;

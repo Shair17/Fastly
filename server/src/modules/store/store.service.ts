@@ -1,7 +1,7 @@
 import {Service} from 'fastify-decorators';
 import {NotFound, BadRequest, Unauthorized} from 'http-errors';
-import {DatabaseService} from '@fastly/database/DatabaseService';
-import {trimStrings} from '@fastly/utils/trimStrings';
+import {DatabaseService} from '../../database/DatabaseService';
+import {trimStrings} from '../../utils/trimStrings';
 import {
   CreateRankingByStoreIdBodyType,
   CreateStoreBodyType,
@@ -9,7 +9,7 @@ import {
 } from './store.schema';
 import {StoreCategory} from '@prisma/client';
 import {CustomerService} from '../customer/customer.service';
-import {calcStoreRanking} from '@fastly/utils/calcStoreRanking';
+import {calcStoreRanking} from '../../utils/calcStoreRanking';
 
 @Service('StoreServiceToken')
 export class StoreService {

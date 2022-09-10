@@ -1,6 +1,6 @@
 import {Service} from 'fastify-decorators';
 import * as argon2 from 'argon2';
-import {PASSWORD_REGEX} from '@fastly/constants/regex';
+import {PASSWORD_REGEX} from '../../constants/regex';
 
 @Service('PasswordServiceToken')
 export class PasswordService {

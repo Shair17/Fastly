@@ -1,7 +1,7 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized, NotFound} from 'http-errors';
 import {Dealer, Order, OrderStatus} from '@prisma/client';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {UserService} from '../user/user.service';
 import {DealerService} from '../dealer/dealer.service';
 import {ProductService} from '../product/product.service';

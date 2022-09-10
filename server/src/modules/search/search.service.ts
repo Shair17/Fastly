@@ -1,7 +1,7 @@
 import {Service} from 'fastify-decorators';
-import {DatabaseService} from '@fastly/database/DatabaseService';
-import {ProductService} from '@fastly/modules/product/product.service';
-import {StoreService} from '@fastly/modules/store/store.service';
+import {DatabaseService} from '../../database/DatabaseService';
+import {ProductService} from '../../modules/product/product.service';
+import {StoreService} from '../../modules/store/store.service';
 
 @Service('SearchServiceToken')
 export class SearchService {

@@ -1,6 +1,6 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized} from 'http-errors';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {Customer} from '@prisma/client';
 
 @Service('CustomerServiceToken')

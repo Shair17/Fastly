@@ -1,5 +1,5 @@
 import {Static, Type} from '@sinclair/typebox';
-import {PASSWORD_REGEX, JWT_REGEX, DNI_REGEX} from '@fastly/constants/regex';
+import {PASSWORD_REGEX, JWT_REGEX, DNI_REGEX} from '../../constants/regex';
 
 // facebook
 export const LogInWithFacebook = Type.Object(

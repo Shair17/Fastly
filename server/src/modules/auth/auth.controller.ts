@@ -1,6 +1,6 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, POST, PUT} from 'fastify-decorators';
 import {AuthService} from './auth.service';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {
   LogInWithFacebook,
   LogInWithFacebookType,
@@ -49,7 +49,7 @@ import {
   customerIsAuthenticated,
   dealerIsAuthenticated,
   userIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 
 @Controller('/v1/auth')
 export class AuthController {

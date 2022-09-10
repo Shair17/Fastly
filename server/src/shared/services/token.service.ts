@@ -1,6 +1,6 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized, InternalServerError} from 'http-errors';
-import {ConfigService} from '@fastly/config/config.service';
+import {ConfigService} from '../../config/config.service';
 import {JwtService, JsonWebTokenError, TokenExpiredError} from './jwt.service';
 import {
   AuthTokenPayload,

@@ -1,13 +1,13 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized, BadRequest, NotFound} from 'http-errors';
-import {DatabaseService} from '@fastly/database/DatabaseService';
-import {PasswordService} from '@fastly/shared/services/password.service';
-import {trimStrings} from '@fastly/utils/trimStrings';
-import {SHAIR_EMAIL} from '@fastly/constants/app';
-import {AvatarService} from '@fastly/shared/services/avatar.service';
-import {ImageService} from '@fastly/shared/services/image.service';
+import {DatabaseService} from '../../database/DatabaseService';
+import {PasswordService} from '../../shared/services/password.service';
+import {trimStrings} from '../../utils/trimStrings';
+import {SHAIR_EMAIL} from '../../constants/app';
+import {AvatarService} from '../../shared/services/avatar.service';
+import {ImageService} from '../../shared/services/image.service';
 import {CreateAdminBodyType, EditAdminBodyType} from './admin.schema';
-import {isString} from '@fastly/utils';
+import {isString} from '../../utils';
 
 @Service('AdminServiceToken')
 export class AdminService {

@@ -5,12 +5,11 @@ import {
   BadRequest,
   InternalServerError,
 } from 'http-errors';
-import {MailService} from '@fastly/shared/services/mail.service';
-import {TokenService} from '@fastly/shared/services/token.service';
-import {HttpService} from '@fastly/shared/services/http.service';
-import {PasswordService} from '@fastly/shared/services/password.service';
-import {trimStrings} from '@fastly/utils/trimStrings';
-import {buildFacebookUri} from '@fastly/utils/buildFacebookUri';
+import {MailService} from '../../shared/services/mail.service';
+import {TokenService} from '../../shared/services/token.service';
+import {HttpService} from '../../shared/services/http.service';
+import {PasswordService} from '../../shared/services/password.service';
+import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
 import {AdminService} from '../admin/admin.service';
 import {CustomerService} from '../customer/customer.service';
@@ -38,9 +37,9 @@ import {
   RefreshCustomerTokenType,
   RefreshDealerTokenType,
 } from './auth.schema';
-import {AvatarService} from '@fastly/shared/services/avatar.service';
-import {ImageService} from '@fastly/shared/services/image.service';
-import {isString} from '@fastly/utils';
+import {AvatarService} from '../../shared/services/avatar.service';
+import {ImageService} from '../../shared/services/image.service';
+import {isString} from '../../utils';
 
 @Service('AuthServiceToken')
 export class AuthService {
@@ -57,6 +56,10 @@ export class AuthService {
     private readonly imageService: ImageService,
   ) {}
 
+  buildFacebookApiUri(accessToken: string): string {
+    return `https://graph.facebook.com/me?access_token=${accessToken}`;
+  }
+
   async logInWithFacebook(data: LogInWithFacebookType) {
     let facebookId: string = '',
       name: string = '';
@@ -66,7 +69,7 @@ export class AuthService {
       data.userID,
     );
 
-    const FACEBOOK_API_URI = buildFacebookUri(facebookAccessToken);
+    const FACEBOOK_API_URI = this.buildFacebookApiUri(facebookAccessToken);
 
     try {
       const {data} = await this.httpService.get<FacebookGraphApiResponse>(

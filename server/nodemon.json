@@ -1,6 +1,6 @@
 {
-	"watch": ["src", "tsconfig.json", ".env", "dev.env", "package.json"],
-	"ext": ".ts,.js",
-	"ignore": [],
-	"exec": "ts-node -r tsconfig-paths/register ./src/main.ts"
+  "watch": ["src", "tsconfig.json", ".env", "dev.env", "package.json"],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "ts-node ./src/index.ts"
 }

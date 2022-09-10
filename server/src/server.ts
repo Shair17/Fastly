@@ -8,7 +8,6 @@ import Fastify, {
 } from 'fastify';
 import {bootstrap} from 'fastify-decorators';
 import {resolve} from 'path';
-import {StatusCodes} from 'http-status-codes';
 import Env from '@fastify/env';
 import Compress from '@fastify/compress';
 import Helmet from '@fastify/helmet';
@@ -19,9 +18,9 @@ import Favicon from 'fastify-favicon';
 import Routes from '@fastify/routes';
 import RateLimit from '@fastify/rate-limit';
 import IO from 'fastify-socket.io';
-import {ConfigSchema} from '@fastly/config/config.schema';
-import {AppModule} from '@fastly/app.module';
-import {MapRoutes} from '@fastly/plugins';
+import {ConfigSchema} from './config/config.schema';
+import {AppModule} from './app.module';
+import {MapRoutes} from './plugins';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -61,12 +60,12 @@ export default async function Server(
     max: 100,
     timeWindow: '1 minute',
   });
-  server.setErrorHandler((error, _, reply) => {
-    if (reply.statusCode === StatusCodes.TOO_MANY_REQUESTS) {
-      error.message = `¡Llegaste al límite de velocidad! ¡Más despacio, por favor!`;
-    }
-    reply.send(error);
-  });
+  // server.setErrorHandler((error, _, reply) => {
+  // if (reply.statusCode === StatusCodes.TOO_MANY_REQUESTS) {
+  // error.message = `¡Llegaste al límite de velocidad! ¡Más despacio, por favor!`;
+  // }
+  // reply.send(error);
+  // });
   server.register(Cors);
   server.register(Compress);
   server.register(Helmet, {
@@ -91,7 +90,6 @@ export default async function Server(
     },
   });
   server.register(bootstrap, {
-    // prefix: 'v1',
     controllers: [...AppModule],
   });
 

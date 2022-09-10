@@ -1,5 +1,5 @@
 import {Service} from 'fastify-decorators';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {NotFound} from 'http-errors';
 import {Product} from '@prisma/client';
 import {StoreService} from '../store/store.service';

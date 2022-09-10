@@ -1,8 +1,8 @@
 import {Service} from 'fastify-decorators';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {Unauthorized, NotFound} from 'http-errors';
 import {Dealer, DealerRanking, Order} from '@prisma/client';
-import {calcDealerRanking} from '@fastly/utils/calcDealerRanking';
+import {calcDealerRanking} from '../../utils/calcDealerRanking';
 import {
   CreateDealerRankingBodyType,
   GetMyOrdersQueryStringType,

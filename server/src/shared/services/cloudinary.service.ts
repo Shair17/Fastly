@@ -1,7 +1,7 @@
 import {Initializer, Service} from 'fastify-decorators';
 import cloudinary from 'cloudinary';
-import {ConfigService} from '@fastly/config/config.service';
-import type {OnModuleInit} from '@fastly/interfaces/module';
+import {ConfigService} from '../../config/config.service';
+import type {OnModuleInit} from '../../interfaces/module';
 
 @Service('CloudinaryServiceToken')
 export class CloudinaryService implements OnModuleInit {

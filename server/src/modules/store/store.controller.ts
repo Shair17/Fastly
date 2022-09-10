@@ -1,10 +1,10 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {
   hasBearerToken,
   userIsAuthenticated,
   customerIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 import {StoreService} from './store.service';
 import {adminOrCustomerIsAuthenticated} from '../../shared/hooks/auth';
 import {

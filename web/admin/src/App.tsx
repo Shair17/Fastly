@@ -77,14 +77,46 @@ function App() {
 							<Route path="/forgot-password" element={<ForgotPassword />} />
 							<Route path="/new-password" element={<NewPassword />} />
 
-							<Route path="/dashboard" element={<Dashboard />} />
-							<Route path="/dashboard/admins" element={<DashboardAdmins />} />
-							<Route path="/dashboard/users" element={<DashboardUsers />} />
+							<Route
+								path="/dashboard"
+								element={
+									<RequireAuth>
+										<Dashboard />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/admins"
+								element={
+									<RequireAuth>
+										<DashboardAdmins />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/users"
+								element={
+									<RequireAuth>
+										<DashboardUsers />
+									</RequireAuth>
+								}
+							/>
 							<Route
 								path="/dashboard/customers"
-								element={<DashboardCustomers />}
+								element={
+									<RequireAuth>
+										<DashboardCustomers />
+									</RequireAuth>
+								}
 							/>
-							<Route path="/dashboard/dealers" element={<DashboardDealers />} />
+							<Route
+								path="/dashboard/dealers"
+								element={
+									<RequireAuth>
+										<DashboardDealers />
+									</RequireAuth>
+								}
+							/>
 
 							<Route path="*" element={<NotFound404 />} />
 						</Routes>

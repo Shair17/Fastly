@@ -1,6 +1,6 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
 import {UserService} from './user.service';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {
   AddAddressBody,
   AddAddressBodyType,
@@ -31,7 +31,7 @@ import {
   hasBearerToken,
   userIsAuthenticated,
   adminIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 
 @Controller('/v1/users')
 export class UserController {

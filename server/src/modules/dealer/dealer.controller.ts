@@ -1,6 +1,6 @@
+import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
 import {DealerService} from './dealer.service';
-import {Request, Reply} from '@fastly/interfaces/http';
 import {GetIsActiveDealerParamsType} from './dealer.schema';
 import {
   CreateDealerRankingBody,
@@ -25,7 +25,7 @@ import {
   adminIsAuthenticated,
   adminOrCustomerOrDealerOrUserIsAuthenticated,
   userIsAuthenticated,
-} from '@fastly/shared/hooks/auth';
+} from '../../shared/hooks/auth';
 
 @Controller('/v1/dealers')
 export class DealerController {

@@ -1,21 +1,21 @@
 import Server from './server';
 import qs from 'qs';
-import {serverHost} from '@fastly/constants/app';
+import {serverHost} from './constants/app';
 
 async function main() {
-  const startTime = performance.now();
+  const startTime = Date.now();
   const app = await Server({
     logger: true,
     disableRequestLogging: true,
     ignoreTrailingSlash: true,
     querystringParser: str => qs.parse(str),
   });
-  const endTime = performance.now();
+  const endTime = Date.now();
 
   if (!!(require.main && module.children)) {
     // app.ready(async () => {
     app.log.info(
-      `Fastly server took ${Math.floor(endTime - startTime)} ms to start`,
+      `Fastly server took ${Math.floor(endTime - startTime)}ms to start`,
     );
     app.log.info(`Developed by @Shair17 <hello@shair.dev>, https://shair.dev`);
 

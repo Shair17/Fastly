@@ -1,5 +1,5 @@
 import {Service} from 'fastify-decorators';
-import {DatabaseService} from '@fastly/database/DatabaseService';
+import {DatabaseService} from '../../database/DatabaseService';
 import {
   Unauthorized,
   InternalServerError,
@@ -13,15 +13,15 @@ import {
   UpdateUserProfileBodyType,
   GetMyUserOrdersQueryStringType,
 } from './user.schema';
-import {trimStrings} from '@fastly/utils/trimStrings';
-import {MAX_USER_ADDRESSES} from '@fastly/constants/app';
+import {trimStrings} from '../../utils/trimStrings';
+import {MAX_USER_ADDRESSES} from '../../constants/app';
 import {ProductService} from '../product/product.service';
 import {EditItemCartQuantityBodyType} from './user.schema';
 import {User, UserAddress, UserCart, Product} from '@prisma/client';
-import {checkIsNewUser} from '@fastly/utils/checkIsNewUser';
-import {AvatarService} from '@fastly/shared/services/avatar.service';
-import {isString} from '@fastly/utils';
-import {ImageService} from '@fastly/shared/services/image.service';
+import {checkIsNewUser} from '../../utils/checkIsNewUser';
+import {AvatarService} from '../../shared/services/avatar.service';
+import {isString} from '../../utils';
+import {ImageService} from '../../shared/services/image.service';
 
 @Service('UserServiceToken')
 export class UserService {
