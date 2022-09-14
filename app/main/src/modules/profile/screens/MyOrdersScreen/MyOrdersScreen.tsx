@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';

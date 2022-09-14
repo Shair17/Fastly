@@ -1,7 +1,7 @@
 import {Service} from 'fastify-decorators';
 import {DatabaseService} from '../../database/DatabaseService';
-import {Unauthorized, NotFound} from 'http-errors';
-import {Dealer, DealerRanking, Order} from '@prisma/client';
+import {Unauthorized} from 'http-errors';
+import {Dealer} from '@prisma/client';
 import {calcDealerRanking} from '../../utils/calcDealerRanking';
 import {
   CreateDealerRankingBodyType,
@@ -10,7 +10,6 @@ import {
 } from './dealer.schema';
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
-import {OrderService} from '../order/order.service';
 import {GetIsActiveDealerParamsType} from './dealer.schema';
 
 @Service('DealerServiceToken')
@@ -107,13 +106,13 @@ export class DealerService {
    * Uso solo para sockets
    */
   async setDealerAvailable(dealerId: string, isAvailable: boolean) {
+    if (!dealerId) return;
+
     const dealer = await this.databaseService.dealer.findUnique({
       where: {id: dealerId},
     });
 
-    if (!dealer) {
-      return;
-    }
+    if (!dealer) return;
 
     if (dealer.isActive && !dealer.isBanned) {
       await this.databaseService.dealer.update({

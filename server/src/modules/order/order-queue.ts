@@ -1,7 +1,6 @@
 import {Initializer, Service} from 'fastify-decorators';
 import {OrderService} from './order.service';
 import {OrderClass, type ICoordinates} from '../../shared/classes/order.class';
-// import {UserService} from '../user/user.service';
 import {Order} from '@prisma/client';
 import {DealerService} from '../dealer/dealer.service';
 import type {OnModuleInit} from '../../interfaces/module';
@@ -20,7 +19,6 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   constructor(
     private readonly orderService: OrderService,
     private readonly dealerService: DealerService,
-    // private readonly userService: UserService,
     private readonly loggerService: LoggerService,
   ) {}
 
@@ -38,10 +36,10 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
       for (let index = 0; index < orders.length; index++) {
         const order = orders[index];
         const orderClass = new OrderClass(order);
+        this.queue.push(orderClass);
         this.loggerService.info(
           `Order with id ${order.id} pushed to order queue`,
         );
-        this.queue.push(orderClass);
       }
 
       this.loggerService.info(

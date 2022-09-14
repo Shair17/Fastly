@@ -1,6 +1,7 @@
 import {Service} from 'fastify-decorators';
 import * as argon2 from 'argon2';
 import {PASSWORD_REGEX} from '../../constants/regex';
+import {InternalServerError} from 'http-errors';
 
 @Service('PasswordServiceToken')
 export class PasswordService {
@@ -10,11 +11,13 @@ export class PasswordService {
     return PASSWORD_REGEX.test(password);
   }
 
-  hash(password: string) {
+  hash(password: string): Promise<string> {
     try {
       return this.argon2.hash(password);
     } catch (error) {
-      throw error;
+      console.log('Error at hashing password ->', error);
+
+      throw new InternalServerError();
     }
   }
 
@@ -26,7 +29,9 @@ export class PasswordService {
     try {
       return this.argon2.verify(hash, plain, options);
     } catch (error) {
-      throw error;
+      console.log('Error at verify password hash ->', error);
+
+      throw new InternalServerError();
     }
   }
 }

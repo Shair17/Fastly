@@ -2,15 +2,15 @@ import React, {useState, FC, Fragment} from 'react';
 import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
-import {AnimatedObject} from '../../components/atoms/AnimatedObject';
-import {Button} from '../../components/atoms/Button';
-import {FooterLegalLinks} from '../../components/molecules/FooterLegalLinks';
-import {OverlayLoading} from '../../components/molecules/OverlayLoading';
+import {AnimatedObject} from '@fastly/components/atoms/AnimatedObject';
+import {Button} from '@fastly/components/atoms/Button';
+import {FooterLegalLinks} from '@fastly/components/molecules/FooterLegalLinks';
+import {OverlayLoading} from '@fastly/components/molecules/OverlayLoading';
 import {objectsImages} from './objectImages';
-import {useAuthStore} from '../../stores/useAuthStore';
-import {useUserStore} from '../../stores/useUserStore';
-import {ContainerWithCredits} from '../../components/templates/ContainerWithCredits';
-import {AuthenticationScreenProps} from '../../navigation/screens/AuthenticationScreen';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useUserStore} from '@fastly/stores/useUserStore';
+import {ContainerWithCredits} from '@fastly/components/templates/ContainerWithCredits';
+import {AuthenticationScreenProps} from '@fastly/navigation/screens/AuthenticationScreen';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import useAxios from 'axios-hooks';
 
@@ -69,7 +69,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
               Notifier.showNotification({
                 title: 'Fastly',
                 description:
-                  'Inicio de sesión con éxito, estamos cargando tus datos...',
+                  'Inicio de sesión con éxito, cargando tus datos...',
                 Component: NotifierComponents.Alert,
                 componentProps: {
                   alertType: 'success',

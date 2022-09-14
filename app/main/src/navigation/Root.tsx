@@ -14,6 +14,7 @@ import {GeolocationPermissionsScreen} from './screens/GeolocationPermissionsScre
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
 import {AuthenticationScreen} from './screens/AuthenticationScreen';
 import {Application} from './bottom-tabs/Root';
+import {SocketProvider} from '@fastly/modules/socket/SocketProvider';
 
 export type RootStackParams = {
   /**
@@ -65,7 +66,9 @@ export const Root: React.FC = () => {
                   animation: 'slide_from_right',
                   headerShown: true,
                   header: () => <BasicHeaderScreen />,
-                  contentStyle: {backgroundColor: theme.colors?.body ?? '#fff'},
+                  contentStyle: {
+                    backgroundColor: theme.colors?.body ?? '#fff',
+                  },
                 }}>
                 <RootStack.Screen
                   name="WelcomeNewUserScreen"

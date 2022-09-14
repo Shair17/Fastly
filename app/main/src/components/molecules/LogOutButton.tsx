@@ -8,8 +8,10 @@ import {
 import {Icon} from 'react-native-magnus';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {Button} from '../atoms/Button';
+import {useSocketStore} from '@fastly/stores/useSocketStore';
 
 export const LogOutButton = () => {
+  const socket = useSocketStore(s => s.socket);
   const removeTokens = useAuthStore(u => u.removeTokens);
   const logOutFromFastly = useAuthStore(u => u.logOutFromFastly);
   const FBLogout = async () => {
@@ -39,6 +41,7 @@ export const LogOutButton = () => {
   const logOut = async () => {
     await FBLogout();
     await logOutFromFastly();
+    socket?.disconnect();
     removeTokens();
   };
 

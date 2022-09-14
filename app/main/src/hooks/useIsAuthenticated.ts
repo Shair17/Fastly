@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {isValidToken} from '@fastly/utils/isValidToken';
-import {isTokenExpired, clearAuthTokens} from '@fastly/services/refresh-token';
+import {isTokenExpired} from '@fastly/services/refresh-token';
 
 export const useIsAuthenticated = (): boolean => {
   const accessToken = useAuthStore(r => r.accessToken);
   const refreshToken = useAuthStore(r => r.refreshToken);
+  const removeTokens = useAuthStore(r => r.removeTokens);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     () => !!accessToken && !!refreshToken,
   );
@@ -22,7 +23,7 @@ export const useIsAuthenticated = (): boolean => {
     }
 
     if (isTokenExpired(refreshToken)) {
-      clearAuthTokens();
+      removeTokens();
       setIsAuthenticated(false);
       return;
     }

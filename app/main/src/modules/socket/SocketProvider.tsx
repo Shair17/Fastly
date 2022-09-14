@@ -1,38 +1,41 @@
 import React, {Fragment, useEffect} from 'react';
-import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
-import {useUserStore} from '@fastly/stores/useUserStore';
 import useAxios from 'axios-hooks';
 import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
+import {useSocketStore} from '@fastly/stores/useSocketStore';
+import {useAuthStore} from '@fastly/stores/useAuthStore';
 
 export const SocketProvider: React.FC = ({children}) => {
+  const isAuthenticated = useIsAuthenticated();
+  const accessToken = useAuthStore(t => t.accessToken);
   const [_, executeGetUserHasOngoingOrders] = useAxios<boolean, any, any>(
-    '/me/has-ongoing-orders',
+    '/users/me/has-ongoing-orders',
     {manual: true},
   );
-  const userId: string = useUserStore<string>(u => u.id);
   const socket = useSocketStore(s => s.socket);
+  const setSocket = useSocketStore(s => s.setSocket);
   const setOnline = useSocketStore(s => s.setOnline);
   const setUserHasOngoingOrders = useSocketStore(
     s => s.setUserHasOngoingOrders,
   );
-  const isAuthenticated: boolean = useIsAuthenticated();
 
   useEffect(() => {
-    if (!isAuthenticated || !userId) return;
+    setSocket(accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
 
     executeGetUserHasOngoingOrders()
       .then(response => {
-        const userHasOngoingOrders = response.data;
-
-        if (typeof userHasOngoingOrders === 'boolean') {
-          setUserHasOngoingOrders(userHasOngoingOrders);
-        }
+        setUserHasOngoingOrders(response.data);
       })
       .catch(console.log);
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    if (!socket) return;
+
     setOnline(socket.connected);
 
     Notifier.showNotification({
@@ -48,6 +51,8 @@ export const SocketProvider: React.FC = ({children}) => {
   }, [socket]);
 
   useEffect(() => {
+    if (!socket) return;
+
     socket.on('connect', () => {
       setOnline(true);
       Notifier.showNotification({
@@ -62,6 +67,8 @@ export const SocketProvider: React.FC = ({children}) => {
   }, [socket]);
 
   useEffect(() => {
+    if (!socket) return;
+
     socket.on('disconnect', () => {
       setOnline(false);
 
@@ -77,23 +84,16 @@ export const SocketProvider: React.FC = ({children}) => {
   }, [socket]);
 
   useEffect(() => {
-    if (!isAuthenticated || !userId) {
-      return;
-    }
+    if (!socket) return;
 
-    // funcionará bien esto?
-    // si no, separar el .emit del .on por socket.emit y socket.on respectivamente
-    socket.emit('SEND_USER_ID', userId);
     socket.on('USER_HAS_ONGOING_ORDERS', (userHasOngoingOrders: boolean) => {
-      // solo modificar el estado en caso sea boleano
-      if (typeof userHasOngoingOrders === 'boolean')
-        setUserHasOngoingOrders(userHasOngoingOrders);
+      setUserHasOngoingOrders(userHasOngoingOrders);
     });
 
     return () => {
-      socket.off('userHasOngoingOrders');
+      socket.off('USER_HAS_ONGOING_ORDERS');
     };
-  }, [socket, isAuthenticated, userId]);
+  }, [socket]);
 
   return <Fragment>{children}</Fragment>;
 };
