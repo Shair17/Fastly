@@ -2,6 +2,17 @@ export interface ForgotPasswordType {
   email: string;
 }
 
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+export interface OrderClass {
+  id: string;
+  order: Order;
+  coordinates: Coordinates;
+}
+
 export type OrderStatus =
   | 'CANCELLED'
   | 'PROBLEM'
@@ -56,6 +67,11 @@ export interface Order {
   product: Product;
   quantity: number;
   status: OrderStatus;
+
+  productId: string;
+  dealerId?: string;
+  userId: string;
+  userAddressId: string;
 }
 
 export interface MyRanking {

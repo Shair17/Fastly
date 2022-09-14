@@ -33,8 +33,8 @@ export const useSocketStore = create(
       set({
         socket: io(SOCKET_URL, {
           transports: ['websocket'],
-          autoConnect: true,
-          forceNew: true,
+          // autoConnect: true,
+          // forceNew: true,
           auth: {
             token,
           },

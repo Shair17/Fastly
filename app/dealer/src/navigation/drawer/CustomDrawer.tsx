@@ -26,8 +26,9 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
   const available = socketOnline && dealerIsOnline;
 
   const logOut = async () => {
-    socket.emit('SET_DEALER_AVAILABLE', false);
     setDealerIsOnline(false);
+    socket?.emit('SET_DEALER_AVAILABLE', false);
+    socket?.disconnect();
     await logOutFromFastly();
     removeTokens();
   };

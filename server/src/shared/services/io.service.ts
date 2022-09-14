@@ -58,6 +58,10 @@ export class IOService implements OnModuleInit {
           return socket.disconnect();
         }
 
+        // console.log(
+        //   `[Socket-Event] - El usuario con id ${userId} se ha conectado.`,
+        // );
+
         // Esto será útil para mandar informacion de su pedido solamente a el usuario conectado, mensaje uno a uno
         socket.join(userId);
 
@@ -87,18 +91,23 @@ export class IOService implements OnModuleInit {
 
       // Eventos de socket para ordenes
       this.io.emit('ORDERS_QUEUE', this.orderQueue.getQueue());
-      this.io.emit('ORDERS_PENDING_QUEUE', this.orderQueue.pendingQueue);
-      this.io.emit('ORDERS_DELIVERED_QUEUE', this.orderQueue.deliveredQueue);
-      this.io.emit('ORDERS_CANCELLED_QUEUE', this.orderQueue.cancelledQueue);
-      this.io.emit('ORDERS_PROBLEM_QUEUE', this.orderQueue.problemQueue);
-      this.io.emit('ORDERS_SENT_QUEUE', this.orderQueue.sentQueue);
+      this.io.emit('ORDERS_PENDING_QUEUE', this.orderQueue.getPendingQueue());
+      this.io.emit(
+        'ORDERS_DELIVERED_QUEUE',
+        this.orderQueue.getDeliveredQueue(),
+      );
+      this.io.emit(
+        'ORDERS_CANCELLED_QUEUE',
+        this.orderQueue.getCancelledQueue(),
+      );
+      this.io.emit('ORDERS_PROBLEM_QUEUE', this.orderQueue.getProblemQueue());
+      this.io.emit('ORDERS_SENT_QUEUE', this.orderQueue.getSentQueue());
 
       socket.on('disconnect', async socket => {
         if (isUser) {
-          console.log(`El usuario con id ${userId} se ha desconectado.`);
         }
+
         if (isDealer) {
-          console.log(`El repartidor con id ${dealerId} se ha desconectado.`);
           await this.dealerService.setDealerAvailable(dealerId, false);
         }
       });

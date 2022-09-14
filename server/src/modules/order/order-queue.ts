@@ -52,23 +52,23 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     return this.queue;
   }
 
-  get cancelledQueue() {
+  getCancelledQueue() {
     return this.queue.filter(order => order.status === 'CANCELLED');
   }
 
-  get deliveredQueue() {
+  getDeliveredQueue() {
     return this.queue.filter(order => order.status === 'DELIVERED');
   }
 
-  get pendingQueue() {
+  getPendingQueue() {
     return this.queue.filter(order => order.status === 'PENDING');
   }
 
-  get problemQueue() {
+  getProblemQueue() {
     return this.queue.filter(order => order.status === 'PROBLEM');
   }
 
-  get sentQueue() {
+  getSentQueue() {
     return this.queue.filter(order => order.status === 'SENT');
   }
 
