@@ -30,17 +30,17 @@ export class OrderClass implements IOrderClass {
     return this.order.status;
   }
 
-  get hasDealer(): boolean {
+  hasDealer(): boolean {
     return (
       typeof this.order.dealerId === 'string' && validate(this.order.dealerId)
     );
   }
 
-  get userId(): string | null {
+  getUserId(): string | null {
     return this.order.userId;
   }
 
-  get dealerId(): string | null {
+  getDealerId(): string | null {
     return this.order.dealerId;
   }
 

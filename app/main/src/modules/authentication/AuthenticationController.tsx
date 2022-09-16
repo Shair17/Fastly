@@ -1,4 +1,4 @@
-import React, {useState, FC, Fragment} from 'react';
+import React, {useState, useRef, FC, Fragment} from 'react';
 import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
@@ -17,6 +17,8 @@ import useAxios from 'axios-hooks';
 const authenticationBackgroundImage = require('../../assets/images/authentication/background.jpg');
 const logoImage = require('../../assets/images/fastly@1000x1000.png');
 
+// TODO: Probar si el useRef funciona como debería para que no me salga el error al momento de iniciar sesion
+
 export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const [{loading, error}, executeLogInWithFacebook] = useAxios(
     {
@@ -25,7 +27,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
     },
     {manual: true},
   );
-  const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
   const setTokens = useAuthStore(s => s.setTokens);
   const setIsNewUser = useAuthStore(s => s.setIsNewUser);
   const setUser = useUserStore(user => user.setUser);

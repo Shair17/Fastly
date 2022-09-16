@@ -41,7 +41,7 @@ export default async function Server(
     FastifyLoggerInstance
   >
 > {
-  const server: FastifyInstance = Fastify(opts);
+  const server = Fastify(opts);
   const publicDir = resolve(__dirname, '../public');
 
   server.log.info(
@@ -85,6 +85,7 @@ export default async function Server(
     healthcheckUrl: '/health',
   });
   server.register(IO, {
+    serveClient: false,
     cors: {
       origin: '*',
     },

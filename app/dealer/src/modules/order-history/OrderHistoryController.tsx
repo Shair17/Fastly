@@ -44,6 +44,9 @@ const _orders: Order[] = [
     quantity: 1,
     createdAt: '2022-08-09T03:28:19.774Z',
     status: 'DELIVERED',
+    productId: '2323232',
+    userAddressId: '23213213',
+    userId: '213123213',
   },
 ];
 
@@ -122,6 +125,10 @@ export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
             status,
             arrivalTime,
             message,
+            productId,
+            userAddressId,
+            userId,
+            dealerId,
           },
         }) => (
           <Div mb="lg" mx="2xl">
@@ -136,6 +143,9 @@ export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
               message={message}
               createdAt={createdAt}
               updatedAt={updatedAt}
+              productId={productId}
+              userAddressId={userAddressId}
+              userId={userId}
             />
           </Div>
         )}

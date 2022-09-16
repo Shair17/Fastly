@@ -20,4 +20,4 @@ export function useAppState() {
   return appState;
 }
 
-export {type AppStateStatus};
+export type {AppStateStatus};

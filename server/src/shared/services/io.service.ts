@@ -16,7 +16,7 @@ import type {JwtPayload} from 'jsonwebtoken';
 
 @Service()
 export class IOService implements OnModuleInit {
-  private readonly fastify: FastifyInstance =
+  private readonly fastify =
     getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
   constructor(
@@ -50,20 +50,27 @@ export class IOService implements OnModuleInit {
         return socket.disconnect();
       }
 
+      // es necesario que esté aquí?
+      this.io.emit(
+        'ARE_THERE_AVAILABLE_DEALERS',
+        await this.orderQueue.areThereAvailableDealers(),
+      );
+
       // Eventos de socket para usuarios
       if (isUser) {
-        const user = await this.userService.getById(userId);
+        const user = await this.userService.getByIdOnlyUser(userId);
 
         if (!user || user.isBanned) {
           return socket.disconnect();
         }
 
-        // console.log(
-        //   `[Socket-Event] - El usuario con id ${userId} se ha conectado.`,
-        // );
-
         // Esto será útil para mandar informacion de su pedido solamente a el usuario conectado, mensaje uno a uno
         socket.join(userId);
+
+        this.io.emit(
+          'ARE_THERE_AVAILABLE_DEALERS',
+          await this.orderQueue.areThereAvailableDealers(),
+        );
 
         socket.emit(
           'USER_HAS_ONGOING_ORDERS',
@@ -73,9 +80,9 @@ export class IOService implements OnModuleInit {
 
       // Eventos de socket para repartidores
       if (isDealer) {
-        // Establecer como conectado al repartidor al momento que se conecte al socket server
         await this.dealerService.setDealerAvailable(dealerId, true);
-        const dealer = await this.dealerService.getById(dealerId);
+
+        const dealer = await this.dealerService.getByIdOnlyDealer(dealerId);
 
         if (!dealer || !dealer.isActive || dealer.isBanned) {
           return socket.disconnect();
@@ -87,6 +94,11 @@ export class IOService implements OnModuleInit {
         socket.on('SET_DEALER_AVAILABLE', async (isAvailable: boolean) => {
           await this.dealerService.setDealerAvailable(dealerId, isAvailable);
         });
+
+        this.io.emit(
+          'ARE_THERE_AVAILABLE_DEALERS',
+          await this.orderQueue.areThereAvailableDealers(),
+        );
       }
 
       // Eventos de socket para ordenes
@@ -105,10 +117,19 @@ export class IOService implements OnModuleInit {
 
       socket.on('disconnect', async socket => {
         if (isUser) {
+          this.io.emit(
+            'ARE_THERE_AVAILABLE_DEALERS',
+            await this.orderQueue.areThereAvailableDealers(),
+          );
         }
 
         if (isDealer) {
           await this.dealerService.setDealerAvailable(dealerId, false);
+
+          this.io.emit(
+            'ARE_THERE_AVAILABLE_DEALERS',
+            await this.orderQueue.areThereAvailableDealers(),
+          );
         }
       });
     });

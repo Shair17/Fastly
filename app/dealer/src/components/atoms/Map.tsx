@@ -29,15 +29,14 @@ export const Map: React.FC<Props> = () => {
 
   useEffect(() => {
     followUserLocation();
+
     return () => {
       stopFollowUserLocation();
     };
   }, []);
 
   useEffect(() => {
-    if (!following.current) {
-      return;
-    }
+    if (!following.current) return;
 
     const {latitude, longitude} = userLocation;
     mapRef.current?.animateCamera({

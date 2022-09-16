@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 
-export const useDidUpdate = (fn: () => void, dependencies?: any[]) => {
+export const useDidUpdate = (fn: () => void, dependencies: any[] = []) => {
   const monuted = useRef<boolean>(false);
 
   useEffect(() => {

@@ -45,11 +45,11 @@ export const Root: React.FC = () => {
   const locationStatus = usePermissionsStore(z => z.locationStatus);
   // TODO: parece que el hook que acabo de hacer es mejor que el otro
   // lo bueno de este hook es que está suscrito a los cambios del refresh token :)
-  const _isAuth = useIsAuthenticated();
+  const isAuthenticated = useIsAuthenticated();
 
   return (
     <RootStack.Navigator>
-      {_isAuth ? (
+      {isAuthenticated ? (
         <RootStack.Group
           screenOptions={{
             headerShown: false,

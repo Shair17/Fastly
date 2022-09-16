@@ -2,7 +2,7 @@ import create from 'zustand';
 import {combine} from 'zustand/middleware';
 import {OrderClass} from '@fastly/interfaces/app';
 
-type OrdersStoreValues = {
+export type OrdersStoreValues = {
   ordersCancelledQueue: OrderClass[];
   ordersDeliveredQueue: OrderClass[];
   ordersPendingQueue: OrderClass[];

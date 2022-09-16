@@ -23,6 +23,11 @@ export const SocketProvider: React.FC = ({children}) => {
     setSocket(accessToken);
   }, [accessToken]);
 
+  // Aquí si es importante agregar ´isAuthenticated´ como dependencia
+  // ya que, SocketProvider está como componente Padre de la app
+  // entonces, necesito que se haga esta solicitud siempre y cuando
+  // el usuario esté autenticado, y si cierra sesión y vuelve a iniciar sesión
+  // se ejecutará nuevamente para obtener su valor inicial
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -83,6 +88,7 @@ export const SocketProvider: React.FC = ({children}) => {
     });
   }, [socket]);
 
+  // TODO: es necesario que esté aquí? Podría pasarlo a un hook y usarlo solo cuando sea necesario
   useEffect(() => {
     if (!socket) return;
 

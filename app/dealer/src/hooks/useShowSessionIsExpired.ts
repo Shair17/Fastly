@@ -16,7 +16,6 @@ export const useShowSessionIsExpired = () => {
       return;
     }
 
-    // TODO: probar si así está mejor
     if (!isTokenExpired(refreshToken)) {
       return;
     }

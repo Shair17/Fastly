@@ -1,4 +1,10 @@
-import {Initializer, Service} from 'fastify-decorators';
+import {FastifyInstance} from 'fastify';
+import {
+  FastifyInstanceToken,
+  getInstanceByToken,
+  Initializer,
+  Service,
+} from 'fastify-decorators';
 import {OrderService} from './order.service';
 import {OrderClass, type ICoordinates} from '../../shared/classes/order.class';
 import {Order} from '@prisma/client';
@@ -14,6 +20,9 @@ export interface IOrderQueue<OrderClass> {
 
 @Service('OrderQueueClassToken')
 export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
+  private readonly fastify =
+    getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
+
   private queue: OrderClass[] = [];
 
   constructor(
@@ -23,8 +32,8 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   ) {}
 
   @Initializer()
-  async onModuleInit(): Promise<void> {
-    await this.loadOrders();
+  onModuleInit() {
+    this.loadOrders();
   }
 
   async loadOrders(): Promise<void> {
@@ -48,51 +57,53 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     }
   }
 
-  getQueue() {
+  getQueue(): OrderClass[] {
     return this.queue;
   }
 
-  getCancelledQueue() {
+  getCancelledQueue(): OrderClass[] {
     return this.queue.filter(order => order.status === 'CANCELLED');
   }
 
-  getDeliveredQueue() {
+  getDeliveredQueue(): OrderClass[] {
     return this.queue.filter(order => order.status === 'DELIVERED');
   }
 
-  getPendingQueue() {
+  getPendingQueue(): OrderClass[] {
     return this.queue.filter(order => order.status === 'PENDING');
   }
 
-  getProblemQueue() {
+  getProblemQueue(): OrderClass[] {
     return this.queue.filter(order => order.status === 'PROBLEM');
   }
 
-  getSentQueue() {
+  getSentQueue(): OrderClass[] {
     return this.queue.filter(order => order.status === 'SENT');
   }
 
   enqueue(order: Order): OrderClass {
     const orderClass = new OrderClass(order);
-
     this.queue.push(orderClass);
+    this.updateOrderQueueSocketEvents();
 
     return orderClass;
   }
 
   dequeue(id: string): void {
     this.queue = this.queue.filter(order => order.id !== id);
+    this.updateOrderQueueSocketEvents();
   }
 
   dequeueByOrderId(id: string): void {
     this.queue = this.queue.filter(z => z.order.id !== id);
+    this.updateOrderQueueSocketEvents();
   }
 
-  getById(id: string) {
+  getById(id: string): OrderClass | undefined {
     return this.queue.find(o => o.id === id);
   }
 
-  getByOrderId(id: string) {
+  getByOrderId(id: string): OrderClass | undefined {
     return this.queue.find(o => o.order.id === id);
   }
 
@@ -100,13 +111,15 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     return this.queue.length;
   }
 
-  setCoordinatesTo(id: string, coordinates: ICoordinates) {
+  setCoordinatesTo(id: string, coordinates: ICoordinates): void {
     const index = this.queue.findIndex(x => x.id === id);
 
     if (index !== -1) {
       this.queue[index].coordinates = coordinates;
+      // TODO: verificar si esto se puede hacer de una mejor manera para actualizar las coordeadas del pedido en especifico
+      this.updateOrderQueueSocketEvents();
     } else {
-      this.loggerService.warn(`Order in queue with id='${id}' doesn't exists.`);
+      this.loggerService.warn(`Order in queue with id '${id}' doesn't exists.`);
     }
   }
 
@@ -114,5 +127,14 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     const dealersCount = await this.dealerService.getAvailableDealersCount();
 
     return dealersCount > 0;
+  }
+
+  updateOrderQueueSocketEvents() {
+    this.fastify.io.emit('ORDERS_QUEUE', this.getQueue());
+    this.fastify.io.emit('ORDERS_PENDING_QUEUE', this.getPendingQueue());
+    this.fastify.io.emit('ORDERS_DELIVERED_QUEUE', this.getDeliveredQueue());
+    this.fastify.io.emit('ORDERS_CANCELLED_QUEUE', this.getCancelledQueue());
+    this.fastify.io.emit('ORDERS_PROBLEM_QUEUE', this.getProblemQueue());
+    this.fastify.io.emit('ORDERS_SENT_QUEUE', this.getSentQueue());
   }
 }

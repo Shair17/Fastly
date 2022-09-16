@@ -13,6 +13,8 @@ import {ErrorController} from '@fastly/modules/error/ErrorController';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {CustomDrawer} from './CustomDrawer';
 import {drawerTabs} from './drawer-tabs';
+import {useSocketStore} from '@fastly/stores/useSocketStore';
+import {useSocketSetDealerAvailable} from '@fastly/hooks/useSocketSetDealerAvailable';
 
 interface Props
   extends NativeStackScreenProps<RootStackParams, 'Application'> {}
@@ -37,8 +39,11 @@ export const Application: React.FC<Props> = () => {
   );
   const setDealer = useDealerStore(u => u.setDealer);
   const setIsActive = useAuthStore(s => s.setIsActive);
+  const isSocketOnline = useSocketStore(s => s.online);
   const {isConnected} = useNetInfo();
+  useSocketSetDealerAvailable();
 
+  // Podría agregar como dependencias el accessToken para que cuando se refresque el toquen, se vuelva a hacer una solicitud para guardar los datos del repartidor
   useEffect(() => {
     executeDealerPopulate()
       .then(response => {
@@ -65,8 +70,7 @@ export const Application: React.FC<Props> = () => {
     return <LoadingScreen />;
   }
 
-  // !isSocketOnline
-  if (!isConnected || error) {
+  if (!isConnected || !isSocketOnline || error) {
     return <ErrorController />;
   }
 
