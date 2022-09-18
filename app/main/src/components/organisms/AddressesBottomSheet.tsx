@@ -36,6 +36,7 @@ export const AddressesBottomSheet: React.FC<Props> = () => {
 
   const goToMyAddresses = () => {
     setAddressesBottomSheetActive(false);
+    // @ts-ignore
     navigation.navigate('ProfileStack', {
       // @ts-ignore
       screen: 'MyAddresses',

@@ -1,6 +1,6 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
-import {Div, Text, ScrollDiv} from 'react-native-magnus';
+import {Div, Text} from 'react-native-magnus';
 import {InactiveAccountScreenProps} from '@fastly/navigation/screens/InactiveAccountScreen';
 import * as Animatable from 'react-native-animatable';
 import {Button} from '@fastly/components/atoms/Button';
@@ -15,6 +15,7 @@ import {useAuthStore} from '@fastly/stores/useAuthStore';
 export const InactiveAccountController: React.FC<
   InactiveAccountScreenProps
 > = () => {
+  StatusBar.setTranslucent(false);
   const dealerId = useDealerStore(d => d.id);
   const [{loading}, executeRefreshDealerIsActive] = useAxios<{
     id: string;
@@ -60,20 +61,16 @@ export const InactiveAccountController: React.FC<
         }
       })
       .catch(error => {
-        if (error?.response?.data.message) {
-          Notifier.showNotification({
-            title: 'Error',
-            description: error?.response?.data.message ?? 'Error inesperado',
-            Component: NotifierComponents.Alert,
-            componentProps: {
-              alertType: 'error',
-            },
-          });
-        }
+        Notifier.showNotification({
+          title: 'Error',
+          description: error?.response?.data.message ?? 'Error inesperado',
+          Component: NotifierComponents.Alert,
+          componentProps: {
+            alertType: 'error',
+          },
+        });
       });
   };
-
-  StatusBar.setTranslucent(false);
 
   return (
     <ContainerWithCredits>
@@ -89,7 +86,7 @@ export const InactiveAccountController: React.FC<
                 , gracias por usar{' '}
                 <Text
                   fontWeight="bold"
-                  fontSize="6xl"
+                  fontSize="4xl"
                   bg="secondary"
                   color="white">
                   {' '}

@@ -22,6 +22,12 @@ import { DashboardAdmins } from './pages/dashboard/admins';
 import { DashboardUsers } from './pages/dashboard/users';
 import { DashboardCustomers } from './pages/dashboard/customers';
 import { DashboardDealers } from './pages/dashboard/dealers';
+
+import { DashboardStores } from './pages/dashboard/stores';
+import { DashboardProducts } from './pages/dashboard/products';
+import { DashboardCoupons } from './pages/dashboard/coupons';
+import { DashboardOrders } from './pages/dashboard/orders';
+
 import useAxios from 'axios-hooks';
 import { RequireAuth } from './components/hoc/RequireAuth';
 import { useShowSessionIsExpired } from './hooks/useShowSessionIsExpired';
@@ -114,6 +120,38 @@ function App() {
 								element={
 									<RequireAuth>
 										<DashboardDealers />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/stores"
+								element={
+									<RequireAuth>
+										<DashboardStores />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/products"
+								element={
+									<RequireAuth>
+										<DashboardProducts />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/coupons"
+								element={
+									<RequireAuth>
+										<DashboardCoupons />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/dashboard/orders"
+								element={
+									<RequireAuth>
+										<DashboardOrders />
 									</RequireAuth>
 								}
 							/>

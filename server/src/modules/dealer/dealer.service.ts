@@ -113,17 +113,17 @@ export class DealerService {
     });
 
     if (!dealer) return;
-    if (!dealer.isActive || dealer.isBanned) return;
-    // if (!dealer.isActive && dealer.isActive) return;
 
-    await this.databaseService.dealer.update({
-      where: {
-        id: dealer.id,
-      },
-      data: {
-        available: isAvailable,
-      },
-    });
+    if (dealer.isActive && !dealer.isBanned) {
+      await this.databaseService.dealer.update({
+        where: {
+          id: dealer.id,
+        },
+        data: {
+          available: isAvailable,
+        },
+      });
+    }
   }
 
   async getByIdOnlyDealer(id: string) {

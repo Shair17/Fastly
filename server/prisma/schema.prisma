@@ -198,6 +198,13 @@ enum OrderStatus {
   DELIVERED
 }
 
+// TODO: Crear un modelo para las ordenes completadas, es decir, entregadas, para así saber que ordenes se realizaron con exito, saber que usuario hizo esa orden, que repartidor la completo, de que tienda y que producto, etc...
+// model CompletedOrders {
+//   id String @id @default(uuid())
+
+//   @@map("completed_orders")
+// }
+
 model Order {
   id            String      @id @default(uuid())
   product       Product     @relation(fields: [productId], references: [id])

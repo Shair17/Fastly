@@ -51,6 +51,7 @@ export class IOService implements OnModuleInit {
       }
 
       // es necesario que esté aquí?
+      // this.io | socket ??
       this.io.emit(
         'ARE_THERE_AVAILABLE_DEALERS',
         await this.orderQueue.areThereAvailableDealers(),
@@ -91,6 +92,15 @@ export class IOService implements OnModuleInit {
         // Unir el dealer a una sala
         socket.join(dealerId);
 
+        // Para emitir desde otro lugar q no sea isDealer
+        // socket.to(dealerId).emit('DEALER_HAS_ACTIVE_ORDERS', await this.orderQueue.dealerHasOngoingOrdersInQueue(dealerId))
+
+        // Esto emite al mismo socket
+        socket.emit(
+          'DEALER_HAS_ACTIVE_ORDERS',
+          await this.orderQueue.dealerHasOngoingOrdersInQueue(dealerId),
+        );
+
         socket.on('SET_DEALER_AVAILABLE', async (isAvailable: boolean) => {
           await this.dealerService.setDealerAvailable(dealerId, isAvailable);
         });
@@ -102,6 +112,28 @@ export class IOService implements OnModuleInit {
       }
 
       // Eventos de socket para ordenes
+      socket.on('NEW_ORDER_CREATED', async (orderId: string) => {
+        const order = await this.orderService.getById(orderId);
+
+        if (!order) return;
+
+        this.orderQueue.enqueue(order);
+
+        if (order.dealerId) {
+          socket
+            .to(order.dealerId)
+            .emit(
+              'DEALER_HAS_ACTIVE_ORDERS',
+              await this.orderQueue.dealerHasOngoingOrdersInQueue(
+                order.dealerId,
+              ),
+            );
+        }
+
+        // Esto sirve para emitir la orden creada a todos los sockets conectados menos al que hizo este socket
+        // socket.broadcast.emit('NEW_ORDER_CREATED', order.id);
+      });
+
       this.io.emit('ORDERS_QUEUE', this.orderQueue.getQueue());
       this.io.emit('ORDERS_PENDING_QUEUE', this.orderQueue.getPendingQueue());
       this.io.emit(
@@ -125,6 +157,13 @@ export class IOService implements OnModuleInit {
 
         if (isDealer) {
           await this.dealerService.setDealerAvailable(dealerId, false);
+
+          this.io
+            .to(dealerId)
+            .emit(
+              'DEALER_HAS_ACTIVE_ORDERS',
+              await this.orderQueue.dealerHasOngoingOrdersInQueue(dealerId),
+            );
 
           this.io.emit(
             'ARE_THERE_AVAILABLE_DEALERS',

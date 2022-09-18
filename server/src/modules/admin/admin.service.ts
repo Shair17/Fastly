@@ -8,11 +8,17 @@ import {AvatarService} from '../../shared/services/avatar.service';
 import {ImageService} from '../../shared/services/image.service';
 import {CreateAdminBodyType, EditAdminBodyType} from './admin.schema';
 import {isString} from '../../utils';
+import {UserService} from '../user/user.service';
+import {CustomerService} from '../customer/customer.service';
+import {DealerService} from '../dealer/dealer.service';
 
 @Service('AdminServiceToken')
 export class AdminService {
   constructor(
     private readonly databaseService: DatabaseService,
+    private readonly userService: UserService,
+    private readonly customerService: CustomerService,
+    private readonly dealerService: DealerService,
     private readonly passwordService: PasswordService,
     private readonly avatarService: AvatarService,
     private readonly imageService: ImageService,
@@ -38,6 +44,15 @@ export class AdminService {
     const {password, ...restOfAdmin} = admin;
 
     return restOfAdmin;
+  }
+
+  async getAccountsCount() {
+    const adminsCount = await this.count();
+    const usersCount = await this.userService.count();
+    const customersCount = await this.customerService.count();
+    const dealersCount = await this.dealerService.count();
+
+    return {adminsCount, usersCount, customersCount, dealersCount};
   }
 
   async createAdmin(data: CreateAdminBodyType) {

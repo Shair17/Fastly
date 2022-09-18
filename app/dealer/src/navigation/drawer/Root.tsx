@@ -13,7 +13,7 @@ import {ErrorController} from '@fastly/modules/error/ErrorController';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {CustomDrawer} from './CustomDrawer';
 import {drawerTabs} from './drawer-tabs';
-import {useSocketStore} from '@fastly/stores/useSocketStore';
+// import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {useSocketSetDealerAvailable} from '@fastly/hooks/useSocketSetDealerAvailable';
 
 interface Props
@@ -39,7 +39,7 @@ export const Application: React.FC<Props> = () => {
   );
   const setDealer = useDealerStore(u => u.setDealer);
   const setIsActive = useAuthStore(s => s.setIsActive);
-  const isSocketOnline = useSocketStore(s => s.online);
+  // const isSocketOnline = useSocketStore(s => s.online);
   const {isConnected} = useNetInfo();
   useSocketSetDealerAvailable();
 
@@ -70,7 +70,8 @@ export const Application: React.FC<Props> = () => {
     return <LoadingScreen />;
   }
 
-  if (!isConnected || !isSocketOnline || error) {
+  // !isSocketOnline
+  if (!isConnected || error) {
     return <ErrorController />;
   }
 

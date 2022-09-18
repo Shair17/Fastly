@@ -32,7 +32,7 @@ export const Map: React.FC<Props> = () => {
     return () => {
       stopFollowUserLocation();
     };
-  }, []);
+  }, [followUserLocation, stopFollowUserLocation]);
 
   useEffect(() => {
     if (!following.current) {

@@ -23,10 +23,8 @@ export const OrdersHistoryScreen: FC<Props> = () => {
     },
   });
 
-  console.log({data, loading, error});
-
   return (
-    <Div flex={1}>
+    <Div p="2xl">
       <Text>OrdersHistoryScreen</Text>
     </Div>
   );

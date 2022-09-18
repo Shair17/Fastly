@@ -5,6 +5,7 @@ import {
 	Text,
 	createStyles,
 	ScrollArea,
+	Badge,
 } from '@mantine/core';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -13,8 +14,12 @@ import {
 	Users,
 	Settings,
 	Logout,
+	Archive,
 	Motorbike,
+	ShoppingCart,
 	Home,
+	Tags,
+	BuildingStore,
 } from 'tabler-icons-react';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useAdminStore } from '../../stores/useAdminStore';
@@ -123,11 +128,26 @@ const tabs = {
 		},
 	],
 	system: [
-		// {
-		// 	link: '',
-		// 	label: 'Orders',
-		// 	icon: ShoppingCart,
-		// },
+		{
+			link: '/dashboard/stores',
+			label: 'Negocios',
+			icon: BuildingStore,
+		},
+		{
+			link: '/dashboard/products',
+			label: 'Productos',
+			icon: Archive,
+		},
+		{
+			link: '/dashboard/coupons',
+			label: 'Cupones',
+			icon: Tags,
+		},
+		{
+			link: '/dashboard/orders',
+			label: 'Pedidos',
+			icon: ShoppingCart,
+		},
 	],
 };
 
@@ -137,7 +157,7 @@ interface Props {
 
 export const Navbar = ({ hidden }: Props) => {
 	const { classes, cx } = useStyles();
-	const [section, setSection] = useState('accounts');
+	const [section, setSection] = useState<'accounts' | 'system'>('accounts');
 	const { pathname } = useLocation();
 	const removeTokens = useAuthStore((s) => s.removeTokens);
 	const navigate = useNavigate();
@@ -157,9 +177,17 @@ export const Navbar = ({ hidden }: Props) => {
 			className={cx(classes.link, {
 				[classes.linkActive]: pathname === item.link,
 			})}
+			style={{ justifyContent: 'space-between', alignItems: 'center' }}
 		>
-			<item.icon className={classes.linkIcon} />
-			<span>{item.label}</span>
+			<div style={{ display: 'flex' }}>
+				<item.icon className={classes.linkIcon} />
+				<span>{item.label}</span>
+			</div>
+			{item.label === 'Pedidos' && (
+				<Badge size="xs" variant="filled">
+					En vivo
+				</Badge>
+			)}
 		</Link>
 	));
 
@@ -195,8 +223,10 @@ export const Navbar = ({ hidden }: Props) => {
 				</Text>
 
 				<SegmentedControl
-					value={section}
-					onChange={setSection}
+					// value={'accounts'}
+					onChange={(value: 'accounts' | 'system') => {
+						setSection(value);
+					}}
 					transitionTimingFunction="ease"
 					fullWidth
 					data={[

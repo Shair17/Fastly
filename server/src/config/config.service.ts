@@ -57,4 +57,12 @@ export class ConfigService {
 
     return this.get(key);
   }
+
+  get isDev(): boolean {
+    return this.get('NODE_ENV') === 'development';
+  }
+
+  get isProd(): boolean {
+    return !this.isDev;
+  }
 }

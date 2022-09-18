@@ -122,4 +122,11 @@ export class AdminController {
       success: true,
     };
   }
+
+  @GET('/accouns-count', {
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async getAccountsCount() {
+    return this.adminService.getAccountsCount();
+  }
 }

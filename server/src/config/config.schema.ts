@@ -4,6 +4,7 @@ export const ConfigSchema = Type.Strict(
   Type.Object(
     {
       PORT: Type.Number(),
+      NODE_ENV: Type.Optional(Type.String()),
       DATABASE_URL: Type.String(),
       MAILER_TRANSPORTER_HOST: Type.String(),
       MAILER_TRANSPORTER_PORT: Type.Number(),

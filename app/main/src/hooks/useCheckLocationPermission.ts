@@ -23,5 +23,5 @@ export const useCheckLocationPermissions = () => {
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [checkLocationPermission]);
 };

@@ -19,7 +19,6 @@ interface Props
 const Tab = createMaterialTopTabNavigator();
 
 export const MyOrdersScreen: React.FC<Props> = ({navigation}) => {
-  const socket = useSocketStore(s => s.socket);
   const socketOnline = useSocketStore(s => s.online);
   const userHasOngoingOrders = useSocketStore(s => s.userHasOngoingOrders);
   const hasOngoingOrders = socketOnline && userHasOngoingOrders;

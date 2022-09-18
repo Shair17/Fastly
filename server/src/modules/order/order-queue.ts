@@ -82,6 +82,15 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
   }
 
   enqueue(order: Order): OrderClass {
+    const existsOrder = this.getById(order.id);
+
+    if (existsOrder !== undefined) {
+      // ¿Debería actualizarlo aquí?
+      this.updateOrderQueueSocketEvents();
+
+      return existsOrder;
+    }
+
     const orderClass = new OrderClass(order);
     this.queue.push(orderClass);
     this.updateOrderQueueSocketEvents();
@@ -107,6 +116,10 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     return this.queue.find(o => o.order.id === id);
   }
 
+  getByDealerId(dealerId: string) {
+    return this.queue.find(d => d.order.dealerId);
+  }
+
   size(): number {
     return this.queue.length;
   }
@@ -121,6 +134,14 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     } else {
       this.loggerService.warn(`Order in queue with id '${id}' doesn't exists.`);
     }
+  }
+
+  async dealerHasOngoingOrdersInQueue(dealerId: string): Promise<boolean> {
+    const dealerHasOngoingOrdersInDatabase =
+      await this.orderService.dealerHasOngoingOrdersInDatabase(dealerId);
+    const inQueue = this.getByDealerId(dealerId);
+
+    return dealerHasOngoingOrdersInDatabase && !!inQueue?.getDealerId();
   }
 
   async areThereAvailableDealers(): Promise<boolean> {

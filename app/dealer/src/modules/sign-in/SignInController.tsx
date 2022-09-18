@@ -43,7 +43,6 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
   const setDealer = useDealerStore(d => d.setDealer);
   const socket = useSocketStore(s => s.socket);
   const setDealerIsOnline = useSocketStore(s => s.setDealerIsOnline);
-
   const emailState = watch('email') || getValues('email');
 
   const handleFinish = handleSubmit(({email, password}) => {
@@ -63,21 +62,19 @@ export const SignInController: React.FC<SignInScreenProps> = ({navigation}) => {
         setDealer(dealer);
         setIsActive(dealer.isActive);
         if (dealer.isActive) {
-          socket.emit('SET_DEALER_AVAILABLE', true);
+          socket?.emit('SET_DEALER_AVAILABLE', true);
           setDealerIsOnline(true);
         }
       })
       .catch(error => {
-        if (error?.response?.data.message) {
-          Notifier.showNotification({
-            title: 'Error!',
-            description: getLoginErrorMessage(error.response.data.message),
-            Component: NotifierComponents.Alert,
-            componentProps: {
-              alertType: 'error',
-            },
-          });
-        }
+        Notifier.showNotification({
+          title: 'Error!',
+          description: getLoginErrorMessage(error.response.data.message),
+          Component: NotifierComponents.Alert,
+          componentProps: {
+            alertType: 'error',
+          },
+        });
       });
   });
 

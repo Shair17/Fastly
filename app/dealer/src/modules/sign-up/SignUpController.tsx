@@ -79,21 +79,19 @@ export const SignUpController: React.FC<SignUpScreenProps> = ({navigation}) => {
           setIsActive(dealer.isActive);
 
           if (dealer.isActive) {
-            socket.emit('SET_DEALER_AVAILABLE', true);
+            socket?.emit('SET_DEALER_AVAILABLE', true);
             setDealerIsOnline(true);
           }
         })
         .catch(error => {
-          if (error?.response?.data.message) {
-            Notifier.showNotification({
-              title: 'Error!',
-              description: getRegisterErrorMessage(error.response.data.message),
-              Component: NotifierComponents.Alert,
-              componentProps: {
-                alertType: 'error',
-              },
-            });
-          }
+          Notifier.showNotification({
+            title: 'Error!',
+            description: getRegisterErrorMessage(error.response.data.message),
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: 'error',
+            },
+          });
         });
     },
   );

@@ -29,7 +29,7 @@ export const useIsAuthenticated = (): boolean => {
     }
 
     setIsAuthenticated(!!accessToken && !!refreshToken);
-  }, [accessToken, refreshToken]);
+  }, [accessToken, refreshToken, removeTokens]);
 
   return isAuthenticated;
 };

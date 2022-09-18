@@ -20,7 +20,7 @@ export const SocketProvider: React.FC = ({children}) => {
 
     Notifier.showNotification({
       description: socket.connected
-        ? 'Conectado a Fastly.'
+        ? 'Conectado a Fastly'
         : 'Desconectado de Fastly, reconectando...',
       Component: NotifierComponents.Alert,
       componentProps: {
@@ -35,8 +35,9 @@ export const SocketProvider: React.FC = ({children}) => {
 
     socket.on('connect', () => {
       setOnline(true);
+
       Notifier.showNotification({
-        description: 'Conectado a Fastly.',
+        description: 'Conectado a Fastly',
         Component: NotifierComponents.Alert,
         componentProps: {
           alertType: 'success',

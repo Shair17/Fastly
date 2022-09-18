@@ -55,6 +55,16 @@ export class UserService {
     };
   }
 
+  async getByIdOnlyUserOrThrow(id: string) {
+    const user = await this.databaseService.user.findUnique({where: {id}});
+
+    if (!user) {
+      throw new Unauthorized();
+    }
+
+    return user;
+  }
+
   async getByIdOrThrow(id: string) {
     const user = await this.getById(id);
 

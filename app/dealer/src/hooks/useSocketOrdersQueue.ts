@@ -32,6 +32,7 @@ export const useSocketOrdersQueue = () => {
   });
   const socket = useSocketStore(s => s.socket);
 
+  /**
   useEffect(() => {
     if (!socket) return;
 
@@ -45,22 +46,6 @@ export const useSocketOrdersQueue = () => {
 
     return () => {
       socket.off('ORDERS_QUEUE');
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on('ORDERS_PENDING_QUEUE', (ordersPendingQueue: OrderClass[]) => {
-      // setOrdersPendingQueue(ordersPendingQueue);
-      setOrdersQueue({
-        ...ordersQueueState,
-        ordersPendingQueue,
-      });
-    });
-
-    return () => {
-      socket.off('ORDERS_PENDING_QUEUE');
     };
   }, [socket]);
 
@@ -131,6 +116,22 @@ export const useSocketOrdersQueue = () => {
 
     return () => {
       socket.off('ORDERS_SENT_QUEUE');
+    };
+  }, [socket]);*/
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('ORDERS_PENDING_QUEUE', (ordersPendingQueue: OrderClass[]) => {
+      // setOrdersPendingQueue(ordersPendingQueue);
+      setOrdersQueue({
+        ...ordersQueueState,
+        ordersPendingQueue,
+      });
+    });
+
+    return () => {
+      socket.off('ORDERS_PENDING_QUEUE');
     };
   }, [socket]);
 

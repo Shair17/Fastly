@@ -1,18 +1,19 @@
 import Server from './server';
 import qs from 'qs';
 import {serverHost} from './constants/app';
+import {isDev} from './constants/environment';
+
+main();
 
 async function main() {
   const startTime = Date.now();
   const app = await Server({
-    logger: true,
-    disableRequestLogging: true,
+    logger: isDev,
+    disableRequestLogging: isDev,
     ignoreTrailingSlash: true,
     querystringParser: str => qs.parse(str),
   });
   const endTime = Date.now();
-
-  // if (!!(require.main && module.children)) {}
 
   app.log.info(
     `Fastly server took ${Math.floor(endTime - startTime)}ms to start`,
@@ -24,5 +25,3 @@ async function main() {
 
   await app.listen(+app.config.PORT, serverHost);
 }
-
-main();

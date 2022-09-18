@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -15,6 +15,8 @@ import {MyProfileResponse} from '@fastly/interfaces/app';
 import {RootStackParams} from '../Root';
 import {LoadingScreen} from '../screens/LoadingScreen';
 import {bottomTabs} from './bottom-tabs';
+import {getTabBarBadge} from '@fastly/utils/getTabBarBadge';
+// import {useSocketStore} from '@fastly/stores/useSocketStore';
 
 interface Props
   extends NativeStackScreenProps<RootStackParams, 'Application'> {}
@@ -31,7 +33,8 @@ const Tab = createBottomTabNavigator<ApplicationParams>();
 
 export const Application: React.FC<Props> = () => {
   StatusBar.setTranslucent(false);
-
+  const [cartCount, setCartCount] = useState<number>(0);
+  const [favoritesCount, setFavoritesCount] = useState<number>(0);
   const [{loading, error}, executeUserPopulate] = useAxios<MyProfileResponse>(
     '/users/me',
     {
@@ -47,6 +50,7 @@ export const Application: React.FC<Props> = () => {
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
   const keepMinigame = useMinigameStore(m => m.keep);
+  // const isSocketOnline = useSocketStore(s => s.online);
   const {isConnected} = useNetInfo();
 
   useEffect(() => {
@@ -63,6 +67,8 @@ export const Application: React.FC<Props> = () => {
 
         setUser(user);
         setAddresses(addresses);
+        setCartCount(cart.length);
+        setFavoritesCount(favorites.length);
       })
       .catch(console.log);
   }, []);
@@ -96,7 +102,14 @@ export const Application: React.FC<Props> = () => {
             component={TabComponent}
             options={{
               tabBarIcon: props => <TabIcon {...props} />,
-              tabBarBadge: TabName === 'CartStack' ? 9 : undefined,
+              tabBarBadge: getTabBarBadge(
+                TabName,
+                TabName === 'CartStack'
+                  ? cartCount
+                  : TabName === 'FavoritesStack'
+                  ? favoritesCount
+                  : undefined,
+              ),
             }}
           />
         ))}

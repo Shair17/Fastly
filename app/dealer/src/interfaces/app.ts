@@ -67,7 +67,6 @@ export interface Order {
   product: Product;
   quantity: number;
   status: OrderStatus;
-
   productId: string;
   dealerId?: string;
   userId: string;

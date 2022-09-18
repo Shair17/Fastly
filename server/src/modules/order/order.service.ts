@@ -6,12 +6,10 @@ import {UserService} from '../user/user.service';
 import {DealerService} from '../dealer/dealer.service';
 import {ProductService} from '../product/product.service';
 import {CreateOrderBodyType} from './order.schema';
-// import {OrderQueue} from './order-queue';
 
 @Service('OrderServiceToken')
 export class OrderService {
   constructor(
-    // private readonly orderQueueService: OrderQueue,
     private readonly databaseService: DatabaseService,
     private readonly dealerService: DealerService,
     private readonly userService: UserService,
@@ -55,7 +53,7 @@ export class OrderService {
     message,
   }: CreateOrderBodyType) {
     const [user, address, product] = await Promise.all([
-      this.userService.getByIdOrThrow(userId),
+      this.userService.getByIdOnlyUserOrThrow(userId),
       this.userService.getUserAddressByIdOrThrow(addressId),
       this.productService.getByIdOrThrow(productId),
     ]);
@@ -97,6 +95,7 @@ export class OrderService {
     // Usar sockets para esto :c
     // por alguna razón, esto no funca por los decoradores
     // this.orderQueueService.enqueue(order);
+    // En la aplicación debería existir un evento que emita el order id cuando haya uno
 
     return order;
   }
@@ -204,6 +203,27 @@ export class OrderService {
       where: {
         user: {
           id: user.id,
+        },
+        status: {
+          notIn: ['CANCELLED', 'DELIVERED'],
+        },
+      },
+    });
+
+    return OngoingOrdersCount > 0;
+  }
+
+  async dealerHasOngoingOrdersInDatabase(dealerId: string): Promise<boolean> {
+    const dealer = await this.dealerService.getByIdOnlyDealer(dealerId);
+
+    if (!dealer) {
+      return false;
+    }
+
+    const OngoingOrdersCount = await this.databaseService.order.count({
+      where: {
+        dealer: {
+          id: dealer.id,
         },
         status: {
           notIn: ['CANCELLED', 'DELIVERED'],

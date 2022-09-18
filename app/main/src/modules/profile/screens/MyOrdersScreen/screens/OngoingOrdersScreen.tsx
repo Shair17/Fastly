@@ -19,8 +19,7 @@ const ratingCompleted = (rating: number) => {
 */
 
 export const OngoingOrdersScreen: FC<Props> = props => {
-  // const userHasOngoingOrders = useSocketStore(s => s.userHasOngoingOrders);
-  const userHasOngoingOrders = true;
+  const userHasOngoingOrders = useSocketStore(s => s.userHasOngoingOrders);
 
   if (!userHasOngoingOrders) {
     return (
