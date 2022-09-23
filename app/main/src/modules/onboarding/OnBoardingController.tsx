@@ -79,7 +79,7 @@ export const OnBoardingController: FC<OnBoardingScreenProps> = ({
                 Empezar
               </OnBoardingDoneButton>
             ) : (
-              <Div flexDir="row" justifyContent="space-between">
+              <Div row justifyContent="space-between">
                 <OnBoardingButton onPress={skip}>Saltar</OnBoardingButton>
                 <OnBoardingButton onPress={next}>Siguiente</OnBoardingButton>
               </Div>

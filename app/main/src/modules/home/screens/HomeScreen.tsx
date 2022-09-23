@@ -5,13 +5,13 @@ import {AdvertisementsCarousel} from '@fastly/components/organisms/Advertisement
 import {FeedCarousel} from '@fastly/components/organisms/FeedCarousel';
 import {ServicesCarousel} from '@fastly/components/organisms/ServicesCarousel';
 import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
-import {HomeScreenProps} from '@fastly/navigation/stacks/home';
+import {HomeStackProps} from '@fastly/navigation/stacks/home';
 import {useAddressesBottomSheetStore} from '@fastly/stores/useAddressesBottomSheetStore';
 import {useUserAddresses} from '@fastly/stores/useUserAddresses';
 import {data} from '../dummyData';
 import {HomeControllerHeader} from '../HomeControllerHeader';
 
-export const HomeScreen: FC<HomeScreenProps> = ({navigation}) => {
+export const HomeScreen: FC<HomeStackProps> = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const currentAddress = useUserAddresses(u => u.currentAddress);
   const setAddressesBottomSheetActive = useAddressesBottomSheetStore(

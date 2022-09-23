@@ -24,6 +24,7 @@ import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { useAdminStore } from '../../stores/useAdminStore';
 import { useDate } from '../../hooks/useDate';
 import useAxios from 'axios-hooks';
+import { useSocketOrdersQueue } from '../../hooks/useSocketOrdersQueue';
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -63,6 +64,7 @@ export const Dashboard = () => {
 		usersCount: number;
 	}>('/admins/accouns-count');
 	const { classes } = useStyles();
+	const { ordersQueue } = useSocketOrdersQueue();
 	const date = useDate();
 	const name = useAdminStore((a) => a.name);
 	const avatar = useAdminStore((a) => a.avatar);
@@ -249,12 +251,12 @@ export const Dashboard = () => {
 
 							<Group align="flex-end" spacing="xs" mt={25}>
 								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{0}</span>
+									<span>{ordersQueue.length || 0}</span>
 								</Text>
 							</Group>
 
 							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de pedidos en Fastly
+								Cantidad de pedidos en tiempo real en Fastly
 							</Text>
 						</Paper>
 					</Grid.Col>

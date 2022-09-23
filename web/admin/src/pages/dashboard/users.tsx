@@ -36,9 +36,6 @@ export const DashboardUsers = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error!</p>;
 
-	console.log({ data });
-	console.log({ response });
-
 	return (
 		<DashboardLayout>
 			<MainAccount

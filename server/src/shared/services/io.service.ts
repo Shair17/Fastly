@@ -40,13 +40,15 @@ export class IOService implements OnModuleInit {
     this.io.on('connection', async socket => {
       const token = socket.handshake.auth.token as string;
       const isValidToken = this.isValidToken(token);
+      const adminId = this.getAdminIdFromToken(token);
       const userId = this.getUserIdFromToken(token);
       const dealerId = this.getDealerIdFromToken(token);
+      const isAdmin = adminId !== null && typeof adminId === 'string';
       const isUser = userId !== null && typeof userId === 'string';
       const isDealer = dealerId !== null && typeof dealerId === 'string';
 
       // Si el token es invalido O si no es usuario ni dealer entonces desconectar del socket
-      if (!isValidToken || (!isUser && !isDealer)) {
+      if (!isValidToken || (!isAdmin && !isUser && !isDealer)) {
         return socket.disconnect();
       }
 
@@ -56,6 +58,10 @@ export class IOService implements OnModuleInit {
         'ARE_THERE_AVAILABLE_DEALERS',
         await this.orderQueue.areThereAvailableDealers(),
       );
+
+      if (isAdmin) {
+        // Eventos para administrador
+      }
 
       // Eventos de socket para usuarios
       if (isUser) {
@@ -172,6 +178,25 @@ export class IOService implements OnModuleInit {
         }
       });
     });
+  }
+
+  getAdminIdFromToken(token: string): string | null {
+    if (!token) return null;
+
+    try {
+      const adminDecoded = this.jwtService.verify(
+        token,
+        this.fastify.config.JWT_ADMIN_SECRET,
+      ) as {
+        id: string;
+      };
+
+      if (adminDecoded && adminDecoded) return adminDecoded.id;
+
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 
   getUserIdFromToken(token: string): string | null {

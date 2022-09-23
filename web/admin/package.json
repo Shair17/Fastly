@@ -23,6 +23,7 @@
 		"react-dom": "^18.0.0",
 		"react-google-recaptcha": "^2.1.0",
 		"react-router-dom": "^6.3.0",
+		"socket.io-client": "^4.5.2",
 		"tabler-icons-react": "^1.48.0",
 		"zod": "^3.17.3",
 		"zustand": "^4.0.0-rc.1"

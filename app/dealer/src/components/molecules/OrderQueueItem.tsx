@@ -1,71 +1,124 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
+import {Notifier, NotifierComponents} from 'react-native-notifier';
+import {OrderClass} from '@fastly/interfaces/app';
+import {useTimeout} from '@fastly/hooks/useTimeout';
+import {formatDate} from '@fastly/utils/formatDate';
+import {useInterval} from '@fastly/hooks/useInterval';
 
-interface Props {
+interface Props extends OrderClass {
   onPress: () => void;
-  canBeTaken: boolean;
+  oneMinuteAdded: Date;
 }
 
-export const OrderQueueItem: FC<Props> = ({onPress, canBeTaken}) => {
+export const OrderQueueItem: FC<Props> = ({
+  onPress,
+  order,
+  coordinates,
+  id,
+  oneMinuteAdded,
+}) => {
+  const [timeAgo, setTimeAgo] = useState(formatDate(new Date(order.createdAt)));
+  const [canBeTaken, setCanBeTaken] = useState(
+    oneMinuteAdded < new Date(Date.now()),
+  );
+  const interval =
+    oneMinuteAdded.getTime() - new Date(order.createdAt).getTime();
+  const borderColor = canBeTaken ? 'green500' : 'yellow500';
+  const bg = canBeTaken ? 'green500' : 'yellow50';
+  const color = canBeTaken ? 'white' : 'yellow900';
+
+  const handleCanBeTaken = () => {
+    if (oneMinuteAdded < new Date(Date.now())) {
+      setCanBeTaken(true);
+    }
+  };
+
+  useTimeout(handleCanBeTaken, interval);
+
+  // TODO Remover luego, puede que no sea una buena práctica tener esto aquí
+  useInterval(() => {
+    handleCanBeTaken();
+    setTimeAgo(formatDate(new Date(order.createdAt)));
+  }, interval);
+  // TODO
+
+  const handlePress = () => {
+    if (!canBeTaken) {
+      Notifier.showNotification({
+        title: 'Advertencia',
+        description: 'Aún no puedes elegir este pedido.',
+        Component: NotifierComponents.Alert,
+        componentProps: {
+          alertType: 'warn',
+        },
+      });
+
+      return;
+    }
+
+    onPress();
+  };
+
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
       <Div
         borderWidth={1}
-        borderColor={canBeTaken ? 'green500' : 'yellow500'}
+        borderColor={borderColor}
         rounded="md"
-        bg={canBeTaken ? 'green500' : 'yellow50'}
+        bg={bg}
         p="md"
         py="lg"
         row>
         <Div position="absolute" left={4} bottom={2}>
-          <Text
-            fontWeight="bold"
-            color={canBeTaken ? 'white' : 'yellow900'}
-            fontSize={8}>
-            {canBeTaken ? 'hace 1 minuto' : '17 segundos (cuenta regresiva)'}
+          <Text fontWeight="bold" color={color} fontSize={8}>
+            {timeAgo}
           </Text>
         </Div>
         <Div flex={1} justifyContent="center" alignItems="center">
           <Icon
             fontFamily="Ionicons"
             name="pricetag"
-            color={canBeTaken ? 'white' : 'yellow900'}
+            color={color}
             fontSize={42}
             mb="sm"
           />
         </Div>
         <Div flex={3} ml="md">
           {/* producto: nombre y precio */}
-          <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="500">
-            <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="bold">
+          <Text color={color} fontWeight="500">
+            <Text color={color} fontWeight="bold">
               Pedido:{' '}
             </Text>
-            Pizza Familiar S/.24
+            {order.product.name} S/.{order.product.price}
           </Text>
-          <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="500">
-            <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="bold">
+          <Text color={color} fontWeight="500">
+            <Text color={color} fontWeight="bold">
               Cantidad:{' '}
             </Text>
-            1 unidad
+            {order.quantity} {order.quantity > 1 ? 'unidades' : 'unidad'}
           </Text>
-          <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="500">
-            <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="bold">
+          <Text color={color} fontWeight="500">
+            <Text color={color} fontWeight="bold">
               Establecimiento:{' '}
             </Text>
-            MonasPizzas
+            {/** Reemplazar storeId con el nombre de la tienda */}
+            {/* MonasPizzas */}
+            {order.product.storeId}
           </Text>
-          <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="500">
-            <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="bold">
+          <Text color={color} fontWeight="500">
+            <Text color={color} fontWeight="bold">
               Dirección:{' '}
             </Text>
-            Ricardo Palma 200 Chequen
+            {order.address.street} {order.address.city}
           </Text>
-          <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="500">
-            <Text color={canBeTaken ? 'white' : 'yellow900'} fontWeight="bold">
+          <Text color={color} fontWeight="500">
+            <Text color={color} fontWeight="bold">
               Para:{' '}
             </Text>
-            Jimmy Morales - 966107266
+            {/** Reemplazar el userId por Nombre del usuario y telefono del usuario como: Jimmy Morales - 966107266 */}
+            {order.userId}
           </Text>
         </Div>
       </Div>

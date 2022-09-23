@@ -2,7 +2,6 @@ import React from 'react';
 import {useTheme} from 'react-native-magnus';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useShowSessionIsExpired} from '@fastly/hooks/useShowSessionIsExpired';
-import {isLoggedIn} from '@fastly/services/refresh-token';
 import {usePermissionsStore} from '@fastly/stores/usePermissionsStore';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {BasicHeaderScreen} from '@fastly/components/molecules/BasicHeaderScreen';
@@ -40,11 +39,8 @@ export const Root: React.FC = () => {
   useShowSessionIsExpired();
 
   const {theme} = useTheme();
-  // const isAuthenticated = isLoggedIn();
   const isActive = useAuthStore(z => z.isActive);
   const locationStatus = usePermissionsStore(z => z.locationStatus);
-  // TODO: parece que el hook que acabo de hacer es mejor que el otro
-  // lo bueno de este hook es que está suscrito a los cambios del refresh token :)
   const isAuthenticated = useIsAuthenticated();
 
   return (

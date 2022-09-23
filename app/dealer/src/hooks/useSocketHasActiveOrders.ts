@@ -6,14 +6,12 @@ export const useSocketHasActiveOrders = () => {
   const socket = useSocketStore(s => s.socket);
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on('DEALER_HAS_ACTIVE_ORDERS', (dealerHasActiveOrders: boolean) => {
+    socket?.on('DEALER_HAS_ACTIVE_ORDERS', (dealerHasActiveOrders: boolean) => {
       setHasActiveOrders(dealerHasActiveOrders);
     });
 
     return () => {
-      socket.off('DEALER_HAS_ACTIVE_ORDERS');
+      socket?.off('DEALER_HAS_ACTIVE_ORDERS');
     };
   }, [socket]);
 

@@ -8,8 +8,8 @@ export const OnBoardingButton: FC<ButtonProps> = props => {
       fontSize="3xl"
       w={140}
       borderWidth={1}
-      bg="transparent"
       borderColor="primary"
+      bg="transparent"
       color="primary"
       underlayColor="red100"
       {...props}
@@ -19,6 +19,14 @@ export const OnBoardingButton: FC<ButtonProps> = props => {
 
 export const OnBoardingDoneButton: FC<ButtonProps> = props => {
   return (
-    <Button block shadow="xs" fontWeight="bold" fontSize="3xl" {...props} />
+    <Button
+      block
+      shadow="xs"
+      borderWidth={1}
+      borderColor="primary"
+      fontWeight="bold"
+      fontSize="3xl"
+      {...props}
+    />
   );
 };

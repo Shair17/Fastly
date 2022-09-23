@@ -9,6 +9,8 @@ import { useHotkeys, useLocalStorage, useColorScheme } from '@mantine/hooks';
 
 import { Routes, Route } from 'react-router-dom';
 
+import { SocketProvider } from './modules/socket/SocketProvider';
+
 import { NotFound404 } from './pages/404';
 
 import { Index } from './pages/index';
@@ -48,120 +50,124 @@ function App() {
 	useShowSessionIsExpired();
 
 	return (
-		<ColorSchemeProvider
-			colorScheme={colorScheme}
-			toggleColorScheme={toggleColorScheme}
-		>
-			<MantineProvider
-				theme={{
-					colorScheme,
-					colors: {
-						brand: [
-							'#FEF0E3',
-							'#FEE9DA',
-							'#FECDB6',
-							'#FEAB92',
-							'#FE8A77',
-							'#FE554A',
-							'#DA3639',
-							'#B62534',
-							'#93172E',
-							'#790E2B',
-						],
-					},
-					primaryColor: 'brand',
-				}}
-				withGlobalStyles
-				withNormalizeCSS
+		<SocketProvider>
+			<ColorSchemeProvider
+				colorScheme={colorScheme}
+				toggleColorScheme={toggleColorScheme}
 			>
-				<ModalsProvider>
-					<NotificationsProvider>
-						<Routes>
-							<Route index element={<Index />} />
-							<Route path="/login" element={<Login />} />
-							{data === 0 && <Route path="/register" element={<Register />} />}
-							<Route path="/forgot-password" element={<ForgotPassword />} />
-							<Route path="/new-password" element={<NewPassword />} />
+				<MantineProvider
+					theme={{
+						colorScheme,
+						colors: {
+							brand: [
+								'#FEF0E3',
+								'#FEE9DA',
+								'#FECDB6',
+								'#FEAB92',
+								'#FE8A77',
+								'#FE554A',
+								'#DA3639',
+								'#B62534',
+								'#93172E',
+								'#790E2B',
+							],
+						},
+						primaryColor: 'brand',
+					}}
+					withGlobalStyles
+					withNormalizeCSS
+				>
+					<ModalsProvider>
+						<NotificationsProvider>
+							<Routes>
+								<Route index element={<Index />} />
+								<Route path="/login" element={<Login />} />
+								{data === 0 && (
+									<Route path="/register" element={<Register />} />
+								)}
+								<Route path="/forgot-password" element={<ForgotPassword />} />
+								<Route path="/new-password" element={<NewPassword />} />
 
-							<Route
-								path="/dashboard"
-								element={
-									<RequireAuth>
-										<Dashboard />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/admins"
-								element={
-									<RequireAuth>
-										<DashboardAdmins />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/users"
-								element={
-									<RequireAuth>
-										<DashboardUsers />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/customers"
-								element={
-									<RequireAuth>
-										<DashboardCustomers />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/dealers"
-								element={
-									<RequireAuth>
-										<DashboardDealers />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/stores"
-								element={
-									<RequireAuth>
-										<DashboardStores />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/products"
-								element={
-									<RequireAuth>
-										<DashboardProducts />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/coupons"
-								element={
-									<RequireAuth>
-										<DashboardCoupons />
-									</RequireAuth>
-								}
-							/>
-							<Route
-								path="/dashboard/orders"
-								element={
-									<RequireAuth>
-										<DashboardOrders />
-									</RequireAuth>
-								}
-							/>
+								<Route
+									path="/dashboard"
+									element={
+										<RequireAuth>
+											<Dashboard />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/admins"
+									element={
+										<RequireAuth>
+											<DashboardAdmins />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/users"
+									element={
+										<RequireAuth>
+											<DashboardUsers />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/customers"
+									element={
+										<RequireAuth>
+											<DashboardCustomers />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/dealers"
+									element={
+										<RequireAuth>
+											<DashboardDealers />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/stores"
+									element={
+										<RequireAuth>
+											<DashboardStores />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/products"
+									element={
+										<RequireAuth>
+											<DashboardProducts />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/coupons"
+									element={
+										<RequireAuth>
+											<DashboardCoupons />
+										</RequireAuth>
+									}
+								/>
+								<Route
+									path="/dashboard/orders"
+									element={
+										<RequireAuth>
+											<DashboardOrders />
+										</RequireAuth>
+									}
+								/>
 
-							<Route path="*" element={<NotFound404 />} />
-						</Routes>
-					</NotificationsProvider>
-				</ModalsProvider>
-			</MantineProvider>
-		</ColorSchemeProvider>
+								<Route path="*" element={<NotFound404 />} />
+							</Routes>
+						</NotificationsProvider>
+					</ModalsProvider>
+				</MantineProvider>
+			</ColorSchemeProvider>
+		</SocketProvider>
 	);
 }
 

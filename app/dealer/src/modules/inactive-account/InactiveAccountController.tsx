@@ -11,6 +11,7 @@ import {FASTLY_CONTACT} from '@fastly/constants/support';
 import {openLink} from '@fastly/utils/openLink';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
+import {useSocketStore} from '@fastly/stores/useSocketStore';
 
 export const InactiveAccountController: React.FC<
   InactiveAccountScreenProps

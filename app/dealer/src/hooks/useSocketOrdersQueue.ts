@@ -21,7 +21,8 @@ import {useSocketStore} from '@fastly/stores/useSocketStore';
 // const setOrdersSentQueue = useOrdersStore(o => o.setOrdersSentQueue);
 
 // Usar este hook para obtener la cola de ordenes
-export const useSocketOrdersQueue = () => {
+export const useSocketOrdersQueue = (): OrdersStoreValues => {
+  const socket = useSocketStore(s => s.socket);
   const [ordersQueueState, setOrdersQueue] = useState<OrdersStoreValues>({
     ordersCancelledQueue: [],
     ordersDeliveredQueue: [],
@@ -30,7 +31,6 @@ export const useSocketOrdersQueue = () => {
     ordersQueue: [],
     ordersSentQueue: [],
   });
-  const socket = useSocketStore(s => s.socket);
 
   /**
   useEffect(() => {
@@ -120,10 +120,7 @@ export const useSocketOrdersQueue = () => {
   }, [socket]);*/
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on('ORDERS_PENDING_QUEUE', (ordersPendingQueue: OrderClass[]) => {
-      // setOrdersPendingQueue(ordersPendingQueue);
+    socket?.on('ORDERS_PENDING_QUEUE', (ordersPendingQueue: OrderClass[]) => {
       setOrdersQueue({
         ...ordersQueueState,
         ordersPendingQueue,
@@ -131,7 +128,7 @@ export const useSocketOrdersQueue = () => {
     });
 
     return () => {
-      socket.off('ORDERS_PENDING_QUEUE');
+      socket?.off('ORDERS_PENDING_QUEUE');
     };
   }, [socket]);
 

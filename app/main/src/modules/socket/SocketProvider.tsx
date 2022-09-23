@@ -43,16 +43,17 @@ export const SocketProvider: React.FC = ({children}) => {
 
     setOnline(socket.connected);
 
-    Notifier.showNotification({
-      description: socket.connected
-        ? 'Conectado a Fastly'
-        : 'Desconectado de Fastly, reconectando...',
-      Component: NotifierComponents.Alert,
-      componentProps: {
-        alertType: socket.connected ? 'success' : 'warn',
-      },
-      duration: 1000,
-    });
+    // Lo quité porque muetra notificaciones mientras se está conectando o cambiando el estado de ´connected´ en ´socket´
+    // Notifier.showNotification({
+    //   description: socket.connected
+    //     ? 'Conectado a Fastly'
+    //     : 'Desconectado de Fastly, reconectando...',
+    //   Component: NotifierComponents.Alert,
+    //   componentProps: {
+    //     alertType: socket.connected ? 'success' : 'warn',
+    //   },
+    //   duration: 1000,
+    // });
   }, [socket]);
 
   useEffect(() => {

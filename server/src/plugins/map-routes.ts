@@ -1,6 +1,8 @@
 import {FastifyPluginAsync} from 'fastify';
 
 const MapRoutes: FastifyPluginAsync = async (server, options) => {
+  let startTime = Date.now();
+
   let routes: Object[] = [];
 
   for (let [path, route] of server.routes) {
@@ -22,6 +24,12 @@ const MapRoutes: FastifyPluginAsync = async (server, options) => {
       ...routes,
     };
   });
+
+  server.log.info(
+    `Mapped ${server.routes.size} routes in ${Math.floor(
+      Date.now() - startTime,
+    )}ms`,
+  );
 };
 
 export default MapRoutes;

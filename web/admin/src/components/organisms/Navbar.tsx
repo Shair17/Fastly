@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
 	Navbar as MantineNavbar,
-	SegmentedControl,
 	Text,
 	createStyles,
 	ScrollArea,
@@ -26,7 +25,6 @@ import { useAdminStore } from '../../stores/useAdminStore';
 
 const useStyles = createStyles((theme, _params, getRef) => {
 	const icon = getRef('icon');
-
 	return {
 		navbar: {
 			backgroundColor:
@@ -104,52 +102,48 @@ const useStyles = createStyles((theme, _params, getRef) => {
 	};
 });
 
-const tabs = {
-	accounts: [
-		{
-			link: '/dashboard/admins',
-			label: 'Administradores',
-			icon: ShieldLock,
-		},
-		{
-			link: '/dashboard/users',
-			label: 'Usuarios',
-			icon: User,
-		},
-		{
-			link: '/dashboard/customers',
-			label: 'Clientes',
-			icon: Users,
-		},
-		{
-			link: '/dashboard/dealers',
-			label: 'Repartidores',
-			icon: Motorbike,
-		},
-	],
-	system: [
-		{
-			link: '/dashboard/stores',
-			label: 'Negocios',
-			icon: BuildingStore,
-		},
-		{
-			link: '/dashboard/products',
-			label: 'Productos',
-			icon: Archive,
-		},
-		{
-			link: '/dashboard/coupons',
-			label: 'Cupones',
-			icon: Tags,
-		},
-		{
-			link: '/dashboard/orders',
-			label: 'Pedidos',
-			icon: ShoppingCart,
-		},
-	],
-};
+const data = [
+	{
+		link: '/dashboard/admins',
+		label: 'Administradores',
+		icon: ShieldLock,
+	},
+	{
+		link: '/dashboard/users',
+		label: 'Usuarios',
+		icon: User,
+	},
+	{
+		link: '/dashboard/customers',
+		label: 'Clientes',
+		icon: Users,
+	},
+	{
+		link: '/dashboard/dealers',
+		label: 'Repartidores',
+		icon: Motorbike,
+	},
+	{
+		link: '/dashboard/stores',
+		label: 'Negocios',
+		icon: BuildingStore,
+	},
+	{
+		link: '/dashboard/products',
+		label: 'Productos',
+		icon: Archive,
+	},
+	{
+		link: '/dashboard/coupons',
+		label: 'Cupones',
+		icon: Tags,
+	},
+	{
+		link: '/dashboard/orders',
+		label: 'Pedidos',
+		icon: ShoppingCart,
+	},
+];
 
 interface Props {
 	hidden: boolean;
@@ -157,7 +151,6 @@ interface Props {
 
 export const Navbar = ({ hidden }: Props) => {
 	const { classes, cx } = useStyles();
-	const [section, setSection] = useState<'accounts' | 'system'>('accounts');
 	const { pathname } = useLocation();
 	const removeTokens = useAuthStore((s) => s.removeTokens);
 	const navigate = useNavigate();
@@ -169,8 +162,7 @@ export const Navbar = ({ hidden }: Props) => {
 		navigate('/login', { replace: true });
 	};
 
-	// @ts-ignore
-	const links = tabs[section].map((item) => (
+	const links = data.map((item) => (
 		<Link
 			to={item.link}
 			key={item.label}
@@ -212,28 +204,9 @@ export const Navbar = ({ hidden }: Props) => {
 			</MantineNavbar.Section>
 
 			<MantineNavbar.Section mt="xl">
-				<Text
-					weight={500}
-					size="sm"
-					className={classes.title}
-					color="dimmed"
-					mb="xs"
-				>
+				<Text weight={500} size="sm" className={classes.title} color="dimmed">
 					{email}
 				</Text>
-
-				<SegmentedControl
-					// value={'accounts'}
-					onChange={(value: 'accounts' | 'system') => {
-						setSection(value);
-					}}
-					transitionTimingFunction="ease"
-					fullWidth
-					data={[
-						{ label: 'Cuentas', value: 'accounts' },
-						{ label: 'Sistema', value: 'system' },
-					]}
-				/>
 			</MantineNavbar.Section>
 
 			<MantineNavbar.Section grow component={ScrollArea} mt="xl">

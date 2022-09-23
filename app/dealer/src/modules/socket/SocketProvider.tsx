@@ -18,16 +18,16 @@ export const SocketProvider: React.FC = ({children}) => {
 
     setOnline(socket.connected);
 
-    Notifier.showNotification({
-      description: socket.connected
-        ? 'Conectado a Fastly'
-        : 'Desconectado de Fastly, reconectando...',
-      Component: NotifierComponents.Alert,
-      componentProps: {
-        alertType: socket.connected ? 'success' : 'warn',
-      },
-      duration: 1000,
-    });
+    // Notifier.showNotification({
+    //   description: socket.connected
+    //     ? 'Conectado a Fastly'
+    //     : 'Desconectado de Fastly, reconectando...',
+    //   Component: NotifierComponents.Alert,
+    //   componentProps: {
+    //     alertType: socket.connected ? 'success' : 'warn',
+    //   },
+    //   duration: 1000,
+    // });
   }, [socket]);
 
   useEffect(() => {

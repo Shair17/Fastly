@@ -1,3 +1,4 @@
+import {Constructor} from 'fastify-decorators/decorators/helpers/inject-dependencies';
 import {AppController} from './app.controller';
 import {
   AuthModule,
@@ -13,7 +14,7 @@ import {
   FeedModule,
 } from './modules';
 
-export const AppModule = [
+export const AppModule: Constructor<unknown>[] = [
   AppController,
 
   ...AuthModule,

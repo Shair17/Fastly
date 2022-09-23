@@ -8,6 +8,7 @@ export const useTimeout = (cb: () => void, delay?: number) => {
   }, [cb]);
 
   useEffect(() => {
+    // !delar && delay !== 0
     if (!delay) {
       return;
     }
