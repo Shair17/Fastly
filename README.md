@@ -23,3 +23,14 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 * Reemplazar por un monorepo de react con vitejs, para así tener una sola carpeta de node_modules para todos los proyectos, menos al de main que es en nextjs.
 
 # FUTURO
+
+Son cambios o características que se pueden o no agregar en un futuro.
+
+* ¿Reescribir todo el servidor en GO?
+* ¿Migrar de arquitectura monolitica a microservicios pero con GO?
+* ¿Usar tRPC o graphql?
+* ¿Autenticación Oauth con más proveedores además de Facebook (Actual)?
+* ¿Autenticación vía OTP por mensaje de texto con twilio?
+* ¿Agregar modulos de Trending y Service?
+* ¿Agregar ruc en entidad de customer (aún no se si será necesario o no)?
+* ¿Agregar entidad de reservas (la idea de jorge que me comentó sobre hacer reservas...)?

@@ -22,7 +22,6 @@ export class CloudinaryService implements OnModuleInit {
 
   @Initializer()
   onModuleInit(): void {
-    let startTime = Date.now();
     cloudinary.v2.config({
       cloud_name: this.configService.getOrThrow<string>(
         'CLOUDINARY_CLOUD_NAME',
@@ -33,19 +32,14 @@ export class CloudinaryService implements OnModuleInit {
       ),
       secure: true,
     });
-    let endTime = Date.now();
 
-    const isReady = !(Object.keys(cloudinary.v2.config()).length === 0);
+    const isReady = Object.keys(cloudinary.v2.config()).length !== 0;
 
-    if (isReady) {
-      this.loggerService.info(
-        `Cloudinary Service is ready to save assets and it took ${Math.floor(
-          endTime - startTime,
-        )}ms`,
-      );
-    } else {
-      this.loggerService.error(`Cloudinary connection cannot be stablished.`);
-    }
+    this.loggerService.info(
+      isReady
+        ? `Cloudinary Service is ready to save assets.`
+        : `Cloudinary connection cannot be stablished.`,
+    );
   }
 
   async upload(
