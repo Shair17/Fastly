@@ -5,12 +5,12 @@ import {PasswordService} from '../../shared/services/password.service';
 import {trimStrings} from '../../utils/trimStrings';
 import {SHAIR_EMAIL} from '../../constants/app';
 import {AvatarService} from '../../shared/services/avatar.service';
-import {ImageService} from '../../shared/services/image.service';
 import {CreateAdminBodyType, EditAdminBodyType} from './admin.schema';
 import {isString} from '../../utils';
 import {UserService} from '../user/user.service';
 import {CustomerService} from '../customer/customer.service';
 import {DealerService} from '../dealer/dealer.service';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
 
 @Service('AdminServiceToken')
 export class AdminService {
@@ -21,7 +21,7 @@ export class AdminService {
     private readonly dealerService: DealerService,
     private readonly passwordService: PasswordService,
     private readonly avatarService: AvatarService,
-    private readonly imageService: ImageService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   count() {
@@ -81,11 +81,15 @@ export class AdminService {
     const hashedPassword = await this.passwordService.hash(data.password);
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(
-        avatar,
+      let filename = `${name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${Date.now().toString()}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
         'admins',
-        'avatar',
+        avatar,
+        filename,
       );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();
@@ -125,11 +129,15 @@ export class AdminService {
     const hashedPassword = await this.passwordService.hash(data.password);
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(
-        avatar,
+      let filename = `${foundAdmin.name.toLocaleLowerCase().replace(' ', '')}-${
+        foundAdmin.id
+      }`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
         'admins',
-        foundAdmin.id,
+        avatar,
+        filename,
       );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();

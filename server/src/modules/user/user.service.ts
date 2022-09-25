@@ -21,14 +21,14 @@ import {User, UserAddress, UserCart, Product} from '@prisma/client';
 import {checkIsNewUser} from '../../utils/checkIsNewUser';
 import {AvatarService} from '../../shared/services/avatar.service';
 import {isString} from '../../utils';
-import {ImageService} from '../../shared/services/image.service';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
 
 @Service('UserServiceToken')
 export class UserService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly productService: ProductService,
-    private readonly imageService: ImageService,
+    private readonly cloudinaryService: CloudinaryService,
     private readonly avatarService: AvatarService,
   ) {}
 
@@ -330,11 +330,15 @@ export class UserService {
     }
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(
-        avatar,
+      let filename = `${user.name.toLocaleLowerCase().replace(' ', '')}-${
+        user.id
+      }`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
         'users',
-        user.id,
+        avatar,
+        filename,
       );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();
@@ -521,7 +525,7 @@ export class UserService {
   async updateUserProfile(userId: string, data: UpdateUserProfileBodyType) {
     const [dni, email, phone] = trimStrings(data.dni, data.email, data.phone);
     let {avatar} = data;
-    const user = await this.getByIdOrThrow(userId);
+    const user = await this.getByIdOnlyUserOrThrow(userId);
 
     if (
       !avatar &&
@@ -537,11 +541,15 @@ export class UserService {
     }
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(
-        avatar,
+      let filename = `${user.name.toLocaleLowerCase().replace(' ', '')}-${
+        user.id
+      }`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
         'users',
-        user.id,
+        avatar,
+        filename,
       );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();

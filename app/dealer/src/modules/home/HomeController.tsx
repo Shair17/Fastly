@@ -4,7 +4,7 @@ import {HomeStackProps as DrawerHomeStackProps} from '@fastly/navigation/stacks/
 import {useSocketHasActiveOrders} from '@fastly/hooks/useSocketHasActiveOrders';
 import {HomeScreen} from './screens/HomeScreen';
 import {OrderDetailScreen} from './screens/OrderDetailScreen';
-import {CurrentOrder} from './screens/CurrentOrder';
+import {CurrentOrderScreen} from './screens/CurrentOrderScreen';
 import {OrderClass} from '@fastly/interfaces/app';
 
 export type HomeStackParams = {
@@ -30,7 +30,10 @@ export const HomeController: FC<DrawerHomeStackProps> = ({navigation}) => {
         name="OrderDetailScreen"
         component={OrderDetailScreen}
       />
-      <HomeStack.Screen name="CurrentOrderScreen" component={CurrentOrder} />
+      <HomeStack.Screen
+        name="CurrentOrderScreen"
+        component={CurrentOrderScreen}
+      />
     </HomeStack.Navigator>
   );
 };

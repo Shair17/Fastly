@@ -7,16 +7,14 @@ interface Greeting {
 
 export function useDate(): Greeting {
 	// const locale = 'en';
-
 	const [today, setDate] = useState<Date>(new Date());
 
 	useEffect(() => {
 		const timer = setInterval(() => {
 			setDate(new Date());
 		}, 60 * 1000);
-		return () => {
-			clearInterval(timer);
-		};
+
+		return () => clearInterval(timer);
 	}, []);
 
 	// const day = today.toLocaleDateString(locale, { weekday: 'long' });

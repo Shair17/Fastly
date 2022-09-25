@@ -10,7 +10,7 @@ export interface ILocation {
   longitude: number;
 }
 
-export const defaultUserLocation = {
+export const defaultUserLocation: ILocation = {
   longitude: 0,
   latitude: 0,
 };

@@ -6,6 +6,6 @@ import {
 
 export interface ButtonProps extends MagnusButtonProps {}
 
-export const Button: FC<ButtonProps> = props => {
-  return <MagnusButton bg="primary" rounded="md" {...props} />;
-};
+export const Button: FC<ButtonProps> = props => (
+  <MagnusButton bg="primary" rounded="md" {...props} />
+);

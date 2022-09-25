@@ -23,3 +23,6 @@ export const appVersion = (currentAppVersion as string) || fallBackAppVersion;
 // x.x.V -> patch updates
 export const appUpdateNeeded =
   +serverVersion.split('.')[0] > +appVersion.split('.')[0];
+
+export const defaultAvatarUri =
+  'https://res.cloudinary.com/fastly-delivery-app-peru/image/upload/v1631005766/defaults/avatars/fastly_mwizrt.jpg';

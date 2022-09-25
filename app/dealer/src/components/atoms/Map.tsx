@@ -9,10 +9,18 @@ import MapView, {
 } from 'react-native-maps';
 import {useLocation} from '@fastly/hooks/useLocation';
 import {Button} from './Button';
+import {Coordinates} from '../../interfaces/app';
 
-interface Props {}
+export interface TMarker {
+  title: string;
+  description: string;
+  coordinate: Coordinates;
+}
+interface Props {
+  markers?: TMarker[];
+}
 
-export const Map: React.FC<Props> = () => {
+export const Map: React.FC<Props> = ({markers}) => {
   const {
     hasLocation,
     gpsAccessDenied,
@@ -30,15 +38,14 @@ export const Map: React.FC<Props> = () => {
   useEffect(() => {
     followUserLocation();
 
-    return () => {
-      stopFollowUserLocation();
-    };
+    return () => stopFollowUserLocation();
   }, []);
 
   useEffect(() => {
     if (!following.current) return;
 
     const {latitude, longitude} = userLocation;
+
     mapRef.current?.animateCamera({
       center: {latitude, longitude},
     });
@@ -92,8 +99,16 @@ export const Map: React.FC<Props> = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        onTouchStart={() => (following.current = false)}
-      />
+        onTouchStart={() => (following.current = false)}>
+        {markers?.map(({title, description, coordinate}, key) => (
+          <Marker
+            key={key.toString()}
+            title={title}
+            description={description}
+            coordinate={coordinate}
+          />
+        ))}
+      </MapView>
       <Button
         position="absolute"
         bg="rgba(0,0,0,0.5)"

@@ -8,7 +8,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 interface Props
   extends NativeStackScreenProps<HomeStackParams, 'CurrentOrderScreen'> {}
 
-export const CurrentOrder: FC<Props> = ({navigation}) => {
+export const CurrentOrderScreen: FC<Props> = ({navigation}) => {
   const hasActiveOrders = useSocketHasActiveOrders();
 
   // Si por alguna razón, entra en esta pantalla sin que el ´dealer´ tenga ordenes activas, entonces devolver a la pantalla de ´home´

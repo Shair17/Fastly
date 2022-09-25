@@ -29,7 +29,7 @@ export const ordersPendingQueue: OrderClass[] = [
         updatedAt: new Date().toString(),
         zip: '321321',
       },
-      createdAt: 'Thu Sep 22 2022 16:35:00 GMT-0500 (Peru Standard Time)',
+      createdAt: 'Thu Sep 24 2022 21:40:00 GMT-0500 (Peru Standard Time)',
       deliveryPrice: 3,
       id: '312321212121d12',
       productId: '321312',
@@ -40,8 +40,8 @@ export const ordersPendingQueue: OrderClass[] = [
       userId: '21312321',
     },
     coordinates: {
-      latitude: 321,
-      longitude: 123,
+      latitude: -7.2272033,
+      longitude: -79.4294623,
     },
   },
   // {

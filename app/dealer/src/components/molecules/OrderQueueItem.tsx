@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
@@ -29,22 +29,20 @@ export const OrderQueueItem: FC<Props> = ({
   const bg = canBeTaken ? 'green500' : 'yellow50';
   const color = canBeTaken ? 'white' : 'yellow900';
 
-  const handleCanBeTaken = () => {
+  const handleUpdateItemData = () => {
+    setTimeAgo(formatDate(new Date(order.createdAt)));
+
     if (oneMinuteAdded < new Date(Date.now())) {
       setCanBeTaken(true);
     }
   };
 
-  useTimeout(handleCanBeTaken, interval);
-
-  // TODO Remover luego, puede que no sea una buena práctica tener esto aquí
-  useInterval(() => {
-    handleCanBeTaken();
-    setTimeAgo(formatDate(new Date(order.createdAt)));
-  }, interval);
-  // TODO
+  // useTimeout(handleUpdateItemData, interval);
+  useInterval(handleUpdateItemData, interval);
 
   const handlePress = () => {
+    handleUpdateItemData();
+
     if (!canBeTaken) {
       Notifier.showNotification({
         title: 'Advertencia',
@@ -60,6 +58,8 @@ export const OrderQueueItem: FC<Props> = ({
 
     onPress();
   };
+
+  useEffect(() => handleUpdateItemData(), []);
 
   return (
     <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>

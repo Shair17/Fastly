@@ -38,7 +38,7 @@ import {
   RefreshDealerTokenType,
 } from './auth.schema';
 import {AvatarService} from '../../shared/services/avatar.service';
-import {ImageService} from '../../shared/services/image.service';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
 import {isString} from '../../utils';
 
 @Service('AuthServiceToken')
@@ -53,7 +53,7 @@ export class AuthService {
     private readonly mailService: MailService,
     private readonly passwordService: PasswordService,
     private readonly avatarService: AvatarService,
-    private readonly imageService: ImageService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   buildFacebookApiUri(accessToken: string): string {
@@ -302,8 +302,16 @@ export class AuthService {
       throw new BadRequest('account_taken');
     }
 
-    if (avatar) {
-      avatar = await this.imageService.saveJpgFromBase64(avatar, 'admins');
+    if (avatar && isString(avatar)) {
+      let filename = `${name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${Date.now().toString()}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'admins',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();
@@ -585,7 +593,15 @@ export class AuthService {
     const hashedPassword = await this.passwordService.hash(data.password);
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(avatar, 'customers');
+      let filename = `${name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${Date.now().toString()}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'customers',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();
@@ -865,7 +881,15 @@ export class AuthService {
     const hashedPassword = await this.passwordService.hash(data.password);
 
     if (avatar && isString(avatar)) {
-      avatar = await this.imageService.saveJpgFromBase64(avatar, 'dealers');
+      let filename = `${name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${Date.now().toString()}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'dealers',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
     }
 
     const defaultAvatar = this.avatarService.getDefaultAvatar();
