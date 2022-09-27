@@ -19,9 +19,8 @@ import {ProductService} from '../product/product.service';
 import {EditItemCartQuantityBodyType} from './user.schema';
 import {User, UserAddress, UserCart, Product} from '@prisma/client';
 import {checkIsNewUser} from '../../utils/checkIsNewUser';
-import {AvatarService} from '../../shared/services/avatar.service';
+import {AvatarService, CloudinaryService} from '../../shared/services';
 import {isString} from '../../utils';
-import {CloudinaryService} from '../../shared/services/cloudinary.service';
 
 @Service('UserServiceToken')
 export class UserService {

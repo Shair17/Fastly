@@ -43,9 +43,9 @@ export class IOService implements OnModuleInit {
       const adminId = this.getAdminIdFromToken(token);
       const userId = this.getUserIdFromToken(token);
       const dealerId = this.getDealerIdFromToken(token);
-      const isAdmin = adminId !== null && typeof adminId === 'string';
-      const isUser = userId !== null && typeof userId === 'string';
-      const isDealer = dealerId !== null && typeof dealerId === 'string';
+      const isAdmin = this.isValidEntity(adminId);
+      const isUser = this.isValidEntity(userId);
+      const isDealer = this.isValidEntity(dealerId);
 
       // Si el token es invalido O si no es usuario ni dealer entonces desconectar del socket
       if (!isValidToken || (!isAdmin && !isUser && !isDealer)) {
@@ -178,6 +178,10 @@ export class IOService implements OnModuleInit {
         }
       });
     });
+  }
+
+  isValidEntity(entity: string | null): entity is string {
+    return entity !== null && typeof entity === 'string';
   }
 
   getAdminIdFromToken(token: string): string | null {

@@ -88,7 +88,7 @@ export const Dashboard = () => {
 									{email}
 								</Text>
 							</div>
-							<Avatar size={40} color="blue" src={avatar}>
+							<Avatar size={40} color="blue" src={avatar} alt={name}>
 								{nameInitials}
 							</Avatar>
 						</Group>

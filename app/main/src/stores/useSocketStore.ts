@@ -2,6 +2,8 @@ import create from 'zustand';
 import {combine} from 'zustand/middleware';
 import {SOCKET_URL} from '@fastly/constants/socket';
 import io, {Socket} from 'socket.io-client';
+import {isValidToken} from '@fastly/utils/isValidToken';
+import {isTokenExpired} from '@fastly/services/refresh-token';
 
 type SocketStoreValues = {
   socket: Socket | null;
@@ -21,6 +23,26 @@ export const useSocketStore = create(
   combine(getDefaultValues(), (set, get) => ({
     setSocket: (token: string) => {
       if (!token) {
+        get().socket?.disconnect();
+
+        set({
+          socket: null,
+        });
+
+        return;
+      }
+
+      if (!isValidToken(token)) {
+        get().socket?.disconnect();
+
+        set({
+          socket: null,
+        });
+
+        return;
+      }
+
+      if (isTokenExpired(token)) {
         get().socket?.disconnect();
 
         set({

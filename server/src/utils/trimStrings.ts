@@ -1,4 +1,4 @@
-export const trimStrings = (...strings: string[]) => {
+export const trimStrings = (...strings: string[]): string[] => {
   let s: string[] = [];
 
   strings.forEach(v => {

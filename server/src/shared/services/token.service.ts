@@ -8,7 +8,7 @@ import {
   ForgotPasswordTokenPayload,
   ForgotPasswordTokenType,
   Tokens,
-} from './token.type';
+} from '../../interfaces/token';
 
 @Service('TokenServiceToken')
 export class TokenService {

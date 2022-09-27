@@ -1,16 +1,18 @@
 import {Service} from 'fastify-decorators';
 import {Unauthorized, BadRequest, NotFound} from 'http-errors';
 import {DatabaseService} from '../../database/DatabaseService';
-import {PasswordService} from '../../shared/services/password.service';
 import {trimStrings} from '../../utils/trimStrings';
 import {SHAIR_EMAIL} from '../../constants/app';
-import {AvatarService} from '../../shared/services/avatar.service';
 import {CreateAdminBodyType, EditAdminBodyType} from './admin.schema';
 import {isString} from '../../utils';
 import {UserService} from '../user/user.service';
 import {CustomerService} from '../customer/customer.service';
 import {DealerService} from '../dealer/dealer.service';
-import {CloudinaryService} from '../../shared/services/cloudinary.service';
+import {
+  AvatarService,
+  CloudinaryService,
+  PasswordService,
+} from '../../shared/services';
 
 @Service('AdminServiceToken')
 export class AdminService {

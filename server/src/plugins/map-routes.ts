@@ -1,9 +1,18 @@
 import {FastifyPluginAsync} from 'fastify';
 
+type Route = {
+  method: string | string[];
+  url: string;
+  path: {
+    prefix: string;
+    routePath: string;
+  };
+};
+
 const MapRoutes: FastifyPluginAsync = async (server, options) => {
   let startTime = Date.now();
 
-  let routes: Object[] = [];
+  let routes: Route[] = [];
 
   for (let [path, route] of server.routes) {
     server.log.info(`Mapped {${path}, ${route[0].method}} route`);

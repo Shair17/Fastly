@@ -1,4 +1,8 @@
-export const replaceAt = (str: string, index: number, replacement: string) => {
+export const replaceAt = (
+  str: string,
+  index: number,
+  replacement: string,
+): string => {
   return (
     str.substring(0, index) +
     replacement +

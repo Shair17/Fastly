@@ -15,6 +15,7 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 
 ## Server
 * Eventos de socket para ordenes, solo faltan pequeños detalles.
+* Reemplazar llaves primarias de **uuid()** a **cuid()**.
 
 ## Web
 * Crear panel administrativo web para **repartidores**

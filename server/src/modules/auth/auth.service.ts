@@ -5,10 +5,14 @@ import {
   BadRequest,
   InternalServerError,
 } from 'http-errors';
-import {MailService} from '../../shared/services/mail.service';
-import {TokenService} from '../../shared/services/token.service';
-import {HttpService} from '../../shared/services/http.service';
-import {PasswordService} from '../../shared/services/password.service';
+import {
+  MailService,
+  HttpService,
+  PasswordService,
+  TokenService,
+  CloudinaryService,
+  AvatarService,
+} from '../../shared/services';
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
 import {AdminService} from '../admin/admin.service';
@@ -37,9 +41,13 @@ import {
   RefreshCustomerTokenType,
   RefreshDealerTokenType,
 } from './auth.schema';
-import {AvatarService} from '../../shared/services/avatar.service';
-import {CloudinaryService} from '../../shared/services/cloudinary.service';
 import {isString} from '../../utils';
+
+type Payload = {
+  id: string;
+  name: string;
+  email?: string;
+};
 
 @Service('AuthServiceToken')
 export class AuthService {
@@ -95,7 +103,7 @@ export class AuthService {
         avatar: this.avatarService.getDefaultAvatar(),
       });
 
-      let payload: {id: string; name: string; email?: string} = {
+      let payload: Payload = {
         id: newUser.id,
         name: newUser.name,
       };
@@ -140,7 +148,7 @@ export class AuthService {
       throw new Unauthorized('banned');
     }
 
-    let payload: {id: string; name: string; email?: string} = {
+    let payload: Payload = {
       id: user.id,
       name: user.name,
     };
@@ -182,10 +190,9 @@ export class AuthService {
 
   async refreshFacebookToken({refreshToken}: RefreshFacebookTokenType) {
     const decoded = this.tokenService.verifyRefreshToken('user', refreshToken);
+    const user = await this.userService.getByIdOnlyUserOrThrow(decoded.id);
 
-    const user = await this.userService.getByIdOrThrow(decoded.id);
-
-    let payload: {id: string; name: string; email?: string} = {
+    let payload: Payload = {
       id: user.id,
       name: user.name,
     };
@@ -208,7 +215,7 @@ export class AuthService {
   }
 
   async logOutFromFacebook(id: string) {
-    const user = await this.userService.getByIdOrThrow(id);
+    const user = await this.userService.getByIdOnlyUserOrThrow(id);
 
     try {
       await this.userService.updateUserRefreshToken(user.id, null);

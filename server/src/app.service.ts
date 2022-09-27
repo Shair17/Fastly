@@ -7,7 +7,7 @@ import {
   appDeveloper,
   appUpdateNeeded,
 } from './constants/app';
-import {IOService} from './shared/services/io.service';
+import {IOService} from './shared/services';
 
 @Service('AppServiceToken')
 export class AppService {
@@ -20,7 +20,7 @@ export class AppService {
     private readonly _: IOService,
   ) {}
 
-  async getApp() {
+  getApp() {
     return {
       serverName,
       serverVersion,

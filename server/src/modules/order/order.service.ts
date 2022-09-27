@@ -193,7 +193,7 @@ export class OrderService {
    * en este caso, devuelvo true o false, dadas las circunstancias
    */
   async userHasOngoingOrders(userId: string): Promise<boolean> {
-    const user = await this.userService.getById(userId);
+    const user = await this.userService.getByIdOnlyUser(userId);
 
     if (!user) {
       return false;
