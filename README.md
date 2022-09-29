@@ -11,21 +11,19 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 * Pantalla de carrito, poner los elementos agregados al carrito allí, hacer una bonita interfaz :)
 * Pantalla de favoritos, poner los elementos agregados a favoritos allí, hacer una bonita interfaz :)
 * Pantalla de perfil, mejorar sección de **Pedidos**
-* Pantalla de perfil, llevar al usuario a la página de **Fastly** en play store al presionar **Califícanos**
 
 ## Server
 * Eventos de socket para ordenes, solo faltan pequeños detalles.
 * Reemplazar llaves primarias de **uuid()** a **cuid()**.
 
 ## Web
-* Crear panel administrativo web para **repartidores**
-* Crear panel administrativo web para **clientes**
-* Terminar lo que falta en el panel administrativo web para **admin**
+* Crear panel administrativo web para **repartidores** (como tengo muchísimo código ya hecho, solo es cuestión de copiar y pegar)
+* Crear panel administrativo web para **clientes** (como tengo muchísimo código ya hecho, solo es cuestión de copiar y pegar)
 * Reemplazar por un monorepo de react con vitejs, para así tener una sola carpeta de node_modules para todos los proyectos, menos al de main que es en nextjs.
 
 # FUTURO
 
-Son cambios o características que se pueden o no agregar en un futuro.
+Son cambios o características que pueden o no ser agregados en un futuro.
 
 * ¿Reescribir todo el servidor en GO?
 * ¿Migrar de arquitectura monolitica a microservicios pero con GO?

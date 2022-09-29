@@ -14,7 +14,6 @@ const JWT_USER_SECRET = process.env.JWT_USER_SECRET!;
 const JWT_CUSTOMER_SECRET = process.env.JWT_CUSTOMER_SECRET!;
 const JWT_DEALER_SECRET = process.env.JWT_DEALER_SECRET!;
 
-// Utils
 const isValidEntity = (entity: string | null): entity is string => {
   return entity !== null && typeof entity === 'string';
 };
@@ -138,140 +137,114 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  try {
-    const token = request.headers.authorization?.split(' ')[1];
+  const token = request.headers.authorization?.split(' ')[1]!;
 
-    const decoded = jwt.verify(token!, JWT_ADMIN_SECRET) as {
-      id: string;
-    };
+  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
-    const adminService = getInstanceByToken<AdminService>('AdminServiceToken');
-    const admin = await adminService.getByIdOrThrow(decoded.id);
+  const adminId = getAdminIdFromToken(token);
+  const isAdmin = isValidEntity(adminId);
 
-    if (admin.isBanned) {
-      throw new Unauthorized('banned');
-    }
-
-    if (!admin.isActive) {
-      throw new Unauthorized('inactive_account');
-    }
-
-    request.adminId = admin.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
+  if (!isAdmin) {
     throw new Unauthorized();
   }
+
+  const adminService = getInstanceByToken<AdminService>('AdminServiceToken');
+  const admin = await adminService.getByIdOrThrow(adminId);
+
+  if (admin.isBanned) {
+    throw new Unauthorized('banned');
+  }
+
+  if (!admin.isActive) {
+    throw new Unauthorized('inactive_account');
+  }
+
+  request.adminId = admin.id;
 };
 
 export const userIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  try {
-    const token = request.headers.authorization?.split(' ')[1];
+  const token = request.headers.authorization?.split(' ')[1]!;
 
-    const decoded = jwt.verify(token!, JWT_USER_SECRET) as {
-      id: string;
-    };
+  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
-    const userService: UserService =
-      getInstanceByToken<UserService>('UserServiceToken');
-    const user = await userService.getByIdOrThrow(decoded.id);
+  const userId = getUserIdFromToken(token);
+  const isUser = isValidEntity(userId);
 
-    if (user.isBanned) {
-      throw new Unauthorized('banned');
-    }
-
-    request.userId = user.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
+  if (!isUser) {
     throw new Unauthorized();
   }
+
+  const userService = getInstanceByToken<UserService>('UserServiceToken');
+  const user = await userService.getByIdOnlyUserOrThrow(userId);
+
+  if (user.isBanned) {
+    throw new Unauthorized('banned');
+  }
+
+  request.userId = user.id;
 };
 
 export const customerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  try {
-    const token = request.headers.authorization?.split(' ')[1];
+  const token = request.headers.authorization?.split(' ')[1]!;
 
-    const decoded = jwt.verify(token!, JWT_CUSTOMER_SECRET) as {
-      id: string;
-    };
+  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
-    const customerService = getInstanceByToken<CustomerService>(
-      'CustomerServiceToken',
-    );
-    const customer = await customerService.getByIdOrThrow(decoded.id);
+  const customerId = getCustomerIdFromToken(token);
+  const isCustomer = isValidEntity(customerId);
 
-    if (customer.isBanned) {
-      throw new Unauthorized('banned');
-    }
-
-    if (!customer.isActive) {
-      throw new Unauthorized('inactive_account');
-    }
-
-    request.customerId = customer.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
+  if (!isCustomer) {
     throw new Unauthorized();
   }
+
+  const customerService = getInstanceByToken<CustomerService>(
+    'CustomerServiceToken',
+  );
+  const customer = await customerService.getByIdOrThrow(customerId);
+
+  if (customer.isBanned) {
+    throw new Unauthorized('banned');
+  }
+
+  if (!customer.isActive) {
+    throw new Unauthorized('inactive_account');
+  }
+
+  request.customerId = customer.id;
 };
 
 export const dealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  try {
-    const token = request.headers.authorization?.split(' ')[1];
+  const token = request.headers.authorization?.split(' ')[1]!;
 
-    const decoded = jwt.verify(token!, JWT_DEALER_SECRET) as {
-      id: string;
-    };
+  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
-    const dealerService =
-      getInstanceByToken<DealerService>('DealerServiceToken');
-    const dealer = await dealerService.getByIdOrThrow(decoded.id);
+  const dealerId = getDealerIdFromToken(token);
+  const isDealer = isValidEntity(dealerId);
 
-    if (dealer.isBanned) {
-      throw new Unauthorized('banned');
-    }
-
-    if (!dealer.isActive) {
-      throw new Unauthorized('inactive_account');
-    }
-    request.dealerId = dealer.id;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Unauthorized(`token_expired`);
-    }
-    if (error instanceof jwt.JsonWebTokenError) {
-      throw new Unauthorized(`invalid_token`);
-    }
-
+  if (!isDealer) {
     throw new Unauthorized();
   }
+
+  const dealerService = getInstanceByToken<DealerService>('DealerServiceToken');
+  const dealer = await dealerService.getByIdOrThrow(dealerId);
+
+  if (dealer.isBanned) {
+    throw new Unauthorized('banned');
+  }
+
+  if (!dealer.isActive) {
+    throw new Unauthorized('inactive_account');
+  }
+
+  request.dealerId = dealer.id;
 };
 
 export const adminOrUserIsAuthenticated: onRequestHookHandler = async (

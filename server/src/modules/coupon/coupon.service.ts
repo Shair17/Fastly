@@ -16,6 +16,10 @@ export class CouponService {
     private readonly productService: ProductService,
   ) {}
 
+  count() {
+    return this.databaseService.coupon.count();
+  }
+
   getById(id: string) {
     return this.databaseService.coupon.findUnique({where: {id}});
   }

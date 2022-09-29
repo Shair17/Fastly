@@ -11,6 +11,10 @@ export class ProductService {
     private readonly storeService: StoreService,
   ) {}
 
+  count() {
+    return this.databaseService.product.count();
+  }
+
   async getById(id: string) {
     return this.databaseService.product.findUnique({where: {id}});
   }

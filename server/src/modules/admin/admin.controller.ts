@@ -123,10 +123,10 @@ export class AdminController {
     };
   }
 
-  @GET('/accouns-count', {
+  @GET('/all-count', {
     onRequest: [hasBearerToken, adminIsAuthenticated],
   })
-  async getAccountsCount() {
-    return this.adminService.getAccountsCount();
+  async getAllCount() {
+    return this.adminService.getAllCount();
   }
 }

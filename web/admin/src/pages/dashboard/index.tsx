@@ -1,3 +1,4 @@
+import { FC, useEffect, useState } from 'react';
 import {
 	Group,
 	Text,
@@ -9,6 +10,7 @@ import {
 	Paper,
 	Space,
 	createStyles,
+	Badge,
 } from '@mantine/core';
 import {
 	ShieldLock,
@@ -19,6 +21,7 @@ import {
 	ShoppingCart,
 	Tags,
 	BuildingStore,
+	Icon,
 } from 'tabler-icons-react';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { useAdminStore } from '../../stores/useAdminStore';
@@ -56,13 +59,57 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
+const CardCount: FC<{
+	classes: { title: string; icon: string; diff: string };
+	Icon: Icon;
+	title: string;
+	count: number;
+	description: string;
+	isRealTime: boolean;
+}> = ({ classes, count, Icon, description, title, isRealTime }) => {
+	return (
+		<Paper withBorder p="md" radius="md">
+			<Group position="apart">
+				<Text size="xs" color="dimmed" className={classes.title}>
+					{title}
+					{isRealTime && (
+						<Badge ml="xs" size="xs" variant="filled">
+							En vivo
+						</Badge>
+					)}
+				</Text>
+				<Icon className={classes.icon} size={22} />
+			</Group>
+
+			<Group align="flex-end" spacing="xs" mt={25}>
+				<Text size="lg" weight={500} className={classes.diff}>
+					<span>{count || 0}</span>
+				</Text>
+			</Group>
+
+			<Text size="xs" color="dimmed" mt={7}>
+				{description}
+			</Text>
+		</Paper>
+	);
+};
+
 export const Dashboard = () => {
-	const [{ data: accountsCount }] = useAxios<{
-		adminsCount: number;
-		customersCount: number;
-		dealersCount: number;
-		usersCount: number;
-	}>('/admins/accouns-count');
+	const [{ error, loading, data: allCount }] = useAxios<{
+		accounts: {
+			adminsCount: number;
+			usersCount: number;
+			customersCount: number;
+			dealersCount: number;
+		};
+		system: {
+			stores: number;
+			products: number;
+			coupons: number;
+			orders: number;
+			ordersQueue: number;
+		};
+	}>('/admins/all-count');
 	const { classes } = useStyles();
 	const { ordersQueue } = useSocketOrdersQueue();
 	const date = useDate();
@@ -71,6 +118,142 @@ export const Dashboard = () => {
 	const email = useAdminStore((a) => a.email);
 	const greeting = `${date.greeting}, ${name.split(' ')[0]}`;
 	const nameInitials = `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`;
+
+	const body = () => {
+		if (loading) {
+			return <p>Cargando...</p>;
+		}
+
+		if (error || !allCount) {
+			console.log(error);
+			return <p>Error!</p>;
+		}
+
+		const data = [
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: ShieldLock,
+				title: 'Administradores',
+				description: 'Cantidad de administradores en Fastly',
+				count: allCount.accounts.adminsCount,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: User,
+				title: 'Usuarios',
+				description: 'Cantidad de usuarios en la aplicación de Fastly',
+				count: allCount.accounts.usersCount,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: Users,
+				title: 'Clientes',
+				description: 'Cantidad de clientes en Fastly',
+				count: allCount.accounts.customersCount,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: Motorbike,
+				title: 'Repartidores',
+				description: 'Cantidad de repartidores en Fastly',
+				count: allCount.accounts.dealersCount,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: BuildingStore,
+				title: 'Negocios',
+				description: 'Cantidad de negocios en Fastly',
+				count: allCount.system.stores,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: Archive,
+				title: 'Productos',
+				description: 'Cantidad de productos en Fastly',
+				count: allCount.system.products,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: Tags,
+				title: 'Cupones',
+				description: 'Cantidad de cupones en Fastly',
+				count: allCount.system.coupons,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: Archive,
+				title: 'Pedidos',
+				description: 'Cantidad de pedidos en Fastly',
+				count: allCount.system.orders,
+			},
+			{
+				classes: {
+					title: classes.title,
+					icon: classes.icon,
+					diff: classes.diff,
+				},
+				Icon: ShoppingCart,
+				title: 'Pedidos',
+				description: 'Cantidad de pedidos en tiempo real en Fastly',
+				count: ordersQueue.length || allCount.system.ordersQueue,
+				isRealTime: true,
+			},
+		];
+
+		return (
+			<Grid>
+				{data.map(
+					(
+						{ classes, Icon, count, description, title, isRealTime = false },
+						key
+					) => (
+						<Grid.Col md={6} lg={3} key={key.toString()}>
+							<CardCount
+								classes={classes}
+								Icon={Icon}
+								count={count}
+								title={title}
+								description={description}
+								isRealTime={isRealTime}
+							/>
+						</Grid.Col>
+					)
+				)}
+			</Grid>
+		);
+	};
 
 	return (
 		<DashboardLayout>
@@ -97,170 +280,7 @@ export const Dashboard = () => {
 
 				<Space h="lg" />
 
-				<Grid>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Administradores
-								</Text>
-								<ShieldLock className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{accountsCount?.adminsCount || 0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de administradores en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Usuarios
-								</Text>
-								<User className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{accountsCount?.usersCount || 0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de usuarios en la aplicación Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Clientes
-								</Text>
-								<Users className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{accountsCount?.customersCount || 0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de clientes en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Repartidores
-								</Text>
-								<Motorbike className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{accountsCount?.dealersCount || 0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de repartidores en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-
-					{/** System */}
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Negocios
-								</Text>
-								<BuildingStore className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de negocios en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Productos
-								</Text>
-								<Archive className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de productos en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Cupones
-								</Text>
-								<Tags className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de cupones en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-					<Grid.Col md={6} lg={3}>
-						<Paper withBorder p="md" radius="md">
-							<Group position="apart">
-								<Text size="xs" color="dimmed" className={classes.title}>
-									Pedidos
-								</Text>
-								<ShoppingCart className={classes.icon} size={22} />
-							</Group>
-
-							<Group align="flex-end" spacing="xs" mt={25}>
-								<Text size="lg" weight={500} className={classes.diff}>
-									<span>{ordersQueue.length || 0}</span>
-								</Text>
-							</Group>
-
-							<Text size="xs" color="dimmed" mt={7}>
-								Cantidad de pedidos en tiempo real en Fastly
-							</Text>
-						</Paper>
-					</Grid.Col>
-				</Grid>
+				{body()}
 			</Box>
 		</DashboardLayout>
 	);

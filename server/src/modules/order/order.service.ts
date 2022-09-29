@@ -16,6 +16,10 @@ export class OrderService {
     private readonly productService: ProductService,
   ) {}
 
+  count() {
+    return this.databaseService.order.count();
+  }
+
   getById(id: string) {
     return this.databaseService.order.findUnique({where: {id}});
   }

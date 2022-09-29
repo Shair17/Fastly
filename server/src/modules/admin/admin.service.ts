@@ -8,11 +8,16 @@ import {isString} from '../../utils';
 import {UserService} from '../user/user.service';
 import {CustomerService} from '../customer/customer.service';
 import {DealerService} from '../dealer/dealer.service';
+import {StoreService} from '../store/store.service';
 import {
   AvatarService,
   CloudinaryService,
   PasswordService,
 } from '../../shared/services';
+import {OrderService} from '../order/order.service';
+import {CouponService} from '../coupon/coupon.service';
+import {ProductService} from '../product/product.service';
+import {OrderQueue} from '../order/order-queue';
 
 @Service('AdminServiceToken')
 export class AdminService {
@@ -20,6 +25,11 @@ export class AdminService {
     private readonly databaseService: DatabaseService,
     private readonly userService: UserService,
     private readonly customerService: CustomerService,
+    private readonly storeService: StoreService,
+    private readonly orderService: OrderService,
+    private readonly orderQueue: OrderQueue,
+    private readonly couponService: CouponService,
+    private readonly productService: ProductService,
     private readonly dealerService: DealerService,
     private readonly passwordService: PasswordService,
     private readonly avatarService: AvatarService,
@@ -48,13 +58,22 @@ export class AdminService {
     return restOfAdmin;
   }
 
-  async getAccountsCount() {
-    const adminsCount = await this.count();
-    const usersCount = await this.userService.count();
-    const customersCount = await this.customerService.count();
-    const dealersCount = await this.dealerService.count();
+  async getAllCount() {
+    const accounts = {
+      adminsCount: await this.count(),
+      usersCount: await this.userService.count(),
+      customersCount: await this.customerService.count(),
+      dealersCount: await this.dealerService.count(),
+    };
+    const system = {
+      stores: await this.storeService.count(),
+      products: await this.productService.count(),
+      coupons: await this.couponService.count(),
+      orders: await this.orderService.count(),
+      ordersQueue: this.orderQueue.size(),
+    };
 
-    return {adminsCount, usersCount, customersCount, dealersCount};
+    return {accounts, system};
   }
 
   async createAdmin(data: CreateAdminBodyType) {

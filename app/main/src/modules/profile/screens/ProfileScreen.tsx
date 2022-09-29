@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
+import {Platform} from 'react-native';
 import {Avatar, Div, Text, Icon} from 'react-native-magnus';
 import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
 import {ProfileItemSetting} from '@fastly/components/organisms/ProfileItemSetting';
 import {LogOutButton} from '@fastly/components/molecules/LogOutButton';
 import {CreatedByShair} from '@fastly/components/molecules/CreatedByShair';
 import {useUserStore} from '@fastly/stores/useUserStore';
-import {FASTLY_PP, FASTLY_TC} from '@fastly/constants/support';
+import {
+  FASTLY_PP,
+  FASTLY_TC,
+  FASTLY_IOS,
+  FASTLY_ANDROID,
+} from '@fastly/constants/support';
 import {openLink} from '@fastly/utils/openLink';
 import {ProfileControllerHeader} from '../ProfileControllerHeader';
 
@@ -84,7 +90,9 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
             <Div my="xl" h={1} bg="gray100" />
 
             <ProfileItemSetting
-              onPress={() => alert('calificanos')}
+              onPress={() =>
+                openLink(Platform.OS === 'ios' ? FASTLY_IOS : FASTLY_ANDROID)
+              }
               iconName="star"
               text="Califícanos"
             />

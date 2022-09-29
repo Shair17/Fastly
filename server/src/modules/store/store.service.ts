@@ -18,6 +18,10 @@ export class StoreService {
     private readonly customerService: CustomerService,
   ) {}
 
+  count() {
+    return this.databaseService.store.count();
+  }
+
   getStores() {
     return this.databaseService.store.findMany();
   }
