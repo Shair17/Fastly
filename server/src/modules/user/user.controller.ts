@@ -2,6 +2,11 @@ import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
 import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
 import {UserService} from './user.service';
 import {
+  BanUserByAdminBody,
+  BanUserByAdminBodyType,
+  BanUserByAdminParamsType,
+} from './user.schema';
+import {
   AddAddressBody,
   AddAddressBodyType,
   AddItemCartBody,
@@ -26,6 +31,7 @@ import {
   MyAddressParamsType,
   GetMyUserOrdersQueryString,
   GetMyUserOrdersQueryStringType,
+  BanUserByAdminParams,
 } from './user.schema';
 import {
   hasBearerToken,
@@ -42,6 +48,26 @@ export class UserController {
   })
   async getUsers() {
     return this.userService.getUsers();
+  }
+
+  @DELETE('/:id', {
+    schema: {
+      params: BanUserByAdminParams,
+      body: BanUserByAdminBody,
+    },
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async toggleBanUserByAdmin(
+    request: Request<{
+      Params: BanUserByAdminParamsType;
+      Body: BanUserByAdminBodyType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.userService.toggleBanUserByAdmin(
+      request.params.id,
+      request.body.reason,
+    );
   }
 
   @GET('/count')

@@ -23,7 +23,7 @@ export const SocketProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
 		socket.on('connect', () => {
 			setOnline(true);
-			console.log('[Fastly] Connected to Fastly server.');
+			console.log('[Fastly] Connected to server.');
 		});
 	}, [socket]);
 
@@ -32,7 +32,7 @@ export const SocketProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
 		socket.on('disconnect', () => {
 			setOnline(false);
-			console.log('[Fastly] Disconnected from Fastly server.');
+			console.log('[Fastly] Disconnected from server.');
 		});
 	}, [socket]);
 

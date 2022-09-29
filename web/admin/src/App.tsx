@@ -45,9 +45,8 @@ function App() {
 	const toggleColorScheme = (value?: ColorScheme) =>
 		setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
-	useHotkeys([['mod+J', () => toggleColorScheme()]]);
-
 	useShowSessionIsExpired();
+	useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
 	return (
 		<SocketProvider>

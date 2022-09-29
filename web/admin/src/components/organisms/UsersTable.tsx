@@ -2,24 +2,46 @@ import { Table } from '@mantine/core';
 
 interface Props {
 	children?: React.ReactNode;
+	type?: 'admins' | 'users' | 'customers' | 'dealers';
 }
 
-export const UsersTable = ({ children }: Props) => {
+const items = {
+	admins: [
+		'Nombres y Apellidos',
+		'Correo Electrónico',
+		'DNI',
+		'Teléfono',
+		'Dirección',
+		'Edad',
+		'Fecha de nacimiento',
+		'Activo',
+		'Baneado',
+		'Razón de baneo',
+	],
+	users: [
+		'Nombres y Apellidos',
+		'Correo Electrónico',
+		'Facebook Id',
+		'DNI',
+		'Teléfono',
+		'Baneado',
+		'Razón de baneo',
+	],
+	customers: [],
+	dealers: [],
+};
+
+export const UsersTable = ({ children, type = 'admins' }: Props) => {
 	return (
 		<Table sx={{ minWidth: 800 }} verticalSpacing="sm">
 			<thead>
 				<tr>
 					<th></th>
-					<th>Nombres y Apellidos</th>
-					<th>Correo electrónico</th>
-					<th>DNI</th>
-					<th>Teléfono</th>
-					<th>Dirección</th>
-					<th>Edad</th>
-					<th>Fecha de nacimiento</th>
-					<th>Activo</th>
-					<th>Baneado</th>
-					<th>Razón de baneo</th>
+
+					{items[type].map((item, key) => (
+						<th key={key.toString()}>{item}</th>
+					))}
+
 					<th></th>
 				</tr>
 			</thead>

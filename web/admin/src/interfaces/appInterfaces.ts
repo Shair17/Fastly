@@ -25,8 +25,8 @@ export interface User {
 	facebookId: string;
 	isBanned: boolean;
 	banReason?: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export type UserAddressTag =

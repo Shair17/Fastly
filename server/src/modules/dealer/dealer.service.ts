@@ -42,6 +42,20 @@ export class DealerService {
     return dealer;
   }
 
+  async getByIdOnlyDealerOrThrow(id: string) {
+    const dealer = await this.databaseService.dealer.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!dealer) {
+      throw new Unauthorized();
+    }
+
+    return dealer;
+  }
+
   async me(dealerId: string) {
     const dealer = await this.getById(dealerId);
 

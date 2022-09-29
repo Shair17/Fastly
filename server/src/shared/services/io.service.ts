@@ -59,8 +59,8 @@ export class IOService implements OnModuleInit {
         await this.orderQueue.areThereAvailableDealers(),
       );
 
+      // Eventos para administrador
       if (isAdmin) {
-        // Eventos para administrador
       }
 
       // Eventos de socket para usuarios

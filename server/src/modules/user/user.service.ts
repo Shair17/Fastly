@@ -54,6 +54,20 @@ export class UserService {
     };
   }
 
+  async toggleBanUserByAdmin(id: string, reason?: string) {
+    const user = await this.getByIdOnlyUserOrThrow(id);
+
+    await this.banUser(user.id, !user.isBanned, reason);
+
+    return {
+      statusCode: 200,
+      message: `User with id ${user.id} was ${
+        user.isBanned ? 'unbanned' : 'banned'
+      }.`,
+      success: true,
+    };
+  }
+
   async getByIdOnlyUserOrThrow(id: string) {
     const user = await this.databaseService.user.findUnique({where: {id}});
 
@@ -621,13 +635,13 @@ export class UserService {
     });
   }
 
-  async banUser(userId: string, banReason?: string) {
+  async banUser(userId: string, isBanned: boolean, banReason?: string) {
     return this.databaseService.user.update({
       where: {
         id: userId,
       },
       data: {
-        isBanned: true,
+        isBanned,
         banReason,
       },
     });

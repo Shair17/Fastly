@@ -9,22 +9,24 @@ import {
 	PasswordInput,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { MainAccount } from '../../components/organisms/MainAccount';
 import { UsersTable } from '../../components/organisms/UsersTable';
-import { UserTableItem } from '../../components/organisms/UserTableItem';
-import { useAdminsStore } from '../../stores/useAdminsStore';
+import { AdminTableItem } from '../../components/organisms/AdminTableItem';
 import { registerSchema } from '../../schemas/register-schema';
 import { DatePicker } from '@mantine/dates';
 import useAxios from 'axios-hooks';
-import { showNotification } from '@mantine/notifications';
 import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
+import { Admin } from '../../interfaces/appInterfaces';
 
 export const DashboardAdmins = () => {
 	const [newAdminModalOpened, setNewAdminModalOpened] = useState(false);
 	const theme = useMantineTheme();
-	const admins = useAdminsStore((a) => a.admins);
-	const fetchAdmins = useAdminsStore((a) => a.fetchAdmins);
+	const [
+		{ error: getAdminsError, loading: getAdminsLoading, data: admins },
+		refetchAdmins,
+	] = useAxios<Admin[]>('/admins');
 	const [{ loading }, executePost] = useAxios(
 		{
 			url: '/admins',
@@ -66,7 +68,7 @@ export const DashboardAdmins = () => {
 							color: 'green',
 						});
 						setNewAdminModalOpened(false);
-						fetchAdmins();
+						refetchAdmins();
 					} else {
 						showNotification({
 							title: 'Error!',
@@ -86,6 +88,32 @@ export const DashboardAdmins = () => {
 				});
 		}
 	);
+
+	const body = () => {
+		if (getAdminsLoading) return <p>Cargando...</p>;
+
+		if (getAdminsError || !admins) {
+			console.error(getAdminsError);
+			return <p>Error!</p>;
+		}
+
+		if (admins.length === 0) {
+			return <p>No hay datos.</p>;
+		}
+
+		return (
+			<UsersTable type="admins">
+				{admins.map((admin) => (
+					<AdminTableItem
+						key={admin.id}
+						{...admin}
+						type="admin"
+						refetch={refetchAdmins}
+					/>
+				))}
+			</UsersTable>
+		);
+	};
 
 	return (
 		<DashboardLayout>
@@ -187,15 +215,7 @@ export const DashboardAdmins = () => {
 				description="Aquí podrás ver la lista de administradores en Fastly"
 				handleAddButton={() => setNewAdminModalOpened(true)}
 			>
-				{Object.keys(admins).length === 0 ? (
-					<p>Cargando...</p>
-				) : (
-					<UsersTable>
-						{admins.map((admin) => (
-							<UserTableItem key={admin.id} {...admin} type="admin" />
-						))}
-					</UsersTable>
-				)}
+				{body()}
 			</MainAccount>
 		</DashboardLayout>
 	);

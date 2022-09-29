@@ -7,6 +7,16 @@ import {
   DNI_REGEX,
 } from '../../constants/regex';
 
+export const BanUserByAdminParams = Type.Object({
+  id: Type.String({format: 'uuid'}),
+});
+export type BanUserByAdminParamsType = Static<typeof BanUserByAdminParams>;
+
+export const BanUserByAdminBody = Type.Object({
+  reason: Type.Optional(Type.String()),
+});
+export type BanUserByAdminBodyType = Static<typeof BanUserByAdminBody>;
+
 export const GetMyUserOrdersQueryString = Type.Object({
   skip: Type.Optional(Type.Number({minimum: 0})),
   take: Type.Optional(Type.Number({minimum: 0})),
