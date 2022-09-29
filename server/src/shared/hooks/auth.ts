@@ -360,7 +360,7 @@ export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
       throw new Unauthorized('banned');
     }
 
-    if (customer.isActive) {
+    if (!customer.isActive) {
       throw new Unauthorized('inactive_account');
     }
 
@@ -518,7 +518,7 @@ export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
         throw new Unauthorized('banned');
       }
 
-      if (customer.isActive) {
+      if (!customer.isActive) {
         throw new Unauthorized('inactive_account');
       }
 
@@ -647,7 +647,7 @@ export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
         throw new Unauthorized('banned');
       }
 
-      if (customer.isActive) {
+      if (!customer.isActive) {
         throw new Unauthorized('inactive_account');
       }
 
@@ -686,7 +686,7 @@ export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
         throw new Unauthorized('banned');
       }
 
-      if (customer.isActive) {
+      if (!customer.isActive) {
         throw new Unauthorized('inactive_account');
       }
 
@@ -765,7 +765,7 @@ export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler 
         throw new Unauthorized('banned');
       }
 
-      if (customer.isActive) {
+      if (!customer.isActive) {
         throw new Unauthorized('inactive_account');
       }
 
