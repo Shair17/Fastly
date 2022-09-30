@@ -9,7 +9,7 @@ import MapView, {
 } from 'react-native-maps';
 import {useLocation} from '@fastly/hooks/useLocation';
 import {Button} from './Button';
-import {Coordinates} from '../../interfaces/app';
+import {Coordinates} from '@fastly/interfaces/app';
 
 export interface TMarker {
   title: string;

@@ -20,7 +20,7 @@ async function main() {
   );
   app.log.info(`Developed by @Shair17 <hello@shair.dev>, https://shair.dev`);
   app.log.info(
-    `Websocket server is listening at ws://${serverHost}:${app.config.PORT}`,
+    `Socket server is listening at ws://${serverHost}:${app.config.PORT}`,
   );
 
   await app.listen(+app.config.PORT, serverHost);

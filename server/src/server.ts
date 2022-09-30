@@ -93,8 +93,6 @@ export default async function Server(
   server.register(bootstrap, {
     controllers: [...AppModule],
   });
-
-  /** Al final para que coja todas las rutas */
   server.register(MapRoutes);
 
   return server;

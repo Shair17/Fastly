@@ -7,7 +7,7 @@ export class TokenExpiredError extends jwt.TokenExpiredError {}
 
 @Service('JwtServiceToken')
 export class JwtService {
-  private readonly jwt: typeof jwt = jwt;
+  private readonly jwt = jwt;
 
   sign(
     payload: string | object | Buffer,

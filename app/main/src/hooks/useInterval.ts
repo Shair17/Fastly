@@ -8,7 +8,7 @@ export const useInterval = (cb: () => void, delay?: number) => {
   }, [cb]);
 
   useEffect(() => {
-    if (!delay) {
+    if (!delay && delay !== 0) {
       return;
     }
 

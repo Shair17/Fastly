@@ -4,11 +4,14 @@ export const isMap = (val: unknown) => toTypeString(val) === '[object Map]';
 
 export const isSet = (val: unknown) => toTypeString(val) === '[object Set]';
 
-export const isDate = (val: unknown) => toTypeString(val) === '[object Date]';
+export const isDate = (val: unknown): val is Date =>
+  toTypeString(val) === '[object Date]';
 
-export const isFunction = (val: unknown) => typeof val === 'function';
+export const isFunction = (val: unknown): val is Function =>
+  typeof val === 'function';
 
-export const isString = (val: unknown) => typeof val === 'string';
+export const isString = (val: unknown): val is string =>
+  typeof val === 'string';
 
 export const isSymbol = (val: unknown) => typeof val === 'symbol';
 

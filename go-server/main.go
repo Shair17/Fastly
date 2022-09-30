@@ -40,6 +40,9 @@ func main() {
 	v1.Get("/users", controllers.UserList)
 	v1.Post("/users", controllers.UserCreate)
 
+	// Setup static files
+	app.Static("/", "./static/public")
+
 	// Handle not founds
 	app.Use(controllers.NotFound)
 
