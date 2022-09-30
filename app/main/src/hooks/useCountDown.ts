@@ -16,7 +16,7 @@ export const useCountDown = (initialCount: number = 1) => {
         setCount(count - 1);
       }
     },
-    canCountDown ? 1e3 : undefined,
+    canCountDown ? 1000 : null,
   );
 
   return count;

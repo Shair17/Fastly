@@ -2,8 +2,7 @@ import {useEffect, useState} from 'react';
 import {AppState, AppStateStatus} from 'react-native';
 
 export const useAppState = () => {
-  const currentState = AppState.currentState;
-  const [appState, setAppState] = useState(currentState);
+  const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
     function onChange(newState: AppStateStatus) {

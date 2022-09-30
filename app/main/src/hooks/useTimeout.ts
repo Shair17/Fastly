@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 
-export const useTimeout = (cb: () => void, delay?: number) => {
+export const useTimeout = (cb: () => void, delay?: number | null) => {
   const savedCb = useRef(cb);
 
   useEffect(() => {
@@ -8,7 +8,7 @@ export const useTimeout = (cb: () => void, delay?: number) => {
   }, [cb]);
 
   useEffect(() => {
-    if (!delay) {
+    if (!delay && delay !== 0) {
       return;
     }
 

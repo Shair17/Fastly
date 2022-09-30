@@ -3,7 +3,6 @@ import {useTheme} from 'react-native-magnus';
 import {lightTheme, darkTheme} from '@fastly/theme';
 import {useSystemColorScheme} from './useSystemColorScheme';
 
-// TODO: Mejorar este hook
 export const useAutoSwitchTheme = () => {
   const systemTheme = useSystemColorScheme();
   const isDarkTheme = systemTheme === 'dark';

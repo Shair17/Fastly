@@ -13,6 +13,7 @@ import {OrderQueue} from '../../modules/order/order-queue';
 import {isValidToken} from '../../utils/isValidToken';
 import {JwtService} from './jwt.service';
 import type {JwtPayload} from 'jsonwebtoken';
+import {isString} from '@fastly/utils';
 
 @Service()
 export class IOService implements OnModuleInit {
@@ -43,9 +44,9 @@ export class IOService implements OnModuleInit {
       const adminId = this.getAdminIdFromToken(token);
       const userId = this.getUserIdFromToken(token);
       const dealerId = this.getDealerIdFromToken(token);
-      const isAdmin = this.isValidEntity(adminId);
-      const isUser = this.isValidEntity(userId);
-      const isDealer = this.isValidEntity(dealerId);
+      const isAdmin = isString(adminId);
+      const isUser = isString(userId);
+      const isDealer = isString(dealerId);
 
       // Si el token es invalido O si no es usuario ni dealer entonces desconectar del socket
       if (!isValidToken || (!isAdmin && !isUser && !isDealer)) {
@@ -178,10 +179,6 @@ export class IOService implements OnModuleInit {
         }
       });
     });
-  }
-
-  isValidEntity(entity: string | null): entity is string {
-    return entity !== null && typeof entity === 'string';
   }
 
   getAdminIdFromToken(token: string): string | null {

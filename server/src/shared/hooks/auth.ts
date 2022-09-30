@@ -8,15 +8,12 @@ import {Unauthorized} from 'http-errors';
 import {BEARER_SCHEME_REGEX} from '../../constants/regex';
 import * as jwt from 'jsonwebtoken';
 import {isValidToken} from '../../utils/isValidToken';
+import {isString} from '@fastly/utils';
 
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET!;
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET!;
 const JWT_CUSTOMER_SECRET = process.env.JWT_CUSTOMER_SECRET!;
 const JWT_DEALER_SECRET = process.env.JWT_DEALER_SECRET!;
-
-const isValidEntity = (entity: string | null): entity is string => {
-  return entity !== null && typeof entity === 'string';
-};
 
 const verifyToken = (token: string) => {
   if (!token) throw new Unauthorized(`invalid_token`);
@@ -142,7 +139,7 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const adminId = getAdminIdFromToken(token);
-  const isAdmin = isValidEntity(adminId);
+  const isAdmin = isString(adminId);
 
   if (!isAdmin) {
     throw new Unauthorized();
@@ -171,7 +168,7 @@ export const userIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const userId = getUserIdFromToken(token);
-  const isUser = isValidEntity(userId);
+  const isUser = isString(userId);
 
   if (!isUser) {
     throw new Unauthorized();
@@ -196,7 +193,7 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const customerId = getCustomerIdFromToken(token);
-  const isCustomer = isValidEntity(customerId);
+  const isCustomer = isString(customerId);
 
   if (!isCustomer) {
     throw new Unauthorized();
@@ -227,7 +224,7 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const dealerId = getDealerIdFromToken(token);
-  const isDealer = isValidEntity(dealerId);
+  const isDealer = isString(dealerId);
 
   if (!isDealer) {
     throw new Unauthorized();
@@ -256,10 +253,10 @@ export const adminOrUserIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const adminId = getAdminIdFromToken(token);
-  const isAdmin = isValidEntity(adminId);
+  const isAdmin = isString(adminId);
 
   const userId = getUserIdFromToken(token);
-  const isUser = isValidEntity(userId);
+  const isUser = isString(userId);
 
   if (!isAdmin && !isUser) {
     throw new Unauthorized();
@@ -301,10 +298,10 @@ export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const adminId = getAdminIdFromToken(token);
-  const isAdmin = isValidEntity(adminId);
+  const isAdmin = isString(adminId);
 
   const customerId = getCustomerIdFromToken(token);
-  const isCustomer = isValidEntity(customerId);
+  const isCustomer = isString(customerId);
 
   if (!isAdmin && !isCustomer) {
     throw new Unauthorized();
@@ -352,10 +349,10 @@ export const userOrDealerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const userId = getUserIdFromToken(token);
-  const isUser = isValidEntity(userId);
+  const isUser = isString(userId);
 
   const dealerId = getDealerIdFromToken(token);
-  const isDealer = isValidEntity(dealerId);
+  const isDealer = isString(dealerId);
 
   if (!isUser && !isDealer) {
     throw new Unauthorized();
@@ -398,10 +395,10 @@ export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const adminId = getAdminIdFromToken(token);
-  const isAdmin = isValidEntity(adminId);
+  const isAdmin = isString(adminId);
 
   const dealerId = getDealerIdFromToken(token);
-  const isDealer = isValidEntity(dealerId);
+  const isDealer = isString(dealerId);
 
   if (!isAdmin && !isDealer) {
     throw new Unauthorized();
@@ -446,13 +443,13 @@ export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
     if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
     const adminId = getAdminIdFromToken(token);
-    const isAdmin = isValidEntity(adminId);
+    const isAdmin = isString(adminId);
 
     const userId = getUserIdFromToken(token);
-    const isUser = isValidEntity(userId);
+    const isUser = isString(userId);
 
     const customerId = getCustomerIdFromToken(token);
-    const isCustomer = isValidEntity(customerId);
+    const isCustomer = isString(customerId);
 
     if (!isAdmin && !isUser && !isCustomer) {
       throw new Unauthorized();
@@ -510,13 +507,13 @@ export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
   if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
   const adminId = getAdminIdFromToken(token);
-  const isAdmin = isValidEntity(adminId);
+  const isAdmin = isString(adminId);
 
   const userId = getUserIdFromToken(token);
-  const isUser = isValidEntity(userId);
+  const isUser = isString(userId);
 
   const dealerId = getDealerIdFromToken(token);
-  const isDealer = isValidEntity(dealerId);
+  const isDealer = isString(dealerId);
 
   if (!isAdmin && !isUser && !isDealer) {
     throw new Unauthorized();
@@ -570,13 +567,13 @@ export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
     if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
     const adminId = getAdminIdFromToken(token);
-    const isAdmin = isValidEntity(adminId);
+    const isAdmin = isString(adminId);
 
     const dealerId = getDealerIdFromToken(token);
-    const isDealer = isValidEntity(dealerId);
+    const isDealer = isString(dealerId);
 
     const customerId = getCustomerIdFromToken(token);
-    const isCustomer = isValidEntity(customerId);
+    const isCustomer = isString(customerId);
 
     if (!isAdmin && !isDealer && !isCustomer) {
       throw new Unauthorized();
@@ -637,13 +634,13 @@ export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
     if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
     const customerId = getCustomerIdFromToken(token);
-    const isCustomer = isValidEntity(customerId);
+    const isCustomer = isString(customerId);
 
     const dealerId = getDealerIdFromToken(token);
-    const isDealer = isValidEntity(dealerId);
+    const isDealer = isString(dealerId);
 
     const userId = getUserIdFromToken(token);
-    const isUser = isValidEntity(userId);
+    const isUser = isString(userId);
 
     if (!isDealer && !isCustomer && !isUser) {
       throw new Unauthorized();
@@ -699,16 +696,16 @@ export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler 
     if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
 
     const adminId = getAdminIdFromToken(token);
-    const isAdmin = isValidEntity(adminId);
+    const isAdmin = isString(adminId);
 
     const customerId = getCustomerIdFromToken(token);
-    const isCustomer = isValidEntity(customerId);
+    const isCustomer = isString(customerId);
 
     const dealerId = getDealerIdFromToken(token);
-    const isDealer = isValidEntity(dealerId);
+    const isDealer = isString(dealerId);
 
     const userId = getUserIdFromToken(token);
-    const isUser = isValidEntity(userId);
+    const isUser = isString(userId);
 
     if (!isDealer && !isCustomer && !isUser) {
       throw new Unauthorized();

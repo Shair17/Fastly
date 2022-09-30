@@ -10,7 +10,6 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 * Pantalla de búsqueda, poner tan solo unos cuantos elementos en búsquedas recientes, más abajo poner más cosas, como productos o cosas que te podrían interesar (recordar lo que hace netflix cuando no hay una pélicula: se muestra contenido relacionado a la búsqueda...)
 * Pantalla de carrito, poner los elementos agregados al carrito allí, hacer una bonita interfaz :)
 * Pantalla de favoritos, poner los elementos agregados a favoritos allí, hacer una bonita interfaz :)
-* Pantalla de perfil, mejorar sección de **Pedidos**
 
 ## Server
 * Eventos de socket para ordenes, solo faltan pequeños detalles.
