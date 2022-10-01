@@ -15,10 +15,14 @@ import useAxios from 'axios-hooks';
 
 export const DashboardDealers = () => {
 	const theme = useMantineTheme();
-	const [{ error, loading, data, response }] = useAxios({
+	const [{ error, loading, data: dealers }, refreshDealers] = useAxios({
 		url: '/dealers',
 		method: 'GET',
 	});
+
+	const handleRefresh = () => {
+		refreshDealers();
+	};
 
 	const body = () => {
 		if (loading) return <p>Cargando...</p>;
@@ -200,6 +204,7 @@ export const DashboardDealers = () => {
 			<MainAccount
 				title="Repartidores 🛵"
 				description="Aquí podrás ver la lista de repartidores en Fastly"
+				handleRefresh={handleRefresh}
 			>
 				{body()}
 			</MainAccount>

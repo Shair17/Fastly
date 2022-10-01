@@ -140,7 +140,7 @@ export const UserTableItem = ({
 				</td>
 				<td>
 					<Badge
-						color={isBanned ? 'green' : 'red'}
+						color={isBanned ? 'red' : 'green'}
 						variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
 					>
 						{isBanned ? 'Sí' : 'No'}

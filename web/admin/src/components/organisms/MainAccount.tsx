@@ -8,22 +8,23 @@ import {
 	ActionIcon,
 	Button,
 } from '@mantine/core';
-import { Plus } from 'tabler-icons-react';
+import { Plus, Refresh } from 'tabler-icons-react';
+import { isFunction } from '../../utils';
 
 interface Props {
 	children: React.ReactNode;
 	title: string;
 	description: string;
-	addButtonDisabled?: boolean;
 	handleAddButton?: () => void | undefined;
+	handleRefresh?: () => void | undefined;
 }
 
 export const MainAccount: FC<Props> = ({
 	children,
 	title,
 	description,
-	addButtonDisabled = false,
 	handleAddButton = undefined,
+	handleRefresh = undefined,
 }) => {
 	return (
 		<Box>
@@ -34,14 +35,24 @@ export const MainAccount: FC<Props> = ({
 						{description}
 					</Text>
 				</Box>
-				<Button
-					leftIcon={<Plus />}
-					variant="default"
-					onClick={handleAddButton}
-					disabled={addButtonDisabled}
-				>
-					AGREGAR
-				</Button>
+				<Group>
+					<Button
+						leftIcon={<Refresh />}
+						variant="default"
+						onClick={handleRefresh}
+						disabled={!isFunction(handleRefresh)}
+					>
+						REFRESCAR
+					</Button>
+					<Button
+						leftIcon={<Plus />}
+						variant="default"
+						onClick={handleAddButton}
+						disabled={!isFunction(handleAddButton)}
+					>
+						AGREGAR
+					</Button>
+				</Group>
 			</Group>
 			<Box>
 				<ScrollArea>{children}</ScrollArea>

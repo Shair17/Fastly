@@ -89,6 +89,14 @@ export const DashboardAdmins = () => {
 		}
 	);
 
+	const handleAddButton = () => {
+		setNewAdminModalOpened(true);
+	};
+
+	const handleRefresh = () => {
+		refetchAdmins();
+	};
+
 	const body = () => {
 		if (getAdminsLoading) return <p>Cargando...</p>;
 
@@ -213,7 +221,8 @@ export const DashboardAdmins = () => {
 			<MainAccount
 				title="Administradores 🛡️"
 				description="Aquí podrás ver la lista de administradores en Fastly"
-				handleAddButton={() => setNewAdminModalOpened(true)}
+				handleAddButton={handleAddButton}
+				handleRefresh={handleRefresh}
 			>
 				{body()}
 			</MainAccount>

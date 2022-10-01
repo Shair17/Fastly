@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
 	Navbar as MantineNavbar,
 	Text,
@@ -11,7 +10,7 @@ import {
 	ShieldLock,
 	User,
 	Users,
-	Settings,
+	// Settings,
 	Logout,
 	Archive,
 	Motorbike,
@@ -214,14 +213,10 @@ export const Navbar = ({ hidden }: Props) => {
 			</MantineNavbar.Section>
 
 			<MantineNavbar.Section className={classes.footer}>
-				<a
-					href="#"
-					className={classes.link}
-					onClick={(event) => event.preventDefault()}
-				>
+				{/* <Link to="/dashboard/settings" className={classes.link}>
 					<Settings className={classes.linkIcon} />
 					<span>Configuración</span>
-				</a>
+				</Link> */}
 				<a href="#" className={classes.link} onClick={logOut}>
 					<Logout className={classes.linkIcon} />
 					<span>Cerrar sesión</span>

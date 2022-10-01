@@ -9,6 +9,10 @@ export const DashboardUsers = () => {
 	const [{ error, loading, data: users, response }, refetchUsers] =
 		useAxios<User[]>('/users');
 
+	const handleRefresh = () => {
+		refetchUsers();
+	};
+
 	const body = () => {
 		if (loading) return <p>Cargando...</p>;
 
@@ -40,7 +44,7 @@ export const DashboardUsers = () => {
 			<MainAccount
 				title="Usuarios 📱"
 				description="Aquí podrás ver la lista de usuarios de la aplicación de Fastly"
-				addButtonDisabled
+				handleRefresh={handleRefresh}
 			>
 				{body()}
 			</MainAccount>

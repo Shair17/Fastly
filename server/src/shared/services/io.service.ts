@@ -13,7 +13,7 @@ import {OrderQueue} from '../../modules/order/order-queue';
 import {isValidToken} from '../../utils/isValidToken';
 import {JwtService} from './jwt.service';
 import type {JwtPayload} from 'jsonwebtoken';
-import {isString} from '@fastly/utils';
+import {isString} from '../../utils';
 
 @Service()
 export class IOService implements OnModuleInit {

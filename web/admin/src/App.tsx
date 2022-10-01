@@ -30,6 +30,8 @@ import { DashboardProducts } from './pages/dashboard/products';
 import { DashboardCoupons } from './pages/dashboard/coupons';
 import { DashboardOrders } from './pages/dashboard/orders';
 
+// import { DashboardSettings } from './pages/dashboard/settings';
+
 import useAxios from 'axios-hooks';
 import { RequireAuth } from './components/hoc/RequireAuth';
 import { useShowSessionIsExpired } from './hooks/useShowSessionIsExpired';
@@ -159,6 +161,15 @@ function App() {
 										</RequireAuth>
 									}
 								/>
+
+								{/* <Route
+									path="/dashboard/settings"
+									element={
+										<RequireAuth>
+											<DashboardSettings />
+										</RequireAuth>
+									}
+								/> */}
 
 								<Route path="*" element={<NotFound404 />} />
 							</Routes>

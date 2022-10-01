@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	createStyles,
 	Title,
@@ -10,10 +11,12 @@ import {
 	Anchor,
 } from '@mantine/core';
 import { Dots } from '../components/atoms/Dots';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/images/fastly@1000x1000.png';
 import useAxios from 'axios-hooks';
 import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { isString } from '../utils';
+import { showNotification } from '@mantine/notifications';
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
@@ -115,6 +118,20 @@ export const Index = () => {
 	const [{ data }] = useAxios<number>('/admins/count');
 	const { classes } = useStyles();
 	const theme = useMantineTheme();
+	const location = useLocation();
+
+	// @ts-ignore
+	const newPasswordPayload = location?.state?.newPasswordPayload || undefined;
+
+	useEffect(() => {
+		if (isString(newPasswordPayload)) {
+			showNotification({
+				title: 'Error!',
+				message: newPasswordPayload,
+				color: 'red',
+			});
+		}
+	}, [location]);
 
 	return (
 		<AuthRedirect>

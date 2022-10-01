@@ -77,6 +77,7 @@ export const applyAuthTokenInterceptor = (
 	config: IAuthTokenInterceptorConfig
 ): void => {
 	if (!axios.interceptors) throw new Error(`invalid axios instance: ${axios}`);
+
 	axios.interceptors.request.use(authTokenInterceptor(config));
 };
 

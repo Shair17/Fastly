@@ -11,9 +11,14 @@ import {
 	Center,
 	Box,
 } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'tabler-icons-react';
 import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { useForm, zodResolver } from '@mantine/form';
+import { forgotPasswordSchema } from '../schemas/forgot-password';
+import useAxios from 'axios-hooks';
+import { showNotification } from '@mantine/notifications';
+import { getForgotPasswordMessage } from '../utils/getErrorMessages';
 
 const useStyles = createStyles((theme) => ({
 	title: {
@@ -37,7 +42,53 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const ForgotPassword = () => {
+	const [{ loading }, executeForgotPassword] = useAxios<
+		{
+			message: string;
+			success: boolean;
+		},
+		{ email: string }
+	>(
+		{
+			url: '/auth/admin/forgot-password',
+			method: 'POST',
+		},
+		{ manual: true }
+	);
+	const location = useLocation();
+	const form = useForm({
+		schema: zodResolver(forgotPasswordSchema),
+		initialValues: {
+			// @ts-ignore
+			email: location.state?.email || undefined,
+		},
+	});
 	const { classes } = useStyles();
+
+	const handleForgotPassword = form.onSubmit(({ email }) => {
+		executeForgotPassword({
+			data: {
+				email,
+			},
+		})
+			.then((res) => {
+				const { message } = res.data;
+				showNotification({
+					title: 'Éxito!',
+					message: message || 'Verifica tu correo para resetear tu contraseña',
+					color: 'green',
+				});
+			})
+			.catch((error) => {
+				if (error?.response?.data.message) {
+					showNotification({
+						title: 'Error!',
+						message: getForgotPasswordMessage(error.response.data.message),
+						color: 'red',
+					});
+				}
+			});
+	});
 
 	return (
 		<AuthRedirect>
@@ -50,11 +101,21 @@ export const ForgotPassword = () => {
 					restablecimiento
 				</Text>
 
-				<Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+				<Paper
+					component="form"
+					onSubmit={handleForgotPassword}
+					withBorder
+					shadow="md"
+					p={30}
+					radius="md"
+					mt="xl"
+				>
 					<TextInput
 						label="Correo electrónico"
 						placeholder="tucorreo@gmail.com"
+						type="email"
 						required
+						{...form.getInputProps('email')}
 					/>
 					<Group position="apart" mt="lg" className={classes.controls}>
 						<Anchor
@@ -69,7 +130,9 @@ export const ForgotPassword = () => {
 								<Box ml={5}>Regresar a iniciar sesión</Box>
 							</Center>
 						</Anchor>
-						<Button className={classes.control}>Enviar</Button>
+						<Button type="submit" className={classes.control} loading={loading}>
+							Enviar
+						</Button>
 					</Group>
 				</Paper>
 			</Container>

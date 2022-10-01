@@ -8,7 +8,7 @@ import {Unauthorized} from 'http-errors';
 import {BEARER_SCHEME_REGEX} from '../../constants/regex';
 import * as jwt from 'jsonwebtoken';
 import {isValidToken} from '../../utils/isValidToken';
-import {isString} from '@fastly/utils';
+import {isString} from '../../utils';
 
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET!;
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET!;

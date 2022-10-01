@@ -1,5 +1,20 @@
 const FALLBACK_MESSAGE = 'Ha ocurrido un error inesperado.';
 
+export const getNewPasswordErrorMessage = (message: string) => {
+	return (
+		{
+			invalid_password:
+				'Por favor mejora tu contraseña, sigue las indicaciones mostradas.',
+		}[message] ||
+		message ||
+		FALLBACK_MESSAGE
+	);
+};
+
+export const getForgotPasswordMessage = (message: string) => {
+	return {}[message] || message || FALLBACK_MESSAGE;
+};
+
 export const getLoginErrorMessage = (message: string) => {
 	return (
 		{

@@ -18,9 +18,10 @@ import { useAdminStore } from '../stores/useAdminStore';
 import { getLoginErrorMessage } from '../utils/getErrorMessages';
 import { AuthRedirect } from '../components/hoc/AuthRedirect';
 import { Admin } from '../interfaces/appInterfaces';
+import { EMAIL_REGEX } from '../constants/regex.constants';
 
 export const Login = () => {
-	const [{ data, loading, error }, executePost] = useAxios<
+	const [{ data, loading, error }, executeLogin] = useAxios<
 		ITokens & { admin: Admin }
 	>(
 		{
@@ -45,7 +46,7 @@ export const Login = () => {
 	const from = location.state?.from?.pathname || '/dashboard';
 
 	const handleLogin = form.onSubmit(({ email, password }) => {
-		executePost({
+		executeLogin({
 			data: {
 				email,
 				password,
@@ -111,7 +112,16 @@ export const Login = () => {
 						{...form.getInputProps('password')}
 					/>
 					<Group position="apart" mt="md">
-						<Anchor component={Link} to="/forgot-password" size="sm">
+						<Anchor
+							component={Link}
+							to="/forgot-password"
+							state={{
+								email: EMAIL_REGEX.test(form.values.email)
+									? form.values.email
+									: undefined,
+							}}
+							size="sm"
+						>
 							Olvidaste tu contraseña?
 						</Anchor>
 					</Group>
