@@ -9,7 +9,8 @@
     "build": "yarn clean && tsc",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\"",
-    "createSecret": "node scripts/createSecret"
+    "createSecret": "node scripts/createSecret",
+    "seeds": "ts-node scripts/seeds"
   },
   "license": "MIT",
   "dependencies": {
@@ -49,6 +50,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@types/fs-extra": "^9.0.13",
     "@types/http-errors": "^1.8.1",
     "@types/jsonwebtoken": "^8.5.8",

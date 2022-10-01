@@ -246,7 +246,13 @@ export const DashboardDealers = () => {
 
 						<Select
 							mt="md"
-							data={['CARRO', 'MOTO', 'BICICLETA', 'PIE', 'NONE']}
+							data={[
+								{ value: 'CARRO', label: 'Carro' },
+								{ value: 'MOTO', label: 'Moto' },
+								{ value: 'BICICLETA', label: 'Bicicleta' },
+								{ value: 'PIE', label: 'Pie' },
+								{ value: 'NONE', label: 'Ninguno' },
+							]}
 							placeholder="Elige tu vehiculo"
 							label="Tu vehiculo"
 							{...form.getInputProps('vehicle')}
