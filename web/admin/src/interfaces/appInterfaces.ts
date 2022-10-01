@@ -1,3 +1,46 @@
+export interface Customer {
+	id: string;
+	name: string;
+	email: string;
+	dni: string;
+	phone: string;
+	address: string;
+	avatar: string;
+	isBanned: boolean;
+	banReason?: string;
+	isActive: boolean;
+	birthDate: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export enum Vehicle {
+	CARRO = 'CARRO',
+	MOTO = 'MOTO',
+	BICICLETA = 'BICICLETA',
+	PIE = 'PIE',
+	NONE = 'NONE',
+}
+
+export interface Dealer {
+	id: string;
+	name: string;
+	email: string;
+	phone: string;
+	isActive: boolean;
+	address: string;
+	avatar: string;
+	birthDate: string;
+	dni: string;
+	isBanned: boolean;
+	banReason?: string;
+	ranking: number;
+	vehicle: Vehicle;
+	available: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
 export interface Admin {
 	address: string;
 	age: number;

@@ -1,13 +1,5 @@
 import { FC } from 'react';
-import {
-	Box,
-	Group,
-	ScrollArea,
-	Title,
-	Text,
-	ActionIcon,
-	Button,
-} from '@mantine/core';
+import { Box, Group, ScrollArea, Title, Text, Button } from '@mantine/core';
 import { Plus, Refresh } from 'tabler-icons-react';
 import { isFunction } from '../../utils';
 
@@ -16,7 +8,9 @@ interface Props {
 	title: string;
 	description: string;
 	handleAddButton?: () => void | undefined;
+	addIsLoading?: boolean;
 	handleRefresh?: () => void | undefined;
+	refreshIsLoading?: boolean;
 }
 
 export const MainAccount: FC<Props> = ({
@@ -24,7 +18,9 @@ export const MainAccount: FC<Props> = ({
 	title,
 	description,
 	handleAddButton = undefined,
+	addIsLoading = false,
 	handleRefresh = undefined,
+	refreshIsLoading = false,
 }) => {
 	return (
 		<Box>
@@ -41,6 +37,7 @@ export const MainAccount: FC<Props> = ({
 						variant="default"
 						onClick={handleRefresh}
 						disabled={!isFunction(handleRefresh)}
+						loading={refreshIsLoading}
 					>
 						REFRESCAR
 					</Button>
@@ -49,6 +46,7 @@ export const MainAccount: FC<Props> = ({
 						variant="default"
 						onClick={handleAddButton}
 						disabled={!isFunction(handleAddButton)}
+						loading={addIsLoading}
 					>
 						AGREGAR
 					</Button>

@@ -1,73 +1,93 @@
-import { useState, Fragment } from 'react';
+import { FC, Fragment, useState } from 'react';
 import {
 	ActionIcon,
 	Anchor,
 	Avatar,
 	Badge,
 	Button,
+	Center,
 	Group,
+	Modal,
 	Paper,
 	PasswordInput,
+	Select,
+	Switch,
 	Text,
 	TextInput,
-	Modal,
 	useMantineTheme,
-	Switch,
 } from '@mantine/core';
-import { Pencil, Trash } from 'tabler-icons-react';
-import { Admin } from '../../interfaces/appInterfaces';
-import { useAdminStore } from '../../stores/useAdminStore';
-import dayjs from 'dayjs';
 import { useModals } from '@mantine/modals';
-import { getEntityType } from '../../utils/getEntityType';
-import { zodResolver, useForm } from '@mantine/form';
-import { registerSchema } from '../../schemas/register-schema';
 import useAxios from 'axios-hooks';
+import { Dealer, Vehicle } from '../../interfaces/appInterfaces';
+import { getEntityType } from '../../utils/getEntityType';
 import { showNotification } from '@mantine/notifications';
+import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
+import { useForm, zodResolver } from '@mantine/form';
+import { registerDealerSchema } from '../../schemas/register-schema';
 import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
 import { DatePicker } from '@mantine/dates';
-import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
+import dayjs from 'dayjs';
 import { formatDate } from '../../utils/formatDate';
+import { Pencil, Trash } from 'tabler-icons-react';
+import { getVehicle } from '../../utils/getVehicle';
 
-interface Props extends Admin {
+interface Props extends Dealer {
 	type: 'admin' | 'user' | 'customer' | 'dealer';
 	refetch: () => void;
 }
 
-export const AdminTableItem = ({
-	id,
-	avatar,
-	createdAt,
-	updatedAt,
-	name,
-	email,
-	dni,
-	phone,
+export const DealerTableItem: FC<Props> = ({
 	address,
-	age,
+	avatar,
 	birthDate,
+	createdAt,
+	dni,
+	email,
+	id,
 	isActive,
 	isBanned,
+	name,
+	phone,
+	updatedAt,
 	banReason,
+	available,
+	ranking,
+	vehicle,
 
-	type,
 	refetch,
-}: Props) => {
-	age = calcAgeFromDate(new Date(birthDate));
+	type,
+}) => {
+	const age = calcAgeFromDate(new Date(birthDate));
 	const theme = useMantineTheme();
-	const selfId = useAdminStore((a) => a.id);
 	const modals = useModals();
-	const [editAdminOpened, setEditAdminOpened] = useState(false);
-	const [{ loading: editAdminIsLoading }, executeEditAdmin] = useAxios(
+	const [editDealerOpened, setEditDealerOpened] = useState(false);
+	const [{ loading: editDealerIsLoading }, executeEditDealer] = useAxios<
+		any,
 		{
-			url: `/admins/${id}`,
+			name: string;
+			email: string;
+			password: string;
+			dni: string;
+			phone: string;
+			address: string;
+			avatar?: string;
+			birthDate: Date;
+			isActive: boolean;
+			available: boolean;
+			isBanned: boolean;
+			banReason?: string;
+			vehicle: Vehicle;
+		}
+	>(
+		{
+			url: `/dealers/${id}`,
 			method: 'PUT',
 		},
 		{ manual: true }
 	);
-	const [_, executeDeleteAdmin] = useAxios(
+	const [_, executeDeleteDealer] = useAxios(
 		{
-			url: `/admins/${id}`,
+			url: `/dealers/${id}`,
 			method: 'DELETE',
 		},
 		{
@@ -75,7 +95,7 @@ export const AdminTableItem = ({
 		}
 	);
 	const editForm = useForm({
-		schema: zodResolver(registerSchema),
+		schema: zodResolver(registerDealerSchema),
 		initialValues: {
 			fullName: name,
 			email,
@@ -86,10 +106,15 @@ export const AdminTableItem = ({
 			address,
 			birthDate: new Date(birthDate),
 			isActive,
+			available,
+			isBanned,
+			banReason,
+			vehicle,
+			avatar,
 		},
 	});
 
-	const handleEditAdmin = editForm.onSubmit(
+	const handleEditDealer = editForm.onSubmit(
 		({
 			address,
 			birthDate,
@@ -99,8 +124,15 @@ export const AdminTableItem = ({
 			password,
 			phone,
 			isActive,
+			available,
+			banReason,
+			confirmPassword,
+			isBanned,
+			vehicle,
 		}) => {
-			executeEditAdmin({
+			if (password !== confirmPassword) return;
+
+			executeEditDealer({
 				data: {
 					address,
 					birthDate: new Date(birthDate),
@@ -110,23 +142,20 @@ export const AdminTableItem = ({
 					password,
 					phone,
 					isActive,
+					available,
+					isBanned,
+					vehicle,
+					avatar,
+					banReason,
 				},
 			})
 				.then(() => {
-					// if (res.status === 200) {
 					showNotification({
-						message: 'Administrador editado correctamente',
+						message: 'Cliente editado correctamente',
 						color: 'green',
 					});
-					setEditAdminOpened(false);
+					setEditDealerOpened(false);
 					refetch();
-					// } else {
-					// showNotification({
-					// title: 'Error!',
-					// message: 'Ocurrió un error al editar el administrador',
-					// color: 'red',
-					// });
-					// }
 				})
 				.catch((error) => {
 					if (error?.response?.data.message) {
@@ -157,7 +186,7 @@ export const AdminTableItem = ({
 			},
 			confirmProps: { color: 'red' },
 			onConfirm: () => {
-				executeDeleteAdmin()
+				executeDeleteDealer()
 					.then(() => {
 						showNotification({
 							title: 'Eliminado',
@@ -183,9 +212,9 @@ export const AdminTableItem = ({
 	return (
 		<Fragment>
 			<Modal
-				opened={editAdminOpened}
-				onClose={() => setEditAdminOpened(false)}
-				title="Editar Administrador"
+				opened={editDealerOpened}
+				onClose={() => setEditDealerOpened(false)}
+				title="Editar Repartidor"
 				centered
 				size="lg"
 				overlayColor={
@@ -197,7 +226,7 @@ export const AdminTableItem = ({
 				overlayBlur={3}
 			>
 				<Paper>
-					<form onSubmit={handleEditAdmin}>
+					<form onSubmit={handleEditDealer}>
 						<TextInput
 							label="Nombre(s) y Apellidos"
 							placeholder="Tus nombre(s) y apellidos"
@@ -265,12 +294,45 @@ export const AdminTableItem = ({
 							required
 							{...editForm.getInputProps('birthDate')}
 						/>
+						<Group position="apart" grow>
+							<Switch
+								mt="md"
+								label="Cuenta baneada"
+								defaultChecked={isBanned}
+								{...editForm.getInputProps('isBanned')}
+							/>
+							<TextInput
+								label="Razón de Baneo"
+								placeholder="Ingresa una razón para banear al repartidor"
+								required={false}
+								type="text"
+								mt="md"
+								{...editForm.getInputProps('banReason')}
+							/>
+						</Group>
 
-						<Switch
+						<Group grow>
+							<Switch
+								mt="md"
+								label="Cuenta activada"
+								defaultChecked={isActive}
+								{...editForm.getInputProps('isActive')}
+							/>
+
+							<Switch
+								mt="md"
+								label="Disponible"
+								defaultChecked={available}
+								{...editForm.getInputProps('available')}
+							/>
+						</Group>
+
+						<Select
 							mt="md"
-							label="Cuenta activada"
-							defaultChecked={isActive}
-							{...editForm.getInputProps('isActive')}
+							data={['CARRO', 'MOTO', 'BICICLETA', 'PIE', 'NONE']}
+							placeholder="Elige tu vehiculo"
+							label="Tu vehiculo"
+							{...editForm.getInputProps('vehicle')}
 						/>
 
 						<Group mt="xl">
@@ -278,9 +340,9 @@ export const AdminTableItem = ({
 								fullWidth
 								color="blue"
 								type="submit"
-								loading={editAdminIsLoading}
+								loading={editDealerIsLoading}
 							>
-								Editar Administrador
+								Editar Repartidor
 							</Button>
 						</Group>
 					</form>
@@ -317,6 +379,20 @@ export const AdminTableItem = ({
 					</Text>
 				</td>
 				<td>
+					<Text
+						size="sm"
+						color="gray"
+						title={ranking === 0 ? 'Sin Calificaciones' : ranking.toString()}
+					>
+						{ranking === 0 ? 'Sin Calificaciones' : ranking.toString()}
+					</Text>
+				</td>
+				<td>
+					<Text size="sm" color="gray" title={getVehicle(vehicle)}>
+						{getVehicle(vehicle)}
+					</Text>
+				</td>
+				<td>
 					<Text size="sm" color="gray" title={age.toString()}>
 						{age.toString()}
 					</Text>
@@ -325,6 +401,14 @@ export const AdminTableItem = ({
 					<Text size="sm" color="gray" title={birthDate}>
 						{dayjs(birthDate).format('DD/MM/YYYY')}
 					</Text>
+				</td>
+				<td>
+					<Badge
+						color={available ? 'green' : 'red'}
+						variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+					>
+						{available ? 'Sí' : 'No'}
+					</Badge>
 				</td>
 				<td>
 					<Badge
@@ -364,19 +448,17 @@ export const AdminTableItem = ({
 				</td>
 				<td>
 					<Group spacing={0} position="right">
-						<ActionIcon onClick={() => setEditAdminOpened(true)}>
+						<ActionIcon onClick={() => setEditDealerOpened(true)}>
 							<Pencil size={16} />
 						</ActionIcon>
 						<ActionIcon
 							color="red"
 							title={
-								id === selfId
-									? 'No puedes eliminarte a ti mismo'
-									: !isActive
+								!isActive
 									? 'No puedes eliminar a un usuario desactivado'
 									: undefined
 							}
-							disabled={id === selfId || !isActive}
+							disabled={!isActive}
 							onClick={openDeleteModal}
 						>
 							<Trash size={16} />

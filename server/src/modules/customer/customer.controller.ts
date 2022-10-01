@@ -1,7 +1,21 @@
 import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
-import {Controller, GET} from 'fastify-decorators';
+import {Controller, DELETE, GET, POST, PUT} from 'fastify-decorators';
 import {CustomerService} from './customer.service';
-import {GetCustomerParams, GetCustomerParamsType} from './customer.schema';
+import {EditCustomerBodyType, EditCustomerParamsType} from './customer.schema';
+import {
+  GetCustomerParams,
+  GetCustomerParamsType,
+  CreateCustomerBody,
+  CreateCustomerBodyType,
+  BanCustomerByAdminParams,
+  BanCustomerByAdminBody,
+  BanCustomerByAdminBodyType,
+  BanCustomerByAdminParamsType,
+  DeleteCustomerByAdminParams,
+  DeleteCustomerByAdminParamsType,
+  EditCustomerBody,
+  EditCustomerParams,
+} from './customer.schema';
 import {
   adminOrCustomerIsAuthenticated,
   hasBearerToken,
@@ -34,10 +48,75 @@ export class CustomerController {
   }
 
   @GET('/', {
-    onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
+    onRequest: [hasBearerToken, adminIsAuthenticated],
   })
   async getCustomers(request: Request, reply: Reply) {
     return this.customerService.getCustomers();
+  }
+
+  @POST('/', {
+    schema: {
+      body: CreateCustomerBody,
+    },
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async createCustomer(
+    request: Request<{
+      Body: CreateCustomerBodyType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.customerService.createCustomer(request.body);
+
+    return {
+      statusCode: 200,
+      message: 'Admin Created',
+      success: true,
+    };
+  }
+
+  @PUT('/:id', {
+    schema: {
+      body: EditCustomerBody,
+      params: EditCustomerParams,
+    },
+    onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
+  })
+  async EditAdmin(
+    request: Request<{
+      Body: EditCustomerBodyType;
+      Params: EditCustomerParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.customerService.editCustomer(request.params.id, request.body);
+
+    return {
+      statusCode: 200,
+      message: 'Customer Edited',
+      success: true,
+    };
+  }
+
+  @DELETE('/:id', {
+    schema: {
+      params: DeleteCustomerByAdminParams,
+    },
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async deleteCustomer(
+    request: Request<{
+      Params: DeleteCustomerByAdminParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.customerService.deleteCustomer(request.params);
+
+    return {
+      statusCode: 200,
+      message: 'Customer Deleted',
+      success: true,
+    };
   }
 
   @GET('/me', {

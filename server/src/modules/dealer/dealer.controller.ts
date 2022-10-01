@@ -1,7 +1,18 @@
 import type {FastifyRequest as Request, FastifyReply as Reply} from 'fastify';
-import {Controller, GET, POST} from 'fastify-decorators';
+import {Controller, GET, POST, DELETE, PUT} from 'fastify-decorators';
 import {DealerService} from './dealer.service';
-import {GetIsActiveDealerParamsType} from './dealer.schema';
+import {
+  CreateDealerBody,
+  CreateDealerBodyType,
+  DeleteDealerParams,
+  DeleteDealerParamsType,
+  EditDealerBody,
+  EditDealerBodyType,
+  EditDealerParams,
+  EditDealerParamsType,
+  GetIsActiveDealerParamsType,
+} from './dealer.schema';
+import {adminOrDealerIsAuthenticated} from '../../shared/hooks/auth';
 import {
   CreateDealerRankingBody,
   CreateDealerRankingBodyType,
@@ -34,6 +45,71 @@ export class DealerController {
   @GET('/count')
   async count() {
     return this.dealerService.count();
+  }
+
+  @POST('/', {
+    schema: {
+      body: CreateDealerBody,
+    },
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async createDealer(
+    request: Request<{
+      Body: CreateDealerBodyType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.dealerService.createDealer(request.body);
+
+    return {
+      statusCode: 200,
+      message: 'Dealer Created',
+      success: true,
+    };
+  }
+
+  @PUT('/:id', {
+    schema: {
+      body: EditDealerBody,
+      params: EditDealerParams,
+    },
+    onRequest: [hasBearerToken, adminOrDealerIsAuthenticated],
+  })
+  async EditAdmin(
+    request: Request<{
+      Body: EditDealerBodyType;
+      Params: EditDealerParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.dealerService.editDealer(request.params.id, request.body);
+
+    return {
+      statusCode: 200,
+      message: 'Dealer Edited',
+      success: true,
+    };
+  }
+
+  @DELETE('/:id', {
+    schema: {
+      params: DeleteDealerParams,
+    },
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async deleteDealer(
+    request: Request<{
+      Params: DeleteDealerParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    await this.dealerService.deleteDealer(request.params.id);
+
+    return {
+      statusCode: 200,
+      message: 'Dealer Deleted',
+      success: true,
+    };
   }
 
   @GET('/:id', {

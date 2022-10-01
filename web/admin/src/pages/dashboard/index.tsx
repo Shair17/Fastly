@@ -1,16 +1,13 @@
-import { FC, useEffect, useState } from 'react';
 import {
 	Group,
 	Text,
 	Avatar,
-	Button,
 	Box,
 	UnstyledButton,
 	Grid,
-	Paper,
 	Space,
 	createStyles,
-	Badge,
+	Button,
 } from '@mantine/core';
 import {
 	ShieldLock,
@@ -21,13 +18,15 @@ import {
 	ShoppingCart,
 	Tags,
 	BuildingStore,
-	Icon,
+	Refresh,
 } from 'tabler-icons-react';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { useAdminStore } from '../../stores/useAdminStore';
 import { useDate } from '../../hooks/useDate';
 import useAxios from 'axios-hooks';
 import { useSocketOrdersQueue } from '../../hooks/useSocketOrdersQueue';
+import { CardCount } from '../../components/organisms/CardCount';
+import { isFunction } from '../../utils';
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -59,43 +58,8 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-const CardCount: FC<{
-	classes: { title: string; icon: string; diff: string };
-	Icon: Icon;
-	title: string;
-	count: number;
-	description: string;
-	isRealTime: boolean;
-}> = ({ classes, count, Icon, description, title, isRealTime }) => {
-	return (
-		<Paper withBorder p="md" radius="md">
-			<Group position="apart">
-				<Text size="xs" color="dimmed" className={classes.title}>
-					{title}
-					{isRealTime && (
-						<Badge ml="xs" size="xs" variant="filled">
-							En vivo
-						</Badge>
-					)}
-				</Text>
-				<Icon className={classes.icon} size={22} />
-			</Group>
-
-			<Group align="flex-end" spacing="xs" mt={25}>
-				<Text size="lg" weight={500} className={classes.diff}>
-					<span>{count || 0}</span>
-				</Text>
-			</Group>
-
-			<Text size="xs" color="dimmed" mt={7}>
-				{description}
-			</Text>
-		</Paper>
-	);
-};
-
 export const Dashboard = () => {
-	const [{ error, loading, data: allCount }] = useAxios<{
+	const [{ error, loading, data: allCount }, refetchAllCount] = useAxios<{
 		accounts: {
 			adminsCount: number;
 			usersCount: number;
@@ -118,6 +82,10 @@ export const Dashboard = () => {
 	const email = useAdminStore((a) => a.email);
 	const greeting = `${date.greeting}, ${name.split(' ')[0]}`;
 	const nameInitials = `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`;
+
+	const handleRefresh = () => {
+		refetchAllCount();
+	};
 
 	const body = () => {
 		if (loading) {
@@ -263,19 +231,30 @@ export const Dashboard = () => {
 						{greeting}
 					</Text>
 
-					<UnstyledButton>
-						<Group>
-							<div>
-								<Text align="right">Admin</Text>
-								<Text size="xs" color="gray" align="right">
-									{email}
-								</Text>
-							</div>
-							<Avatar size={40} color="blue" src={avatar} alt={name}>
-								{nameInitials}
-							</Avatar>
-						</Group>
-					</UnstyledButton>
+					<Group>
+						<Button
+							leftIcon={<Refresh />}
+							variant="default"
+							onClick={handleRefresh}
+							disabled={!isFunction(handleRefresh)}
+							loading={loading}
+						>
+							REFRESCAR
+						</Button>
+						<UnstyledButton>
+							<Group>
+								<div>
+									<Text align="right">Admin</Text>
+									<Text size="xs" color="gray" align="right">
+										{email}
+									</Text>
+								</div>
+								<Avatar size={40} color="blue" src={avatar} alt={name}>
+									{nameInitials}
+								</Avatar>
+							</Group>
+						</UnstyledButton>
+					</Group>
 				</Group>
 
 				<Space h="lg" />

@@ -1,4 +1,56 @@
+import {Vehicle} from '@prisma/client';
 import {Static, Type} from '@sinclair/typebox';
+import {DNI_REGEX, PASSWORD_REGEX} from '../../constants/regex';
+
+export const CreateDealerBody = Type.Object(
+  {
+    name: Type.String({minLength: 5}),
+    email: Type.String({format: 'email'}),
+    password: Type.RegEx(PASSWORD_REGEX),
+    dni: Type.RegEx(DNI_REGEX),
+    phone: Type.String({minLength: 9, maxLength: 9}),
+    address: Type.String({minLength: 5}),
+    avatar: Type.Optional(Type.String()),
+    birthDate: Type.String({format: 'date-time'}),
+    vehicle: Type.Enum(Vehicle),
+  },
+  {
+    additionalProperties: false,
+  },
+);
+export type CreateDealerBodyType = Static<typeof CreateDealerBody>;
+
+export const EditDealerParams = Type.Object({
+  id: Type.String({format: 'uuid'}),
+});
+export type EditDealerParamsType = Static<typeof EditDealerParams>;
+
+export const EditDealerBody = Type.Object(
+  {
+    name: Type.String({minLength: 5}),
+    email: Type.String({format: 'email'}),
+    password: Type.RegEx(PASSWORD_REGEX),
+    dni: Type.RegEx(DNI_REGEX),
+    phone: Type.String({minLength: 9, maxLength: 9}),
+    address: Type.String({minLength: 5}),
+    avatar: Type.Optional(Type.String()),
+    birthDate: Type.String({format: 'date-time'}),
+    isActive: Type.Boolean(),
+    available: Type.Boolean(),
+    isBanned: Type.Boolean(),
+    banReason: Type.Optional(Type.String()),
+    vehicle: Type.Enum(Vehicle),
+  },
+  {
+    additionalProperties: false,
+  },
+);
+export type EditDealerBodyType = Static<typeof EditDealerBody>;
+
+export const DeleteDealerParams = Type.Object({
+  id: Type.String({format: 'uuid'}),
+});
+export type DeleteDealerParamsType = Static<typeof DeleteDealerParams>;
 
 export const GetMyOrdersQueryString = Type.Object({
   skip: Type.Optional(Type.Number({minimum: 0})),

@@ -6,7 +6,7 @@ import { User } from '../../interfaces/appInterfaces';
 import { UserTableItem } from '../../components/organisms/UserTableItem';
 
 export const DashboardUsers = () => {
-	const [{ error, loading, data: users, response }, refetchUsers] =
+	const [{ error, loading: getUsersIsLoading, data: users }, refetchUsers] =
 		useAxios<User[]>('/users');
 
 	const handleRefresh = () => {
@@ -14,7 +14,7 @@ export const DashboardUsers = () => {
 	};
 
 	const body = () => {
-		if (loading) return <p>Cargando...</p>;
+		if (getUsersIsLoading) return <p>Cargando...</p>;
 
 		if (error || !users) {
 			console.error(error);
@@ -45,6 +45,7 @@ export const DashboardUsers = () => {
 				title="Usuarios 📱"
 				description="Aquí podrás ver la lista de usuarios de la aplicación de Fastly"
 				handleRefresh={handleRefresh}
+				refreshIsLoading={getUsersIsLoading}
 			>
 				{body()}
 			</MainAccount>

@@ -67,7 +67,7 @@ export const NewPassword = () => {
 				resetPasswordToken: token!,
 			},
 		})
-			.then((res) => {
+			.then(() => {
 				showNotification({
 					title: 'Éxito',
 					message:

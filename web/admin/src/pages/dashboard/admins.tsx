@@ -1,33 +1,33 @@
 import { useState } from 'react';
 import {
-	Modal,
 	Button,
 	Group,
+	Drawer,
 	useMantineTheme,
 	Paper,
 	TextInput,
 	PasswordInput,
 } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { useForm, zodResolver } from '@mantine/form';
+import { DatePicker } from '@mantine/dates';
+import useAxios from 'axios-hooks';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { MainAccount } from '../../components/organisms/MainAccount';
 import { UsersTable } from '../../components/organisms/UsersTable';
 import { AdminTableItem } from '../../components/organisms/AdminTableItem';
 import { registerSchema } from '../../schemas/register-schema';
-import { DatePicker } from '@mantine/dates';
-import useAxios from 'axios-hooks';
 import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
 import { Admin } from '../../interfaces/appInterfaces';
 
 export const DashboardAdmins = () => {
-	const [newAdminModalOpened, setNewAdminModalOpened] = useState(false);
+	const [newAdminDrawerOpened, setNewAdminDrawerOpened] = useState(false);
 	const theme = useMantineTheme();
 	const [
-		{ error: getAdminsError, loading: getAdminsLoading, data: admins },
+		{ error: getAdminsError, loading: getAdminsIsLoading, data: admins },
 		refetchAdmins,
 	] = useAxios<Admin[]>('/admins');
-	const [{ loading }, executePost] = useAxios(
+	const [{ loading: createAdminIsLoading }, executeCreateAdmin] = useAxios(
 		{
 			url: '/admins',
 			method: 'POST',
@@ -48,9 +48,9 @@ export const DashboardAdmins = () => {
 		},
 	});
 
-	const handleRegister = form.onSubmit(
+	const handleRegisterNewAdmin = form.onSubmit(
 		({ address, birthDate, dni, email, fullName, password, phone }) => {
-			executePost({
+			executeCreateAdmin({
 				data: {
 					address,
 					birthDate: new Date(birthDate),
@@ -67,7 +67,7 @@ export const DashboardAdmins = () => {
 							message: 'Administrador creado correctamente',
 							color: 'green',
 						});
-						setNewAdminModalOpened(false);
+						setNewAdminDrawerOpened(false);
 						refetchAdmins();
 					} else {
 						showNotification({
@@ -90,7 +90,7 @@ export const DashboardAdmins = () => {
 	);
 
 	const handleAddButton = () => {
-		setNewAdminModalOpened(true);
+		setNewAdminDrawerOpened(true);
 	};
 
 	const handleRefresh = () => {
@@ -98,7 +98,7 @@ export const DashboardAdmins = () => {
 	};
 
 	const body = () => {
-		if (getAdminsLoading) return <p>Cargando...</p>;
+		if (getAdminsIsLoading) return <p>Cargando...</p>;
 
 		if (getAdminsError || !admins) {
 			console.error(getAdminsError);
@@ -125,12 +125,10 @@ export const DashboardAdmins = () => {
 
 	return (
 		<DashboardLayout>
-			<Modal
-				opened={newAdminModalOpened}
-				onClose={() => setNewAdminModalOpened(false)}
+			<Drawer
+				opened={newAdminDrawerOpened}
+				onClose={() => setNewAdminDrawerOpened(false)}
 				title="Crear Administrador"
-				centered
-				size="lg"
 				overlayColor={
 					theme.colorScheme === 'dark'
 						? theme.colors.dark[9]
@@ -138,9 +136,12 @@ export const DashboardAdmins = () => {
 				}
 				overlayOpacity={0.55}
 				overlayBlur={3}
+				padding="xl"
+				position="right"
+				size="2xl"
 			>
 				<Paper>
-					<form onSubmit={handleRegister}>
+					<form onSubmit={handleRegisterNewAdmin}>
 						<TextInput
 							label="Nombre(s) y Apellidos"
 							placeholder="Tus nombre(s) y apellidos"
@@ -210,19 +211,21 @@ export const DashboardAdmins = () => {
 						/>
 
 						<Group mt="xl">
-							<Button fullWidth color="blue" type="submit" loading={loading}>
+							<Button fullWidth type="submit" loading={createAdminIsLoading}>
 								Crear Administrador
 							</Button>
 						</Group>
 					</form>
 				</Paper>
-			</Modal>
+			</Drawer>
 
 			<MainAccount
 				title="Administradores 🛡️"
 				description="Aquí podrás ver la lista de administradores en Fastly"
 				handleAddButton={handleAddButton}
+				addIsLoading={createAdminIsLoading}
 				handleRefresh={handleRefresh}
+				refreshIsLoading={getAdminsIsLoading}
 			>
 				{body()}
 			</MainAccount>

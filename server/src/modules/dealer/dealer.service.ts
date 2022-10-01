@@ -1,21 +1,31 @@
 import {Service} from 'fastify-decorators';
 import {DatabaseService} from '../../database/DatabaseService';
-import {Unauthorized} from 'http-errors';
+import {Unauthorized, BadRequest} from 'http-errors';
 import {Dealer} from '@prisma/client';
 import {calcDealerRanking} from '../../utils/calcDealerRanking';
 import {
+  CreateDealerBodyType,
   CreateDealerRankingBodyType,
+  EditDealerBodyType,
   GetMyOrdersQueryStringType,
   GetMyRankingsQueryStringType,
 } from './dealer.schema';
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
 import {GetIsActiveDealerParamsType} from './dealer.schema';
+import {SHAIR_EMAIL} from '../../constants/app';
+import {AvatarService} from '../../shared/services/avatar.service';
+import {PasswordService} from '../../shared/services/password.service';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
+import {isString} from '../../utils';
 
 @Service('DealerServiceToken')
 export class DealerService {
   constructor(
     private readonly databaseService: DatabaseService,
+    private readonly avatarService: AvatarService,
+    private readonly passwordService: PasswordService,
+    private readonly cloudinaryService: CloudinaryService,
     private readonly userService: UserService,
   ) {}
 
@@ -30,6 +40,137 @@ export class DealerService {
 
   count() {
     return this.databaseService.dealer.count();
+  }
+
+  async createDealer(data: CreateDealerBodyType) {
+    const [address, dni, email, name, phone, birthDate] = trimStrings(
+      data.address,
+      data.dni,
+      data.email,
+      data.name,
+      data.phone,
+      data.birthDate,
+    );
+    let {avatar} = data;
+
+    const foundDealer = await this.getByEmail(email);
+
+    if (foundDealer) {
+      throw new BadRequest('account_taken');
+    }
+
+    if (!this.passwordService.isValidPassword(data.password)) {
+      throw new BadRequest('invalid_password');
+    }
+
+    const hashedPassword = await this.passwordService.hash(data.password);
+
+    if (avatar && isString(avatar)) {
+      let filename = `${name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${Date.now().toString()}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'dealers',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
+    }
+
+    const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+    return this.databaseService.dealer.create({
+      data: {
+        address,
+        avatar: avatar || defaultAvatar,
+        birthDate: new Date(birthDate),
+        dni,
+        email,
+        name,
+        phone,
+        password: hashedPassword,
+        isActive: false,
+        vehicle: data.vehicle,
+        available: false,
+        isBanned: false,
+      },
+    });
+  }
+
+  async editDealer(adminId: string, data: EditDealerBodyType) {
+    const [address, dni, email, name, phone, birthDate] = trimStrings(
+      data.address,
+      data.dni,
+      data.email,
+      data.name,
+      data.phone,
+      data.birthDate,
+    );
+    let {avatar} = data;
+
+    const foundDealer = await this.getByIdOrThrow(adminId);
+
+    if (!this.passwordService.isValidPassword(data.password)) {
+      throw new BadRequest('invalid_password');
+    }
+
+    const hashedPassword = await this.passwordService.hash(data.password);
+
+    if (avatar && isString(avatar)) {
+      let filename = `${foundDealer.name
+        .toLocaleLowerCase()
+        .replace(' ', '')}-${foundDealer.id}`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'dealers',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
+    }
+
+    const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+    return this.databaseService.dealer.update({
+      where: {
+        id: foundDealer.id,
+      },
+      data: {
+        address,
+        phone,
+        name,
+        dni,
+        email,
+        password: hashedPassword,
+        avatar: avatar || defaultAvatar,
+        isActive: data.isActive,
+        birthDate: new Date(birthDate),
+        vehicle: data.vehicle,
+        available: data.available,
+        banReason: data.banReason,
+        isBanned: data.isBanned,
+      },
+    });
+  }
+
+  async deleteDealer(id: string) {
+    const dealer = await this.getById(id);
+
+    if (!dealer) {
+      throw new Unauthorized();
+    }
+
+    if (dealer.email === SHAIR_EMAIL) {
+      throw new Unauthorized('lol, no puedes eliminar a Shair jajajsda');
+    }
+
+    return this.databaseService.dealer.update({
+      where: {
+        id,
+      },
+      data: {
+        isActive: false,
+      },
+    });
   }
 
   async getByIdOrThrow(id: string) {
@@ -113,7 +254,39 @@ export class DealerService {
   }
 
   async getDealers() {
-    return this.databaseService.dealer.findMany();
+    const dealers = await this.databaseService.dealer.findMany({
+      select: {
+        password: false,
+        address: true,
+        avatar: true,
+        banReason: true,
+        birthDate: true,
+        createdAt: true,
+        dni: true,
+        email: true,
+        id: true,
+        isActive: true,
+        isBanned: true,
+        name: true,
+        phone: true,
+        updatedAt: true,
+        refreshToken: false,
+        resetPasswordToken: false,
+        available: true,
+        orders: false,
+        rankings: true,
+        vehicle: true,
+      },
+    });
+
+    const response = dealers.map(({rankings, ...dealer}) => {
+      return {
+        ...dealer,
+        ranking: calcDealerRanking(rankings),
+      };
+    });
+
+    return response;
   }
 
   /**

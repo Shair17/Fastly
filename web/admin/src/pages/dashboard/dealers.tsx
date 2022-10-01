@@ -1,210 +1,273 @@
+import { useState } from 'react';
+import {
+	Drawer,
+	Group,
+	Paper,
+	PasswordInput,
+	Button,
+	TextInput,
+	useMantineTheme,
+	Select,
+} from '@mantine/core';
 import { DashboardLayout } from '../../components/templates/DashboardLayout';
 import { MainAccount } from '../../components/organisms/MainAccount';
-import {
-	ActionIcon,
-	Anchor,
-	Avatar,
-	Badge,
-	Group,
-	Table,
-	Text,
-	useMantineTheme,
-} from '@mantine/core';
-import { Pencil, Trash } from 'tabler-icons-react';
 import useAxios from 'axios-hooks';
+import { UsersTable } from '../../components/organisms/UsersTable';
+import { useForm, zodResolver } from '@mantine/form';
+import { Dealer, Vehicle } from '../../interfaces/appInterfaces';
+import { DatePicker } from '@mantine/dates';
+import { registerDealerSchema } from '../../schemas/register-schema';
+import { showNotification } from '@mantine/notifications';
+import { getCreateNewDealerErrorMessage } from '../../utils/getErrorMessages';
+import { DealerTableItem } from '../../components/organisms/DealerTableItem';
+
+const initialValues = {
+	fullName: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+	dni: '',
+	phone: '',
+	address: '',
+	birthDate: '',
+	isActive: false,
+	available: false,
+	isBanned: false,
+	banReason: '',
+	vehicle: Vehicle.NONE,
+	avatar: '',
+};
 
 export const DashboardDealers = () => {
+	const [newDealerDrawerOpened, setNewDealerDrawerOpened] = useState(false);
 	const theme = useMantineTheme();
-	const [{ error, loading, data: dealers }, refreshDealers] = useAxios({
+	const [
+		{ error, loading: getDealersIsLoading, data: dealers },
+		refetchDealers,
+	] = useAxios<Dealer[]>({
 		url: '/dealers',
 		method: 'GET',
 	});
+	const [{ loading: createDealerIsLoading }, executeCreateDealer] = useAxios<
+		any,
+		{
+			name: string;
+			email: string;
+			password: string;
+			dni: string;
+			phone: string;
+			address: string;
+			avatar?: string;
+			birthDate: Date;
+			vehicle: Vehicle;
+		}
+	>(
+		{
+			url: '/dealers',
+			method: 'POST',
+		},
+		{ manual: true }
+	);
+	const form = useForm({
+		schema: zodResolver(registerDealerSchema),
+		initialValues,
+	});
+
+	const handleRegisterNewDealer = form.onSubmit(
+		({
+			address,
+			birthDate,
+			dni,
+			email,
+			fullName,
+			password,
+			phone,
+			avatar,
+			confirmPassword,
+			vehicle,
+		}) => {
+			if (password !== confirmPassword) return;
+
+			executeCreateDealer({
+				data: {
+					address,
+					birthDate: new Date(birthDate),
+					dni,
+					email,
+					name: fullName,
+					password,
+					phone,
+					avatar,
+					vehicle,
+				},
+			})
+				.then(() => {
+					showNotification({
+						message: 'Repartidor creado correctamente',
+						color: 'green',
+					});
+					setNewDealerDrawerOpened(false);
+					refetchDealers();
+					form.setValues(initialValues);
+				})
+				.catch((error) => {
+					if (error?.response?.data.message) {
+						showNotification({
+							title: 'Error!',
+							message: getCreateNewDealerErrorMessage(
+								error.response.data.message
+							),
+							color: 'red',
+						});
+					}
+				});
+		}
+	);
+
+	const handleAddButton = () => {
+		setNewDealerDrawerOpened(true);
+	};
 
 	const handleRefresh = () => {
-		refreshDealers();
+		refetchDealers();
 	};
 
 	const body = () => {
-		if (loading) return <p>Cargando...</p>;
+		if (getDealersIsLoading) return <p>Cargando...</p>;
 
-		if (error) {
-			console.error(error);
+		if (error || !dealers) {
 			return <p>Error!</p>;
 		}
 
-		return (
-			<Table sx={{ minWidth: 800 }} verticalSpacing="sm">
-				<thead>
-					<tr>
-						<th>Nombres y Apellidos</th>
-						<th>Correo electrónico</th>
-						<th>DNI</th>
-						<th>Teléfono</th>
-						<th>Dirección</th>
-						<th>Edad</th>
-						<th>Fecha de nacimiento</th>
-						<th>Activo</th>
-						<th>Baneado</th>
-						<th>Razón de baneo</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<Group spacing="sm">
-								<Avatar size={30} radius={30} />
-								<Text size="sm" weight={500}>
-									Jimmy Morales
-								</Text>
-							</Group>
-						</td>
-						<td>
-							<Anchor<'a'> size="sm" href="mailto:hello@shair.dev">
-								hello@shair.dev
-							</Anchor>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								74408267
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								966107266
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								Ricardo Palma 200, Chequen
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								20
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								29/11/2001
-							</Text>
-						</td>
-						<td>
-							<Badge
-								color="green"
-								variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-							>
-								Si
-							</Badge>
-						</td>
-						<td>
-							<Badge
-								color="red"
-								variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-							>
-								No
-							</Badge>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								Nula
-							</Text>
-						</td>
-						<td>
-							<Group spacing={0} position="right">
-								<ActionIcon>
-									<Pencil size={16} />
-								</ActionIcon>
-								<ActionIcon color="red">
-									<Trash size={16} />
-								</ActionIcon>
-							</Group>
-						</td>
-					</tr>
+		if (dealers.length === 0) {
+			return <p>No hay datos.</p>;
+		}
 
-					{/** Jorge */}
-					<tr>
-						<td>
-							<Group spacing="sm">
-								<Avatar size={30} radius={30} />
-								<Text size="sm" weight={500}>
-									Jorge Malca
-								</Text>
-							</Group>
-						</td>
-						<td>
-							<Anchor<'a'> size="sm" href="mailto:hello@shair.dev">
-								jorge@gmail.com
-							</Anchor>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								65456237
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								900100233
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								Rivera 300, Chepén
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								20
-							</Text>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								30/10/2001
-							</Text>
-						</td>
-						<td>
-							<Badge
-								color="green"
-								variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-							>
-								Si
-							</Badge>
-						</td>
-						<td>
-							<Badge
-								color="red"
-								variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-							>
-								No
-							</Badge>
-						</td>
-						<td>
-							<Text size="sm" color="gray">
-								Nula
-							</Text>
-						</td>
-						<td>
-							<Group spacing={0} position="right">
-								<ActionIcon>
-									<Pencil size={16} />
-								</ActionIcon>
-								<ActionIcon color="red">
-									<Trash size={16} />
-								</ActionIcon>
-							</Group>
-						</td>
-					</tr>
-				</tbody>
-			</Table>
+		return (
+			<UsersTable type="dealers">
+				{dealers.map((dealer) => (
+					<DealerTableItem
+						key={dealer.id}
+						{...dealer}
+						type="dealer"
+						refetch={refetchDealers}
+					/>
+				))}
+			</UsersTable>
 		);
 	};
 
 	return (
 		<DashboardLayout>
+			<Drawer
+				opened={newDealerDrawerOpened}
+				onClose={() => setNewDealerDrawerOpened(false)}
+				title="Crear Repartidor"
+				overlayColor={
+					theme.colorScheme === 'dark'
+						? theme.colors.dark[9]
+						: theme.colors.gray[2]
+				}
+				overlayOpacity={0.55}
+				overlayBlur={3}
+				padding="xl"
+				position="right"
+				size="2xl"
+			>
+				<Paper>
+					<form onSubmit={handleRegisterNewDealer}>
+						<TextInput
+							label="Nombre(s) y Apellidos"
+							placeholder="Tus nombre(s) y apellidos"
+							required
+							type="text"
+							mt="md"
+							{...form.getInputProps('fullName')}
+						/>
+						<TextInput
+							label="Correo electrónico"
+							placeholder="tucorreo@gmail.com"
+							required
+							type="email"
+							mt="md"
+							{...form.getInputProps('email')}
+						/>
+						<PasswordInput
+							label="Contraseña"
+							placeholder="Tu contraseña segura"
+							description="Mínimo ocho caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial."
+							required
+							mt="md"
+							{...form.getInputProps('password')}
+						/>
+						<PasswordInput
+							label="Confirma tu contraseña"
+							description="Aquí debes escribir la contraseña que pusiste arriba."
+							placeholder="Confirma tu contraseña segura"
+							required
+							mt="md"
+							{...form.getInputProps('confirmPassword')}
+						/>
+
+						<Group grow>
+							<TextInput
+								label="Documento Nacional de Identidad"
+								placeholder="Tu Documento Nacional de Identidad"
+								required
+								type="number"
+								maxLength={8}
+								mt="md"
+								{...form.getInputProps('dni')}
+							/>
+							<TextInput
+								label="Número de celular"
+								placeholder="Tu número de celular"
+								required
+								type="number"
+								mt="md"
+								{...form.getInputProps('phone')}
+							/>
+						</Group>
+						<TextInput
+							label="Dirección"
+							placeholder="Tu dirección de casa o residencia"
+							required
+							type="text"
+							mt="md"
+							{...form.getInputProps('address')}
+						/>
+						<DatePicker
+							label="Fecha de nacimiento"
+							placeholder="Tu fecha de nacimiento"
+							mt="md"
+							required
+							{...form.getInputProps('birthDate')}
+						/>
+
+						<Select
+							mt="md"
+							data={['CARRO', 'MOTO', 'BICICLETA', 'PIE', 'NONE']}
+							placeholder="Elige tu vehiculo"
+							label="Tu vehiculo"
+							{...form.getInputProps('vehicle')}
+						/>
+
+						<Group mt="xl">
+							<Button fullWidth type="submit" loading={createDealerIsLoading}>
+								Crear Repartidor
+							</Button>
+						</Group>
+					</form>
+				</Paper>
+			</Drawer>
+
 			<MainAccount
 				title="Repartidores 🛵"
 				description="Aquí podrás ver la lista de repartidores en Fastly"
+				addIsLoading={createDealerIsLoading}
+				handleAddButton={handleAddButton}
 				handleRefresh={handleRefresh}
+				refreshIsLoading={getDealersIsLoading}
 			>
 				{body()}
 			</MainAccount>

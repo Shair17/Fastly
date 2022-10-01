@@ -9,7 +9,6 @@ import {
 	Paper,
 	Table,
 	Text,
-	useMantineTheme,
 	Box,
 	createStyles,
 	Space,

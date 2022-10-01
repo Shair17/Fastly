@@ -9,13 +9,13 @@ import {
 	Group,
 	useMantineTheme,
 } from '@mantine/core';
-import { Ban, Check } from 'tabler-icons-react';
-import { User } from '../../interfaces/appInterfaces';
-import { useModals } from '@mantine/modals';
-import { getEntityType } from '../../utils/getEntityType';
 import { showNotification } from '@mantine/notifications';
+import { useModals } from '@mantine/modals';
+import { Ban, Check } from 'tabler-icons-react';
 import useAxios from 'axios-hooks';
-
+import { User } from '../../interfaces/appInterfaces';
+import { getEntityType } from '../../utils/getEntityType';
+import { formatDate } from '../../utils/formatDate';
 interface Props extends User {
 	type: 'admin' | 'user' | 'customer' | 'dealer';
 	refetch: () => void;
@@ -31,6 +31,8 @@ export const UserTableItem = ({
 	isBanned,
 	banReason,
 	facebookId,
+	createdAt,
+	updatedAt,
 
 	type,
 	refetch,
@@ -38,10 +40,8 @@ export const UserTableItem = ({
 	const theme = useMantineTheme();
 	const modals = useModals();
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [{ loading }, executeBanUser] = useAxios<
-		{
-			success: boolean;
-		},
+	const [_, executeBanUser] = useAxios<
+		any,
 		{
 			reason?: string;
 		},
@@ -154,6 +154,16 @@ export const UserTableItem = ({
 						title={banReason || 'Nulo'}
 					>
 						{banReason || 'Nulo'}
+					</Text>
+				</td>
+				<td>
+					<Text size="sm" color="gray" title={createdAt}>
+						{formatDate(new Date(createdAt))}
+					</Text>
+				</td>
+				<td>
+					<Text size="sm" color="gray" title={updatedAt}>
+						{formatDate(new Date(updatedAt))}
 					</Text>
 				</td>
 				<td>

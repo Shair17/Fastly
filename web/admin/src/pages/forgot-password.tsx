@@ -72,10 +72,11 @@ export const ForgotPassword = () => {
 			},
 		})
 			.then((res) => {
-				const { message } = res.data;
 				showNotification({
 					title: 'Éxito!',
-					message: message || 'Verifica tu correo para resetear tu contraseña',
+					message:
+						res.data.message ||
+						'Verifica tu correo para resetear tu contraseña',
 					color: 'green',
 				});
 			})

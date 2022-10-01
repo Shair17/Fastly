@@ -1,5 +1,29 @@
 const FALLBACK_MESSAGE = 'Ha ocurrido un error inesperado.';
 
+export const getCreateNewDealerErrorMessage = (message: string) => {
+	return (
+		{
+			invalid_password:
+				'Por favor mejora tu contraseña, sigue las indicaciones mostradas.',
+			account_taken: 'Prueba con otros datos por favor.',
+		}[message] ||
+		message ||
+		FALLBACK_MESSAGE
+	);
+};
+
+export const getCreateNewCustomerErrorMessage = (message: string) => {
+	return (
+		{
+			invalid_password:
+				'Por favor mejora tu contraseña, sigue las indicaciones mostradas.',
+			account_taken: 'Prueba con otros datos por favor.',
+		}[message] ||
+		message ||
+		FALLBACK_MESSAGE
+	);
+};
+
 export const getNewPasswordErrorMessage = (message: string) => {
 	return (
 		{

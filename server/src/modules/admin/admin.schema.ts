@@ -26,7 +26,7 @@ export type CreateAdminBodyType = Static<typeof CreateAdminBody>;
 export const EditAdminParams = Type.Object({
   id: Type.String({format: 'uuid'}),
 });
-export type EditAdminParamsType = Static<typeof DeleteAdminParams>;
+export type EditAdminParamsType = Static<typeof EditAdminParams>;
 export const EditAdminBody = Type.Object(
   {
     name: Type.String({minLength: 5}),
