@@ -1,4 +1,4 @@
-import { Vehicle } from '../interfaces/appInterfaces';
+import { Vehicle } from '@fastly/interfaces/appInterfaces';
 
 export const getVehicle = (vehicle: keyof typeof Vehicle) => {
 	return (

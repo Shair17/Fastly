@@ -13,12 +13,12 @@ import {
 } from '@mantine/core';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'tabler-icons-react';
-import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';
 import { useForm, zodResolver } from '@mantine/form';
-import { forgotPasswordSchema } from '../schemas/forgot-password';
+import { forgotPasswordSchema } from '@fastly/schemas/forgot-password';
 import useAxios from 'axios-hooks';
 import { showNotification } from '@mantine/notifications';
-import { getForgotPasswordMessage } from '../utils/getErrorMessages';
+import { getForgotPasswordMessage } from '@fastly/utils/getErrorMessages';
 
 const useStyles = createStyles((theme) => ({
 	title: {

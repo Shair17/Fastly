@@ -12,13 +12,13 @@ import { showNotification } from '@mantine/notifications';
 import { useForm, zodResolver } from '@mantine/form';
 import { DatePicker } from '@mantine/dates';
 import useAxios from 'axios-hooks';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { MainAccount } from '../../components/organisms/MainAccount';
-import { UsersTable } from '../../components/organisms/UsersTable';
-import { AdminTableItem } from '../../components/organisms/AdminTableItem';
-import { registerSchema } from '../../schemas/register-schema';
-import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
-import { Admin } from '../../interfaces/appInterfaces';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
+import { MainAccount } from '@fastly/components/organisms/MainAccount';
+import { UsersTable } from '@fastly/components/organisms/UsersTable';
+import { AdminTableItem } from '@fastly/components/organisms/AdminTableItem';
+import { registerSchema } from '@fastly/schemas/register-schema';
+import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
+import { Admin } from '@fastly/interfaces/appInterfaces';
 
 export const DashboardAdmins = () => {
 	const [newAdminDrawerOpened, setNewAdminDrawerOpened] = useState(false);
@@ -221,7 +221,13 @@ export const DashboardAdmins = () => {
 
 			<MainAccount
 				title="Administradores 🛡️"
-				description="Aquí podrás ver la lista de administradores en Fastly"
+				description={`Aquí podrás ver la lista de administradores en Fastly.${
+					admins
+						? ` Hay ${admins.length} administradore${
+								admins.length !== 1 ? 's' : ''
+						  }.`
+						: ''
+				}`}
 				handleAddButton={handleAddButton}
 				addIsLoading={createAdminIsLoading}
 				handleRefresh={handleRefresh}

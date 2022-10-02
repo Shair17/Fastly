@@ -1,28 +1,22 @@
 import { useEffect } from 'react';
 import {
-	createStyles,
 	Container,
 	Title,
 	Text,
-	TextInput,
 	Paper,
-	Group,
-	Anchor,
-	Center,
-	Box,
 	Button,
 	PasswordInput,
 } from '@mantine/core';
-import { AuthRedirect } from '../components/hoc/AuthRedirect';
+import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';
 import { useForm, zodResolver } from '@mantine/form';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { isValidToken } from '../utils/isValidToken';
-import { isTokenExpired } from '../services/refresh-token.service';
-import { isString } from '../utils';
+import { isValidToken } from '@fastly/utils/isValidToken';
+import { isTokenExpired } from '@fastly/services/refresh-token.service';
+import { isString } from '@fastly/utils';
 import { showNotification } from '@mantine/notifications';
 import useAxios from 'axios-hooks';
-import { newPasswordSchema } from '../schemas/new-password';
-import { getNewPasswordErrorMessage } from '../utils/getErrorMessages';
+import { newPasswordSchema } from '@fastly/schemas/new-password';
+import { getNewPasswordErrorMessage } from '@fastly/utils/getErrorMessages';
 
 export const NewPassword = () => {
 	const [{ loading }, executeNewPassword] = useAxios<

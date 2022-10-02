@@ -1,9 +1,9 @@
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { MainAccount } from '../../components/organisms/MainAccount';
-import { UsersTable } from '../../components/organisms/UsersTable';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
+import { MainAccount } from '@fastly/components/organisms/MainAccount';
+import { UsersTable } from '@fastly/components/organisms/UsersTable';
 import useAxios from 'axios-hooks';
-import { User } from '../../interfaces/appInterfaces';
-import { UserTableItem } from '../../components/organisms/UserTableItem';
+import { User } from '@fastly/interfaces/appInterfaces';
+import { UserTableItem } from '@fastly/components/organisms/UserTableItem';
 
 export const DashboardUsers = () => {
 	const [{ error, loading: getUsersIsLoading, data: users }, refetchUsers] =
@@ -43,7 +43,11 @@ export const DashboardUsers = () => {
 		<DashboardLayout>
 			<MainAccount
 				title="Usuarios 📱"
-				description="Aquí podrás ver la lista de usuarios de la aplicación de Fastly"
+				description={`Aquí podrás ver la lista de usuarios de la aplicación de Fastly.${
+					users
+						? ` Hay ${users.length} usuario${users.length !== 1 ? 's' : ''}.`
+						: ''
+				}`}
 				handleRefresh={handleRefresh}
 				refreshIsLoading={getUsersIsLoading}
 			>

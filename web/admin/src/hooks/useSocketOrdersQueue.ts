@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { OrderClass } from '../interfaces/appInterfaces';
-import { useSocketStore } from '../stores/useSocketStore';
+import { OrderClass } from '@fastly/interfaces/appInterfaces';
+import { useSocketStore } from '@fastly/stores/useSocketStore';
 
 export type OrdersStoreValues = {
 	ordersCancelledQueue: OrderClass[];

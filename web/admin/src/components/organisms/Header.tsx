@@ -11,7 +11,7 @@ import {
 	useMantineColorScheme,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { Logo } from '../atoms/Logo';
+import { Logo } from '@fastly/components/atoms/Logo';
 import { MoonStars, Sun } from 'tabler-icons-react';
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
 	setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Header: FC<Props> = ({ children, opened, setOpened }) => {
+export const Header: FC<Props> = ({ opened, setOpened }) => {
 	const theme = useMantineTheme();
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 

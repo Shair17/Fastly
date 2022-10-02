@@ -5,7 +5,6 @@ import {
 	Avatar,
 	Badge,
 	Button,
-	Center,
 	Group,
 	Modal,
 	Paper,
@@ -18,18 +17,18 @@ import {
 } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 import useAxios from 'axios-hooks';
-import { Dealer, Vehicle } from '../../interfaces/appInterfaces';
-import { getEntityType } from '../../utils/getEntityType';
+import { Dealer, Vehicle } from '@fastly/interfaces/appInterfaces';
+import { getEntityType } from '@fastly/utils/getEntityType';
 import { showNotification } from '@mantine/notifications';
-import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
+import { calcAgeFromDate } from '@fastly/utils/calcAgeFromDate';
 import { useForm, zodResolver } from '@mantine/form';
-import { registerDealerSchema } from '../../schemas/register-schema';
-import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
+import { registerDealerSchema } from '@fastly/schemas/register-schema';
+import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
 import { DatePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
-import { formatDate } from '../../utils/formatDate';
+import { formatDate } from '@fastly/utils/formatDate';
 import { Pencil, Trash } from 'tabler-icons-react';
-import { getVehicle } from '../../utils/getVehicle';
+import { getVehicle } from '@fastly/utils/getVehicle';
 
 interface Props extends Dealer {
 	type: 'admin' | 'user' | 'customer' | 'dealer';
@@ -108,7 +107,7 @@ export const DealerTableItem: FC<Props> = ({
 			isActive,
 			available,
 			isBanned,
-			banReason,
+			banReason: banReason || '',
 			vehicle,
 			avatar,
 		},

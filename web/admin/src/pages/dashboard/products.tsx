@@ -1,14 +1,4 @@
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import {
-	ActionIcon,
-	Anchor,
-	Avatar,
-	Badge,
-	Group,
-	Table,
-	Text,
-	useMantineTheme,
-} from '@mantine/core';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 
 export const DashboardProducts = () => {
 	return (

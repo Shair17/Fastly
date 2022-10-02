@@ -19,8 +19,8 @@ import {
 	Tags,
 	BuildingStore,
 } from 'tabler-icons-react';
-import { useAuthStore } from '../../stores/useAuthStore';
-import { useAdminStore } from '../../stores/useAdminStore';
+import { useAuthStore } from '@fastly/stores/useAuthStore';
+import { useAdminStore } from '@fastly/stores/useAdminStore';
 
 const useStyles = createStyles((theme, _params, getRef) => {
 	const icon = getRef('icon');

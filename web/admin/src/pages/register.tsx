@@ -12,16 +12,15 @@ import {
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { getDefaultAvatar } from '../utils/getDefaultAvatar';
+import { getDefaultAvatar } from '@fastly/utils/getDefaultAvatar';
 import { useForm, zodResolver } from '@mantine/form';
 import useAxios from 'axios-hooks';
-import { getRegisterErrorMessage } from '../utils/getErrorMessages';
-import { registerSchema } from '../schemas/register-schema';
+import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
+import { registerSchema } from '@fastly/schemas/register-schema';
 import { showNotification } from '@mantine/notifications';
-import { useAuthStore, ITokens } from '../stores/useAuthStore';
-// import { useAdminStore } from '../stores/useAdminStore';
-import { AuthRedirect } from '../components/hoc/AuthRedirect';
-import { Admin } from '../interfaces/appInterfaces';
+import { useAuthStore, ITokens } from '@fastly/stores/useAuthStore';
+import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';
+import { Admin } from '@fastly/interfaces/appInterfaces';
 
 const avatar = getDefaultAvatar(100);
 

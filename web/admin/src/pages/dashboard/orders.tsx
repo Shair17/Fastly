@@ -1,20 +1,16 @@
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 import {
-	ActionIcon,
-	Anchor,
-	Avatar,
-	Badge,
 	Group,
 	Grid,
 	Paper,
-	Table,
 	Text,
 	Box,
 	createStyles,
 	Space,
 } from '@mantine/core';
-import { useSocketOrdersQueue } from '../../hooks/useSocketOrdersQueue';
+import { useSocketOrdersQueue } from '@fastly/hooks/useSocketOrdersQueue';
 import { ShoppingCart } from 'tabler-icons-react';
+import { getOrderStatus } from '@fastly/utils/getOrderStatus';
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -28,7 +24,7 @@ const useStyles = createStyles((theme) => ({
 	},
 
 	diff: {
-		lineHeight: 1,
+		lineHeight: 1.5,
 		display: 'flex',
 		alignItems: 'center',
 	},
@@ -64,24 +60,40 @@ export const DashboardOrders = () => {
 					<Text>No hay pedidos en cola actualmente.</Text>
 				) : (
 					<Grid>
-						{ordersQueue.map((item, key) => (
-							<Grid.Col key={key.toString()} md={6} lg={3}>
+						{ordersQueue.map((item) => (
+							<Grid.Col key={item.id} md={6} lg={3}>
 								<Paper withBorder p="md" radius="md">
 									<Group position="apart">
 										<Text size="xs" color="dimmed" className={classes.title}>
-											Pedidos
+											Pedido • <span>{getOrderStatus(item.order.status)}</span>
 										</Text>
 										<ShoppingCart className={classes.icon} size={22} />
 									</Group>
 
-									<Group align="flex-end" spacing="xs" mt={25}>
+									<Group spacing="xs" mt={25}>
+										{/**
+										 * Reemplazar luego los siguientes datos...
+										 * item.order.product.storeId => storeName
+										 * item.order.product.description => storeStreet
+										 * item.order.product.id => customerPhone
+										 *
+										 * Cambiar estos datos que vienen en el backend
+										 */}
 										<Text size="lg" weight={500} className={classes.diff}>
-											<span>{ordersQueue.length || 0}</span>
+											{item.order.product.name} • S/.{item.order.product.name} •{' '}
+											{item.order.quantity}{' '}
+											{item.order.quantity > 1 ? 'unidades' : 'unidad'} •{' '}
+											{item.order.product.storeId} •{' '}
+											{item.order.product.description} • {item.order.product.id}
 										</Text>
 									</Group>
 
 									<Text size="xs" color="dimmed" mt={7}>
-										Cantidad de pedidos en tiempo real en Fastly
+										Coordenadas:
+										<Text size="xs" color="dimmed">
+											latitud: {item.coordinates.latitude}, longitud:{' '}
+											{item.coordinates.longitude}
+										</Text>
 									</Text>
 								</Paper>
 							</Grid.Col>

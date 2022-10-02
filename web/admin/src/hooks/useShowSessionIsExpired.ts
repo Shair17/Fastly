@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { showNotification } from '@mantine/notifications';
-import { isTokenExpired } from '../services/refresh-token.service';
-import { useAuthStore } from '../stores/useAuthStore';
-import { isValidToken } from '../utils/isValidToken';
+import { isTokenExpired } from '@fastly/services/refresh-token.service';
+import { useAuthStore } from '@fastly/stores/useAuthStore';
+import { isValidToken } from '@fastly/utils/isValidToken';
 
 export const useShowSessionIsExpired = () => {
 	const refreshToken = useAuthStore<string>((s) => s.refreshToken);

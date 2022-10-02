@@ -1,3 +1,36 @@
+export enum StoreCategory {
+	LICORERIA = 'LICORERIA',
+	RESTAURANTE = 'RESTAURANTE',
+	MASCOTAS = 'MASCOTAS',
+	MODA = 'MODA',
+	TECNOLOGIA = 'TECNOLOGIA',
+	JUGUETERIA = 'JUGUETERIA',
+	FARMACIA = 'FARMACIA',
+	CUIDADO_PERSONAL = 'CUIDADO_PERSONAL',
+	MAQUILLAJE = 'MAQUILLAJE',
+	FLORISTERIA = 'FLORISTERIA',
+	TIENDA = 'TIENDA',
+	SUPERMERCADOS = 'SUPERMERCADOS',
+	LIBRERIA = 'LIBRERIA',
+	JUGUERIA = 'JUGUERIA',
+	OTRO = 'OTRO',
+}
+
+export type Store = {
+	id: string;
+	name: string;
+	description?: string;
+	address: string;
+	logo?: string;
+	category: StoreCategory;
+	categoryDescription?: string;
+	openTime?: string;
+	closeTime?: string;
+	createdAt: string;
+	updatedAt: string;
+	ownerId: string;
+};
+
 export interface Customer {
 	id: string;
 	name: string;
@@ -107,6 +140,14 @@ export type Product = {
 	updatedAt: string;
 	storeId: string;
 };
+
+export enum OrderStatusEnum {
+	CANCELLED = 'CANCELLED',
+	PROBLEM = 'PROBLEM',
+	PENDING = 'PENDING',
+	SENT = 'SENT',
+	DELIVERED = 'DELIVERED',
+}
 
 export type OrderStatus =
 	| 'CANCELLED'

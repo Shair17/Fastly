@@ -20,13 +20,13 @@ import {
 	BuildingStore,
 	Refresh,
 } from 'tabler-icons-react';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { useAdminStore } from '../../stores/useAdminStore';
-import { useDate } from '../../hooks/useDate';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
+import { useAdminStore } from '@fastly/stores/useAdminStore';
+import { useDate } from '@fastly/hooks/useDate';
 import useAxios from 'axios-hooks';
-import { useSocketOrdersQueue } from '../../hooks/useSocketOrdersQueue';
-import { CardCount } from '../../components/organisms/CardCount';
-import { isFunction } from '../../utils';
+import { useSocketOrdersQueue } from '@fastly/hooks/useSocketOrdersQueue';
+import { CardCount } from '@fastly/components/organisms/CardCount';
+import { isFunction } from '@fastly/utils';
 
 const useStyles = createStyles((theme) => ({
 	root: {

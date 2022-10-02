@@ -1,6 +1,22 @@
 import { z } from 'zod';
-import { DNI_REGEX, PASSWORD_REGEX } from '../constants/regex.constants';
-import { Vehicle } from '../interfaces/appInterfaces';
+import {
+	DNI_REGEX,
+	PASSWORD_REGEX,
+	UUID_REGEX,
+} from '@fastly/constants/regex.constants';
+import { StoreCategory, Vehicle } from '@fastly/interfaces/appInterfaces';
+
+export const registerStoreSchema = z.object({
+	owner: z.string().regex(UUID_REGEX, { message: 'Identificador inválido' }),
+	name: z.string(),
+	address: z.string(),
+	description: z.optional(z.string()),
+	categoryDescription: z.optional(z.string()),
+	openTime: z.optional(z.date()),
+	closeTime: z.optional(z.date()),
+	logo: z.optional(z.string()),
+	category: z.nativeEnum(StoreCategory),
+});
 
 export const registerDealerSchema = z
 	.object({

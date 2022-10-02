@@ -7,7 +7,7 @@ import {
 	Group,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { Illustration } from '../components/atoms/Illustration';
+import { Illustration } from '@fastly/components/atoms/Illustration';
 
 const useStyles = createStyles((theme) => ({
 	root: {

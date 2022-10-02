@@ -14,20 +14,20 @@ import {
 	useMantineTheme,
 	Switch,
 } from '@mantine/core';
-import { Pencil, Trash } from 'tabler-icons-react';
-import { Admin } from '../../interfaces/appInterfaces';
-import { useAdminStore } from '../../stores/useAdminStore';
-import dayjs from 'dayjs';
-import { useModals } from '@mantine/modals';
-import { getEntityType } from '../../utils/getEntityType';
-import { zodResolver, useForm } from '@mantine/form';
-import { registerSchema } from '../../schemas/register-schema';
 import useAxios from 'axios-hooks';
-import { showNotification } from '@mantine/notifications';
-import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
+import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
-import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
-import { formatDate } from '../../utils/formatDate';
+import { showNotification } from '@mantine/notifications';
+import { zodResolver, useForm } from '@mantine/form';
+import { useModals } from '@mantine/modals';
+import { Pencil, Trash } from 'tabler-icons-react';
+import { Admin } from '@fastly/interfaces/appInterfaces';
+import { useAdminStore } from '@fastly/stores/useAdminStore';
+import { getEntityType } from '@fastly/utils/getEntityType';
+import { registerSchema } from '@fastly/schemas/register-schema';
+import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
+import { calcAgeFromDate } from '@fastly/utils/calcAgeFromDate';
+import { formatDate } from '@fastly/utils/formatDate';
 
 interface Props extends Admin {
 	type: 'admin' | 'user' | 'customer' | 'dealer';

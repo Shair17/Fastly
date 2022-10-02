@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '../stores/useAuthStore';
-import { isValidToken } from '../utils/isValidToken';
+import { useAuthStore } from '@fastly/stores/useAuthStore';
+import { isValidToken } from '@fastly/utils/isValidToken';
 import {
 	isTokenExpired,
 	clearAuthTokens,
-} from '../services/refresh-token.service';
+} from '@fastly/services/refresh-token.service';
 
 export const useIsAuthenticated = (): boolean => {
 	const accessToken = useAuthStore((r) => r.accessToken);

@@ -1,8 +1,8 @@
 import { useState, FC } from 'react';
 import { AppShell, useMantineTheme } from '@mantine/core';
-import { Navbar } from '../../components/organisms/Navbar';
-import { Header } from '../organisms/Header';
-import { RequireAuth } from '../hoc/RequireAuth';
+import { Navbar } from '@fastly/components/organisms/Navbar';
+import { Header } from '@fastly/components/organisms/Header';
+import { RequireAuth } from '@fastly/components/hoc/RequireAuth';
 
 interface Props {
 	children?: React.ReactNode;

@@ -8,17 +8,17 @@ import {
 	TextInput,
 	useMantineTheme,
 } from '@mantine/core';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { MainAccount } from '../../components/organisms/MainAccount';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
+import { MainAccount } from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
-import { UsersTable } from '../../components/organisms/UsersTable';
-import { ClientTableItem } from '../../components/organisms/ClientTableItem';
+import { UsersTable } from '@fastly/components/organisms/UsersTable';
+import { ClientTableItem } from '@fastly/components/organisms/ClientTableItem';
 import { useForm, zodResolver } from '@mantine/form';
-import { Customer } from '../../interfaces/appInterfaces';
+import { Customer } from '@fastly/interfaces/appInterfaces';
 import { DatePicker } from '@mantine/dates';
-import { registerSchema } from '../../schemas/register-schema';
+import { registerSchema } from '@fastly/schemas/register-schema';
 import { showNotification } from '@mantine/notifications';
-import { getCreateNewCustomerErrorMessage } from '../../utils/getErrorMessages';
+import { getCreateNewCustomerErrorMessage } from '@fastly/utils/getErrorMessages';
 
 const initialValues = {
 	fullName: '',
@@ -222,7 +222,13 @@ export const DashboardCustomers = () => {
 
 			<MainAccount
 				title="Clientes ✨"
-				description="Aquí podrás ver la lista de clientes en Fastly"
+				description={`Aquí podrás ver la lista de clientes en Fastly.${
+					customers
+						? ` Hay ${customers.length} cliente${
+								customers.length !== 1 ? 's' : ''
+						  }.`
+						: ''
+				}`}
 				addIsLoading={createCustomerIsLoading}
 				handleAddButton={handleAddButton}
 				handleRefresh={handleRefresh}

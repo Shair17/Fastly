@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PASSWORD_REGEX } from '../constants/regex.constants';
+import { PASSWORD_REGEX } from '@fastly/constants/regex.constants';
 
 export const newPasswordSchema = z
 	.object({

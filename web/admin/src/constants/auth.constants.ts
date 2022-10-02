@@ -1,4 +1,4 @@
-import { Admin } from '../interfaces/appInterfaces';
+import { Admin } from '@fastly/interfaces/appInterfaces';
 
 export type Tokens = {
 	accessToken: string;

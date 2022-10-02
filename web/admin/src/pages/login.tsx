@@ -11,14 +11,14 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm, zodResolver } from '@mantine/form';
-import { loginSchema } from '../schemas/login-schema';
+import { loginSchema } from '@fastly/schemas/login-schema';
 import useAxios from 'axios-hooks';
-import { useAuthStore, ITokens } from '../stores/useAuthStore';
-import { useAdminStore } from '../stores/useAdminStore';
-import { getLoginErrorMessage } from '../utils/getErrorMessages';
-import { AuthRedirect } from '../components/hoc/AuthRedirect';
-import { Admin } from '../interfaces/appInterfaces';
-import { EMAIL_REGEX } from '../constants/regex.constants';
+import { useAuthStore, ITokens } from '@fastly/stores/useAuthStore';
+import { useAdminStore } from '@fastly/stores/useAdminStore';
+import { getLoginErrorMessage } from '@fastly/utils/getErrorMessages';
+import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';
+import { Admin } from '@fastly/interfaces/appInterfaces';
+import { EMAIL_REGEX } from '@fastly/constants/regex.constants';
 
 export const Login = () => {
 	const [{ data, loading, error }, executeLogin] = useAxios<

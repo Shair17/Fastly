@@ -1,4 +1,4 @@
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 import { Text } from '@mantine/core';
 
 export const DashboardSettings = () => {

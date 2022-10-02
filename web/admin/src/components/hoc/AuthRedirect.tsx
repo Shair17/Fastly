@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useIsAuthenticated } from '../../hooks/useIsAuthenticated';
+import { useIsAuthenticated } from '@fastly/hooks/useIsAuthenticated';
 
 interface Props {
 	children: JSX.Element;

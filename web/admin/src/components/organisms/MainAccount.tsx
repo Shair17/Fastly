@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Group, ScrollArea, Title, Text, Button } from '@mantine/core';
 import { Plus, Refresh } from 'tabler-icons-react';
-import { isFunction } from '../../utils';
+import { isFunction } from '@fastly/utils';
 
 interface Props {
 	children: React.ReactNode;

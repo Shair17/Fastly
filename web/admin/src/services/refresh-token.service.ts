@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { useAuthStore, ITokens } from '../stores/useAuthStore';
-import { isValidToken } from '../utils/isValidToken';
+import { useAuthStore, ITokens } from '@fastly/stores/useAuthStore';
+import { isValidToken } from '@fastly/utils/isValidToken';
 
 // a little time before expiration to try refresh (seconds)
 const EXPIRE_FUDGE = 10;

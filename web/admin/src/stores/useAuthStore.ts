@@ -5,10 +5,8 @@ import {
 	refreshToken,
 	accessTokenKey,
 	refreshTokenKey,
-	admin,
-	adminKey,
 	Tokens,
-} from '../constants/auth.constants';
+} from '@fastly/constants/auth.constants';
 
 export interface ITokens extends Tokens {}
 

@@ -1,6 +1,6 @@
 import { Fragment, FC, PropsWithChildren, useEffect } from 'react';
-import { useAuthStore } from '../../stores/useAuthStore';
-import { useSocketStore } from '../../stores/useSocketStore';
+import { useAuthStore } from '@fastly/stores/useAuthStore';
+import { useSocketStore } from '@fastly/stores/useSocketStore';
 
 export const SocketProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 	const accessToken = useAuthStore((t) => t.accessToken);

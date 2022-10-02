@@ -13,9 +13,9 @@ import { showNotification } from '@mantine/notifications';
 import { useModals } from '@mantine/modals';
 import { Ban, Check } from 'tabler-icons-react';
 import useAxios from 'axios-hooks';
-import { User } from '../../interfaces/appInterfaces';
-import { getEntityType } from '../../utils/getEntityType';
-import { formatDate } from '../../utils/formatDate';
+import { User } from '@fastly/interfaces/appInterfaces';
+import { getEntityType } from '@fastly/utils/getEntityType';
+import { formatDate } from '@fastly/utils/formatDate';
 interface Props extends User {
 	type: 'admin' | 'user' | 'customer' | 'dealer';
 	refetch: () => void;

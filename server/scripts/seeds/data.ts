@@ -2,7 +2,12 @@ import {faker} from '@faker-js/faker';
 import {generateRandomDNI} from '../../src/utils/generateRandomDNI';
 import {generateRandomPhone} from '../../src/utils/generateRandomPhone';
 import * as argon2 from 'argon2';
-import {Vehicle} from '@prisma/client';
+import {
+  Vehicle,
+  UserAddressTag,
+  OrderStatus,
+  StoreCategory,
+} from '@prisma/client';
 
 const DEFAULT_PASSWORD = `XshairX123$`;
 
@@ -38,8 +43,15 @@ export const getCity = faker.address.city;
 
 export const getZip = faker.address.zipCode;
 
-export const getTag = () => {
-  const items = ['CASA', 'AMIGO', 'PAREJA', 'TRABAJO', 'UNIVERSIDAD', 'OTRO'];
+export const getTag = (): keyof typeof UserAddressTag => {
+  const items: UserAddressTag[] = [
+    'CASA',
+    'AMIGO',
+    'PAREJA',
+    'TRABAJO',
+    'UNIVERSIDAD',
+    'OTRO',
+  ];
 
   return items[Math.floor(Math.random() * items.length)];
 };
@@ -50,8 +62,14 @@ export const getVehicle = (): keyof typeof Vehicle => {
   return items[Math.floor(Math.random() * items.length)];
 };
 
-export const getOrderStatus = () => {
-  const items = ['CANCELLED', 'PROBLEM', 'PENDING', 'SENT', 'DELIVERED'];
+export const getOrderStatus = (): keyof typeof OrderStatus => {
+  const items: OrderStatus[] = [
+    'CANCELLED',
+    'PROBLEM',
+    'PENDING',
+    'SENT',
+    'DELIVERED',
+  ];
 
   return items[Math.floor(Math.random() * items.length)];
 };
@@ -64,8 +82,8 @@ export const getCoords = () => ({
   longitude: getLongitude(),
 });
 
-export const getStoreCategory = () => {
-  const items = [
+export const getStoreCategory = (): keyof typeof StoreCategory => {
+  const items: StoreCategory[] = [
     'LICORERIA',
     'RESTAURANTE',
     'MASCOTAS',

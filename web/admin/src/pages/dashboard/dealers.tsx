@@ -9,17 +9,17 @@ import {
 	useMantineTheme,
 	Select,
 } from '@mantine/core';
-import { DashboardLayout } from '../../components/templates/DashboardLayout';
-import { MainAccount } from '../../components/organisms/MainAccount';
+import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
+import { MainAccount } from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
-import { UsersTable } from '../../components/organisms/UsersTable';
+import { UsersTable } from '@fastly/components/organisms/UsersTable';
 import { useForm, zodResolver } from '@mantine/form';
-import { Dealer, Vehicle } from '../../interfaces/appInterfaces';
+import { Dealer, Vehicle } from '@fastly/interfaces/appInterfaces';
 import { DatePicker } from '@mantine/dates';
-import { registerDealerSchema } from '../../schemas/register-schema';
+import { registerDealerSchema } from '@fastly/schemas/register-schema';
 import { showNotification } from '@mantine/notifications';
-import { getCreateNewDealerErrorMessage } from '../../utils/getErrorMessages';
-import { DealerTableItem } from '../../components/organisms/DealerTableItem';
+import { getCreateNewDealerErrorMessage } from '@fastly/utils/getErrorMessages';
+import { DealerTableItem } from '@fastly/components/organisms/DealerTableItem';
 
 const initialValues = {
 	fullName: '',
@@ -269,7 +269,13 @@ export const DashboardDealers = () => {
 
 			<MainAccount
 				title="Repartidores 🛵"
-				description="Aquí podrás ver la lista de repartidores en Fastly"
+				description={`Aquí podrás ver la lista de repartidores en Fastly.${
+					dealers
+						? ` Hay ${dealers.length} repartidor${
+								dealers.length !== 1 ? 'es' : ''
+						  }.`
+						: ''
+				}`}
 				addIsLoading={createDealerIsLoading}
 				handleAddButton={handleAddButton}
 				handleRefresh={handleRefresh}

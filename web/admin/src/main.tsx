@@ -4,10 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 import { configure } from 'axios-hooks';
-import { cache } from './cache';
-import { http as axios } from './services/http.service';
+import { cache } from '@fastly/cache';
+import { http as axios } from '@fastly/services/http.service';
 import { register } from 'timeago.js';
-import { getDateLang } from './utils/getDateLang';
+import { getDateLang } from '@fastly/utils/getDateLang';
 
 register('es_PE', getDateLang);
 configure({ axios, cache });

@@ -6,7 +6,10 @@ import {
   customerIsAuthenticated,
 } from '../../shared/hooks/auth';
 import {StoreService} from './store.service';
-import {adminOrCustomerIsAuthenticated} from '../../shared/hooks/auth';
+import {
+  adminOrCustomerIsAuthenticated,
+  adminIsAuthenticated,
+} from '../../shared/hooks/auth';
 import {
   CreateStoreBody,
   GetStoreParams,
@@ -31,6 +34,13 @@ import {
 @Controller('/v1/stores')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
+
+  @GET('/admin', {
+    onRequest: [hasBearerToken, adminIsAuthenticated],
+  })
+  async getStoresForAdmin() {
+    return this.storeService.getStores();
+  }
 
   @GET('/', {
     schema: {
@@ -63,7 +73,7 @@ export class StoreController {
     }>,
     reply: Reply,
   ) {
-    return this.storeService.getByIdOrThrow(request.params.id);
+    return this.storeService.getStore(request.params.id);
   }
 
   @GET('/categories')

@@ -10,12 +10,12 @@ import {
 	Image,
 	Anchor,
 } from '@mantine/core';
-import { Dots } from '../components/atoms/Dots';
+import { Dots } from '@fastly/components/atoms/Dots';
 import { Link, useLocation } from 'react-router-dom';
-import Logo from '../assets/images/fastly@1000x1000.png';
+import Logo from '@fastly/assets/images/fastly@1000x1000.png';
 import useAxios from 'axios-hooks';
-import { AuthRedirect } from '../components/hoc/AuthRedirect';
-import { isString } from '../utils';
+import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';
+import { isString } from '@fastly/utils';
 import { showNotification } from '@mantine/notifications';
 
 const useStyles = createStyles((theme) => ({

@@ -16,16 +16,16 @@ import {
 } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 import useAxios from 'axios-hooks';
-import { Customer } from '../../interfaces/appInterfaces';
-import { getEntityType } from '../../utils/getEntityType';
+import { Customer } from '@fastly/interfaces/appInterfaces';
+import { getEntityType } from '@fastly/utils/getEntityType';
 import { showNotification } from '@mantine/notifications';
-import { calcAgeFromDate } from '../../utils/calcAgeFromDate';
+import { calcAgeFromDate } from '@fastly/utils/calcAgeFromDate';
 import { useForm, zodResolver } from '@mantine/form';
-import { registerSchema } from '../../schemas/register-schema';
-import { getRegisterErrorMessage } from '../../utils/getErrorMessages';
+import { registerSchema } from '@fastly/schemas/register-schema';
+import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
 import { DatePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
-import { formatDate } from '../../utils/formatDate';
+import { formatDate } from '@fastly/utils/formatDate';
 import { Pencil, Trash } from 'tabler-icons-react';
 
 interface Props extends Customer {

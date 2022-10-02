@@ -1,9 +1,9 @@
 import create from 'zustand';
 import { combine } from 'zustand/middleware';
-import { SOCKET_URL } from '../constants/socket';
+import { SOCKET_URL } from '@fastly/constants/socket';
 import io, { Socket } from 'socket.io-client';
-import { isValidToken } from '../utils/isValidToken';
-import { isTokenExpired } from '../services/refresh-token.service';
+import { isValidToken } from '@fastly/utils/isValidToken';
+import { isTokenExpired } from '@fastly/services/refresh-token.service';
 
 type SocketStoreValues = {
 	socket: Socket | null;

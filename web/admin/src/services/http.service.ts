@@ -1,7 +1,7 @@
 import { showNotification } from '@mantine/notifications';
 import Axios from 'axios';
-import { BASE_URL as baseURL } from '../constants/api.constants';
-import { useAuthStore } from '../stores/useAuthStore';
+import { BASE_URL as baseURL } from '@fastly/constants/api.constants';
+import { useAuthStore } from '@fastly/stores/useAuthStore';
 import {
 	TokenRefreshRequest,
 	applyAuthTokenInterceptor,

@@ -9,3 +9,6 @@ export const JWT_REGEX =
 export const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 export const DNI_REGEX = /^\d{8}(?:[-\s]\d{4})?$/;
+
+export const UUID_REGEX =
+	/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;

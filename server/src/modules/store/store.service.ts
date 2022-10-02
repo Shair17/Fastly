@@ -43,6 +43,21 @@ export class StoreService {
     });
   }
 
+  async getStore(id: string) {
+    const store = await this.getByIdOrThrow(id);
+
+    const {owner, ownerId, rankings, ...restOfStore} = store;
+    const {password, refreshToken, resetPasswordToken, ...restOfOwner} = owner;
+
+    return {
+      ranking: calcStoreRanking(rankings),
+      owner: {
+        ...restOfOwner,
+      },
+      ...restOfStore,
+    };
+  }
+
   async getByIdOrThrow(id: string) {
     const store = await this.getById(id);
 

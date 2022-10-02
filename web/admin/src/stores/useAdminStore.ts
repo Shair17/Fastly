@@ -1,8 +1,8 @@
 import create from 'zustand';
 import { combine } from 'zustand/middleware';
-import { Admin } from '../interfaces/appInterfaces';
-import { http } from '../services/http.service';
-import { isLoggedIn } from '../services/refresh-token.service';
+import { Admin } from '@fastly/interfaces/appInterfaces';
+import { http } from '@fastly/services/http.service';
+import { isLoggedIn } from '@fastly/services/refresh-token.service';
 
 const getDefaultValues = async (): Promise<Admin> => {
 	const isAuthenticated = isLoggedIn();
@@ -29,7 +29,6 @@ export const useAdminStore = create(
 
 			set(response.data);
 		},
-		setAdmin: (admin: Admin) => set(admin)
-			
+		setAdmin: (admin: Admin) => set(admin),
 	}))
 );
