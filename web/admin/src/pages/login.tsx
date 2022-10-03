@@ -11,7 +11,7 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm, zodResolver } from '@mantine/form';
-import { loginSchema } from '@fastly/schemas/login-schema';
+import { loginSchema } from '@fastly/schemas/schemas';
 import useAxios from 'axios-hooks';
 import { useAuthStore, ITokens } from '@fastly/stores/useAuthStore';
 import { useAdminStore } from '@fastly/stores/useAdminStore';

@@ -14,9 +14,11 @@ import { MainAccount } from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
 import { Store } from '@fastly/interfaces/appInterfaces';
 import { useForm, zodResolver } from '@mantine/form';
-import { registerStoreSchema } from '@fastly/schemas/register-schema';
+import { registerStoreSchema } from '@fastly/schemas/schemas';
 import { showNotification } from '@mantine/notifications';
 import { TimeInput } from '@mantine/dates';
+import { GlobalTable } from '@fastly/components/organisms/GlobalTable';
+import { StoreTableItem } from '@fastly/components/organisms/StoreTableItem';
 
 export const DashboardStores = () => {
 	const theme = useMantineTheme();
@@ -103,15 +105,22 @@ export const DashboardStores = () => {
 	const body = () => {
 		if (getStoresIsLoading) return <p>Cargando...</p>;
 
-		if (getStoresError || !stores) {
-			return <p>Error!</p>;
-		}
+		if (getStoresError || !stores) return <p>Error!</p>;
 
-		if (stores.length === 0) {
-			return <p>No hay datos.</p>;
-		}
+		if (stores.length === 0) return <p>No hay negocios.</p>;
 
-		return null;
+		return (
+			<GlobalTable type="stores">
+				{stores.map((store) => (
+					<StoreTableItem
+						key={store.id}
+						{...store}
+						type="store"
+						refetch={refetchStores}
+					/>
+				))}
+			</GlobalTable>
+		);
 	};
 
 	return (
@@ -134,10 +143,10 @@ export const DashboardStores = () => {
 				<Paper>
 					<form onSubmit={handleRegisterNewStore}>
 						<TextInput
-							label="Identificador del dueño"
-							placeholder="Ingresa el identificador del dueño o cliente"
+							label="Correo electrónico del dueño"
+							placeholder="Ingresa el correo electrónico de la cuenta del dueño o cliente en Fastly"
 							required
-							type="text"
+							type="email"
 							mt="md"
 							{...form.getInputProps('owner')}
 						/>
@@ -155,6 +164,7 @@ export const DashboardStores = () => {
 								label="Logotipo del negocio"
 								placeholder="Ingresa la url del logotipo del negocio"
 								type="text"
+								required
 								mt="md"
 								{...form.getInputProps('logo')}
 							/>
@@ -174,7 +184,7 @@ export const DashboardStores = () => {
 							required
 							type="text"
 							mt="md"
-							{...form.getInputProps('owner')}
+							{...form.getInputProps('address')}
 						/>
 
 						<Group grow>

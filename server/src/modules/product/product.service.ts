@@ -1,8 +1,9 @@
 import {Service} from 'fastify-decorators';
 import {DatabaseService} from '../../database/DatabaseService';
 import {NotFound} from 'http-errors';
-import {Product} from '@prisma/client';
 import {StoreService} from '../store/store.service';
+import {CreateProductBodyType, EditProductBodyType} from './product.schema';
+import {trimStrings} from '../../utils/trimStrings';
 
 @Service('ProductServiceToken')
 export class ProductService {
@@ -13,6 +14,10 @@ export class ProductService {
 
   count() {
     return this.databaseService.product.count();
+  }
+
+  async getProducts() {
+    return this.databaseService.product.findMany();
   }
 
   async getById(id: string) {
@@ -29,16 +34,64 @@ export class ProductService {
     return product;
   }
 
-  async createProduct(data: Product) {
-    const store = await this.storeService.getByIdOrThrow(data.storeId);
-    const {blurHash, image, name, description, price} = data;
+  async createProduct(data: CreateProductBodyType) {
+    const [storeId, name, image, blurHash] = trimStrings(
+      data.storeId,
+      data.name,
+      data.image,
+      data.blurHash,
+    );
+    const {description, price} = data;
 
-    return this.databaseService.product.create({
+    const store = await this.storeService.getByIdOrThrow(storeId);
+
+    const newProduct = await this.databaseService.product.create({
       data: {
         blurHash,
+        description,
+        price,
         image,
         name,
+        store: {
+          connect: {
+            id: store.id,
+          },
+        },
+      },
+    });
+
+    return {
+      statusCode: 200,
+      product: {
+        ...newProduct,
+      },
+      success: true,
+    };
+  }
+
+  async editProduct(id: string, data: EditProductBodyType) {
+    const [storeId, name, image, blurHash] = trimStrings(
+      data.storeId,
+      data.name,
+      data.image,
+      data.blurHash,
+    );
+    const {price, description} = data;
+
+    const [product, store] = await Promise.all([
+      await this.getByIdOrThrow(id),
+      await this.storeService.getByIdOrThrow(storeId),
+    ]);
+
+    const updatedProduct = await this.databaseService.product.update({
+      where: {
+        id: product.id,
+      },
+      data: {
+        blurHash,
         description,
+        image,
+        name,
         price,
         store: {
           connect: {
@@ -47,5 +100,27 @@ export class ProductService {
         },
       },
     });
+
+    return {
+      statusCode: 200,
+      product: {
+        ...updatedProduct,
+      },
+      success: true,
+    };
+  }
+
+  async deleteProduct(id: string) {
+    const product = await this.getByIdOrThrow(id);
+
+    const deletedProduct = await this.databaseService.product.delete({
+      where: {id: product.id},
+    });
+
+    return {
+      statusCode: 200,
+      success: true,
+      message: `Product with id ${deletedProduct.id} was deleted.`,
+    };
   }
 }

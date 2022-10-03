@@ -23,7 +23,15 @@ export class StoreService {
   }
 
   getStores() {
-    return this.databaseService.store.findMany();
+    return this.databaseService.store.findMany({
+      include: {
+        owner: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    });
   }
 
   getCategories() {
@@ -86,7 +94,7 @@ export class StoreService {
   }
 
   async createStore(data: CreateStoreBodyType) {
-    const [ownerId, address, name] = trimStrings(
+    const [ownerEmail, address, name] = trimStrings(
       data.owner,
       data.address,
       data.name,
@@ -99,7 +107,11 @@ export class StoreService {
       logo,
       openTime,
     } = data;
-    const owner = await this.customerService.getByIdOrThrow(ownerId);
+    const owner = await this.customerService.getByEmail(ownerEmail);
+
+    if (!owner) {
+      throw new BadRequest(`Owner with email ${ownerEmail} doesn't exists.`);
+    }
 
     const newStore = await this.databaseService.store.create({
       data: {
@@ -114,6 +126,13 @@ export class StoreService {
         owner: {
           connect: {
             id: owner.id,
+          },
+        },
+      },
+      include: {
+        owner: {
+          select: {
+            email: true,
           },
         },
       },

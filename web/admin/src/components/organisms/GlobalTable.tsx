@@ -1,8 +1,16 @@
 import { Table } from '@mantine/core';
 
+type Type =
+	| 'admins'
+	| 'users'
+	| 'customers'
+	| 'dealers'
+	| 'stores'
+	| 'products';
+
 interface Props {
 	children?: React.ReactNode;
-	type?: 'admins' | 'users' | 'customers' | 'dealers';
+	type: Type;
 }
 
 const items = {
@@ -62,9 +70,33 @@ const items = {
 		'Creación',
 		'Actualizado',
 	],
+	stores: [
+		'ID del Negocio',
+		'Nombre del Negocio',
+		'Descripción del Negocio',
+		'Dirección del Negocio',
+		'Categoría',
+		'Descripción de la Categoría',
+		'ID del Dueño',
+		'Correo del Dueño',
+		'Hora de Apertura',
+		'Hora de Cierre',
+		'Creación',
+		'Actualizado',
+	],
+	products: [
+		'Nombre',
+		'Descripción',
+		'Precio',
+		'Imagen',
+		'Blur Hash (Código para efecto de desenfoque)',
+		'ID del Negocio',
+		'Creación',
+		'Actualizado',
+	],
 };
 
-export const UsersTable = ({ children, type = 'admins' }: Props) => {
+export const GlobalTable = ({ children, type }: Props) => {
 	return (
 		<Table sx={{ minWidth: 800 }} verticalSpacing="sm">
 			<thead>

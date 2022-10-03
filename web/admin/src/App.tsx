@@ -27,7 +27,7 @@ import { DashboardDealers } from './pages/dashboard/dealers';
 
 import { DashboardStores } from './pages/dashboard/stores';
 import { DashboardProducts } from './pages/dashboard/products';
-import { DashboardCoupons } from './pages/dashboard/coupons';
+// import { DashboardCoupons } from './pages/dashboard/coupons';
 import { DashboardOrders } from './pages/dashboard/orders';
 
 // import { DashboardSettings } from './pages/dashboard/settings';
@@ -145,14 +145,14 @@ function App() {
 										</RequireAuth>
 									}
 								/>
-								<Route
+								{/* <Route
 									path="/dashboard/coupons"
 									element={
 										<RequireAuth>
 											<DashboardCoupons />
 										</RequireAuth>
 									}
-								/>
+								/> */}
 								<Route
 									path="/dashboard/orders"
 									element={

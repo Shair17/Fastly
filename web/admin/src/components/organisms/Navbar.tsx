@@ -16,7 +16,7 @@ import {
 	Motorbike,
 	ShoppingCart,
 	Home,
-	Tags,
+	// Tags,
 	BuildingStore,
 } from 'tabler-icons-react';
 import { useAuthStore } from '@fastly/stores/useAuthStore';
@@ -132,11 +132,11 @@ const data = [
 		label: 'Productos',
 		icon: Archive,
 	},
-	{
-		link: '/dashboard/coupons',
-		label: 'Cupones',
-		icon: Tags,
-	},
+	// {
+	// 	link: '/dashboard/coupons',
+	// 	label: 'Cupones',
+	// 	icon: Tags,
+	// },
 	{
 		link: '/dashboard/orders',
 		label: 'Pedidos',

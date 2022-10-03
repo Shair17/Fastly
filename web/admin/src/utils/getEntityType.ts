@@ -5,6 +5,8 @@ export const getEntityType = (type: string): string => {
 			user: 'Usuario',
 			customer: 'Cliente',
 			dealer: 'Repartidor',
+			store: 'Negocio',
+			product: 'Producto',
 		}[type] || 'Entidad'
 	);
 };

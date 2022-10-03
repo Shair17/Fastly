@@ -1,20 +1,21 @@
-import {Service, Initializer} from 'fastify-decorators';
+import {Service, Initializer, Destructor} from 'fastify-decorators';
 import {ConfigService} from '../../config/config.service';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import internal from 'stream';
+import {OnModuleInit, OnModuleDestroy} from '../../interfaces/module';
 
 @Service('MailServiceToken')
-export class MailService {
-  private readonly nodemailer: typeof nodemailer = nodemailer;
+export class MailService implements OnModuleInit, OnModuleDestroy {
+  private readonly nodemailer = nodemailer;
 
   private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
 
   constructor(private readonly configService: ConfigService) {}
 
   @Initializer()
-  init(): void {
+  onModuleInit(): void {
     this.transporter = this.nodemailer.createTransport({
       host: this.configService.getOrThrow<string>('MAILER_TRANSPORTER_HOST'),
       port: +this.configService.getOrThrow<number>('MAILER_TRANSPORTER_PORT'),
@@ -26,6 +27,11 @@ export class MailService {
         pass: this.configService.getOrThrow<string>('MAILER_TRANSPORTER_PASS'),
       },
     });
+  }
+
+  @Destructor()
+  onModuleDestroy() {
+    this.transporter.close();
   }
 
   async sendEmail({

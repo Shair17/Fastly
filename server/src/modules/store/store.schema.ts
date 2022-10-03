@@ -21,7 +21,8 @@ export type GetStoresQueryStringType = Static<typeof GetStoresQueryString>;
 
 export const CreateStoreBody = Type.Object(
   {
-    owner: Type.String({format: 'uuid'}),
+    // Reemplacé owner por owner email
+    owner: Type.String({format: 'email'}),
     logo: Type.Optional(Type.String({format: 'uri'})),
     name: Type.String(),
     description: Type.Optional(Type.String()),

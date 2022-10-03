@@ -14,13 +14,15 @@ import Helmet from '@fastify/helmet';
 import Cors from '@fastify/cors';
 import HealthCheck from 'fastify-healthcheck';
 import Static from '@fastify/static';
-import Favicon from 'fastify-favicon';
+// import Favicon from 'fastify-favicon';
 import Routes from '@fastify/routes';
 import RateLimit from '@fastify/rate-limit';
 import IO from 'fastify-socket.io';
 import {ConfigSchema} from './config/config.schema';
 import {AppModule} from './app.module';
 import {MapRoutes} from './plugins';
+
+const publicDir = resolve(__dirname, '../public');
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -42,7 +44,6 @@ export default async function Server(
   >
 > {
   const server = Fastify(opts);
-  const publicDir = resolve(__dirname, '../public');
 
   server.log.info(
     `Starting Fastly server application at ${new Date().toLocaleString()}`,
@@ -76,10 +77,10 @@ export default async function Server(
   server.register(Static, {
     root: publicDir,
   });
-  server.register(Favicon, {
-    path: publicDir,
-    name: 'favicon.ico',
-  });
+  // server.register(Favicon, {
+  // path: publicDir,
+  // name: 'favicon.ico',
+  // });
   server.register(HealthCheck, {
     exposeUptime: true,
     healthcheckUrl: '/health',

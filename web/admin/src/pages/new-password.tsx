@@ -15,7 +15,7 @@ import { isTokenExpired } from '@fastly/services/refresh-token.service';
 import { isString } from '@fastly/utils';
 import { showNotification } from '@mantine/notifications';
 import useAxios from 'axios-hooks';
-import { newPasswordSchema } from '@fastly/schemas/new-password';
+import { newPasswordSchema } from '@fastly/schemas/schemas';
 import { getNewPasswordErrorMessage } from '@fastly/utils/getErrorMessages';
 
 export const NewPassword = () => {

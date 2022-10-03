@@ -48,7 +48,7 @@ export class IOService implements OnModuleInit {
       const isUser = isString(userId);
       const isDealer = isString(dealerId);
 
-      // Si el token es invalido O si no es usuario ni dealer entonces desconectar del socket
+      // Si el token es invalido Ó si no es usuario ni dealer entonces desconectar del socket
       if (!isValidToken || (!isAdmin && !isUser && !isDealer)) {
         return socket.disconnect();
       }

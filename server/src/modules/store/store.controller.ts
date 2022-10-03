@@ -3,13 +3,10 @@ import {Controller, GET, POST, PUT, DELETE} from 'fastify-decorators';
 import {
   hasBearerToken,
   userIsAuthenticated,
-  customerIsAuthenticated,
-} from '../../shared/hooks/auth';
-import {StoreService} from './store.service';
-import {
   adminOrCustomerIsAuthenticated,
   adminIsAuthenticated,
 } from '../../shared/hooks/auth';
+import {StoreService} from './store.service';
 import {
   CreateStoreBody,
   GetStoreParams,

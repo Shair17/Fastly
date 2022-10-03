@@ -22,7 +22,7 @@ import { getEntityType } from '@fastly/utils/getEntityType';
 import { showNotification } from '@mantine/notifications';
 import { calcAgeFromDate } from '@fastly/utils/calcAgeFromDate';
 import { useForm, zodResolver } from '@mantine/form';
-import { registerDealerSchema } from '@fastly/schemas/register-schema';
+import { registerDealerSchema } from '@fastly/schemas/schemas';
 import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
 import { DatePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
@@ -337,7 +337,7 @@ export const DealerTableItem: FC<Props> = ({
 						<Group mt="xl">
 							<Button
 								fullWidth
-								color="blue"
+								color="primary"
 								type="submit"
 								loading={editDealerIsLoading}
 							>

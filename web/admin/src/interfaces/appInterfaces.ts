@@ -29,6 +29,9 @@ export type Store = {
 	createdAt: string;
 	updatedAt: string;
 	ownerId: string;
+	owner: {
+		email: string;
+	};
 };
 
 export interface Customer {
@@ -131,11 +134,11 @@ export type UserAddress = {
 export type Product = {
 	id: string;
 	name: string;
-	description: string | null;
+	description?: string;
 	price: number;
 	image: string;
 	blurHash: string;
-	couponId: string | null;
+	couponId?: string;
 	createdAt: string;
 	updatedAt: string;
 	storeId: string;

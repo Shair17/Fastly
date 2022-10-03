@@ -24,7 +24,7 @@ import { Pencil, Trash } from 'tabler-icons-react';
 import { Admin } from '@fastly/interfaces/appInterfaces';
 import { useAdminStore } from '@fastly/stores/useAdminStore';
 import { getEntityType } from '@fastly/utils/getEntityType';
-import { registerSchema } from '@fastly/schemas/register-schema';
+import { registerSchema } from '@fastly/schemas/schemas';
 import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
 import { calcAgeFromDate } from '@fastly/utils/calcAgeFromDate';
 import { formatDate } from '@fastly/utils/formatDate';
@@ -276,7 +276,7 @@ export const AdminTableItem = ({
 						<Group mt="xl">
 							<Button
 								fullWidth
-								color="blue"
+								color="primary"
 								type="submit"
 								loading={editAdminIsLoading}
 							>

@@ -12,3 +12,6 @@ export const DNI_REGEX = /^\d{8}(?:[-\s]\d{4})?$/;
 
 export const UUID_REGEX =
 	/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+
+export const URL_REGEX =
+	/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/;

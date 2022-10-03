@@ -2,19 +2,45 @@ import { z } from 'zod';
 import {
 	DNI_REGEX,
 	PASSWORD_REGEX,
+	URL_REGEX,
 	UUID_REGEX,
 } from '@fastly/constants/regex.constants';
 import { StoreCategory, Vehicle } from '@fastly/interfaces/appInterfaces';
 
+export const newPasswordSchema = z
+	.object({
+		password: z
+			.string()
+			.regex(PASSWORD_REGEX, { message: 'Nueva contraseña inválida' }),
+		confirmPassword: z.string().regex(PASSWORD_REGEX, {
+			message: 'Confirmación de nueva contraseña inválida',
+		}),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: 'Las contraseñas no coinciden',
+		path: ['confirmPassword'],
+	});
+
+export const loginSchema = z.object({
+	email: z.string().email({ message: 'Correo electrónico inválido' }),
+	password: z
+		.string()
+		.regex(PASSWORD_REGEX, { message: 'Contraseña inválida' }),
+});
+
+export const forgotPasswordSchema = z.object({
+	email: z.string().email({ message: 'Correo electrónico inválido' }),
+});
+
 export const registerStoreSchema = z.object({
-	owner: z.string().regex(UUID_REGEX, { message: 'Identificador inválido' }),
+	owner: z.string().email({ message: 'Correo electrónico inválido' }),
 	name: z.string(),
 	address: z.string(),
 	description: z.optional(z.string()),
 	categoryDescription: z.optional(z.string()),
 	openTime: z.optional(z.date()),
 	closeTime: z.optional(z.date()),
-	logo: z.optional(z.string()),
+	logo: z.string(),
 	category: z.nativeEnum(StoreCategory),
 });
 
@@ -62,3 +88,36 @@ export const registerSchema = z
 		message: 'Las contraseñas no coinciden',
 		path: ['confirmPassword'], // path of error
 	});
+
+export const editStoreSchema = z.object({
+	name: z.string(),
+	description: z.optional(z.string()),
+	address: z.string(),
+	category: z.nativeEnum(StoreCategory),
+	categoryDescription: z.optional(z.string()),
+	openTime: z.optional(z.date()),
+	closeTime: z.optional(z.date()),
+	logo: z.string(),
+});
+
+export const registerProductSchema = z.object({
+	storeId: z
+		.string()
+		.regex(UUID_REGEX, { message: 'Identificador del negocio inválido.' }),
+	name: z.string(),
+	description: z.optional(z.string()),
+	price: z.number().min(0, { message: 'Ingresa un precio válido.' }),
+	image: z.string().regex(URL_REGEX, { message: 'URL de la imagen inválida.' }),
+	blurHash: z.string(),
+});
+
+export const editProductSchema = z.object({
+	name: z.string(),
+	description: z.optional(z.string()),
+	price: z.number(),
+	blurHash: z.string(),
+	storeId: z
+		.string()
+		.regex(UUID_REGEX, { message: 'Identificador del negocio inválido.' }),
+	image: z.string().regex(URL_REGEX, { message: 'URL de la imagen inválida.' }),
+});

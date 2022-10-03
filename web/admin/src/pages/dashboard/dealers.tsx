@@ -12,11 +12,11 @@ import {
 import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 import { MainAccount } from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
-import { UsersTable } from '@fastly/components/organisms/UsersTable';
+import { GlobalTable } from '@fastly/components/organisms/GlobalTable';
 import { useForm, zodResolver } from '@mantine/form';
 import { Dealer, Vehicle } from '@fastly/interfaces/appInterfaces';
 import { DatePicker } from '@mantine/dates';
-import { registerDealerSchema } from '@fastly/schemas/register-schema';
+import { registerDealerSchema } from '@fastly/schemas/schemas';
 import { showNotification } from '@mantine/notifications';
 import { getCreateNewDealerErrorMessage } from '@fastly/utils/getErrorMessages';
 import { DealerTableItem } from '@fastly/components/organisms/DealerTableItem';
@@ -135,16 +135,12 @@ export const DashboardDealers = () => {
 	const body = () => {
 		if (getDealersIsLoading) return <p>Cargando...</p>;
 
-		if (error || !dealers) {
-			return <p>Error!</p>;
-		}
+		if (error || !dealers) return <p>Error!</p>;
 
-		if (dealers.length === 0) {
-			return <p>No hay datos.</p>;
-		}
+		if (dealers.length === 0) return <p>No hay repartidores.</p>;
 
 		return (
-			<UsersTable type="dealers">
+			<GlobalTable type="dealers">
 				{dealers.map((dealer) => (
 					<DealerTableItem
 						key={dealer.id}
@@ -153,7 +149,7 @@ export const DashboardDealers = () => {
 						refetch={refetchDealers}
 					/>
 				))}
-			</UsersTable>
+			</GlobalTable>
 		);
 	};
 

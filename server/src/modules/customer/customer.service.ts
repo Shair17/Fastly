@@ -37,6 +37,16 @@ export class CustomerService {
     return customer;
   }
 
+  async getByEmailOrThrow(email: string) {
+    const customer = await this.getByEmail(email);
+
+    if (!customer) {
+      throw new Unauthorized();
+    }
+
+    return customer;
+  }
+
   async me(customerId: string) {
     const customer = await this.getById(customerId);
 

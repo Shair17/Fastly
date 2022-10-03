@@ -16,7 +16,7 @@ import { getDefaultAvatar } from '@fastly/utils/getDefaultAvatar';
 import { useForm, zodResolver } from '@mantine/form';
 import useAxios from 'axios-hooks';
 import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
-import { registerSchema } from '@fastly/schemas/register-schema';
+import { registerSchema } from '@fastly/schemas/schemas';
 import { showNotification } from '@mantine/notifications';
 import { useAuthStore, ITokens } from '@fastly/stores/useAuthStore';
 import { AuthRedirect } from '@fastly/components/hoc/AuthRedirect';

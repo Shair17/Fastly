@@ -14,9 +14,9 @@ import { DatePicker } from '@mantine/dates';
 import useAxios from 'axios-hooks';
 import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 import { MainAccount } from '@fastly/components/organisms/MainAccount';
-import { UsersTable } from '@fastly/components/organisms/UsersTable';
+import { GlobalTable } from '@fastly/components/organisms/GlobalTable';
 import { AdminTableItem } from '@fastly/components/organisms/AdminTableItem';
-import { registerSchema } from '@fastly/schemas/register-schema';
+import { registerSchema } from '@fastly/schemas/schemas';
 import { getRegisterErrorMessage } from '@fastly/utils/getErrorMessages';
 import { Admin } from '@fastly/interfaces/appInterfaces';
 
@@ -100,17 +100,12 @@ export const DashboardAdmins = () => {
 	const body = () => {
 		if (getAdminsIsLoading) return <p>Cargando...</p>;
 
-		if (getAdminsError || !admins) {
-			console.error(getAdminsError);
-			return <p>Error!</p>;
-		}
+		if (getAdminsError || !admins) return <p>Error!</p>;
 
-		if (admins.length === 0) {
-			return <p>No hay datos.</p>;
-		}
+		if (admins.length === 0) return <p>No hay administradores.</p>;
 
 		return (
-			<UsersTable type="admins">
+			<GlobalTable type="admins">
 				{admins.map((admin) => (
 					<AdminTableItem
 						key={admin.id}
@@ -119,7 +114,7 @@ export const DashboardAdmins = () => {
 						refetch={refetchAdmins}
 					/>
 				))}
-			</UsersTable>
+			</GlobalTable>
 		);
 	};
 

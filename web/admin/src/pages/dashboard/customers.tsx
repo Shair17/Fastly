@@ -11,12 +11,12 @@ import {
 import { DashboardLayout } from '@fastly/components/templates/DashboardLayout';
 import { MainAccount } from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
-import { UsersTable } from '@fastly/components/organisms/UsersTable';
+import { GlobalTable } from '@fastly/components/organisms/GlobalTable';
 import { ClientTableItem } from '@fastly/components/organisms/ClientTableItem';
 import { useForm, zodResolver } from '@mantine/form';
 import { Customer } from '@fastly/interfaces/appInterfaces';
 import { DatePicker } from '@mantine/dates';
-import { registerSchema } from '@fastly/schemas/register-schema';
+import { registerSchema } from '@fastly/schemas/schemas';
 import { showNotification } from '@mantine/notifications';
 import { getCreateNewCustomerErrorMessage } from '@fastly/utils/getErrorMessages';
 
@@ -101,17 +101,12 @@ export const DashboardCustomers = () => {
 	const body = () => {
 		if (getCustomersIsLoading) return <p>Cargando...</p>;
 
-		if (error || !customers) {
-			console.log(error);
-			return <p>Error!</p>;
-		}
+		if (error || !customers) return <p>Error!</p>;
 
-		if (customers.length === 0) {
-			return <p>No hay datos.</p>;
-		}
+		if (customers.length === 0) return <p>No hay clientes.</p>;
 
 		return (
-			<UsersTable type="customers">
+			<GlobalTable type="customers">
 				{customers.map((customer) => (
 					<ClientTableItem
 						key={customer.id}
@@ -120,7 +115,7 @@ export const DashboardCustomers = () => {
 						refetch={refetchCustomers}
 					/>
 				))}
-			</UsersTable>
+			</GlobalTable>
 		);
 	};
 

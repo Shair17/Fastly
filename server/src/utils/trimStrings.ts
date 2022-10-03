@@ -1,4 +1,4 @@
-import {isString} from './index';
+import {isString} from '.';
 
 export const trimStrings = (...strings: string[]): string[] => {
   let s: string[] = [];
