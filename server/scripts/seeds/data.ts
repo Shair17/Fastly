@@ -1,7 +1,8 @@
 import {faker} from '@faker-js/faker';
+import * as argon2 from 'argon2';
 import {generateRandomDNI} from '../../src/utils/generateRandomDNI';
 import {generateRandomPhone} from '../../src/utils/generateRandomPhone';
-import * as argon2 from 'argon2';
+import {generateCouponCode} from '../../src/utils/generateCouponCode';
 import {
   Vehicle,
   UserAddressTag,
@@ -11,6 +12,8 @@ import {
 
 const DEFAULT_PASSWORD = `XshairX123$`;
 
+export const getImage = faker.image.abstract;
+
 export const getFullName = faker.name.fullName;
 
 export const getEmail = faker.internet.email;
@@ -18,6 +21,8 @@ export const getEmail = faker.internet.email;
 export const getDNI = generateRandomDNI;
 
 export const getPhone = generateRandomPhone;
+
+export const getCouponCode = generateCouponCode;
 
 export const getAddress = () =>
   `${faker.address.street()} ${faker.address.buildingNumber()} ${faker.address.city()}`;
@@ -29,6 +34,8 @@ export const getAvatar = faker.internet.avatar;
 export const getPassword = () => argon2.hash(DEFAULT_PASSWORD);
 
 export const getComment = faker.lorem.lines;
+
+export const getDescription = faker.lorem.lines;
 
 export const getRanking = faker.datatype.number({
   min: 0,
@@ -103,3 +110,6 @@ export const getStoreCategory = (): keyof typeof StoreCategory => {
 
   return items[Math.floor(Math.random() * items.length)];
 };
+
+export const getNumberBeetwen = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min) + min);
