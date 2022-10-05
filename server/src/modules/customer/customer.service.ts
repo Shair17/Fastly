@@ -1,5 +1,5 @@
 import {Service} from 'fastify-decorators';
-import {Unauthorized, BadRequest} from 'http-errors';
+import {Unauthorized, BadRequest, NotFound} from 'http-errors';
 import {DatabaseService} from '../../database/DatabaseService';
 import {Customer} from '@prisma/client';
 import {
@@ -22,6 +22,25 @@ export class CustomerService {
     private readonly cloudinaryService: CloudinaryService,
     private readonly passwordService: PasswordService,
   ) {}
+
+  async getMyStores(customerId: string) {
+    const foundCustomer = await this.getByIdOrThrow(customerId);
+
+    const customer = await this.databaseService.customer.findUnique({
+      where: {
+        id: foundCustomer.id,
+      },
+      include: {
+        stores: true,
+      },
+    });
+
+    if (!customer) {
+      throw new NotFound();
+    }
+
+    return customer.stores;
+  }
 
   count() {
     return this.databaseService.customer.count();

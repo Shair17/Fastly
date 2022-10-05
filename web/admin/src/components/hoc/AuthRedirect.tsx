@@ -1,16 +1,16 @@
-import { Navigate } from 'react-router-dom';
-import { useIsAuthenticated } from '@fastly/hooks/useIsAuthenticated';
+import {Navigate} from 'react-router-dom';
+import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
 interface Props {
-	children: JSX.Element;
+  children: JSX.Element;
 }
 
-export const AuthRedirect = ({ children }: Props) => {
-	const isAuthenticated = useIsAuthenticated();
+export const AuthRedirect = ({children}: Props) => {
+  const isAuthenticated = useIsAuthenticated();
 
-	if (isAuthenticated) {
-		return <Navigate to="/dashboard" replace />;
-	}
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
-	return children;
+  return children;
 };

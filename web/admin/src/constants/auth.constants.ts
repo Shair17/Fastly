@@ -1,8 +1,8 @@
-import { Admin } from '@fastly/interfaces/appInterfaces';
+import {Admin} from '@fastly/interfaces/appInterfaces';
 
 export type Tokens = {
-	accessToken: string;
-	refreshToken: string;
+  accessToken: string;
+  refreshToken: string;
 };
 
 export const accessTokenKey = '@fastly.admin/token';

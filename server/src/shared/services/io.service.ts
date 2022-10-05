@@ -42,14 +42,16 @@ export class IOService implements OnModuleInit {
       const token = socket.handshake.auth.token as string;
       const isValidToken = this.isValidToken(token);
       const adminId = this.getAdminIdFromToken(token);
+      const customerId = this.getCustomerIdFromToken(token);
       const userId = this.getUserIdFromToken(token);
       const dealerId = this.getDealerIdFromToken(token);
       const isAdmin = isString(adminId);
+      const isCustomer = isString(customerId);
       const isUser = isString(userId);
       const isDealer = isString(dealerId);
 
       // Si el token es invalido Ó si no es usuario ni dealer entonces desconectar del socket
-      if (!isValidToken || (!isAdmin && !isUser && !isDealer)) {
+      if (!isValidToken || (!isAdmin && !isCustomer && !isUser && !isDealer)) {
         return socket.disconnect();
       }
 
@@ -193,6 +195,23 @@ export class IOService implements OnModuleInit {
       };
 
       if (adminDecoded && adminDecoded) return adminDecoded.id;
+
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  getCustomerIdFromToken(token: string): string | null {
+    if (!token) return null;
+
+    try {
+      const customerDecoded = this.jwtService.verify(
+        token,
+        this.fastify.config.JWT_CUSTOMER_SECRET,
+      ) as {id: string};
+
+      if (customerDecoded && customerDecoded.id) return customerDecoded.id;
 
       return null;
     } catch (error) {

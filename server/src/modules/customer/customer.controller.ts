@@ -7,10 +7,6 @@ import {
   GetCustomerParamsType,
   CreateCustomerBody,
   CreateCustomerBodyType,
-  BanCustomerByAdminParams,
-  BanCustomerByAdminBody,
-  BanCustomerByAdminBodyType,
-  BanCustomerByAdminParamsType,
   DeleteCustomerByAdminParams,
   DeleteCustomerByAdminParamsType,
   EditCustomerBody,
@@ -124,5 +120,12 @@ export class CustomerController {
   })
   async me(request: Request, reply: Reply) {
     return this.customerService.me(request.customerId);
+  }
+
+  @GET('/me/stores', {
+    onRequest: [hasBearerToken, customerIsAuthenticated],
+  })
+  async getMyStores(request: Request, reply: Reply) {
+    return this.customerService.getMyStores(request.customerId);
   }
 }
