@@ -3,16 +3,15 @@ import {FlatList} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import {EmptyOrderQueue} from '@fastly/components/molecules/EmptyOrderQueue';
 import {OrderQueueItem} from '@fastly/components/molecules/OrderQueueItem';
-// import {useSocketOrdersQueue} from '@fastly/hooks/useSocketOrdersQueue';
+import {useSocketOrdersQueue} from '@fastly/hooks/useSocketOrdersQueue';
 import {addMinutesToDate} from '@fastly/utils/addMinutesToDate';
 import {HomeStackParams} from '../HomeController';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ordersPendingQueue} from '../data';
 
 interface Props extends NativeStackScreenProps<HomeStackParams, 'HomeScreen'> {}
 
 export const HomeScreen: FC<Props> = ({navigation}) => {
-  // const {ordersPendingQueue} = useSocketOrdersQueue();
+  const {ordersPendingQueue} = useSocketOrdersQueue();
 
   return (
     <Div bg="body">

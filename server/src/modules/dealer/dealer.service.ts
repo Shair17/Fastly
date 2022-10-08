@@ -9,6 +9,7 @@ import {
   EditDealerBodyType,
   GetMyOrdersQueryStringType,
   GetMyRankingsQueryStringType,
+  UpdateDealerProfileBodyType,
 } from './dealer.schema';
 import {trimStrings} from '../../utils/trimStrings';
 import {UserService} from '../user/user.service';
@@ -28,6 +29,70 @@ export class DealerService {
     private readonly cloudinaryService: CloudinaryService,
     private readonly userService: UserService,
   ) {}
+
+  async updateDealerProfile(
+    dealerId: string,
+    data: UpdateDealerProfileBodyType,
+  ) {
+    const [address, email, name, phone] = trimStrings(
+      data.address,
+      data.email,
+      data.name,
+      data.phone,
+    );
+    let {avatar} = data;
+    const dealer = await this.getByIdOnlyDealerOrThrow(dealerId);
+
+    if (
+      !avatar &&
+      dealer.avatar === avatar &&
+      dealer.address === address &&
+      dealer.email === email &&
+      dealer.name === name &&
+      dealer.phone === phone &&
+      dealer.vehicle === data.vehicle
+    ) {
+      return {
+        statusCode: 200,
+        success: true,
+        modified: false,
+      };
+    }
+
+    if (avatar && isString(avatar)) {
+      let filename = `${dealer.name.toLocaleLowerCase().replace(' ', '')}-${
+        dealer.id
+      }`;
+      let cloudinaryResponse = await this.cloudinaryService.upload(
+        'dealers',
+        avatar,
+        filename,
+      );
+      avatar = cloudinaryResponse.secure_url;
+    }
+
+    const defaultAvatar = this.avatarService.getDefaultAvatar();
+
+    await this.databaseService.dealer.update({
+      where: {
+        id: dealer.id,
+      },
+      data: {
+        name,
+        address,
+        email,
+        phone,
+        vehicle: data.vehicle,
+        avatar: avatar || defaultAvatar,
+      },
+    });
+
+    return {
+      statusCode: 200,
+      success: true,
+      modified: true,
+    };
+  }
 
   async getIsActive({id: dealerId}: GetIsActiveDealerParamsType) {
     const dealer = await this.getByIdOrThrow(dealerId);

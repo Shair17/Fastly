@@ -4,7 +4,7 @@ import {storage} from '@fastly/services/storage';
 import {http} from '@fastly/services/http';
 import {isLoggedIn} from '@fastly/services/refresh-token';
 import {isBanned, available, isActive, dealerKey} from '@fastly/constants/auth';
-import {Dealer, Vehicle} from '@fastly/interfaces/app';
+import {Dealer} from '@fastly/interfaces/app';
 
 const getDefaultValues = (): Dealer => {
   const dealer = storage.getString(dealerKey);
@@ -25,7 +25,7 @@ const getDefaultValues = (): Dealer => {
     banReason: '',
     isActive,
     birthDate: '',
-    vehicle: Vehicle.NONE,
+    vehicle: 'NONE',
     available,
     createdAt: '',
     updatedAt: '',

@@ -1,6 +1,25 @@
 import {Vehicle} from '@prisma/client';
 import {Static, Type} from '@sinclair/typebox';
-import {DNI_REGEX, PASSWORD_REGEX} from '../../constants/regex';
+import {
+  DNI_REGEX,
+  PASSWORD_REGEX,
+  PHONE_NUMBER_REGEX,
+} from '../../constants/regex';
+
+export const UpdateDealerProfileBody = Type.Object(
+  {
+    name: Type.String(),
+    email: Type.String({format: 'email'}),
+    avatar: Type.Optional(Type.String()),
+    address: Type.String(),
+    phone: Type.RegEx(PHONE_NUMBER_REGEX),
+    vehicle: Type.Enum(Vehicle),
+  },
+  {additionalProperties: false},
+);
+export type UpdateDealerProfileBodyType = Static<
+  typeof UpdateDealerProfileBody
+>;
 
 export const CreateDealerBody = Type.Object(
   {

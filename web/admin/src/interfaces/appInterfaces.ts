@@ -181,8 +181,15 @@ export interface Coordinates {
   longitude: number;
 }
 
+type TOrder = Order & {
+  customerId: string;
+  userName: string;
+  userPhone: string;
+  storeName: string;
+};
+
 export interface OrderClass {
   id: string;
-  order: Order;
+  order: TOrder;
   coordinates: Coordinates;
 }

@@ -47,6 +47,7 @@ export const ListAddressScreen: React.FC = () => {
           <Radio.Group>
             {addresses.map(address => {
               const isCurrent = currentAddress.id === address.id;
+
               return (
                 <Div mb="lg" key={address.id}>
                   <AddressBottomSheetItem

@@ -7,9 +7,16 @@ export interface Coordinates {
   longitude: number;
 }
 
+type TOrder = Order & {
+  customerId: string;
+  userName: string;
+  userPhone: string;
+  storeName: string;
+};
+
 export interface OrderClass {
   id: string;
-  order: Order;
+  order: TOrder;
   coordinates: Coordinates;
 }
 
@@ -103,7 +110,9 @@ export interface SignUpBody {
   birthDate: string;
 }
 
-export enum Vehicle {
+export type Vehicle = 'CARRO' | 'MOTO' | 'BICICLETA' | 'PIE' | 'NONE';
+
+export enum VehicleEnum {
   CARRO = 'CARRO',
   MOTO = 'MOTO',
   BICICLETA = 'BICICLETA',

@@ -53,7 +53,7 @@ const _orders: Order[] = [
 export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [noMoreOrders, setNoMoreOrders] = useState<boolean>(false);
-  const [myOrders, setMyOrders] = useState<Order[]>(_orders);
+  const [myOrders, setMyOrders] = useState<Order[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [
     {

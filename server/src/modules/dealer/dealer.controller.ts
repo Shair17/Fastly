@@ -11,6 +11,8 @@ import {
   EditDealerParams,
   EditDealerParamsType,
   GetIsActiveDealerParamsType,
+  UpdateDealerProfileBody,
+  UpdateDealerProfileBodyType,
 } from './dealer.schema';
 import {adminOrDealerIsAuthenticated} from '../../shared/hooks/auth';
 import {
@@ -188,6 +190,24 @@ export class DealerController {
   })
   async me({dealerId}: Request, reply: Reply) {
     return this.dealerService.me(dealerId);
+  }
+
+  @PUT('/me', {
+    schema: {
+      body: UpdateDealerProfileBody,
+    },
+    onRequest: [hasBearerToken, dealerIsAuthenticated],
+  })
+  async updateDealerProfile(
+    request: Request<{
+      Body: UpdateDealerProfileBodyType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.dealerService.updateDealerProfile(
+      request.dealerId,
+      request.body,
+    );
   }
 
   @GET('/me/orders-count', {

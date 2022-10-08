@@ -6,6 +6,7 @@ import {UserService} from '../user/user.service';
 import {DealerService} from '../dealer/dealer.service';
 import {ProductService} from '../product/product.service';
 import {CreateOrderBodyType} from './order.schema';
+import {IOrder} from '@fastly/shared/classes/order.class';
 
 @Service('OrderServiceToken')
 export class OrderService {
@@ -20,10 +21,12 @@ export class OrderService {
     return this.databaseService.order.count();
   }
 
-  async getById(id: string) {
+  async getById(id: string): Promise<IOrder | null> {
     const order = await this.databaseService.order.findUnique({
       where: {id},
       include: {
+        address: true,
+        user: true,
         product: {
           include: {
             store: {
@@ -42,11 +45,25 @@ export class OrderService {
 
     if (!order) return null;
 
-    const {product, ...restOfOrder} = order;
-
     return {
-      ...restOfOrder,
-      customerId: product.store.owner.id,
+      arrivalTime: order.arrivalTime,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+      deliveryPrice: order.deliveryPrice,
+      id: order.id,
+      message: order.message,
+      quantity: order.quantity,
+      status: order.status,
+      productId: order.productId,
+      storeName: order.product.store.name,
+      customerId: order.product.store.owner.id,
+      dealerId: order.dealerId,
+      product: order.product,
+      userId: order.userId,
+      userAddressId: order.userAddressId,
+      address: order.address,
+      userName: order.user.name,
+      userPhone: order.user.phone! || '',
     };
   }
 
@@ -64,7 +81,7 @@ export class OrderService {
     return this.databaseService.order.findMany({where: {status}});
   }
 
-  async getOrdersForQueue() {
+  async getOrdersForQueue(): Promise<IOrder[]> {
     const orders = await this.databaseService.order.findMany({
       where: {
         status: {
@@ -72,6 +89,8 @@ export class OrderService {
         },
       },
       include: {
+        address: true,
+        user: true,
         product: {
           include: {
             store: {
@@ -89,11 +108,25 @@ export class OrderService {
     });
 
     const response = orders.map(order => {
-      const {product, ...restOfOrder} = order;
-
       return {
-        ...restOfOrder,
-        customerId: product.store.owner.id,
+        arrivalTime: order.arrivalTime,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+        deliveryPrice: order.deliveryPrice,
+        id: order.id,
+        message: order.message,
+        quantity: order.quantity,
+        status: order.status,
+        productId: order.productId,
+        storeName: order.product.store.name,
+        customerId: order.product.store.owner.id,
+        dealerId: order.dealerId,
+        product: order.product,
+        userId: order.userId,
+        userAddressId: order.userAddressId,
+        address: order.address,
+        userName: order.user.name,
+        userPhone: order.user.phone! || '',
       };
     });
 

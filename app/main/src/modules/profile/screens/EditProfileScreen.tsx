@@ -66,12 +66,10 @@ export const EditProfileScreen: React.FC<Props> = ({navigation}) => {
       },
     })
       .then(response => {
-        if (response.status === 200 && response.data) {
-          if (response.data.modified) {
-            fetchUser();
-          }
-          goBack();
+        if (response.data.modified) {
+          fetchUser();
         }
+        goBack();
       })
       .catch(e => {
         console.log(e?.response?.data.message);

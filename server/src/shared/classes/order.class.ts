@@ -1,4 +1,4 @@
-import {Order, OrderStatus} from '@prisma/client';
+import {OrderStatus, Product, UserAddress} from '@prisma/client';
 import {validate} from 'uuid';
 
 export interface ICoordinates {
@@ -12,7 +12,27 @@ export interface IOrderClass {
   coordinates: ICoordinates;
 }
 
-export type IOrder = Order & {customerId: string};
+export type IOrder = {
+  id: string;
+  address: UserAddress;
+  createdAt: Date;
+  updatedAt: Date;
+  arrivalTime: Date | null;
+  deliveryPrice: number;
+  message: string | null;
+  product: Product;
+  quantity: number;
+  status: OrderStatus;
+  productId: string;
+  dealerId: string | null;
+  userId: string;
+  userAddressId: string;
+
+  customerId: string;
+  userName: string;
+  userPhone: string;
+  storeName: string;
+};
 
 export class OrderClass implements IOrderClass {
   id: string;

@@ -3,7 +3,6 @@ import {TouchableOpacity} from 'react-native';
 import {Div, Text, Icon} from 'react-native-magnus';
 import {Notifier, NotifierComponents} from 'react-native-notifier';
 import {OrderClass} from '@fastly/interfaces/app';
-import {useTimeout} from '@fastly/hooks/useTimeout';
 import {formatDate} from '@fastly/utils/formatDate';
 import {useInterval} from '@fastly/hooks/useInterval';
 
@@ -86,7 +85,6 @@ export const OrderQueueItem: FC<Props> = ({
           />
         </Div>
         <Div flex={3} ml="md">
-          {/* producto: nombre y precio */}
           <Text color={color} fontWeight="500">
             <Text color={color} fontWeight="bold">
               Pedido:{' '}
@@ -103,9 +101,7 @@ export const OrderQueueItem: FC<Props> = ({
             <Text color={color} fontWeight="bold">
               Establecimiento:{' '}
             </Text>
-            {/** Reemplazar storeId con el nombre de la tienda */}
-            {/* MonasPizzas */}
-            {order.product.storeId}
+            {order.storeName}
           </Text>
           <Text color={color} fontWeight="500">
             <Text color={color} fontWeight="bold">
@@ -117,8 +113,7 @@ export const OrderQueueItem: FC<Props> = ({
             <Text color={color} fontWeight="bold">
               Para:{' '}
             </Text>
-            {/** Reemplazar el userId por Nombre del usuario y telefono del usuario como: Jimmy Morales - 966107266 */}
-            {order.userId}
+            {order.userName} {order.userPhone}
           </Text>
         </Div>
       </Div>

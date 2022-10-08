@@ -72,16 +72,16 @@ export const drawerTabs: DrawerTab[] = [
     ),
     title: 'Perfil',
   },
-  {
-    DrawerName: 'SettingsStack',
-    DrawerComponent: SettingsStack,
-    DrawerIcon: ({color, focused, size}) => (
-      <Icon
-        name={focused ? 'settings' : 'settings-outline'}
-        color={color}
-        size={size}
-      />
-    ),
-    title: 'Configuración',
-  },
+  // {
+  //   DrawerName: 'SettingsStack',
+  //   DrawerComponent: SettingsStack,
+  //   DrawerIcon: ({color, focused, size}) => (
+  //     <Icon
+  //       name={focused ? 'settings' : 'settings-outline'}
+  //       color={color}
+  //       size={size}
+  //     />
+  //   ),
+  //   title: 'Configuración',
+  // },
 ];

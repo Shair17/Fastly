@@ -9,7 +9,7 @@ async function main() {
   const startTime = Date.now();
   const app = await Server({
     logger: isDev,
-    // disableRequestLogging: isDev,
+    disableRequestLogging: isDev,
     ignoreTrailingSlash: true,
     querystringParser: str => qs.parse(str),
   });
