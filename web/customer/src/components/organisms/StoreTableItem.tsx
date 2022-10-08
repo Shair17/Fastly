@@ -284,7 +284,7 @@ export const StoreTableItem = ({
                 color="primary"
                 type="submit"
                 loading={editStoreIsLoading}>
-                Editar Administrador
+                Editar Negocio
               </Button>
             </Group>
           </form>

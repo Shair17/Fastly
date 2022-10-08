@@ -8,17 +8,19 @@ export interface ICoordinates {
 
 export interface IOrderClass {
   id: string;
-  order: Order;
+  order: IOrder;
   coordinates: ICoordinates;
 }
 
+export type IOrder = Order & {customerId: string};
+
 export class OrderClass implements IOrderClass {
   id: string;
-  order: Order;
+  order: IOrder;
   coordinates: ICoordinates;
 
   constructor(
-    order: Order,
+    order: IOrder,
     coordinates: ICoordinates = {latitude: 0, longitude: 0},
   ) {
     this.id = order.id;

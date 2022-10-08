@@ -11,6 +11,11 @@ export const GetStoreParams = Type.Object({
 });
 export type GetStoreParamsType = Static<typeof GetStoreParams>;
 
+export const GetProductsByStore = Type.Object({
+  id: Type.String({format: 'uuid'}),
+});
+export type GetProductsByStoreType = Static<typeof GetProductsByStore>;
+
 export const GetStoresQueryString = Type.Object(
   {
     category: Type.Optional(Type.String()),

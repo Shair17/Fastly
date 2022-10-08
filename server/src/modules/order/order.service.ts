@@ -20,8 +20,34 @@ export class OrderService {
     return this.databaseService.order.count();
   }
 
-  getById(id: string) {
-    return this.databaseService.order.findUnique({where: {id}});
+  async getById(id: string) {
+    const order = await this.databaseService.order.findUnique({
+      where: {id},
+      include: {
+        product: {
+          include: {
+            store: {
+              include: {
+                owner: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!order) return null;
+
+    const {product, ...restOfOrder} = order;
+
+    return {
+      ...restOfOrder,
+      customerId: product.store.owner.id,
+    };
   }
 
   async getByIdOrThrow(id: string) {
@@ -39,13 +65,39 @@ export class OrderService {
   }
 
   async getOrdersForQueue() {
-    return this.databaseService.order.findMany({
+    const orders = await this.databaseService.order.findMany({
       where: {
         status: {
           notIn: ['CANCELLED', 'DELIVERED'],
         },
       },
+      include: {
+        product: {
+          include: {
+            store: {
+              include: {
+                owner: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
+
+    const response = orders.map(order => {
+      const {product, ...restOfOrder} = order;
+
+      return {
+        ...restOfOrder,
+        customerId: product.store.owner.id,
+      };
+    });
+
+    return response;
   }
 
   async createOrder({

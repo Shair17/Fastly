@@ -18,6 +18,50 @@ export class StoreService {
     private readonly customerService: CustomerService,
   ) {}
 
+  async getProductsByStore(storeId: string) {
+    const store = await this.getByIdOrThrow(storeId);
+
+    return store.products;
+  }
+
+  async getMyStoresForSelect(customerId: string) {
+    const customer = await this.customerService.getByIdOnlyCustomerOrThrow(
+      customerId,
+    );
+
+    const stores = await this.databaseService.customer.findUnique({
+      where: {
+        id: customer.id,
+      },
+      select: {
+        stores: {
+          select: {
+            id: true,
+            name: true,
+            logo: true,
+            category: true,
+          },
+        },
+      },
+    });
+
+    if (!stores) {
+      throw new NotFound();
+    }
+
+    const response = stores.stores.map(store => {
+      return {
+        ...store,
+      };
+    });
+
+    return response;
+  }
+
+  async getMyStoresForCustomer(customerId: string) {
+    return this.customerService.getMyStores(customerId);
+  }
+
   count() {
     return this.databaseService.store.count();
   }
@@ -49,6 +93,32 @@ export class StoreService {
         rankings: true,
       },
     });
+  }
+
+  async getMyStoreById(customerId: string, storeId: string) {
+    const customer = await this.databaseService.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+
+    if (!customer) {
+      throw new Unauthorized();
+    }
+
+    const store = await this.databaseService.store.findUnique({
+      where: {id: storeId},
+    });
+
+    if (!store) {
+      throw new NotFound(`Store with id ${storeId} not found`);
+    }
+
+    if (store.ownerId !== customer.id) {
+      throw new Unauthorized();
+    }
+
+    return store;
   }
 
   async getStore(id: string) {

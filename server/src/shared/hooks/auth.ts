@@ -10,35 +10,49 @@ import * as jwt from 'jsonwebtoken';
 import {isValidToken} from '../../utils/isValidToken';
 import {isString} from '../../utils';
 
+// Json Web Token Secrets
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET!;
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET!;
 const JWT_CUSTOMER_SECRET = process.env.JWT_CUSTOMER_SECRET!;
 const JWT_DEALER_SECRET = process.env.JWT_DEALER_SECRET!;
 
 const verifyToken = (token: string) => {
-  if (!token) throw new Unauthorized(`invalid_token`);
+  if (!token) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
-  if (!isValidToken(token)) throw new Unauthorized(`invalid_token`);
+  const tokenIsValid = isValidToken(token);
+
+  if (!tokenIsValid) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const decoded = jwt.decode(token) as jwt.JwtPayload;
 
-  if (!decoded) throw new Unauthorized(`invalid_token`);
+  if (!decoded) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
-  if (new Date(decoded.exp! * 1000) < new Date())
+  if (new Date(decoded.exp! * 1000) < new Date()) {
     throw new Unauthorized(`token_expired`);
+  }
 
   return true;
 };
 
 const getAdminIdFromToken = (token: string): string | null => {
-  if (!verifyToken(token)) return null;
+  if (!verifyToken(token)) {
+    return null;
+  }
 
   try {
     const adminDecoded = jwt.verify(token, JWT_ADMIN_SECRET) as {
       id: string;
     };
 
-    if (adminDecoded && adminDecoded.id) return adminDecoded.id;
+    if (adminDecoded && adminDecoded.id) {
+      return adminDecoded.id;
+    }
 
     return null;
   } catch (error) {
@@ -47,14 +61,18 @@ const getAdminIdFromToken = (token: string): string | null => {
 };
 
 const getUserIdFromToken = (token: string): string | null => {
-  if (!verifyToken(token)) return null;
+  if (!verifyToken(token)) {
+    return null;
+  }
 
   try {
     const userDecoded = jwt.verify(token, JWT_USER_SECRET) as {
       id: string;
     };
 
-    if (userDecoded && userDecoded.id) return userDecoded.id;
+    if (userDecoded && userDecoded.id) {
+      return userDecoded.id;
+    }
 
     return null;
   } catch (error) {
@@ -63,14 +81,18 @@ const getUserIdFromToken = (token: string): string | null => {
 };
 
 const getCustomerIdFromToken = (token: string): string | null => {
-  if (!verifyToken(token)) return null;
+  if (!verifyToken(token)) {
+    return null;
+  }
 
   try {
     const customerDecoded = jwt.verify(token, JWT_CUSTOMER_SECRET) as {
       id: string;
     };
 
-    if (customerDecoded && customerDecoded.id) return customerDecoded.id;
+    if (customerDecoded && customerDecoded.id) {
+      return customerDecoded.id;
+    }
 
     return null;
   } catch (error) {
@@ -79,14 +101,18 @@ const getCustomerIdFromToken = (token: string): string | null => {
 };
 
 const getDealerIdFromToken = (token: string): string | null => {
-  if (!verifyToken(token)) return null;
+  if (!verifyToken(token)) {
+    return null;
+  }
 
   try {
     const dealerDecoded = jwt.verify(token, JWT_DEALER_SECRET) as {
       id: string;
     };
 
-    if (dealerDecoded && dealerDecoded.id) return dealerDecoded.id;
+    if (dealerDecoded && dealerDecoded.id) {
+      return dealerDecoded.id;
+    }
 
     return null;
   } catch (error) {
@@ -94,6 +120,8 @@ const getDealerIdFromToken = (token: string): string | null => {
   }
 };
 
+// Hook for verify if has bearer token
+// very very useful
 export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
   const {authorization} = request.headers;
   let token: string;
@@ -130,13 +158,16 @@ export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
   }
 };
 
+// Hook for check if admin is authenticated
 export const adminIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const adminId = getAdminIdFromToken(token);
   const isAdmin = isString(adminId);
@@ -159,13 +190,16 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
   request.adminId = admin.id;
 };
 
+// Hook for check if user is authenticated
 export const userIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const userId = getUserIdFromToken(token);
   const isUser = isString(userId);
@@ -184,13 +218,16 @@ export const userIsAuthenticated: onRequestHookHandler = async (
   request.userId = user.id;
 };
 
+// Hook for check if customer is authenticated
 export const customerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const customerId = getCustomerIdFromToken(token);
   const isCustomer = isString(customerId);
@@ -215,13 +252,16 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
   request.customerId = customer.id;
 };
 
+// Hook for check if dealer is authenticated
 export const dealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const dealerId = getDealerIdFromToken(token);
   const isDealer = isString(dealerId);
@@ -244,13 +284,16 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
   request.dealerId = dealer.id;
 };
 
+// Hook for check if admin - user is authenticated
 export const adminOrUserIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const adminId = getAdminIdFromToken(token);
   const isAdmin = isString(adminId);
@@ -289,13 +332,16 @@ export const adminOrUserIsAuthenticated: onRequestHookHandler = async (
   }
 };
 
+// Hook for check if admin - customer is authenticated
 export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const adminId = getAdminIdFromToken(token);
   const isAdmin = isString(adminId);
@@ -340,13 +386,16 @@ export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
   }
 };
 
+// Hook for check if user - dealer is authenticated
 export const userOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const userId = getUserIdFromToken(token);
   const isUser = isString(userId);
@@ -386,13 +435,16 @@ export const userOrDealerIsAuthenticated: onRequestHookHandler = async (
   }
 };
 
+// Hook for check if admin - dealer is authenticated
 export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const adminId = getAdminIdFromToken(token);
   const isAdmin = isString(adminId);
@@ -436,11 +488,14 @@ export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
   }
 };
 
+// Hook for check if admin - user - customer is authenticated
 export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
     const token = request.headers.authorization?.split(' ')[1]!;
 
-    if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+    if (!verifyToken(token)) {
+      throw new Unauthorized(`invalid_token`);
+    }
 
     const adminId = getAdminIdFromToken(token);
     const isAdmin = isString(adminId);
@@ -498,13 +553,16 @@ export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
     }
   };
 
+// Hook for check if admin - user - dealer is authenticated
 export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
   const token = request.headers.authorization?.split(' ')[1]!;
 
-  if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
 
   const adminId = getAdminIdFromToken(token);
   const isAdmin = isString(adminId);
@@ -560,11 +618,14 @@ export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
   }
 };
 
+// Hook for check if admin - dealer - customer is authenticated
 export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
     const token = request.headers.authorization?.split(' ')[1]!;
 
-    if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+    if (!verifyToken(token)) {
+      throw new Unauthorized(`invalid_token`);
+    }
 
     const adminId = getAdminIdFromToken(token);
     const isAdmin = isString(adminId);
@@ -627,11 +688,14 @@ export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
     }
   };
 
+// Hook for check if customer - dealer - user is authenticated
 export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
     const token = request.headers.authorization?.split(' ')[1]!;
 
-    if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+    if (!verifyToken(token)) {
+      throw new Unauthorized(`invalid_token`);
+    }
 
     const customerId = getCustomerIdFromToken(token);
     const isCustomer = isString(customerId);
@@ -689,11 +753,14 @@ export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
     }
   };
 
+// Hook for check if admin - customer - dealer - user is authenticated
 export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
     const token = request.headers.authorization?.split(' ')[1]!;
 
-    if (!verifyToken(token)) throw new Unauthorized(`invalid_token`);
+    if (!verifyToken(token)) {
+      throw new Unauthorized(`invalid_token`);
+    }
 
     const adminId = getAdminIdFromToken(token);
     const isAdmin = isString(adminId);
@@ -707,7 +774,7 @@ export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler 
     const userId = getUserIdFromToken(token);
     const isUser = isString(userId);
 
-    if (!isDealer && !isCustomer && !isUser) {
+    if (!isAdmin && !isDealer && !isCustomer && !isUser) {
       throw new Unauthorized();
     }
 
@@ -767,3 +834,173 @@ export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler 
       throw new Unauthorized();
     }
   };
+
+// Hook for check if admin - customer - user is authenticated
+export const adminOrCustomerOrUserIsAuthenticated: onRequestHookHandler =
+  async (request, reply) => {
+    const token = request.headers.authorization?.split(' ')[1]!;
+
+    if (!verifyToken(token)) {
+      throw new Unauthorized(`invalid_token`);
+    }
+
+    const adminId = getAdminIdFromToken(token);
+    const isAdmin = isString(adminId);
+
+    const customerId = getCustomerIdFromToken(token);
+    const isCustomer = isString(customerId);
+
+    const userId = getUserIdFromToken(token);
+    const isUser = isString(userId);
+
+    if (!isAdmin && !isCustomer && !isUser) {
+      throw new Unauthorized();
+    }
+
+    if (isAdmin) {
+      const adminService =
+        getInstanceByToken<AdminService>('AdminServiceToken');
+      const admin = await adminService.getByIdOrThrow(adminId);
+
+      if (admin.isBanned) {
+        throw new Unauthorized('banned');
+      }
+
+      if (!admin.isActive) {
+        throw new Unauthorized('inactive_account');
+      }
+
+      request.adminId = admin.id;
+    } else if (isCustomer) {
+      const customerService = getInstanceByToken<CustomerService>(
+        'CustomerServiceToken',
+      );
+      const customer = await customerService.getByIdOrThrow(customerId);
+
+      if (customer.isBanned) {
+        throw new Unauthorized('banned');
+      }
+
+      if (!customer.isActive) {
+        throw new Unauthorized('inactive_account');
+      }
+
+      request.customerId = customer.id;
+    } else if (isUser) {
+      const userService = getInstanceByToken<UserService>('UserServiceToken');
+      const user = await userService.getByIdOnlyUserOrThrow(userId);
+
+      if (user.isBanned) {
+        throw new Unauthorized('banned');
+      }
+
+      request.userId = user.id;
+    } else {
+      throw new Unauthorized();
+    }
+  };
+
+// Hook for check if customer - dealer is authenticated
+export const customerOrDealerIsAuthenticated: onRequestHookHandler = async (
+  request,
+  reply,
+) => {
+  const token = request.headers.authorization?.split(' ')[1]!;
+
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
+
+  const customerId = getCustomerIdFromToken(token);
+  const isCustomer = isString(customerId);
+
+  const dealerId = getDealerIdFromToken(token);
+  const isDealer = isString(dealerId);
+
+  if (!isCustomer && !isDealer) {
+    throw new Unauthorized();
+  }
+
+  if (isCustomer) {
+    const customerService = getInstanceByToken<CustomerService>(
+      'CustomerServiceToken',
+    );
+    const customer = await customerService.getByIdOrThrow(customerId);
+
+    if (customer.isBanned) {
+      throw new Unauthorized('banned');
+    }
+
+    if (!customer.isActive) {
+      throw new Unauthorized('inactive_account');
+    }
+
+    request.customerId = customer.id;
+  } else if (isDealer) {
+    const dealerService =
+      getInstanceByToken<DealerService>('DealerServiceToken');
+    const dealer = await dealerService.getByIdOnlyDealerOrThrow(dealerId);
+
+    if (dealer.isBanned) {
+      throw new Unauthorized('banned');
+    }
+
+    if (!dealer.isActive) {
+      throw new Unauthorized('inactive_account');
+    }
+
+    request.dealerId = dealer.id;
+  } else {
+    throw new Unauthorized();
+  }
+};
+
+// Hook for check if customer - user is authenticated
+export const customerOrUserIsAuthenticated: onRequestHookHandler = async (
+  request,
+  reply,
+) => {
+  const token = request.headers.authorization?.split(' ')[1]!;
+
+  if (!verifyToken(token)) {
+    throw new Unauthorized(`invalid_token`);
+  }
+
+  const customerId = getCustomerIdFromToken(token);
+  const isCustomer = isString(customerId);
+
+  const userId = getUserIdFromToken(token);
+  const isUser = isString(userId);
+
+  if (!isCustomer && !isUser) {
+    throw new Unauthorized();
+  }
+
+  if (isCustomer) {
+    const customerService = getInstanceByToken<CustomerService>(
+      'CustomerServiceToken',
+    );
+    const customer = await customerService.getByIdOrThrow(customerId);
+
+    if (customer.isBanned) {
+      throw new Unauthorized('banned');
+    }
+
+    if (!customer.isActive) {
+      throw new Unauthorized('inactive_account');
+    }
+
+    request.customerId = customer.id;
+  } else if (isUser) {
+    const userService = getInstanceByToken<UserService>('UserServiceToken');
+    const user = await userService.getByIdOnlyUserOrThrow(userId);
+
+    if (user.isBanned) {
+      throw new Unauthorized('banned');
+    }
+
+    request.userId = user.id;
+  } else {
+    throw new Unauthorized();
+  }
+};

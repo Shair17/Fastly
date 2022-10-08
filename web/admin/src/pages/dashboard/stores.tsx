@@ -26,7 +26,7 @@ export const DashboardStores = () => {
   const [
     {error: getStoresError, loading: getStoresIsLoading, data: stores},
     refetchStores,
-  ] = useAxios<Store[]>('/stores/admin');
+  ] = useAxios<Store[]>('/stores');
   const [{loading: createStoreIsLoading}, executeCreateStore] = useAxios(
     {
       url: '/stores',

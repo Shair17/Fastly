@@ -136,25 +136,28 @@ export const Navbar = ({hidden}: Props) => {
     navigate('/login', {replace: true});
   };
 
-  const links = data.map(item => (
-    <Link
-      to={item.link}
-      key={item.label}
-      className={cx(classes.link, {
-        [classes.linkActive]: pathname === item.link,
-      })}
-      style={{justifyContent: 'space-between', alignItems: 'center'}}>
-      <div style={{display: 'flex'}}>
-        <item.icon className={classes.linkIcon} />
-        <span>{item.label}</span>
-      </div>
-      {item.label === 'Pedidos' && (
-        <Badge size="xs" variant="filled">
-          En vivo
-        </Badge>
-      )}
-    </Link>
-  ));
+  const links = data.map(item => {
+    return (
+      <Link
+        to={item.link}
+        key={item.label}
+        className={cx(classes.link, {
+          // [classes.linkActive]: pathname === item.link,
+          [classes.linkActive]: pathname.includes(item.link),
+        })}
+        style={{justifyContent: 'space-between', alignItems: 'center'}}>
+        <div style={{display: 'flex'}}>
+          <item.icon className={classes.linkIcon} />
+          <span>{item.label}</span>
+        </div>
+        {item.label === 'Pedidos' && (
+          <Badge size="xs" variant="filled">
+            En vivo
+          </Badge>
+        )}
+      </Link>
+    );
+  });
 
   return (
     <MantineNavbar

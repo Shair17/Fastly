@@ -183,6 +183,6 @@ export interface Coordinates {
 
 export interface OrderClass {
   id: string;
-  order: Order;
+  order: Order & {customerId: string};
   coordinates: Coordinates;
 }

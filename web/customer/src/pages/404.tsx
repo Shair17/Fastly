@@ -57,7 +57,14 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-export function NotFound404() {
+const defaultMessage =
+  'La página que intenta abrir no existe. Puede que hayas escrito mal la dirección, o la página se ha movido a otra URL. Si usted piensa esto es un error, póngase en contacto con el soporte.';
+
+interface Props {
+  message?: string;
+}
+
+export function NotFound404({message = defaultMessage}: Props) {
   const {classes} = useStyles();
 
   return (
@@ -71,9 +78,7 @@ export function NotFound404() {
             size="lg"
             align="center"
             className={classes.description}>
-            La página que intenta abrir no existe. Puede que hayas escrito mal
-            la dirección, o la página se ha movido a otra URL. Si usted piensa
-            esto es un error, póngase en contacto con el soporte.
+            {message}
           </Text>
           <Group position="center">
             <Button component={Link} to="/" size="md">

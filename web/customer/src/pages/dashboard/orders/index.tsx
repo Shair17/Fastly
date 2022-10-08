@@ -11,6 +11,7 @@ import {
 import {useSocketOrdersQueue} from '@fastly/hooks/useSocketOrdersQueue';
 import {ShoppingCart} from 'tabler-icons-react';
 import {getOrderStatus} from '@fastly/utils/getOrderStatus';
+import {useCustomerStore} from '@fastly/stores/useCustomerStore';
 
 const useStyles = createStyles(theme => ({
   root: {
@@ -42,8 +43,14 @@ const useStyles = createStyles(theme => ({
 }));
 
 export const DashboardOrders = () => {
+  const customerId = useCustomerStore(s => s.id);
   const {classes} = useStyles();
-  const {ordersQueue} = useSocketOrdersQueue();
+  const {ordersQueue: _ordersQueue} = useSocketOrdersQueue();
+
+  // Mostrar solo ordenes en cola que sean de propiedad del cliente
+  const ordersQueue = _ordersQueue.filter(
+    order => order.order.customerId === customerId,
+  );
 
   return (
     <DashboardLayout>

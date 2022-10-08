@@ -5,6 +5,8 @@ import {
   userIsAuthenticated,
   adminOrCustomerIsAuthenticated,
   adminIsAuthenticated,
+  adminOrCustomerOrUserIsAuthenticated,
+  customerIsAuthenticated,
 } from '../../shared/hooks/auth';
 import {StoreService} from './store.service';
 import {
@@ -26,24 +28,52 @@ import {
   CreateRankingByStoreIdParamsType,
   CreateRankingByStoreIdBody,
   CreateRankingByStoreIdBodyType,
+  GetProductsByStore,
+  GetProductsByStoreType,
 } from './store.schema';
 
 @Controller('/v1/stores')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
-  @GET('/admin', {
-    onRequest: [hasBearerToken, adminIsAuthenticated],
+  @GET('/my-stores-select', {
+    onRequest: [hasBearerToken, customerIsAuthenticated],
   })
-  async getStoresForAdmin() {
-    return this.storeService.getStores();
+  async getMyStoresForSelect(request: Request, reply: Reply) {
+    return this.storeService.getMyStoresForSelect(request.customerId);
+  }
+
+  // get my stores for customer
+  @GET('/my-stores', {
+    onRequest: [hasBearerToken, customerIsAuthenticated],
+  })
+  async getMyStoresForCustomer(request: Request, reply: Reply) {
+    return this.storeService.getMyStoresForCustomer(request.customerId);
+  }
+
+  @GET('/my-stores/:id', {
+    schema: {
+      params: GetStoreParams,
+    },
+    onRequest: [hasBearerToken, adminOrCustomerOrUserIsAuthenticated],
+  })
+  async getMyStoreById(
+    request: Request<{
+      Params: GetStoreParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.storeService.getMyStoreById(
+      request.customerId,
+      request.params.id,
+    );
   }
 
   @GET('/', {
     schema: {
       querystring: GetStoresQueryString,
     },
-    onRequest: [hasBearerToken, userIsAuthenticated],
+    onRequest: [hasBearerToken, adminOrCustomerOrUserIsAuthenticated],
   })
   async getStores(
     request: Request<{
@@ -62,7 +92,7 @@ export class StoreController {
     schema: {
       params: GetStoreParams,
     },
-    onRequest: [hasBearerToken, userIsAuthenticated],
+    onRequest: [hasBearerToken, adminOrCustomerOrUserIsAuthenticated],
   })
   async getById(
     request: Request<{
@@ -71,6 +101,21 @@ export class StoreController {
     reply: Reply,
   ) {
     return this.storeService.getStore(request.params.id);
+  }
+
+  @GET('/:id/products', {
+    schema: {
+      params: GetProductsByStore,
+    },
+    onRequest: [hasBearerToken, adminOrCustomerOrUserIsAuthenticated],
+  })
+  async getProductsByStore(
+    request: Request<{
+      Params: GetProductsByStoreType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.storeService.getProductsByStore(request.params.id);
   }
 
   @GET('/categories')

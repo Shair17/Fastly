@@ -16,6 +16,12 @@ import {ForgotPassword} from './pages/forgot-password';
 import {NewPassword} from './pages/new-password';
 
 import {Dashboard} from './pages/dashboard/index';
+import {DashboardStores} from './pages/dashboard/stores/index';
+import {DashboardStore} from './pages/dashboard/stores/store';
+import {DashboardProducts} from './pages/dashboard/products/index';
+import {DashboardProduct} from './pages/dashboard/products/product';
+import {DashboardOrders} from './pages/dashboard/orders/index';
+import {DashboardOrder} from './pages/dashboard/orders/order';
 
 import {RequireAuth} from './components/hoc/RequireAuth';
 import {useShowSessionIsExpired} from './hooks/useShowSessionIsExpired';
@@ -73,6 +79,81 @@ function App() {
                   element={
                     <RequireAuth>
                       <Dashboard />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="/dashboard/stores/*"
+                  element={
+                    <RequireAuth>
+                      <DashboardStore />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/stores"
+                  element={
+                    <RequireAuth>
+                      <DashboardStores />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/stores/:id"
+                  element={
+                    <RequireAuth>
+                      <DashboardStore />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="/dashboard/products/*"
+                  element={
+                    <RequireAuth>
+                      <DashboardProduct />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/products"
+                  element={
+                    <RequireAuth>
+                      <DashboardProducts />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/products/:id"
+                  element={
+                    <RequireAuth>
+                      <DashboardProduct />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="/dashboard/orders/*"
+                  element={
+                    <RequireAuth>
+                      <DashboardOrder />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/orders"
+                  element={
+                    <RequireAuth>
+                      <DashboardOrders />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard/orders/:id"
+                  element={
+                    <RequireAuth>
+                      <DashboardOrder />
                     </RequireAuth>
                   }
                 />

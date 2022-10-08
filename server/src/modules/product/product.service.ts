@@ -4,13 +4,45 @@ import {NotFound} from 'http-errors';
 import {StoreService} from '../store/store.service';
 import {CreateProductBodyType, EditProductBodyType} from './product.schema';
 import {trimStrings} from '../../utils/trimStrings';
+import {CustomerService} from '../customer/customer.service';
 
 @Service('ProductServiceToken')
 export class ProductService {
   constructor(
     private readonly databaseService: DatabaseService,
+    private readonly customerService: CustomerService,
     private readonly storeService: StoreService,
   ) {}
+
+  async getMyProducts(customerId: string) {
+    const foundCustomer = await this.customerService.getByIdOrThrow(customerId);
+
+    const products = await this.databaseService.product.findMany({
+      where: {
+        store: {
+          owner: {
+            id: foundCustomer.id,
+          },
+        },
+      },
+    });
+
+    if (!products) {
+      throw new NotFound();
+    }
+
+    const response = products.map(store => {
+      return {
+        ...store,
+        owner: {
+          id: foundCustomer.id,
+          email: foundCustomer.email,
+        },
+      };
+    });
+
+    return response;
+  }
 
   count() {
     return this.databaseService.product.count();

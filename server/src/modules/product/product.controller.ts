@@ -16,11 +16,19 @@ import {
 import {
   hasBearerToken,
   adminOrCustomerIsAuthenticated,
+  customerIsAuthenticated,
 } from '../../shared/hooks/auth';
 
 @Controller('/v1/products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
+
+  @GET('/my-products', {
+    onRequest: [hasBearerToken, customerIsAuthenticated],
+  })
+  async getMyProducts(request: Request, reply: Reply) {
+    return this.productService.getMyProducts(request.customerId);
+  }
 
   @GET('/', {
     onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],

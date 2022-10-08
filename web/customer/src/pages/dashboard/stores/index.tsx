@@ -24,9 +24,9 @@ export const DashboardStores = () => {
   const theme = useMantineTheme();
   const [newStoreDrawerOpened, setNewStoreDrawerOpened] = useState(false);
   const [
-    {error: getStoresError, loading: getStoresIsLoading, data: stores},
+    {error: getMyStoresError, loading: getMyStoresIsLoading, data: myStores},
     refetchStores,
-  ] = useAxios<Store[]>('/stores/admin');
+  ] = useAxios<Store[]>('/stores/my-stores');
   const [{loading: createStoreIsLoading}, executeCreateStore] = useAxios(
     {
       url: '/stores',
@@ -103,15 +103,15 @@ export const DashboardStores = () => {
   };
 
   const body = () => {
-    if (getStoresIsLoading) return <p>Cargando...</p>;
+    if (getMyStoresIsLoading) return <p>Cargando...</p>;
 
-    if (getStoresError || !stores) return <p>Error!</p>;
+    if (getMyStoresError || !myStores) return <p>Error!</p>;
 
-    if (stores.length === 0) return <p>No hay negocios.</p>;
+    if (myStores.length === 0) return <p>No hay negocios.</p>;
 
     return (
       <GlobalTable type="stores">
-        {stores.map(store => (
+        {myStores.map(store => (
           <StoreTableItem
             key={store.id}
             {...store}
@@ -258,15 +258,17 @@ export const DashboardStores = () => {
 
       <MainAccount
         title="Negocios 🏪"
-        description={`Aquí podrás ver la lista de negocios en Fastly.${
-          stores
-            ? ` Hay ${stores.length} negocio${stores.length !== 1 ? 's' : ''}.`
+        description={`Aquí podrás ver tus negocios en Fastly.${
+          myStores
+            ? ` Hay ${myStores.length} negocio${
+                myStores.length !== 1 ? 's' : ''
+              }.`
             : ''
         }`}
         handleAddButton={handleAddButton}
         addIsLoading={createStoreIsLoading}
         handleRefresh={handleRefresh}
-        refreshIsLoading={getStoresIsLoading}>
+        refreshIsLoading={getMyStoresIsLoading}>
         {body()}
       </MainAccount>
     </DashboardLayout>

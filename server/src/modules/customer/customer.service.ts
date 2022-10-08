@@ -39,7 +39,16 @@ export class CustomerService {
       throw new NotFound();
     }
 
-    return customer.stores;
+    const response = customer.stores.map(store => {
+      return {
+        ...store,
+        owner: {
+          email: foundCustomer.email,
+        },
+      };
+    });
+
+    return response;
   }
 
   count() {

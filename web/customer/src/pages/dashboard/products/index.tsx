@@ -7,16 +7,27 @@ import {
   Button,
   TextInput,
   NumberInput,
+  Select,
 } from '@mantine/core';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {MainAccount} from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
-import {Product} from '@fastly/interfaces/appInterfaces';
+import {Product, StoreCategory} from '@fastly/interfaces/appInterfaces';
 import {useForm, zodResolver} from '@mantine/form';
 import {registerProductSchema} from '@fastly/schemas/schemas';
 import {showNotification} from '@mantine/notifications';
 import {GlobalTable} from '@fastly/components/organisms/GlobalTable';
 import {ProductTableItem} from '@fastly/components/organisms/ProductTableItem';
+import {getStoreCategory} from '@fastly/utils/getCategory';
+import {SelectStoreItem} from '@fastly/components/organisms/SelectStoreItem';
+
+type MyProductsResponse = Product & {owner: {id: string; email: string}};
+type MyStoresSelectResponse = {
+  id: string;
+  name: string;
+  logo?: string;
+  category: StoreCategory;
+};
 
 export const DashboardProducts = () => {
   const theme = useMantineTheme();
@@ -24,7 +35,15 @@ export const DashboardProducts = () => {
   const [
     {error: getProductsError, loading: getProductsIsLoading, data: products},
     refetchProducts,
-  ] = useAxios<Product[]>('/products');
+  ] = useAxios<MyProductsResponse[]>('/products/my-products');
+  const [
+    {
+      error: myStoresSelectError,
+      loading: myStoresSelectIsLoading,
+      data: myStoresSelect,
+    },
+    refetchMyStoresSelect,
+  ] = useAxios<MyStoresSelectResponse[]>('/stores/my-stores-select');
   const [{loading: createProductIsLoading}, executeCreateProduct] = useAxios(
     {
       url: '/products',
@@ -61,8 +80,8 @@ export const DashboardProducts = () => {
             message: 'Producto creado correctamente',
             color: 'green',
           });
-          setNewProductDrawerOpened(false);
           refetchProducts();
+          setNewProductDrawerOpened(false);
         })
         .catch(error => {
           if (error?.response?.data.message) {
@@ -82,6 +101,38 @@ export const DashboardProducts = () => {
 
   const handleRefresh = () => {
     refetchProducts();
+  };
+
+  const loadSelectStores = () => {
+    if (myStoresSelectIsLoading) return <p>Cargando...</p>;
+
+    if (myStoresSelectError || !myStoresSelect) return <p>Error!</p>;
+
+    const data = myStoresSelect.map(item => {
+      return {
+        image: item.logo!,
+        label: item.name,
+        value: item.id,
+        description: getStoreCategory(item.category),
+      };
+    });
+
+    return (
+      <Select
+        label="Elige uno de tus negocios"
+        placeholder="Elige un negocio"
+        itemComponent={SelectStoreItem}
+        data={data}
+        searchable
+        maxDropdownHeight={400}
+        nothingFound="No hay negocios"
+        filter={(value, item) =>
+          item.label?.toLowerCase().includes(value.toLowerCase().trim()) ||
+          item.description.toLowerCase().includes(value.toLowerCase().trim())
+        }
+        {...form.getInputProps('storeId')}
+      />
+    );
   };
 
   const body = () => {
@@ -123,6 +174,8 @@ export const DashboardProducts = () => {
         size="xl">
         <Paper>
           <form onSubmit={handleRegisterNewProduct}>
+            <>{loadSelectStores()}</>
+
             <TextInput
               label="Nombre del Producto"
               placeholder="Ingresa el nombre del producto"
@@ -145,14 +198,6 @@ export const DashboardProducts = () => {
               type="text"
               mt="md"
               {...form.getInputProps('blurHash')}
-            />
-            <TextInput
-              label="Identificador de negocio del producto"
-              placeholder="Ingresa el identificador de negocio del producto"
-              required
-              type="text"
-              mt="md"
-              {...form.getInputProps('storeId')}
             />
             <NumberInput
               label="Precio del producto en soles"
@@ -182,7 +227,7 @@ export const DashboardProducts = () => {
 
       <MainAccount
         title="Productos 📦"
-        description={`Aquí podrás ver la lista de productos en Fastly.${
+        description={`Aquí podrás ver tus productos en Fastly.${
           products
             ? ` Hay ${products.length} producto${
                 products.length !== 1 ? 's' : ''

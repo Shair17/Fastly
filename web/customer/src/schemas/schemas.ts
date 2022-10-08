@@ -98,6 +98,14 @@ export const editStoreSchema = z.object({
   logo: z.string(),
 });
 
+export const createProductSchema = z.object({
+  name: z.string(),
+  description: z.optional(z.string()),
+  price: z.number().min(0, {message: 'Ingresa un precio válido.'}),
+  image: z.string().regex(URL_REGEX, {message: 'URL de la imagen inválida.'}),
+  blurHash: z.string(),
+});
+
 export const registerProductSchema = z.object({
   storeId: z
     .string()

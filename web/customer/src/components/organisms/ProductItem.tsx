@@ -1,44 +1,58 @@
-import {useState, Fragment} from 'react';
+import {FC, Fragment, useState} from 'react';
 import {
-  ActionIcon,
-  Avatar,
-  Button,
-  Anchor,
-  Group,
-  Paper,
+  Card,
+  Image,
   Text,
-  NumberInput,
+  Group,
+  Badge,
+  Button,
+  ActionIcon,
+  createStyles,
   TextInput,
   Modal,
-  useMantineTheme,
-  Select,
+  Paper,
+  NumberInput,
 } from '@mantine/core';
+import {Product} from '@fastly/interfaces/appInterfaces';
+import {Trash} from 'tabler-icons-react';
 import useAxios from 'axios-hooks';
-import {showNotification} from '@mantine/notifications';
-import {zodResolver, useForm} from '@mantine/form';
 import {useModals} from '@mantine/modals';
-import {Pencil, Trash} from 'tabler-icons-react';
-import {Product, StoreCategory} from '@fastly/interfaces/appInterfaces';
-import {getEntityType} from '@fastly/utils/getEntityType';
+import {showNotification} from '@mantine/notifications';
+import {useForm, zodResolver} from '@mantine/form';
 import {editProductSchema} from '@fastly/schemas/schemas';
-import {getRegisterErrorMessage} from '@fastly/utils/getErrorMessages';
 import {formatDate} from '@fastly/utils/formatDate';
-import {getStoreCategory} from '@fastly/utils/getCategory';
-import {SelectStoreItem} from './SelectStoreItem';
+
+const useStyles = createStyles(theme => ({
+  card: {
+    backgroundColor:
+      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  section: {
+    borderBottom: `1px solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  trash: {
+    color: theme.colors.red[6],
+  },
+
+  label: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
+}));
 
 interface Props extends Product {
-  type: 'admin' | 'user' | 'customer' | 'dealer' | 'store' | 'product';
   refetch: () => void;
 }
 
-type MyStoresSelectResponse = {
-  id: string;
-  name: string;
-  logo?: string;
-  category: StoreCategory;
-};
-
-export const ProductTableItem = ({
+export const ProductItem: FC<Props> = ({
   blurHash,
   createdAt,
   id,
@@ -50,36 +64,30 @@ export const ProductTableItem = ({
   couponId,
   description,
 
-  type,
   refetch,
-}: Props) => {
-  const theme = useMantineTheme();
+}) => {
   const modals = useModals();
   const [editProductOpened, setEditProductOpened] = useState(false);
-  const [
-    {
-      error: myStoresSelectError,
-      loading: myStoresSelectIsLoading,
-      data: myStoresSelect,
-    },
-    refetchMyStoresSelect,
-  ] = useAxios<MyStoresSelectResponse[]>('/stores/my-stores-select');
   const [{loading: editProductIsLoading}, executeEditProduct] = useAxios(
     {
-      url: `/products/${id}`,
       method: 'PUT',
-    },
-    {manual: true},
-  );
-  const [, executeDeleteProduct] = useAxios(
-    {
       url: `/products/${id}`,
-      method: 'DELETE',
     },
     {
       manual: true,
     },
   );
+  const [, executeDeleteProduct] = useAxios(
+    {
+      method: 'DELETE',
+      url: `/products/${id}`,
+    },
+    {
+      manual: true,
+    },
+  );
+  const {classes, theme} = useStyles();
+
   const editForm = useForm({
     validate: zodResolver(editProductSchema),
     initialValues: {
@@ -116,7 +124,7 @@ export const ProductTableItem = ({
           if (error?.response?.data.message) {
             showNotification({
               title: 'Error!',
-              message: getRegisterErrorMessage(error.response.data.message),
+              message: error.response.data.message,
               color: 'red',
             });
           }
@@ -124,51 +132,17 @@ export const ProductTableItem = ({
     },
   );
 
-  const loadSelectStores = () => {
-    if (myStoresSelectIsLoading) return <p>Cargando...</p>;
-
-    if (myStoresSelectError || !myStoresSelect) return <p>Error!</p>;
-
-    const data = myStoresSelect.map(item => {
-      return {
-        image: item.logo!,
-        label: item.name,
-        value: item.id,
-        description: getStoreCategory(item.category),
-      };
-    });
-
-    return (
-      <Select
-        label="Elige uno de tus negocios"
-        mt="md"
-        placeholder="Elige un negocio"
-        itemComponent={SelectStoreItem}
-        data={data}
-        searchable
-        maxDropdownHeight={400}
-        nothingFound="No hay negocios"
-        filter={(value, item) =>
-          item.label?.toLowerCase().includes(value.toLowerCase().trim()) ||
-          item.description.toLowerCase().includes(value.toLowerCase().trim())
-        }
-        {...editForm.getInputProps('storeId')}
-      />
-    );
-  };
-
   const openDeleteModal = () => {
     modals.openConfirmModal({
-      title: `Eliminar ${getEntityType(type)}`,
+      title: `Eliminar Producto`,
       centered: true,
       children: (
         <Text size="sm" inline>
-          Estás seguro que quieres eliminar a <strong>{name}</strong>? Todos los
-          datos relacionados al producto serán eliminados.
+          Estás seguro que quieres eliminar el producto <strong>{name}</strong>?
         </Text>
       ),
       labels: {
-        confirm: `Eliminar ${getEntityType(type)}`,
+        confirm: `Eliminar Producto`,
         cancel: 'Cancelar',
       },
       confirmProps: {color: 'red'},
@@ -177,7 +151,7 @@ export const ProductTableItem = ({
           .then(() => {
             showNotification({
               title: 'Eliminado',
-              message: `Producto ${name} borrado correctamente.`,
+              message: `Producto eliminado correctamente.`,
               color: 'green',
             });
 
@@ -236,7 +210,6 @@ export const ProductTableItem = ({
               mt="md"
               {...editForm.getInputProps('blurHash')}
             />
-            <>{loadSelectStores()}</>
             <NumberInput
               label="Precio del producto en soles"
               placeholder="Ingresa el precio del producto en soles"
@@ -270,69 +243,51 @@ export const ProductTableItem = ({
         </Paper>
       </Modal>
 
-      <tr>
-        <td>
-          <Avatar size={30} radius={30} src={image} />
-        </td>
-        <td>
-          <Text size="sm" weight={500} lineClamp={1} title={name}>
-            {name}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" weight={500} lineClamp={1} title={description}>
-            {description || 'Nulo'}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" weight={500} lineClamp={1} title={price.toString()}>
-            S/. {price}
-          </Text>
-        </td>
-        <td>
-          <Anchor<'a'>
-            lineClamp={1}
-            size="sm"
-            href={image}
-            target="_blank"
-            title={description}>
-            {image}
-          </Anchor>
-        </td>
-        <td>
-          <Text size="sm" weight={500} lineClamp={1} title={blurHash}>
-            {blurHash}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" weight={500} lineClamp={1} title={storeId}>
-            {storeId}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" title={createdAt}>
-            {formatDate(new Date(createdAt))}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" title={updatedAt}>
-            {formatDate(new Date(updatedAt))}
-          </Text>
-        </td>
-        <td>
-          <Group spacing={0} position="right">
-            <ActionIcon onClick={() => setEditProductOpened(true)}>
-              <Pencil size={16} />
-            </ActionIcon>
-            <ActionIcon
-              color="red"
-              title="Eliminar Producto"
-              onClick={openDeleteModal}>
-              <Trash size={16} />
-            </ActionIcon>
+      <Card withBorder radius="md" p="md" className={classes.card}>
+        <Card.Section>
+          <Image src={image} alt={name} height={180} />
+        </Card.Section>
+
+        <Card.Section className={classes.section} mt="md">
+          <Group position="apart">
+            <Text size="lg" weight={500}>
+              {name}
+            </Text>
+            <Badge size="sm">country</Badge>
           </Group>
-        </td>
-      </tr>
+          <Text size="sm" mt="xs">
+            Descripción: {description || 'Nulo'}
+          </Text>
+          <Text size="sm" mt="xs">
+            Precio: S/. {price.toString()}
+          </Text>
+        </Card.Section>
+
+        <Card.Section className={classes.section}>
+          <Text mt="md" color="dimmed" title={createdAt}>
+            Creado: {formatDate(new Date(createdAt))}
+          </Text>
+          <Text mt="md" color="dimmed" title={updatedAt}>
+            Actualizado: {formatDate(new Date(updatedAt))}
+          </Text>
+        </Card.Section>
+
+        <Group mt="xs">
+          <Button
+            radius="md"
+            style={{flex: 1}}
+            onClick={() => setEditProductOpened(true)}>
+            Editar Producto
+          </Button>
+          <ActionIcon
+            variant="default"
+            radius="md"
+            size={36}
+            onClick={openDeleteModal}>
+            <Trash size={18} className={classes.trash} />
+          </ActionIcon>
+        </Group>
+      </Card>
     </Fragment>
   );
 };

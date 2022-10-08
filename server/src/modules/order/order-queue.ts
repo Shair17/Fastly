@@ -6,7 +6,11 @@ import {
   Service,
 } from 'fastify-decorators';
 import {OrderService} from './order.service';
-import {OrderClass, type ICoordinates} from '../../shared/classes/order.class';
+import {
+  IOrder,
+  OrderClass,
+  type ICoordinates,
+} from '../../shared/classes/order.class';
 import {Order} from '@prisma/client';
 import {DealerService} from '../dealer/dealer.service';
 import type {OnModuleInit} from '../../interfaces/module';
@@ -81,7 +85,7 @@ export class OrderQueue implements IOrderQueue<OrderClass>, OnModuleInit {
     return this.queue.filter(order => order.status === 'SENT');
   }
 
-  enqueue(order: Order): OrderClass {
+  enqueue(order: IOrder): OrderClass {
     const existsOrder = this.getById(order.id);
 
     if (existsOrder !== undefined) {
