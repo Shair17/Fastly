@@ -14,7 +14,7 @@ import {SwipeablePanel} from 'rn-swipeable-panel';
 import {useOrderHistoryBottomSheetStore} from '@fastly/stores/useOrderHistoryBottomSheetStore';
 
 interface Props
-  extends NativeStackScreenProps<ProfileStackParams, 'MyAddresses'> {}
+  extends NativeStackScreenProps<ProfileStackParams, 'MyOrders'> {}
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -52,38 +52,40 @@ export const MyOrdersScreen: React.FC<Props> = ({navigation}) => {
           </Text>
         }
       />
-      <Tab.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            borderTopWidth: 0,
-            elevation: 4,
-          },
-        }}>
-        <Tab.Screen
-          name="OngoingOrdersScreen"
-          component={OngoingOrdersScreen}
-          options={{
-            title: 'En Camino',
-            // tabBarLabelStyle: {textTransform: 'capitalize'},
-            tabBarLabelStyle: {fontWeight: '500'},
-            tabBarBadge: () =>
-              hasOngoingOrders ? (
+      {hasOngoingOrders ? (
+        <Tab.Navigator
+          screenOptions={{
+            tabBarStyle: {
+              borderTopWidth: 0,
+              elevation: 4,
+            },
+          }}>
+          <Tab.Screen
+            name="OngoingOrdersScreen"
+            component={OngoingOrdersScreen}
+            options={{
+              title: 'En Camino',
+              // tabBarLabelStyle: {textTransform: 'capitalize'},
+              tabBarLabelStyle: {fontWeight: '500'},
+              tabBarBadge: () => (
                 <Div top={15} right={40}>
                   <PulseIndicator size={20} />
                 </Div>
-              ) : null,
-          }}
-        />
-        <Tab.Screen
-          name="OrdersHistoryScreen"
-          component={OrdersHistoryScreen}
-          options={{
-            title: 'Historial',
-            tabBarLabelStyle: {fontWeight: '500'},
-            // tabBarLabelStyle: {textTransform: 'capitalize'},
-          }}
-        />
-      </Tab.Navigator>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="OrdersHistoryScreen"
+            component={OrdersHistoryScreen}
+            options={{
+              title: 'Historial',
+              tabBarLabelStyle: {fontWeight: '500'},
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <OrdersHistoryScreen />
+      )}
 
       <SwipeablePanel
         isActive={orderHistoryBottomSheetActive}

@@ -99,28 +99,28 @@ export const SupportScreen: React.FC = ({navigation}: any) => {
                   iconName="logo-whatsapp"
                   title="WhatsApp"
                   description="+51 966107266"
-                  onPress={() => openLink(FASTLY_WHATSAPP)}
+                  onPress={() => openLink(FASTLY_WHATSAPP, false)}
                 />
 
                 <ContactItem
                   iconName="logo-facebook"
                   title="Facebook"
                   description="@fastlyapp"
-                  onPress={() => openLink(FASTLY_FACEBOOK)}
+                  onPress={() => openLink(FASTLY_FACEBOOK, false)}
                 />
 
                 <ContactItem
                   iconName="logo-instagram"
                   title="Instagram"
                   description="@fastly.pe"
-                  onPress={() => openLink(FASTLY_INSTAGRAM)}
+                  onPress={() => openLink(FASTLY_INSTAGRAM, false)}
                 />
 
                 <ContactItem
                   iconName="earth"
                   title="Web"
                   description="https://fastly.delivery"
-                  onPress={() => openLink(FASTLY_WEB)}
+                  onPress={() => openLink(FASTLY_WEB, false)}
                 />
               </Div>
 
@@ -133,28 +133,28 @@ export const SupportScreen: React.FC = ({navigation}: any) => {
                   iconName="logo-whatsapp"
                   title="WhatsApp"
                   description="+51 966107266"
-                  onPress={() => openLink(SHAIR_WHATSAPP)}
+                  onPress={() => openLink(SHAIR_WHATSAPP, false)}
                 />
 
                 <ContactItem
                   iconName="logo-facebook"
                   title="Facebook"
                   description="@shair17"
-                  onPress={() => openLink(SHAIR_FACEBOOK)}
+                  onPress={() => openLink(SHAIR_FACEBOOK, false)}
                 />
 
                 <ContactItem
                   iconName="logo-instagram"
                   title="Instagram"
                   description="@shair.dev"
-                  onPress={() => openLink(SHAIR_INSTAGRAM)}
+                  onPress={() => openLink(SHAIR_INSTAGRAM, false)}
                 />
 
                 <ContactItem
                   iconName="earth"
                   title="Web"
                   description="https://shair.dev"
-                  onPress={() => openLink(SHAIR_WEB)}
+                  onPress={() => openLink(SHAIR_WEB, false)}
                 />
               </Div>
 
@@ -190,7 +190,7 @@ export const SupportScreen: React.FC = ({navigation}: any) => {
                 <Text
                   fontWeight="bold"
                   color="secondary"
-                  onPress={() => openLink(SHAIR_CONTACTO)}>
+                  onPress={() => openLink(SHAIR_CONTACTO, false)}>
                   su sitio web oficial
                 </Text>
                 .

@@ -16,8 +16,6 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 * Reemplazar llaves primarias de **uuid()** a **cuid()**.
 
 ## Web
-* Crear panel administrativo web para **repartidores** (como tengo muchísimo código ya hecho, solo es cuestión de copiar y pegar)
-* Crear panel administrativo web para **clientes** (como tengo muchísimo código ya hecho, solo es cuestión de copiar y pegar)
 * Reemplazar por un monorepo de react con vitejs, para así tener una sola carpeta de node_modules para todos los proyectos, menos al de main que es en nextjs.
 
 # FUTURO

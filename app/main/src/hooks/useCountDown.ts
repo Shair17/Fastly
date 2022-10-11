@@ -6,6 +6,7 @@ import {minutesToSeconds} from 'date-fns';
 // https://github.com/ocetnik/react-native-background-timer
 // ya que si la app pasa a modo background el intervalo se pausa
 // y se reanuda cuando se quita el modo background
+// o puedo usar el createdAt de la orden actual creada
 export const useCountDown = (initialCount: number = 1) => {
   const [count, setCount] = useState(minutesToSeconds(initialCount));
   const canCountDown = count > 0;

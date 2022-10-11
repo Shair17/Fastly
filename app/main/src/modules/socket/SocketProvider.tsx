@@ -42,24 +42,10 @@ export const SocketProvider: React.FC = ({children}) => {
     if (!socket) return;
 
     setOnline(socket.connected);
-
-    // Lo quité porque muetra notificaciones mientras se está conectando o cambiando el estado de ´connected´ en ´socket´
-    // Notifier.showNotification({
-    //   description: socket.connected
-    //     ? 'Conectado a Fastly'
-    //     : 'Desconectado de Fastly, reconectando...',
-    //   Component: NotifierComponents.Alert,
-    //   componentProps: {
-    //     alertType: socket.connected ? 'success' : 'warn',
-    //   },
-    //   duration: 1000,
-    // });
   }, [socket]);
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on('connect', () => {
+    socket?.on('connect', () => {
       setOnline(true);
       Notifier.showNotification({
         description: 'Conectado a Fastly',
@@ -73,9 +59,7 @@ export const SocketProvider: React.FC = ({children}) => {
   }, [socket]);
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on('disconnect', () => {
+    socket?.on('disconnect', () => {
       setOnline(false);
 
       Notifier.showNotification({
@@ -89,16 +73,13 @@ export const SocketProvider: React.FC = ({children}) => {
     });
   }, [socket]);
 
-  // TODO: es necesario que esté aquí? Podría pasarlo a un hook y usarlo solo cuando sea necesario
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on('USER_HAS_ONGOING_ORDERS', (userHasOngoingOrders: boolean) => {
+    socket?.on('USER_HAS_ONGOING_ORDERS', (userHasOngoingOrders: boolean) => {
       setUserHasOngoingOrders(userHasOngoingOrders);
     });
 
     return () => {
-      socket.off('USER_HAS_ONGOING_ORDERS');
+      socket?.off('USER_HAS_ONGOING_ORDERS');
     };
   }, [socket]);
 

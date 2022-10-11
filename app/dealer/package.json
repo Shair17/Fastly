@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android --no-packager",
-    "ios": "react-native run-ios",
+    "android:start": "yarn android && yarn start",
+    "start:reset": "react-native start --reset-cache",
     "start": "react-native start",
+    "ios": "react-native run-ios",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "android:start": "yarn android && yarn start"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.5",

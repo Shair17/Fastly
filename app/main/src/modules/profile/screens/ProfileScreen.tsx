@@ -91,7 +91,10 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
 
             <ProfileItemSetting
               onPress={() =>
-                openLink(Platform.OS === 'ios' ? FASTLY_IOS : FASTLY_ANDROID)
+                openLink(
+                  Platform.OS === 'ios' ? FASTLY_IOS : FASTLY_ANDROID,
+                  false,
+                )
               }
               iconName="star"
               text="Califícanos"
@@ -100,7 +103,7 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
             <Div my="md" />
 
             <ProfileItemSetting
-              onPress={() => openLink(FASTLY_PP)}
+              onPress={() => openLink(FASTLY_PP, false)}
               iconName="lock-closed"
               text="Política de Privacidad"
             />
@@ -108,7 +111,7 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
             <Div my="md" />
 
             <ProfileItemSetting
-              onPress={() => openLink(FASTLY_TC)}
+              onPress={() => openLink(FASTLY_TC, false)}
               iconName="information-circle"
               text="Terminos y Condiciones"
             />

@@ -1,6 +1,5 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {Avatar, Div, Icon, Text} from 'react-native-magnus';
-import {useSocketStore} from '@fastly/stores/useSocketStore';
 import {Button} from '@fastly/components/atoms/Button';
 // import {AirbnbRating} from 'react-native-ratings';
 import {Map, TMarker} from '@fastly/components/atoms/Map';
@@ -30,24 +29,10 @@ const markers: TMarker[] = [
 interface Props {}
 
 export const OngoingOrdersScreen: FC<Props> = props => {
-  // const userHasOngoingOrders = useSocketStore(s => s.userHasOngoingOrders);
   const name = useUserStore(u => u.name);
   const firstName = name.split(' ')[0];
   const countDown = useCountDown();
   const canBeCancelled = countDown > 0;
-
-  // if (!userHasOngoingOrders) {
-  //   return (
-  //     <Div flex={1} p="2xl">
-  //       <Text fontWeight="bold" fontSize="6xl">
-  //         No tienes pedidos en camino :(
-  //       </Text>
-  //       <Button fontWeight="bold" block mt="2xl">
-  //         Crear un Pedido
-  //       </Button>
-  //     </Div>
-  //   );
-  // }
 
   return (
     <Div flex={1} bg="#FEE9DA">

@@ -14,7 +14,6 @@ import {GeolocationPermissionsScreen} from './screens/GeolocationPermissionsScre
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
 import {AuthenticationScreen} from './screens/AuthenticationScreen';
 import {Application} from './bottom-tabs/Root';
-import {SocketProvider} from '@fastly/modules/socket/SocketProvider';
 
 export type RootStackParams = {
   /**
