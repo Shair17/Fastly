@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import {Div, Text, Icon, Avatar, Badge} from 'react-native-magnus';
 import {useDealerStore} from '@fastly/stores/useDealerStore';
 import {
@@ -87,7 +87,22 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={logOut}
+          onPress={() =>
+            Alert.alert(
+              'Cerrar Sesión',
+              '¿Estás seguro que quieres cerrar sesión?',
+              [
+                {
+                  text: 'No',
+                  style: 'cancel',
+                },
+                {text: 'Sí', onPress: () => logOut()},
+              ],
+              {
+                cancelable: true,
+              },
+            )
+          }
           activeOpacity={0.8}
           style={{paddingVertical: 20}}>
           <Div flexDir="row" alignItems="center">

@@ -1077,7 +1077,7 @@ export class AuthService {
   }
 
   async logOutDealer(id: string) {
-    const dealer = await this.dealerService.getByIdOrThrow(id);
+    const dealer = await this.dealerService.getByIdOnlyDealerOrThrow(id);
 
     try {
       await this.dealerService.updateDealerRefreshToken(dealer.id, null);
