@@ -120,31 +120,26 @@ const getDealerIdFromToken = (token: string): string | null => {
   }
 };
 
-// Hook for verify if has bearer token
-// very very useful
 export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
-  const {authorization} = request.headers;
-  let token: string;
+  const authorization = request.headers.authorization;
 
-  if (!!authorization) {
-    const parts = authorization.split(' ');
-
-    if (parts.length === 2 && parts[1].split('.').length === 3) {
-      const scheme = parts[0];
-      token = parts[1];
-
-      if (!BEARER_SCHEME_REGEX.test(scheme)) {
-        throw new Unauthorized('malformed_token');
-      }
-
-      if (!isValidToken(token)) {
-        throw new Unauthorized('malformed_token');
-      }
-    } else {
-      throw new Unauthorized('malformed_token');
-    }
-  } else {
+  if (!isString(authorization)) {
     throw new Unauthorized('token_not_provided');
+  }
+
+  const parts = <[string, string]>authorization.split(' ');
+  const [scheme, token] = parts;
+
+  if (!(parts.length === 2 && token.split('.').length === 3)) {
+    throw new Unauthorized('malformed_token');
+  }
+
+  if (!BEARER_SCHEME_REGEX.test(scheme)) {
+    throw new Unauthorized('malformed_token');
+  }
+
+  if (!isValidToken(token)) {
+    throw new Unauthorized('malformed_token');
   }
 
   const decoded = jwt.decode(token) as jwt.JwtPayload;
