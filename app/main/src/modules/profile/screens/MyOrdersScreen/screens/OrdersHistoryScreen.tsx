@@ -15,12 +15,7 @@ export const OrdersHistoryScreen: FC<Props> = () => {
   const [take, setTake] = useState(10);
   const [skip, setSkip] = useState(0);
   const [{data, loading, error}, execute] = useAxios({
-    url: '/users/me/orders',
-    params: {
-      orderBy: 'desc',
-      take,
-      skip,
-    },
+    url: `/users/me/orders?take=${take}&skip=${skip}&orderBy=desc`,
   });
 
   return (

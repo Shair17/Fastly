@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const Carousel: FC<Props> = ({
-  height = 150,
+  height = 200,
   autoplayInterval = 2000,
   children,
 }) => {

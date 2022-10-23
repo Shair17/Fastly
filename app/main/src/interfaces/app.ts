@@ -1,3 +1,31 @@
+export interface Store {
+  id: string;
+  name: string;
+  description?: string;
+  address: string;
+  logo: string;
+  category: StoreCategory;
+  categoryDescription?: string;
+  openTime?: string;
+  closeTime?: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  image: string;
+  blurHash: string;
+  couponId: string;
+  createdAt: string;
+  updatedAt: string;
+  storeId: string;
+}
+
 export interface Coordinates {
   latitude: number;
   longitude: number;
@@ -32,7 +60,7 @@ export type LocationInformationType = {
   // longitude: number;
 };
 
-export enum StoreCategory {
+export enum StoreCategoryEnum {
   LICORERIA = 'Licorería',
   RESTAURANTE = 'Restaurante',
   MASCOTAS = 'Mascotas',
@@ -49,6 +77,41 @@ export enum StoreCategory {
   JUGUERIA = 'Juguería',
   OTRO = 'Otro',
 }
+export type StoreCategory =
+  | 'LICORERIA'
+  | 'RESTAURANTE'
+  | 'MASCOTAS'
+  | 'MODA'
+  | 'TECNOLOGIA'
+  | 'JUGUETERIA'
+  | 'FARMACIA'
+  | 'CUIDADO_PERSONAL'
+  | 'MAQUILLAJE'
+  | 'FLORISTERIA'
+  | 'TIENDA'
+  | 'SUPERMERCADOS'
+  | 'LIBRERIA'
+  | 'JUGUERIA'
+  | 'OTRO';
+// export const StoreCategory: {
+//   LICORERIA: 'LICORERIA',
+//   RESTAURANTE: 'RESTAURANTE',
+//   MASCOTAS: 'MASCOTAS',
+//   MODA: 'MODA',
+//   TECNOLOGIA: 'TECNOLOGIA',
+//   JUGUETERIA: 'JUGUETERIA',
+//   FARMACIA: 'FARMACIA',
+//   CUIDADO_PERSONAL: 'CUIDADO_PERSONAL',
+//   MAQUILLAJE: 'MAQUILLAJE',
+//   FLORISTERIA: 'FLORISTERIA',
+//   TIENDA: 'TIENDA',
+//   SUPERMERCADOS: 'SUPERMERCADOS',
+//   LIBRERIA: 'LIBRERIA',
+//   JUGUERIA: 'JUGUERIA',
+//   OTRO: 'OTRO'
+// };
+
+// export type StoreCategory = (typeof StoreCategory)[keyof typeof StoreCategory]
 
 export type TagType =
   | 'CASA'

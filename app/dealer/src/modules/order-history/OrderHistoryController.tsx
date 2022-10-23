@@ -80,7 +80,7 @@ export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
         setIsLoading(false);
         setNoMoreOrders(response.data.length !== 10);
       })
-      .finally(() => setIsLoading(false));
+      .catch(() => setIsLoading(false));
   };
 
   const fetchMore = () => {

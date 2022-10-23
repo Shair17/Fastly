@@ -588,7 +588,7 @@ export class UserService {
 
   async myOrders(
     userId: string,
-    {orderBy = 'desc', skip, take}: GetMyUserOrdersQueryStringType,
+    {orderBy = 'desc', skip = 0, take = 10}: GetMyUserOrdersQueryStringType,
   ) {
     const user = await this.getByIdOrThrow(userId);
 

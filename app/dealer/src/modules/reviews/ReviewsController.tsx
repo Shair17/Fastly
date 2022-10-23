@@ -40,7 +40,7 @@ export const ReviewsController: React.FC<ReviewsStackProps> = () => {
         setIsLoading(false);
         setNoMoreReviews(response.data.length !== 10);
       })
-      .finally(() => setIsLoading(false));
+      .catch(() => setIsLoading(false));
   };
 
   const fetchMore = () => {

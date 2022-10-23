@@ -577,7 +577,7 @@ export class DealerService {
 
   async getMyOrders(
     dealerId: string,
-    {skip, take, orderBy = 'desc'}: GetMyOrdersQueryStringType,
+    {skip = 10, take = 10, orderBy = 'desc'}: GetMyOrdersQueryStringType,
   ) {
     const dealer = await this.getByIdOrThrow(dealerId);
     const orders = await this.databaseService.order.findMany({
