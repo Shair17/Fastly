@@ -4,7 +4,7 @@ export const CreateOrderBody = Type.Object({
   userId: Type.String({format: 'uri'}),
   dealerId: Type.Optional(Type.String({format: 'uri'})),
   addressId: Type.String({format: 'uuid'}),
-  productId: Type.String({format: 'uri'}),
+  productIDs: Type.Array(Type.String({format: 'uri'})),
   quantity: Type.Number(),
   message: Type.Optional(Type.String()),
 });

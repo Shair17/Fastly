@@ -5,7 +5,7 @@ import {HomeStackParamList} from '../HomeController';
 
 interface Props extends NativeStackScreenProps<HomeStackParamList, 'Store'> {}
 
-export const StoreScreen: React.FC<Props> = () => (
+export const StoreScreen: React.FC<Props> = ({navigation, route}) => (
   <Div flex={1} alignItems="center" justifyContent="center">
     <Text>CategoriesScreen</Text>
   </Div>

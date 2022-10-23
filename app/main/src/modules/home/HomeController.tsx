@@ -40,7 +40,8 @@ export const HomeController: React.FC<HomeStackProps> = ({navigation}) => {
       <HomeStack.Screen name="Category" component={CategoryScreen} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
       <HomeStack.Screen name="Store" component={StoreScreen} />
-      {/** Agregar pantalla de *SERVICIO* para la siguiente versión */}
+      {/** Agregar pantalla de *TODO LO QUE QUIERAS* para la siguiente versión */}
+      {/** Agregar pantalla de *ENCARGOS* para la siguiente versión */}
     </HomeStack.Navigator>
   );
 };

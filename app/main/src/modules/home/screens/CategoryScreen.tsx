@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({onPress, category}) => (
   />
 );
 
-export const CategoryScreen: React.FC<Props> = ({route, navigation}) => {
+export const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
   const [skip, setSkip] = useState(0);
   const category = route.params.category;
   const [{error, loading, data: stores}, refetchStoresForCategory] = useAxios(
@@ -69,7 +69,7 @@ export const CategoryScreen: React.FC<Props> = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    // ´category ´ isn't in categories
+    // ´category´ isn't in categories
     if (!categories.includes(category)) {
       Notifier.showNotification({
         title: 'Alerta',
@@ -87,87 +87,87 @@ export const CategoryScreen: React.FC<Props> = ({route, navigation}) => {
     <Div flex={1} bg="body">
       <Header category={category} onPress={() => navigation.goBack()} />
 
-      <FlatList
-        // refreshControl={}
-        // refreshing
-        style={{
-          width: '100%',
-        }}
-        data={Array.from({length: 10}, i => i)}
-        renderItem={() => {
-          return (
-            <Div bg="red100" mb="2xl" p="2xl">
-              <Text>HOLA</Text>
-            </Div>
-          );
-        }}
-        ListHeaderComponent={() => {
-          return (
-            <Div p="2xl">
-              <Div>
-                <Text color="text" mb="lg" fontWeight="bold" fontSize="4xl">
-                  Negocios en la categoría:{' '}
-                  <Text
-                    color="secondary"
-                    mb="lg"
-                    fontWeight="bold"
-                    fontSize="4xl">
-                    {parseCategoryStore(category)}
-                  </Text>
-                </Text>
+      {false && (
+        <FlatList
+          style={{
+            width: '100%',
+          }}
+          data={Array.from({length: 10}, i => i)}
+          renderItem={() => {
+            return (
+              <Div bg="red100" mb="2xl" p="2xl">
+                <Text>HOLA</Text>
               </Div>
-            </Div>
-          );
-        }}
-        ListFooterComponent={() => {
-          if (stores?.length === 0) return null;
-
-          return (
-            <Div
-              bg="body"
-              flex={1}
-              alignItems="center"
-              justifyContent="center"
-              mt="lg"
-              mb="xl">
-              {loading ? (
-                <Div alignItems="center" justifyContent="center">
-                  <ActivityIndicator />
-                  <Text mt="sm">Cargando...</Text>
+            );
+          }}
+          ListHeaderComponent={() => {
+            return (
+              <Div p="2xl">
+                <Div>
+                  <Text color="text" mb="lg" fontWeight="bold" fontSize="4xl">
+                    Negocios en la categoría:{' '}
+                    <Text
+                      color="secondary"
+                      mb="lg"
+                      fontWeight="bold"
+                      fontSize="4xl">
+                      {parseCategoryStore(category)}
+                    </Text>
+                  </Text>
                 </Div>
-              ) : null}
+              </Div>
+            );
+          }}
+          ListFooterComponent={() => {
+            if (stores?.length === 0) return null;
 
-              {/** noMoreReviews */}
-              {false ? (
-                <Text fontWeight="600" fontSize="lg">
-                  Haz llegado al final.
+            return (
+              <Div
+                bg="body"
+                flex={1}
+                alignItems="center"
+                justifyContent="center"
+                mt="lg"
+                mb="xl">
+                {loading ? (
+                  <Div alignItems="center" justifyContent="center">
+                    <ActivityIndicator />
+                    <Text mt="sm">Cargando...</Text>
+                  </Div>
+                ) : null}
+
+                {/** noMoreReviews */}
+                {false ? (
+                  <Text fontWeight="600" fontSize="lg">
+                    Haz llegado al final.
+                  </Text>
+                ) : null}
+              </Div>
+            );
+          }}
+          ListEmptyComponent={() => {
+            return (
+              <Div flex={1} px="2xl">
+                <Text fontWeight="500" fontSize="2xl">
+                  No hay negocios en la categoría de{' '}
+                  {parseCategoryStore(category)}
                 </Text>
-              ) : null}
-            </Div>
-          );
-        }}
-        ListEmptyComponent={() => {
-          return (
-            <Div flex={1} px="2xl">
-              <Text fontWeight="500" fontSize="2xl">
-                No hay negocios en la categoría de{' '}
-                {parseCategoryStore(category)}
-              </Text>
-              <Button
-                mt="xl"
-                fontWeight="600"
-                block
-                loading={loading}
-                h={55}
-                onPress={fetchStores}>
-                Recargar
-              </Button>
-            </Div>
-          );
-        }}
-        onEndReachedThreshold={0.2}
-        onEndReached={undefined}
-      />
+                <Button
+                  mt="xl"
+                  fontWeight="600"
+                  block
+                  loading={loading}
+                  h={55}
+                  onPress={fetchStores}>
+                  Recargar
+                </Button>
+              </Div>
+            );
+          }}
+          onEndReachedThreshold={0.2}
+          onEndReached={undefined}
+        />
+      )}
     </Div>
   );
 };

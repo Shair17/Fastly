@@ -1,4 +1,4 @@
-import {OrderStatus, Product, UserAddress} from '@prisma/client';
+import {OrderStatus, Product, Store, UserAddress} from '@prisma/client';
 import {validate} from 'uuid';
 import {isCuid} from 'cuid';
 
@@ -21,18 +21,23 @@ export type IOrder = {
   arrivalTime: Date | null;
   deliveryPrice: number;
   message: string | null;
-  product: Product;
+  // products: Product[];
+  products: (Product & {
+    store: {
+      name: string;
+      owner: {
+        id: string;
+      };
+    };
+  })[];
   quantity: number;
   status: OrderStatus;
-  productId: string;
   dealerId: string | null;
   userId: string;
   userAddressId: string;
 
-  customerId: string;
   userName: string;
   userPhone: string;
-  storeName: string;
 };
 
 export class OrderClass implements IOrderClass {

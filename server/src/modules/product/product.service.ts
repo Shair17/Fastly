@@ -52,6 +52,25 @@ export class ProductService {
     return this.databaseService.product.findMany();
   }
 
+  async verifyProductIDsInDatabaseOrThrow(productIDs: string[]) {
+    for (const productId of productIDs) {
+      const product = await this.databaseService.product.findUnique({
+        where: {
+          id: productId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!product) {
+        throw new NotFound(`Product with id ${productId} doesn't exists.`);
+      }
+    }
+
+    return productIDs;
+  }
+
   async getById(id: string) {
     return this.databaseService.product.findUnique({where: {id}});
   }

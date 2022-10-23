@@ -27,9 +27,12 @@ export class OrderService {
       include: {
         address: true,
         user: true,
-        product: {
+        products: {
           include: {
             store: {
+              select: {
+                name: true,
+              },
               include: {
                 owner: {
                   select: {
@@ -54,11 +57,8 @@ export class OrderService {
       message: order.message,
       quantity: order.quantity,
       status: order.status,
-      productId: order.productId,
-      storeName: order.product.store.name,
-      customerId: order.product.store.owner.id,
+      products: order.products,
       dealerId: order.dealerId,
-      product: order.product,
       userId: order.userId,
       userAddressId: order.userAddressId,
       address: order.address,
@@ -91,10 +91,23 @@ export class OrderService {
       include: {
         address: true,
         user: true,
-        product: {
-          include: {
+        products: {
+          select: {
+            blurHash: true,
+            id: true,
+            image: true,
+            description: true,
+            name: true,
+            price: true,
+            rankings: true,
+            coupon: true,
+            couponId: true,
+            storeId: true,
+            createdAt: true,
+            updatedAt: true,
             store: {
-              include: {
+              select: {
+                name: true,
                 owner: {
                   select: {
                     id: true,
@@ -117,11 +130,8 @@ export class OrderService {
         message: order.message,
         quantity: order.quantity,
         status: order.status,
-        productId: order.productId,
-        storeName: order.product.store.name,
-        customerId: order.product.store.owner.id,
+        products: order.products,
         dealerId: order.dealerId,
-        product: order.product,
         userId: order.userId,
         userAddressId: order.userAddressId,
         address: order.address,
@@ -135,16 +145,16 @@ export class OrderService {
 
   async createOrder({
     addressId,
-    productId,
+    productIDs,
     quantity,
     userId,
     dealerId,
     message,
   }: CreateOrderBodyType) {
-    const [user, address, product] = await Promise.all([
+    const [user, address, products] = await Promise.all([
       this.userService.getByIdOnlyUserOrThrow(userId),
       this.userService.getUserAddressByIdOrThrow(addressId),
-      this.productService.getByIdOrThrow(productId),
+      this.productService.verifyProductIDsInDatabaseOrThrow(productIDs),
     ]);
 
     let dealer: Dealer | null = null;
@@ -152,6 +162,10 @@ export class OrderService {
     if (dealerId !== undefined) {
       dealer = await this.dealerService.getByIdOrThrow(dealerId);
     }
+
+    const productsToConnect = products.map(productId => ({
+      id: productId,
+    }));
 
     const order = await this.databaseService.order.create({
       data: {
@@ -162,10 +176,8 @@ export class OrderService {
             id: dealer?.id ?? undefined,
           },
         },
-        product: {
-          connect: {
-            id: product.id,
-          },
+        products: {
+          connect: productsToConnect,
         },
         user: {
           connect: {

@@ -3,9 +3,7 @@ import {Alert, TouchableOpacity} from 'react-native';
 import {Div, Text} from 'react-native-magnus';
 import {Order} from '@fastly/interfaces/app';
 import {format as timeAgoFormat} from 'timeago.js';
-import format from 'date-fns/format';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
-import esLocale from 'date-fns/locale/es';
 
 interface Props extends Order {}
 
@@ -14,7 +12,7 @@ export const MyOrderHistoryItem: React.FC<Props> = ({
   address,
   message,
   quantity,
-  product,
+  products,
   deliveryPrice,
   status,
   arrivalTime,
@@ -22,9 +20,12 @@ export const MyOrderHistoryItem: React.FC<Props> = ({
   updatedAt,
 }) => {
   const handleOpenMoreInfo = () => {
+    const productsNames = products.map(product => product.name);
+    const displayProducts = productsNames.join(', ');
+
     Alert.alert(
       `Tu Pedido con id: ${id}`,
-      `Se ha llevado: ${product.name}, Dirección: ${
+      `Se ha llevado: ${displayProducts}, Dirección: ${
         address.name
       }, Cantidad: ${quantity}, Precio del Delivery: ${deliveryPrice}${
         arrivalTime ? `, Hora de Llegada: ${arrivalTime}` : ''

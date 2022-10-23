@@ -111,16 +111,16 @@ model DealerRanking {
 }
 
 model User {
-  id                  String          @id @default(uuid())
+  id                  String           @id @default(uuid())
   name                String
   email               String?
-  phone               String?         @db.VarChar(9)
-  dni                 String?         @db.VarChar(8)
+  phone               String?          @db.VarChar(9)
+  dni                 String?          @db.VarChar(8)
   avatar              String
-  refreshToken        String?         @db.VarChar(1024)
-  facebookId          String          @unique
-  facebookAccessToken String          @db.VarChar(512)
-  isBanned            Boolean         @default(false)
+  refreshToken        String?          @db.VarChar(1024)
+  facebookId          String           @unique
+  facebookAccessToken String           @db.VarChar(512)
+  isBanned            Boolean          @default(false)
   banReason           String?
   addresses           UserAddress[]
   favorites           UserFavorite[]
@@ -128,8 +128,9 @@ model User {
   storeRankings       StoreRanking[]
   dealerRankings      DealerRanking[]
   orders              Order[]
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime        @updatedAt
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  ProductRanking      ProductRanking[]
 
   @@map("users")
 }
@@ -198,30 +199,32 @@ enum OrderStatus {
   DELIVERED
 }
 
-// TODO: Crear un modelo para las ordenes completadas, es decir, entregadas, para así saber que ordenes se realizaron con exito, saber que usuario hizo esa orden, que repartidor la completo, de que tienda y que producto, etc...
-// model CompletedOrders {
-//   id String @id @default(uuid())
+model CompletedOrders {
+  id String @id @default(uuid())
 
-//   @@map("completed_orders")
-// }
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  @@map("completed_orders")
+}
 
 model Order {
-  id            String      @id @default(uuid())
-  product       Product     @relation(fields: [productId], references: [id])
-  productId     String
-  dealer        Dealer?     @relation(fields: [dealerId], references: [id])
-  dealerId      String?
-  user          User        @relation(fields: [userId], references: [id])
-  userId        String
-  quantity      Int         @default(1)
-  deliveryPrice Float       @default(0) @db.Float
-  status        OrderStatus @default(PENDING)
-  message       String?
-  arrivalTime   DateTime?
-  address       UserAddress @relation(fields: [userAddressId], references: [id])
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  userAddressId String
+  id              String            @id @default(uuid())
+  products        Product[]
+  dealer          Dealer?           @relation(fields: [dealerId], references: [id])
+  dealerId        String?
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  quantity        Int               @default(1)
+  deliveryPrice   Float             @default(0) @db.Float
+  status          OrderStatus       @default(PENDING)
+  message         String?
+  arrivalTime     DateTime?
+  address         UserAddress       @relation(fields: [userAddressId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  userAddressId   String
+  completedOrders CompletedOrders[]
 
   @@map("orders")
 }
@@ -282,24 +285,41 @@ model StoreRanking {
 }
 
 model Product {
-  id            String         @id @default(uuid())
+  id            String           @id @default(uuid())
   name          String
   description   String?
-  price         Float          @default(0) @db.Float
+  price         Float            @default(0) @db.Float
   image         String
   blurHash      String
-  coupon        Coupon?        @relation(fields: [couponId], references: [id])
+  coupon        Coupon?          @relation(fields: [couponId], references: [id])
   couponId      String?
   orders        Order[]
   userCart      UserCart[]
   userFavorites UserFavorite[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  rankings      ProductRanking[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
   store   Store  @relation(fields: [storeId], references: [id])
   storeId String
 
   @@map("products")
+}
+
+model ProductRanking {
+  id        String   @id @default(uuid())
+  comment   String?
+  value     Float    @db.Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+
+  @@map("products_rankings")
 }
 
 model Coupon {

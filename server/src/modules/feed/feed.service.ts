@@ -6,6 +6,7 @@ import {
   GetFeedStoresQueryStringType,
   GetFeedProductsQueryStringType,
 } from './feed.schema';
+import {randomPick} from '../../utils/randomPick';
 
 // Carousel
 type Image = string;
@@ -143,6 +144,9 @@ export class FeedService {
   private async getRecommended() {
     return this.databaseService.product.findMany({
       take: 10,
+      orderBy: {
+        createdAt: randomPick(['asc', 'desc']) as any,
+      },
     });
   }
 

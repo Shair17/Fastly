@@ -96,6 +96,7 @@ Table users {
   orders orders [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  ProductRanking products_rankings [not null]
 }
 
 Table users_addresses {
@@ -136,10 +137,15 @@ Table users_favorites {
   userId String
 }
 
+Table completed_orders {
+  id String [pk]
+  order orders [not null]
+  orderId String [not null]
+}
+
 Table orders {
   id String [pk]
-  product products [not null]
-  productId String [not null]
+  products products [not null]
   dealer dealers
   dealerId String
   user users [not null]
@@ -153,6 +159,7 @@ Table orders {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   userAddressId String [not null]
+  completedOrders completed_orders [not null]
 }
 
 Table stores {
@@ -197,10 +204,23 @@ Table products {
   orders orders [not null]
   userCart users_cart [not null]
   userFavorites users_favorites [not null]
+  rankings products_rankings [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   store stores [not null]
   storeId String [not null]
+}
+
+Table products_rankings {
+  id String [pk]
+  comment String
+  value Float [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user users [not null]
+  userId String [not null]
+  product products
+  productId String
 }
 
 Table coupons {
@@ -212,6 +232,11 @@ Table coupons {
   products products [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+}
+
+Table OrderToProduct {
+  productsId String [ref: > products.id]
+  ordersId String [ref: > orders.id]
 }
 
 Enum Vehicle {
@@ -271,7 +296,7 @@ Ref: users_favorites.productId > products.id
 
 Ref: users_favorites.userId > users.id
 
-Ref: orders.productId > products.id
+Ref: completed_orders.orderId > orders.id
 
 Ref: orders.dealerId > dealers.id
 
@@ -288,3 +313,7 @@ Ref: stores_rankings.storeId > stores.id
 Ref: products.couponId > coupons.id
 
 Ref: products.storeId > stores.id
+
+Ref: products_rankings.userId > users.id
+
+Ref: products_rankings.productId > products.id

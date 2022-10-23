@@ -29,18 +29,20 @@ const _orders: Order[] = [
       updatedAt: 'casa',
       zip: 'asawqe',
     },
-    product: {
-      id: '345',
-      blurHash: 'qqwqewq',
-      couponId: '22qw',
-      createdAt: 'hoy',
-      description: 'asdas',
-      image: 'dasdsa',
-      name: 'dasdas',
-      price: 234,
-      storeId: '33232',
-      updatedAt: 'qwewq',
-    },
+    products: [
+      {
+        id: '345',
+        blurHash: 'qqwqewq',
+        couponId: '22qw',
+        createdAt: 'hoy',
+        description: 'asdas',
+        image: 'dasdsa',
+        name: 'dasdas',
+        price: 234,
+        storeId: '33232',
+        updatedAt: 'qwewq',
+      },
+    ],
     quantity: 1,
     createdAt: '2022-08-09T03:28:19.774Z',
     status: 'DELIVERED',
@@ -120,7 +122,7 @@ export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
             createdAt,
             updatedAt,
             deliveryPrice,
-            product,
+            products,
             quantity,
             status,
             arrivalTime,
@@ -135,7 +137,7 @@ export const OrderHistoryController: React.FC<OrderHistoryStackProps> = () => {
             <MyOrderHistoryItem
               id={id}
               address={address}
-              product={product}
+              products={products}
               deliveryPrice={deliveryPrice}
               quantity={quantity}
               status={status}

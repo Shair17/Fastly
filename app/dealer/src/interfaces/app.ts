@@ -71,7 +71,7 @@ export interface Order {
   arrivalTime?: string;
   deliveryPrice: number;
   message?: string;
-  product: Product;
+  products: Product[];
   quantity: number;
   status: OrderStatus;
   productId: string;

@@ -52,7 +52,7 @@ export type Response = {
   products: Product[];
 };
 
-export const HomeScreen: FC<HomeStackProps> = ({navigation}) => {
+export const HomeScreen: FC<HomeStackProps> = ({navigation, route}) => {
   const [{error, loading, data: feed}, refectchFeed] =
     useAxios<Response>('/feed');
 

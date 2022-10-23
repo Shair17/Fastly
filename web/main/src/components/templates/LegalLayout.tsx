@@ -14,7 +14,7 @@ export const LegalLayout: FC<PropsWithChildren<Props>> = ({
   return (
     <Layout title={title}>
       <div className="relative">
-        <div className="flex flex-col items-center w-full mx-auto my-16 lg:my-24 max-w-7xl sm:px-3 lg:px-6">
+        <div className="flex flex-col items-center w-full px-4 mx-auto my-16 lg:my-24 max-w-7xl sm:px-3 lg:px-6">
           <h1 className="text-3xl font-bold text-center 2xl:text-6xl">
             {title}
           </h1>
