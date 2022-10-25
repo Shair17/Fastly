@@ -34,10 +34,11 @@ export const registerStoreSchema = z.object({
   owner: z.string().email({message: 'Correo electrónico inválido'}),
   name: z.string(),
   address: z.string(),
-  description: z.optional(z.string()),
+  description: z.string(),
   categoryDescription: z.optional(z.string()),
   openTime: z.optional(z.date()),
   closeTime: z.optional(z.date()),
+  // TODO: usar base64 image
   logo: z.string(),
   category: z.nativeEnum(StoreCategory),
 });

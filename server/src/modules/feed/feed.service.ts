@@ -7,6 +7,7 @@ import {
   GetFeedProductsQueryStringType,
 } from './feed.schema';
 import {randomPick} from '../../utils/randomPick';
+import {calcStoreRanking} from '../../utils/calcStoreRanking';
 
 // Carousel
 type Image = string;
@@ -78,7 +79,7 @@ export class FeedService {
     skip = 0,
     take = 10,
   }: GetStoresByCategoryQueryStringType) {
-    return this.databaseService.store.findMany({
+    const _stores = await this.databaseService.store.findMany({
       where: {
         category,
       },
@@ -87,7 +88,23 @@ export class FeedService {
       orderBy: {
         createdAt: orderBy,
       },
+      include: {
+        rankings: true,
+      },
     });
+
+    const stores = _stores.map(store => {
+      const {rankings, ...restOfStore} = store;
+      return {
+        ranking: {
+          value: calcStoreRanking(rankings),
+          size: rankings.length,
+        },
+        ...restOfStore,
+      };
+    });
+
+    return stores;
   }
 
   private getCarousel(): Carousel[] {

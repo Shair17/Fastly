@@ -250,9 +250,9 @@ enum StoreCategory {
 model Store {
   id                  String         @id @default(uuid())
   name                String
-  description         String?
+  description         String
   address             String
-  logo                String?
+  logo                String
   category            StoreCategory
   categoryDescription String?
   rankings            StoreRanking[]

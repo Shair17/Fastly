@@ -1,9 +1,10 @@
-export const checkCouponExpiration = (couponExpiration?: Date) => {
-  if (couponExpiration) {
-    const expiration = new Date(couponExpiration);
-    const now = new Date();
+import {isDate} from '.';
 
-    return expiration > now;
+export const checkCouponExpiration = (couponExpiration?: Date) => {
+  if (isDate(couponExpiration)) {
+    const expiration = new Date(couponExpiration);
+
+    return expiration > new Date();
   }
 
   console.log('el cupon no tiene fecha de expiracion');

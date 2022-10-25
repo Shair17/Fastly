@@ -349,7 +349,6 @@ export class AuthService {
         refreshToken,
       );
     } catch (error) {
-      console.log('error?');
       throw new InternalServerError();
     }
 
@@ -1001,7 +1000,9 @@ export class AuthService {
       resetPasswordToken,
     );
 
-    const dealer = await this.dealerService.getByIdOrThrow(decoded.id);
+    const dealer = await this.dealerService.getByIdOnlyDealerOrThrow(
+      decoded.id,
+    );
 
     if (
       dealer.resetPasswordToken &&

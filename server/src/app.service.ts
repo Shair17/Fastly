@@ -6,6 +6,7 @@ import {
   appVersion,
   appDeveloper,
   appUpdateNeeded,
+  appUpdateMessage,
 } from './constants/app';
 import {IOService} from './shared/services';
 
@@ -28,6 +29,7 @@ export class AppService {
       appVersion,
       appDeveloper,
       appUpdateNeeded,
+      appUpdateMessage,
       date: new Date().toISOString(),
     };
   }

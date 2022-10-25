@@ -28,9 +28,10 @@ export const CreateStoreBody = Type.Object(
   {
     // Reemplacé owner por owner email
     owner: Type.String({format: 'email'}),
-    logo: Type.Optional(Type.String({format: 'uri'})),
+    // TODO: cambiar a base64 image
+    logo: Type.String({format: 'uri'}),
     name: Type.String(),
-    description: Type.Optional(Type.String()),
+    description: Type.String(),
     address: Type.String(),
     category: Type.Enum(StoreCategory),
     categoryDescription: Type.Optional(Type.String()),

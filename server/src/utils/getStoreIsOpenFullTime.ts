@@ -1,8 +1,5 @@
+import {isDate} from './index';
+
 export const getStoreIsOpenFullTime = (openTime?: Date, closeTime?: Date) => {
-  return (
-    !openTime &&
-    !(typeof openTime !== undefined) &&
-    !closeTime &&
-    !(typeof closeTime !== undefined)
-  );
+  return isDate(openTime) || isDate(closeTime);
 };

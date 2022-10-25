@@ -170,7 +170,7 @@ export class CouponService {
   }
 
   async generateCouponCode() {
-    let generatedCoupon = getCouponCode();
+    const generatedCoupon = getCouponCode();
 
     const couponExists = await this.couponExists(generatedCoupon);
 

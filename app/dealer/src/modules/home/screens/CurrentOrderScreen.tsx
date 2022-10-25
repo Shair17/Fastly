@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {Div, Text} from 'react-native-magnus';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSocketHasActiveOrders} from '@fastly/hooks/useSocketHasActiveOrders';

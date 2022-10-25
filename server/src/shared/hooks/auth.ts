@@ -158,7 +158,8 @@ export const adminIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -190,7 +191,8 @@ export const userIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -218,7 +220,8 @@ export const customerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -252,7 +255,8 @@ export const dealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -284,7 +288,8 @@ export const adminOrUserIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -332,7 +337,8 @@ export const adminOrCustomerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -386,7 +392,8 @@ export const userOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -435,7 +442,8 @@ export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -486,7 +494,8 @@ export const adminOrDealerIsAuthenticated: onRequestHookHandler = async (
 // Hook for check if admin - user - customer is authenticated
 export const adminOrUserOrCustomerIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
-    const token = request.headers.authorization?.split(' ')[1]!;
+    const parts = <[string, string]>request.headers.authorization?.split(' ');
+    const [, token] = parts;
 
     if (!verifyToken(token)) {
       throw new Unauthorized(`invalid_token`);
@@ -553,7 +562,8 @@ export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -616,7 +626,8 @@ export const adminOrUserOrDealerIsAuthenticated: onRequestHookHandler = async (
 // Hook for check if admin - dealer - customer is authenticated
 export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
-    const token = request.headers.authorization?.split(' ')[1]!;
+    const parts = <[string, string]>request.headers.authorization?.split(' ');
+    const [, token] = parts;
 
     if (!verifyToken(token)) {
       throw new Unauthorized(`invalid_token`);
@@ -686,7 +697,8 @@ export const adminOrDealerOrCustomerIsAuthenticated: onRequestHookHandler =
 // Hook for check if customer - dealer - user is authenticated
 export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
-    const token = request.headers.authorization?.split(' ')[1]!;
+    const parts = <[string, string]>request.headers.authorization?.split(' ');
+    const [, token] = parts;
 
     if (!verifyToken(token)) {
       throw new Unauthorized(`invalid_token`);
@@ -751,7 +763,8 @@ export const customerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
 // Hook for check if admin - customer - dealer - user is authenticated
 export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
-    const token = request.headers.authorization?.split(' ')[1]!;
+    const parts = <[string, string]>request.headers.authorization?.split(' ');
+    const [, token] = parts;
 
     if (!verifyToken(token)) {
       throw new Unauthorized(`invalid_token`);
@@ -833,7 +846,8 @@ export const adminOrCustomerOrDealerOrUserIsAuthenticated: onRequestHookHandler 
 // Hook for check if admin - customer - user is authenticated
 export const adminOrCustomerOrUserIsAuthenticated: onRequestHookHandler =
   async (request, reply) => {
-    const token = request.headers.authorization?.split(' ')[1]!;
+    const parts = <[string, string]>request.headers.authorization?.split(' ');
+    const [, token] = parts;
 
     if (!verifyToken(token)) {
       throw new Unauthorized(`invalid_token`);
@@ -900,7 +914,8 @@ export const customerOrDealerIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);
@@ -955,7 +970,8 @@ export const customerOrUserIsAuthenticated: onRequestHookHandler = async (
   request,
   reply,
 ) => {
-  const token = request.headers.authorization?.split(' ')[1]!;
+  const parts = <[string, string]>request.headers.authorization?.split(' ');
+  const [, token] = parts;
 
   if (!verifyToken(token)) {
     throw new Unauthorized(`invalid_token`);

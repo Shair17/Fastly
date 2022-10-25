@@ -24,5 +24,8 @@ export const appVersion = (currentAppVersion as string) || fallBackAppVersion;
 export const appUpdateNeeded =
   +serverVersion.split('.')[0] > +appVersion.split('.')[0];
 
+export const appUpdateMessage =
+  'Por favor actualiza Fastly Delivery para tener una mejor experiencia!';
+
 export const defaultAvatarUri =
   'https://res.cloudinary.com/fastly-delivery-app-peru/image/upload/v1631005766/defaults/avatars/fastly_mwizrt.jpg';

@@ -1,6 +1,6 @@
 import {OrderStatus, Product, Store, UserAddress} from '@prisma/client';
-import {validate} from 'uuid';
 import {isCuid} from 'cuid';
+import {isString} from '../../utils';
 
 export interface ICoordinates {
   latitude: number;
@@ -60,10 +60,8 @@ export class OrderClass implements IOrderClass {
 
   hasDealer(): boolean {
     // TODO: reemplazzar el código existente por el comentario
-    // return isCuid(this.order.dealerId)
-    return (
-      typeof this.order.dealerId === 'string' && validate(this.order.dealerId)
-    );
+    // return isString(this.order.dealerId) && isCuid(this.order.dealerId)
+    return typeof this.order.dealerId === 'string';
   }
 
   getUserId(): string | null {

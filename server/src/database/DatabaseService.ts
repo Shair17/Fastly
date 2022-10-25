@@ -21,7 +21,7 @@ export class DatabaseService
     this.loggerService.info(
       `Prisma Module has established the connection to the database and it took ${Math.floor(
         endTime - startTime,
-      )}ms`,
+      )}ms.`,
     );
   }
 

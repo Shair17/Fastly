@@ -35,6 +35,7 @@ export class IOService implements OnModuleInit {
   @Initializer()
   async onModuleInit(): Promise<void> {
     this.socketEvents();
+    this.fastify.log.info('Socket server ready for listen events.');
   }
 
   socketEvents(): void {

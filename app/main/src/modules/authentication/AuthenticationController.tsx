@@ -1,4 +1,4 @@
-import React, {useState, FC, Fragment} from 'react';
+import React, {useState, FC, Fragment, useCallback} from 'react';
 import {StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import {Div, Text, Image, Icon} from 'react-native-magnus';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
@@ -30,7 +30,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
   const setIsNewUser = useAuthStore(s => s.setIsNewUser);
   const setUser = useUserStore(user => user.setUser);
 
-  const loginWithFacebook = async () => {
+  const loginWithFacebook = useCallback(async () => {
     try {
       const {isCancelled} = await LoginManager.logInWithPermissions([
         'public_profile',
@@ -138,7 +138,7 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
       });
       setOverlayVisible(false);
     }
-  };
+  }, []);
 
   return (
     <Fragment>

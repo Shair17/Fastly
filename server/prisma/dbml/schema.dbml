@@ -165,9 +165,9 @@ Table orders {
 Table stores {
   id String [pk]
   name String [not null]
-  description String
+  description String [not null]
   address String [not null]
-  logo String
+  logo String [not null]
   category StoreCategory [not null]
   categoryDescription String
   rankings stores_rankings [not null]

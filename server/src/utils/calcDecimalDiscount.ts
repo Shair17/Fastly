@@ -5,7 +5,7 @@ export const calcDecimalDiscount = (discount: number) => {
     return discount / 100;
   }
 
-  console.error('discount es menor a 0 o mayor a 100');
+  console.log('discount es menor a 0 o mayor a 100');
 
   return 0;
 };
