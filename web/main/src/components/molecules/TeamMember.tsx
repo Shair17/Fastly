@@ -21,11 +21,11 @@ export const TeamMember: FC<Props> = ({
   whatsapp,
 }) => {
   return (
-    <div className="flex flex-col md:items-center md:flex-row md:space-x-6">
+    <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
       <div className="flex items-end justify-start overflow-hidden rounded-lg">
         <Image src={avatar} width={96} height={96} alt={name} />
       </div>
-      <div className="flex flex-col justify-between mt-2 text-left md:py-2 md:mt-0">
+      <div className="mt-2 flex flex-col justify-between text-left md:mt-0 md:py-2">
         <h3 className="mt-1 text-lg font-medium text-gray-600">{name}</h3>
         <p>{description}</p>
         <div className="mt-2 space-x-1 text-gray-400 md:mt-4">

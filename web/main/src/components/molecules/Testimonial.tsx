@@ -10,7 +10,7 @@ import {
   World,
 } from 'tabler-icons-react';
 
-const SocialIcon: FC<Pick<Props, 'socialType'>> = ({socialType}) => {
+const SocialIcon: FC<Pick<TestimonialType, 'socialType'>> = ({socialType}) => {
   if (socialType === 'facebook') return <BrandFacebook />;
   if (socialType === 'twitter') return <BrandTwitter />;
   if (socialType === 'instagram') return <BrandInstagram />;
@@ -20,9 +20,9 @@ const SocialIcon: FC<Pick<Props, 'socialType'>> = ({socialType}) => {
   return <World />;
 };
 
-interface Props extends TestimonialType {}
+// interface Props extends TestimonialType {}
 
-export const Testimonial: FC<Props> = ({
+export const Testimonial: FC<TestimonialType> = ({
   avatar,
   name,
   quote,
@@ -31,7 +31,7 @@ export const Testimonial: FC<Props> = ({
   type,
 }) => {
   return (
-    <div className="px-5 py-6 space-y-5">
+    <div className="space-y-5 px-5 py-6">
       <div className="flex items-center justify-between">
         <Image
           src={avatar}
@@ -40,11 +40,11 @@ export const Testimonial: FC<Props> = ({
           alt={name}
           className="rounded-full"
         />
-        <div className="min-w-0 ml-3 mr-auto">
-          <h3 className="overflow-hidden text-base font-semibold whitespace-nowrap text-ellipsis">
+        <div className="ml-3 mr-auto min-w-0">
+          <h3 className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
             {name}
           </h3>
-          <p className="overflow-hidden text-sm italic text-gray-500 whitespace-nowrap text-ellipsis">
+          <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm italic text-gray-500">
             {type}
           </p>
         </div>

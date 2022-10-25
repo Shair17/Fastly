@@ -37,7 +37,7 @@ const Terminos: NextPage = () => {
         </a>
         .
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Archivos de registro
       </h2>
       <p>
@@ -48,27 +48,27 @@ const Terminos: NextPage = () => {
       </p>
       <p>La información recopilada por los archivos de registro incluye:</p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Direcciones de protocolo de Internet (IP) (pueden revelar su ubicación
           geográfica).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Detalles del software que realiza la solicitud (como tipo de
           navegador, versión, sistema operativo).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Tipo de dispositivo (móvil, tableta, escritorio).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Sello de fecha y hora de la solicitud.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           El nombre del recurso solicitado.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Número de solicitudes.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Páginas de referencia / salida.
         </li>
       </ul>
@@ -78,7 +78,7 @@ const Terminos: NextPage = () => {
         tendencias, administrar el sitio, rastreando el movimiento de los
         usuarios en el sitio web y reuniendo información demográfica.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Información personal
       </h2>
       <p>
@@ -94,7 +94,7 @@ const Terminos: NextPage = () => {
         autorizadas o procesamiento ilegal, y contra la pérdida accidental,
         destrucción, daño, alteración, divulgación o acceso.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Inscríbase en programas beta
       </h2>
       <p>
@@ -103,16 +103,16 @@ const Terminos: NextPage = () => {
         registrándote con Apple, recopilamos:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Tu nombre.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico (o el alias generado por Apple).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Un identificador proporcionado por Apple.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Idioma preferido.
         </li>
       </ul>
@@ -124,15 +124,15 @@ const Terminos: NextPage = () => {
         recuerde abrir la aplicación nuevamente para que también podamos
         eliminar la información de nuestros registros.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Consultas de soporte
       </h2>
       <p>Cuando manejamos sus solicitudes de soporte, recopilamos:</p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Cualquier información que proporcione para el contexto (registros de
           fallas, información de diagnóstico, etc.).
         </li>
@@ -142,17 +142,17 @@ const Terminos: NextPage = () => {
         recopilamos el siguientes datos sobre su dispositivo:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Modelo de dispositivo (por ejemplo, iPhone XR).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Versión de software instalada (por ejemplo, iOS 13.7).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Idioma del sistema preferido y el idioma que se muestra en la
           aplicación Fastly.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Versión y número de compilación de la aplicación Fastly.
         </li>
       </ul>
@@ -166,11 +166,11 @@ const Terminos: NextPage = () => {
         Podemos retener correos electrónicos de soporte indefinidamente para:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Tener contexto de solicitudes anteriores, lo que puede ayudarnos a
           responder a sus preguntas futuras más rápidamente.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Identificar tendencias en las consultas de soporte, que pueden
           ayudarnos a detectar y resolver problemas y mejorar la aplicación
           Fastly
@@ -184,7 +184,7 @@ const Terminos: NextPage = () => {
         </a>
         .
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Comentarios y sugerencias
       </h2>
       <p>
@@ -192,10 +192,10 @@ const Terminos: NextPage = () => {
         sugerencia, recoger:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Su dirección de correo electrónico.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           El contenido de su comentario o sugerencia (incluidos los enlaces o
           cualquier otro material adicional que nos proporcione como contexto).
         </li>
@@ -205,17 +205,17 @@ const Terminos: NextPage = () => {
         recopilamos el siguientes datos sobre su dispositivo:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Modelo de dispositivo (por ejemplo, Xiaomi Redmi Note 8 Pro).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Versión de software instalada (por ejemplo, Android 10).
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Idioma del sistema preferido y el idioma que se muestra en la
           aplicación Fastly.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Versión y número de compilación de la aplicación Fastly.
         </li>
       </ul>
@@ -224,11 +224,11 @@ const Terminos: NextPage = () => {
         indefinido para:
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Tener contexto de comentarios / sugerencias anteriores que puede haber
           enviado a nosotros, para que podamos comprender mejor sus necesidades.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           Identifique posibles mejoras en la aplicación Fastly.
         </li>
       </ul>
@@ -246,7 +246,7 @@ const Terminos: NextPage = () => {
         los términos especificados en Comentarios y Sección de sugerencias de
         nuestros Términos.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl"> Formspree </h2>
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl"> Formspree </h2>
       <p>
         Usamos un servicio de terceros llamado Formspree para manejar el
         formulario de contacto. envíos (soporte y comentarios). Este servicio
@@ -265,7 +265,7 @@ const Terminos: NextPage = () => {
         Al utilizar nuestros formularios de contacto, reconoce y acepta que su
         La información se transferirá para su procesamiento a Formspree.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Seguridad de los datos
       </h2>
       <p>
@@ -282,7 +282,7 @@ const Terminos: NextPage = () => {
         para proteger sus datos personales, no puede garantizar su absoluta
         seguridad.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Divulgación de datos
       </h2>
       <p>
@@ -291,7 +291,7 @@ const Terminos: NextPage = () => {
         proporcione sin su consentimiento, o utilizar sus datos para cualquier
         propósito que no sea el razón por la que lo recopilamos originalmente.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Acceder y actualizar
       </h2>
       <p>
@@ -303,7 +303,7 @@ const Terminos: NextPage = () => {
         Evaluaremos y actuaremos sobre su solicitud, sujeto a la excepciones,
         establecidas en la ley aplicable.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Transferencia de datos
       </h2>
       <p>
@@ -316,7 +316,7 @@ const Terminos: NextPage = () => {
         Su consentimiento a esta Política de privacidad seguido de su envío de
         tal La información representa su aceptación de esa transferencia.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Datos de la aplicación
       </h2>
       <p>
@@ -326,7 +326,7 @@ const Terminos: NextPage = () => {
         se define en &quot;Consultas de soporte&quot; y &quot;Comentarios y
         sugerencias&quot; de esta Política de privacidad.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Uso de la aplicación
       </h2>
       <p>
@@ -348,7 +348,7 @@ const Terminos: NextPage = () => {
         </a>{' '}
         en los análisis de uso de Apple en cualquier momento si lo desea.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Registros de fallos
       </h2>
       <p>
@@ -360,7 +360,7 @@ const Terminos: NextPage = () => {
         momento del accidente. Ninguno de estos datos puede identificarlo en de
         todas formas.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">Actualizaciones</h2>
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">Actualizaciones</h2>
       <p>
         La aplicación puede actualizarse automáticamente en su dispositivo una
         vez que se versión o funciones están disponibles para usted. La
@@ -369,7 +369,7 @@ const Terminos: NextPage = () => {
         ajustar su configuración de actualización automática directamente en su
         dispositivo.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Servicios de proveedores externos
       </h2>
       <p>
@@ -377,7 +377,7 @@ const Terminos: NextPage = () => {
         actividades en Fastly.
       </p>
       <ul className="pl-5">
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           <a
             href="https://www.apple.com/"
             target="_blank"
@@ -388,7 +388,7 @@ const Terminos: NextPage = () => {
           : Procesamiento de pagos, verificación de actualizaciones y
           administración de licencias de iOS aplicaciones.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           <a
             href="https://formspree.io/"
             target="_blank"
@@ -398,7 +398,7 @@ const Terminos: NextPage = () => {
           </a>
           : Manejo de envíos de formularios de contacto.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           <a
             href="https://www.mailgun.com/"
             target="_blank"
@@ -408,7 +408,7 @@ const Terminos: NextPage = () => {
           </a>
           : Manejo de la lista de correo del programa beta.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           <a
             href="https://github.com/"
             target="_blank"
@@ -420,7 +420,7 @@ const Terminos: NextPage = () => {
           de este servicio. a medida que ocurren los procesos de soporte al
           cliente.
         </li>
-        <li className={`relative pl-8 mb-6 ${styles.fA_DsS1e45}`}>
+        <li className={`relative mb-6 pl-8 ${styles.fA_DsS1e45}`}>
           <a
             href="https://slack.com/"
             target="_blank"
@@ -433,7 +433,7 @@ const Terminos: NextPage = () => {
           que ocurren los procesos de soporte al cliente.
         </li>
       </ul>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Información para niños
       </h2>
       <p>
@@ -443,7 +443,7 @@ const Terminos: NextPage = () => {
         encarecidamente que contáctenos de inmediato y haremos nuestro mejor
         esfuerzo para eliminar dicha información de nuestros registros.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Enlaces a otros sitios
       </h2>
       <p>
@@ -456,7 +456,7 @@ const Terminos: NextPage = () => {
         No tenemos control ni asumimos ninguna responsabilidad por el contenido,
         políticas o prácticas de privacidad de sitios o servicios de terceros.
       </p>
-      <h2 className="!mt-16 font-bold text-2xl sm:text-3xl">
+      <h2 className="!mt-16 text-2xl font-bold sm:text-3xl">
         Cambios en esta Política de privacidad
       </h2>
       <p>

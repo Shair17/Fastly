@@ -1,7 +1,7 @@
 import {ButtonProps} from 'react-html-props';
 
-interface Props extends ButtonProps {}
+// interface Props extends ButtonProps {}
 
-export const Button = (props: Props) => {
+export const Button = (props: ButtonProps) => {
   return <button {...props} />;
 };

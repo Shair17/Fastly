@@ -5,13 +5,13 @@ import Link from 'next/link';
 export const Hero = () => {
   return (
     <div className="w-full">
-      <div className="px-4 py-16 mx-auto max-w-7xl sm:px-3 lg:px-6">
-        <div className="grid items-center justify-center grid-cols-1 gap-12 md:grid-cols-2">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-3 lg:px-6">
+        <div className="grid grid-cols-1 items-center justify-center gap-12 md:grid-cols-2">
           <div className="">
-            <h1 className="my-5 font-extrabold text-gray-900 text-7xl">
+            <h1 className="my-5 text-7xl font-extrabold text-gray-900">
               Delivery de lo que quieras en minutos.
             </h1>
-            <p className="max-w-[90%] my-8 text-xl text-gray-900">
+            <p className="my-8 max-w-[90%] text-xl text-gray-900">
               Con Fastly puedes pedir lo que quieras cuando quieras en tu
               localidad en unos pocos pasos. Tú tranquilo, nosotros nerviosos.
               Quchau, ya llegamos! Descarga Fastly en tu plataforma de

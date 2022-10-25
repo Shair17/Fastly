@@ -1,13 +1,11 @@
 import {FC, PropsWithChildren} from 'react';
 import {Layout} from './Layout';
 
-interface Props {}
-
-export const BlogLayout: FC<PropsWithChildren<Props>> = ({children}) => {
+export const BlogLayout: FC<PropsWithChildren> = ({children}) => {
   return (
     <Layout title="Blog">
       <div className="relative">
-        <div className="flex flex-col items-center w-full mx-auto my-12 lg:my-16 max-w-7xl sm:px-3 lg:px-6">
+        <div className="mx-auto my-12 flex w-full max-w-7xl flex-col items-center sm:px-3 lg:my-16 lg:px-6">
           {children}
         </div>
       </div>

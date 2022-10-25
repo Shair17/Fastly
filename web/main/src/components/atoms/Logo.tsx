@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {SVGProps} from 'react-html-props';
 
-interface Props extends SVGProps {}
+// interface Props extends SVGProps {}
 
-export const Logo: FC<Props> = props => {
+export const Logo: FC<SVGProps> = props => {
   return (
     <svg
       viewBox="0 0 50 65"

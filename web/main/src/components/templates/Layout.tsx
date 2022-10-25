@@ -12,7 +12,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({children, title}) => {
   return (
     <Fragment>
       <NextSeo title={title} />
-      <div className="relative flex flex-col w-full min-h-screen">
+      <div className="relative flex min-h-screen w-full flex-col">
         <Header />
         <Main>{children}</Main>
         <Footer />

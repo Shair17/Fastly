@@ -68,9 +68,8 @@ export const Flex: FC<Props> = ({
   alignItems,
   alignSelf,
 
-  as: Component = 'div',
-
   children,
+  className,
   ...rest
 }) => {
   const classes = c(
@@ -150,16 +149,12 @@ export const Flex: FC<Props> = ({
     {'self-stretch': alignSelf === 'stretch'},
 
     // rest of className passed by props as simple string | strings
-    rest.className,
+    className,
   );
 
-  const {className, ...props} = rest;
-
-  const ACompontent = Component as any;
-
   return (
-    <ACompontent className={classes} {...props}>
+    <div className={classes} {...rest}>
       {children}
-    </ACompontent>
+    </div>
   );
 };

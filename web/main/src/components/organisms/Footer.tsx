@@ -6,19 +6,17 @@ import {IOSBadge} from '../atoms/IOSBadge';
 import {footerItems} from './footer-items.constants';
 import {footerSocial} from './footer-social.constants';
 
-interface Props {}
-
-export const Footer: FC<PropsWithChildren<Props>> = () => {
+export const Footer: FC<PropsWithChildren> = () => {
   return (
     <footer className="relative z-10">
       <div className="bg-primary-500">
-        <div className="grid gap-16 px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:py-16 lg:px-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-7xl gap-16 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:py-16 lg:px-8">
           <div>
             <section>
               <div>
                 <Link href="/" passHref title="Inicio de Fastly">
                   <a
-                    className="inline-flex px-4 py-2 bg-white rounded-full"
+                    className="inline-flex rounded-full bg-white px-4 py-2"
                     title="Inicio de Fastly">
                     <Logo className="mr-2 h-7" />
                     <span className="self-center text-2xl font-bold">
@@ -55,7 +53,7 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
                 </div>
               </div>
             </section>
-            <ul className="flex items-center mt-4 space-x-4 xl:space-x-5">
+            <ul className="mt-4 flex items-center space-x-4 xl:space-x-5">
               {footerSocial.map(({title, href, icon}, key) => (
                 <li key={key.toString()}>
                   <a
@@ -90,7 +88,7 @@ export const Footer: FC<PropsWithChildren<Props>> = () => {
             </div>
           ))}
         </div>
-        <div className="px-4 pb-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
           <div className="text-white">
             © {new Date().getFullYear().toString()} <strong>Fastly</strong> ·
             Desarrollado por{' '}

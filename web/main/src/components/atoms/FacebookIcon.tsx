@@ -1,8 +1,8 @@
 import {SVGProps} from 'react-html-props';
 
-interface Props extends SVGProps {}
+// interface Props extends SVGProps {}
 
-export const FacebookIcon = (props: Props) => {
+export const FacebookIcon = (props: SVGProps) => {
   return (
     <svg
       role="img"

@@ -1,8 +1,8 @@
 import {SVGProps} from 'react-html-props';
 
-interface Props extends SVGProps {}
+// interface Props extends SVGProps {}
 
-export const WhatsappIcon = (props: Props) => {
+export const WhatsappIcon = (props: SVGProps) => {
   return (
     <svg
       role="img"

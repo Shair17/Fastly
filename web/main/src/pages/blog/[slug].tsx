@@ -1,10 +1,10 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import ErrorPage from 'next/error';
-import {BlogLayout} from '../../components/templates/BlogLayout';
-import PostType from '../../types/post';
-import {getPostBySlug, getAllPosts} from '../../utils/api';
-import markdownToHtml from '../../utils/markdownToHtml';
+import {BlogLayout} from 'components/templates/BlogLayout';
+import PostType from 'types/post';
+import {getPostBySlug, getAllPosts} from 'utils/api';
+import markdownToHtml from 'utils/markdownToHtml';
 import {PostLayout} from 'components/templates/PostLayout';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   preview?: boolean;
 }
 
-const Post: NextPage<Props> = ({post, morePosts, preview}) => {
+const Post: NextPage<Props> = ({post}) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;

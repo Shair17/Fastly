@@ -2,14 +2,12 @@ import {FC} from 'react';
 import {howItWorks} from 'constants/how-it-works.constants';
 import {HowItWorksItem} from '../molecules/HowItWorksItem';
 
-interface Props {}
-
-export const HowItWorks: FC<Props> = () => {
+export const HowItWorks: FC = () => {
   return (
-    <div className="w-full my-28" id="how-it-works">
-      <div className="px-1 mx-auto max-w-7xl sm:px-3 lg:px-6">
-        <h2 className="text-4xl font-bold text-center">Cómo Funciona</h2>
-        <div className="grid grid-cols-1 gap-20 my-16 md:grid-cols-2">
+    <div className="my-28 w-full" id="how-it-works">
+      <div className="mx-auto max-w-7xl px-1 sm:px-3 lg:px-6">
+        <h2 className="text-center text-4xl font-bold">Cómo Funciona</h2>
+        <div className="my-16 grid grid-cols-1 gap-20 md:grid-cols-2">
           {howItWorks.map((hiw, key) => (
             <HowItWorksItem
               key={key.toString()}

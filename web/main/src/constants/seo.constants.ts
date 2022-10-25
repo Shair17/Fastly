@@ -7,31 +7,31 @@ export const defaultSEO: DefaultSeoProps = {
   additionalLinkTags: [
     {
       rel: 'icon',
-      href: 'https://fastly.delivery/favicon.ico',
+      href: '/favicon.ico',
     },
     {
       rel: 'apple-touch-icon',
-      href: 'https://fastly.delivery/apple-touch-icon.png',
+      href: '/apple-touch-icon.png',
       sizes: '180x180',
     },
     {
       rel: 'manifest',
       href: '/manifest.json',
     },
-    {
-      rel: 'preload',
-      href: 'https://fastly.delivery/assets/fonts/Inter-italic-latin.var.woff2',
-      as: 'font',
-      type: 'font/woff2',
-      crossOrigin: 'anonymous',
-    },
-    {
-      rel: 'preload',
-      href: 'https://fastly.delivery/assets/fonts/Inter-roman-latin.var.woff2',
-      as: 'font',
-      type: 'font/woff2',
-      crossOrigin: 'anonymous',
-    },
+    // {
+    //   rel: "preload",
+    //   href: "/assets/fonts/Inter-italic-latin.var.woff2",
+    //   as: "font",
+    //   type: "font/woff2",
+    //   crossOrigin: "anonymous",
+    // },
+    // {
+    //   rel: "preload",
+    //   href: "/assets/fonts/Inter-roman-latin.var.woff2",
+    //   as: "font",
+    //   type: "font/woff2",
+    //   crossOrigin: "anonymous",
+    // },
   ],
   openGraph: {
     type: 'website',

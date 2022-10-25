@@ -9,8 +9,8 @@ interface Props {
 
 export const Post = ({post}: Props) => {
   return (
-    <div className="cursor-pointer link-effect">
-      <div className="relative overflow-hidden transition-shadow bg-gray-100 rounded-md dark:bg-gray-800 hover:shadow-sm aspect-video">
+    <div className="link-effect cursor-pointer">
+      <div className="relative aspect-video overflow-hidden rounded-md bg-gray-100 transition-shadow hover:shadow-sm dark:bg-gray-800">
         <Link as={`/blog/${post.slug}`} href="/blog/[slug]" title={post.title}>
           <a title={post.title}>
             <Image
@@ -18,20 +18,21 @@ export const Post = ({post}: Props) => {
               layout="fill"
               src={post.coverImage}
               alt={post.title}
+              priority
             />
           </a>
         </Link>
       </div>
-      <h2 className="mt-3 text-lg font-semibold tracking-normal text-black text-brand-primary dark:text-white">
+      <h2 className="text-brand-primary mt-3 text-lg font-semibold tracking-normal text-black dark:text-white">
         <span className="link-underline link-underline-blue">{post.title}</span>
       </h2>
-      <div className="flex items-center mt-3 space-x-3 text-gray-500 dark:text-gray-400">
+      <div className="mt-3 flex items-center space-x-3 text-gray-500 dark:text-gray-400">
         <div className="flex items-center gap-3">
-          <div className="relative flex-shrink-0 w-5 h-5">
+          <div className="relative h-5 w-5 flex-shrink-0">
             <Image
               src={post.author.picture}
               layout="fill"
-              className="w-full h-full rounded-full"
+              className="h-full w-full rounded-full"
               alt={post.author.name}
             />
           </div>
