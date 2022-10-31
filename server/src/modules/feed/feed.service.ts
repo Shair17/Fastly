@@ -8,6 +8,7 @@ import {
 } from './feed.schema';
 import {randomPick} from '../../utils/randomPick';
 import {calcStoreRanking} from '../../utils/calcStoreRanking';
+import {NotFound} from 'http-errors';
 
 // Carousel
 type Image = string;
@@ -44,6 +45,26 @@ type Response = {
 @Service('FeedServiceToken')
 export class FeedService {
   constructor(private readonly databaseService: DatabaseService) {}
+
+  async getStore(id: string) {
+    const store = await this.databaseService.store.findUnique({
+      where: {id},
+      include: {
+        rankings: true,
+      },
+    });
+
+    if (!store) {
+      throw new NotFound(`Store with id ${id} not found`);
+    }
+
+    const {rankings, ...restOfStore} = store;
+
+    return {
+      ranking: calcStoreRanking(rankings),
+      ...restOfStore,
+    };
+  }
 
   async getProductsForFeed({
     orderBy = 'desc',

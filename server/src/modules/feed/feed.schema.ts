@@ -1,6 +1,13 @@
 import {Type, Static} from '@sinclair/typebox';
 import {StoreCategory} from '@prisma/client';
 
+export const GetStoreForFeedParams = Type.Object({
+  id: Type.String({
+    format: 'uuid',
+  }),
+});
+export type GetStoreForFeedParamsType = Static<typeof GetStoreForFeedParams>;
+
 export const GetStoresByCategoryQueryString = Type.Object({
   category: Type.Enum(StoreCategory),
 

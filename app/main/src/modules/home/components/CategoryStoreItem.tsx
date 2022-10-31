@@ -13,9 +13,11 @@ interface Props extends Store {
     value: number;
     size: number;
   };
+  navigation: any;
 }
 
 export const CategoryStoreItem: React.FC<Props> = ({
+  id,
   name,
   description,
   address,
@@ -23,11 +25,19 @@ export const CategoryStoreItem: React.FC<Props> = ({
   openTime,
   closeTime,
   ranking,
+  navigation,
 }) => {
-  const isOpenFullTime = isString(openTime) || isString(closeTime);
+  // const isOpenFullTime = isString(openTime) || isString(closeTime);
+  const isOpenFullTime = !(isString(openTime) && isString(closeTime));
 
   return (
-    <TouchableOpacity activeOpacity={0.95} onPress={() => console.log('TODO')}>
+    <TouchableOpacity
+      activeOpacity={0.95}
+      onPress={() =>
+        navigation.navigate('Store', {
+          id,
+        })
+      }>
       <Div
         bg="body"
         h={150}

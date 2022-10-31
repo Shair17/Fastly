@@ -227,7 +227,9 @@ export const AuthenticationController: FC<AuthenticationScreenProps> = () => {
         </ContainerWithCredits>
       </SafeAreaView>
 
-      <OverlayLoading overlayVisible={overlayVisible && loading} />
+      {overlayVisible && loading ? (
+        <OverlayLoading overlayVisible={overlayVisible && loading} />
+      ) : null}
     </Fragment>
   );
 };

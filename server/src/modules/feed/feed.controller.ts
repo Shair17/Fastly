@@ -9,11 +9,27 @@ import {
   GetStoresByCategoryQueryStringType,
   GetFeedStoresQueryString,
   GetFeedStoresQueryStringType,
+  GetStoreForFeedParams,
+  GetStoreForFeedParamsType,
 } from './feed.schema';
 
 @Controller('/v1/feed')
 export class FeedController {
   constructor(private readonly feedService: FeedService) {}
+
+  @GET('/stores/:id', {
+    schema: {
+      params: GetStoreForFeedParams,
+    },
+  })
+  async getStore(
+    request: Request<{
+      Params: GetStoreForFeedParamsType;
+    }>,
+    reply: Reply,
+  ) {
+    return this.feedService.getStore(request.params.id);
+  }
 
   @GET('/products', {
     onRequest: [hasBearerToken, userIsAuthenticated],

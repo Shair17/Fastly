@@ -7,6 +7,6 @@ interface Props extends NativeStackScreenProps<HomeStackParamList, 'Product'> {}
 
 export const ProductScreen: React.FC<Props> = ({navigation, route}) => (
   <Div flex={1} alignItems="center" justifyContent="center">
-    <Text>CategoriesScreen</Text>
+    <Text>ProductScreen</Text>
   </Div>
 );

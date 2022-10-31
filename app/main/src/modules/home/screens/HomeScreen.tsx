@@ -96,12 +96,12 @@ export const HomeScreen: FC<HomeStackProps> = ({navigation, route}) => {
 
             <Categories
               navigation={navigation}
-              onSeeMorePress={() =>
-                // @ts-ignore
-                navigation.navigate('HomeStack', {
-                  screen: 'Categories',
-                })
-              }
+              // onSeeMorePress={() =>
+              //   // @ts-ignore
+              //   navigation.navigate('HomeStack', {
+              //     screen: 'Categories',
+              //   })
+              // }
             />
 
             <Div my="lg" />

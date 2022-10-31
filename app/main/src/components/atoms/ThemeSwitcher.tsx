@@ -1,10 +1,7 @@
 import React from 'react';
-import {useTheme, Div, Radio, Text, Icon} from 'react-native-magnus';
-import {lightTheme, darkTheme, ThemesNames} from '@fastly/theme';
-import {useMMKVString} from 'react-native-mmkv';
-import {themeStorageKey} from '@fastly/constants';
-import {storage} from '@fastly/services';
-import {useSystemColorScheme} from '@fastly/hooks';
+import {Div, Radio, Text, Icon} from 'react-native-magnus';
+import {ThemesNames} from '@fastly/theme';
+import {useThemeStorage} from '@fastly/hooks/useThemeStorage';
 
 const ThemeOptions = [
   {
@@ -25,12 +22,7 @@ const ThemeOptions = [
 ];
 
 export const ThemeSwitcher = () => {
-  const {setTheme} = useTheme();
-  const systemTheme = useSystemColorScheme();
-  const [themeStorage, setThemeStorage] = useMMKVString(
-    themeStorageKey,
-    storage,
-  );
+  const [themeStorage, setThemeStorage] = useThemeStorage();
   const defaultValue =
     themeStorage === ThemesNames.lightTheme
       ? 'light'
@@ -39,15 +31,12 @@ export const ThemeSwitcher = () => {
       : 'system';
 
   const onChange = (themeName: ThemesNames) => {
-    if (themeName === ThemesNames.systemTheme) {
-      setThemeStorage(undefined);
-      setTheme(systemTheme === 'light' ? lightTheme : darkTheme);
-    } else if (themeName === ThemesNames.lightTheme) {
+    if (themeName === ThemesNames.lightTheme) {
       setThemeStorage(ThemesNames.lightTheme);
-      setTheme(lightTheme);
     } else if (themeName === ThemesNames.darkTheme) {
       setThemeStorage(ThemesNames.darkTheme);
-      setTheme(darkTheme);
+    } else {
+      setThemeStorage(undefined);
     }
   };
 

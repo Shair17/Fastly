@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({onPress, category}) => (
       </TouchableOpacity>
     }
     middle={
-      <Text color="text" fontWeight="bold" fontSize="xl">
+      <Text color="text" fontWeight="bold" fontSize="xl" numberOfLines={1}>
         {parseCategoryStore(category)}
       </Text>
     }
@@ -73,6 +73,9 @@ export const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
     FeedStore[]
   >(
     `/feed/stores-by-category?category=${category}&take=10&skip=${skip}&orderBy=desc`,
+    {
+      useCache: false,
+    },
   );
 
   const fetchStores = () => {
@@ -116,7 +119,7 @@ export const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
         renderItem={({index, item, separators}) => {
           return (
             <Div mb="xl" px="2xl">
-              <CategoryStoreItem {...item} />
+              <CategoryStoreItem navigation={navigation} {...item} />
             </Div>
           );
         }}

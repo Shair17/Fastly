@@ -14,6 +14,7 @@ import {GeolocationPermissionsScreen} from './screens/GeolocationPermissionsScre
 import {OnBoardingScreen} from './screens/OnBoardingScreen';
 import {AuthenticationScreen} from './screens/AuthenticationScreen';
 import {Application} from './bottom-tabs/Root';
+import {useIsAuthenticated} from '@fastly/hooks/useIsAuthenticated';
 
 export type RootStackParams = {
   /**
@@ -44,7 +45,8 @@ export const Root: React.FC = () => {
   useShowSessionIsExpired();
 
   const {theme} = useTheme();
-  const isAuthenticated = isLoggedIn();
+  // const isAuthenticated = isLoggedIn();
+  const isAuthenticated = useIsAuthenticated();
   const isNewUser = useAuthStore(z => z.isNewUser);
   const locationStatus = usePermissionsStore(z => z.locationStatus);
 

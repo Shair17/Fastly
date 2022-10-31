@@ -118,6 +118,14 @@ const services: Service[] = [
       {
         itemService: [
           {
+            id: StoreCategoryEnum.OTRO,
+            title: 'Otros',
+            img: require('../../assets/images/objects/other.png'),
+            bgColor: 'sky100',
+            borderColor: 'sky300',
+            category: 'OTRO',
+          },
+          {
             id: 'TODO_LO_QUE_QUIERAS',
             title: 'Todo lo que quieras',
             img: require('../../assets/images/objects/everything-you-want.png'),
@@ -132,14 +140,14 @@ const services: Service[] = [
             borderColor: 'yellow300',
           },
           // This will be ignored
-          {
-            id: 'UNKNOWN',
-            bgColor: 'blue100',
-            borderColor: 'blue300',
-            img: require('../../assets/images/objects/box-order.png'),
-            title: 'test',
-            isEmpty: true,
-          },
+          // {
+          //   id: 'UNKNOWN',
+          //   bgColor: 'blue100',
+          //   borderColor: 'blue300',
+          //   img: require('../../assets/images/objects/box-order.png'),
+          //   title: 'test',
+          //   isEmpty: true,
+          // },
         ],
       },
     ],
