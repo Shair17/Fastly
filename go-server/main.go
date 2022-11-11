@@ -18,22 +18,17 @@ var (
 )
 
 func main() {
-	// Parse command-line flags
 	flag.Parse()
 
-	// Connected with database
 	database.Connect()
 
-	// Create fiber app
 	app := fiber.New(fiber.Config{
-		Prefork: *prod, // go run app.go -prod
+		Prefork: *prod,
 	})
 
-	// Middleware
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	// Create a /api/v1 endpoint
 	v1 := app.Group("/api/v1")
 
 	// Bind handlers
