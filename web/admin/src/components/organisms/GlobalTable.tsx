@@ -89,7 +89,7 @@ const items = {
     'Descripción',
     'Precio',
     'Imagen',
-    'Blur Hash (Código para efecto de desenfoque)',
+    // 'Blur Hash (Código para efecto de desenfoque)',
     'ID del Negocio',
     'Creación',
     'Actualizado',

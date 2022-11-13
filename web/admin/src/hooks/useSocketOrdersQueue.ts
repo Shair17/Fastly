@@ -1,4 +1,6 @@
 import {useState, useEffect} from 'react';
+import notificationSound from '@fastly/assets/sounds/notification.mp3';
+import useSound from 'use-sound';
 import {OrderClass} from '@fastly/interfaces/appInterfaces';
 import {useSocketStore} from '@fastly/stores/useSocketStore';
 
@@ -13,6 +15,7 @@ export type OrdersStoreValues = {
 
 export const useSocketOrdersQueue = (): OrdersStoreValues => {
   const socket = useSocketStore(s => s.socket);
+  const [play] = useSound(notificationSound);
   const [ordersQueueState, setOrdersQueue] = useState<OrdersStoreValues>({
     ordersCancelledQueue: [],
     ordersDeliveredQueue: [],
@@ -21,6 +24,8 @@ export const useSocketOrdersQueue = (): OrdersStoreValues => {
     ordersQueue: [],
     ordersSentQueue: [],
   });
+
+  // TODO: when got a order we can play audio notification
 
   useEffect(() => {
     socket?.on('ORDERS_QUEUE', (ordersQueue: OrderClass[]) => {

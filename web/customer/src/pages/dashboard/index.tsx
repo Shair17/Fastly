@@ -12,8 +12,9 @@ import {
   Select,
   Drawer,
   useMantineTheme,
+  FileInput,
 } from '@mantine/core';
-import {Plus, Refresh} from 'tabler-icons-react';
+import {Plus, Refresh, Upload} from 'tabler-icons-react';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {useCustomerStore} from '@fastly/stores/useCustomerStore';
 import {useDate} from '@fastly/hooks/useDate';
@@ -62,7 +63,7 @@ export const Dashboard = () => {
       categoryDescription: '',
       openTime: new Date(),
       closeTime: new Date(),
-      logo: '',
+      logo: null,
       category: '',
     },
   });
@@ -79,36 +80,43 @@ export const Dashboard = () => {
       openTime,
       owner,
     }) => {
-      executeCreateStore({
-        data: {
-          address,
-          name,
-          category,
-          categoryDescription,
-          description,
-          logo,
-          openTime,
-          closeTime,
-          owner: owner || email,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Negocio creado correctamente',
-            color: 'green',
-          });
-          setNewStoreDrawerOpened(false);
-          refetchMyStores();
+      const reader = new FileReader();
+      // @ts-ignore
+      reader.readAsDataURL(logo!);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeCreateStore({
+          data: {
+            address,
+            name,
+            category,
+            categoryDescription,
+            description,
+            logo: base64,
+            openTime,
+            closeTime,
+            owner: owner || email,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: error.response.data.message,
-              color: 'red',
+              message: 'Negocio creado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setNewStoreDrawerOpened(false);
+            refetchMyStores();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: error.response.data.message,
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -172,12 +180,14 @@ export const Dashboard = () => {
                 mt="md"
                 {...form.getInputProps('name')}
               />
-              <TextInput
-                label="Logotipo del negocio"
-                placeholder="Ingresa la url del logotipo del negocio"
-                type="text"
-                required
+              <FileInput
+                label="Logotipo del negocio (2MB máximo)"
+                withAsterisk
                 mt="md"
+                required
+                placeholder="Ingresa el logotipo del negocio"
+                accept="image/png,image/jpeg,image/jpg"
+                icon={<Upload size={14} />}
                 {...form.getInputProps('logo')}
               />
             </Group>
@@ -293,7 +303,7 @@ export const Dashboard = () => {
                 onClick={handleAddStore}
                 disabled={!isFunction(handleAddStore)}
                 loading={createStoreIsLoading}>
-                AGREGAR
+                AGREGAR NEGOCIO
               </Button>
             </Group>
 

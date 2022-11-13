@@ -12,12 +12,13 @@ import {
   Modal,
   useMantineTheme,
   Select,
+  FileInput,
 } from '@mantine/core';
 import useAxios from 'axios-hooks';
 import {showNotification} from '@mantine/notifications';
 import {zodResolver, useForm} from '@mantine/form';
 import {useModals} from '@mantine/modals';
-import {Pencil, Trash} from 'tabler-icons-react';
+import {Pencil, Trash, Upload} from 'tabler-icons-react';
 import {Product, StoreCategory} from '@fastly/interfaces/appInterfaces';
 import {getEntityType} from '@fastly/utils/getEntityType';
 import {editProductSchema} from '@fastly/schemas/schemas';
@@ -94,33 +95,40 @@ export const ProductTableItem = ({
 
   const handleEditProduct = editForm.onSubmit(
     ({blurHash, description, image, name, price, storeId}) => {
-      executeEditProduct({
-        data: {
-          storeId,
-          name,
-          description,
-          blurHash,
-          price,
-          image,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Producto editado correctamente',
-            color: 'green',
-          });
-          setEditProductOpened(false);
-          refetch();
+      const reader = new FileReader();
+      // @ts-ignore
+      reader.readAsDataURL(image);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeEditProduct({
+          data: {
+            storeId,
+            name,
+            description,
+            blurHash,
+            price,
+            image: base64,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: getRegisterErrorMessage(error.response.data.message),
-              color: 'red',
+              message: 'Producto editado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setEditProductOpened(false);
+            refetch();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: getRegisterErrorMessage(error.response.data.message),
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -228,14 +236,14 @@ export const ProductTableItem = ({
               mt="md"
               {...editForm.getInputProps('description')}
             />
-            <TextInput
+            {/* <TextInput
               label="Blur Hash del Producto"
               placeholder="Ingresa Blur Hash del producto"
               required
               type="text"
               mt="md"
               {...editForm.getInputProps('blurHash')}
-            />
+            /> */}
             <>{loadSelectStores()}</>
             <NumberInput
               label="Precio del producto en soles"
@@ -248,12 +256,15 @@ export const ProductTableItem = ({
               stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
               {...editForm.getInputProps('price')}
             />
-            <TextInput
-              label="Imagen del producto"
-              placeholder="Ingresa la URL de la imagen del producto"
-              required
-              type="text"
+
+            <FileInput
+              label="Imagen del producto (2MB máximo)"
+              placeholder="Ingresa la imagen del producto"
+              withAsterisk
               mt="md"
+              required
+              accept="image/png,image/jpeg,image/jpg"
+              icon={<Upload size={14} />}
               {...editForm.getInputProps('image')}
             />
 
@@ -299,11 +310,11 @@ export const ProductTableItem = ({
             {image}
           </Anchor>
         </td>
-        <td>
+        {/* <td>
           <Text size="sm" weight={500} lineClamp={1} title={blurHash}>
             {blurHash}
           </Text>
-        </td>
+        </td> */}
         <td>
           <Text size="sm" weight={500} lineClamp={1} title={storeId}>
             {storeId}

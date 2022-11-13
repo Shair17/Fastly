@@ -5,10 +5,12 @@ import {StoreService} from '../store/store.service';
 import {CreateProductBodyType, EditProductBodyType} from './product.schema';
 import {trimStrings} from '../../utils/trimStrings';
 import {CustomerService} from '../customer/customer.service';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
 
 @Service('ProductServiceToken')
 export class ProductService {
   constructor(
+    private readonly cloudinaryService: CloudinaryService,
     private readonly databaseService: DatabaseService,
     private readonly customerService: CustomerService,
     private readonly storeService: StoreService,
@@ -96,12 +98,18 @@ export class ProductService {
 
     const store = await this.storeService.getByIdOrThrow(storeId);
 
+    const uploadedImage = await this.cloudinaryService.upload(
+      'products',
+      image,
+      `product-${name}-image-${Date.now().toString()}`,
+    );
+
     const newProduct = await this.databaseService.product.create({
       data: {
         blurHash,
         description,
         price,
-        image,
+        image: uploadedImage.secure_url,
         name,
         store: {
           connect: {
@@ -134,6 +142,12 @@ export class ProductService {
       await this.storeService.getByIdOrThrow(storeId),
     ]);
 
+    const updatedImage = await this.cloudinaryService.upload(
+      'products',
+      image,
+      `product-${name}-image-${Date.now().toString()}`,
+    );
+
     const updatedProduct = await this.databaseService.product.update({
       where: {
         id: product.id,
@@ -141,7 +155,7 @@ export class ProductService {
       data: {
         blurHash,
         description,
-        image,
+        image: updatedImage.secure_url,
         name,
         price,
         store: {

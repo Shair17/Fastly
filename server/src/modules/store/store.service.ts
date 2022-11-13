@@ -10,10 +10,12 @@ import {
 import {StoreCategory} from '@prisma/client';
 import {CustomerService} from '../customer/customer.service';
 import {calcStoreRanking} from '../../utils/calcStoreRanking';
+import {CloudinaryService} from '../../shared/services/cloudinary.service';
 
 @Service('StoreServiceToken')
 export class StoreService {
   constructor(
+    private readonly cloudinaryService: CloudinaryService,
     private readonly databaseService: DatabaseService,
     private readonly customerService: CustomerService,
   ) {}
@@ -183,6 +185,12 @@ export class StoreService {
       throw new BadRequest(`Owner with email ${ownerEmail} doesn't exists.`);
     }
 
+    const uploadedLogo = await this.cloudinaryService.upload(
+      'stores',
+      logo,
+      `store-${name}-logo-${Date.now().toString()}`,
+    );
+
     const newStore = await this.databaseService.store.create({
       data: {
         address,
@@ -191,7 +199,7 @@ export class StoreService {
         closeTime,
         openTime,
         description,
-        logo,
+        logo: uploadedLogo.secure_url,
         name,
         owner: {
           connect: {
@@ -234,6 +242,12 @@ export class StoreService {
       this.customerService.getByIdOrThrow(ownerId),
     ]);
 
+    const updatedLogo = await this.cloudinaryService.upload(
+      'stores',
+      logo,
+      `store-${name}-logo-${Date.now().toString()}`,
+    );
+
     const updatedStore = await this.databaseService.store.update({
       where: {
         id: store.id,
@@ -241,7 +255,7 @@ export class StoreService {
       data: {
         name,
         description,
-        logo,
+        logo: updatedLogo.secure_url,
         address,
         category,
         categoryDescription,

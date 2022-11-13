@@ -6,13 +6,12 @@ import {
   Text,
   Avatar,
   Grid,
-  Box,
-  Card,
   Drawer,
   useMantineTheme,
   Paper,
   TextInput,
   NumberInput,
+  FileInput,
 } from '@mantine/core';
 import useAxios from 'axios-hooks';
 import {useParams} from 'react-router-dom';
@@ -21,7 +20,7 @@ import {isUUID} from '@fastly/utils';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {Product, Store} from '@fastly/interfaces/appInterfaces';
 import {getStoreCategory} from '@fastly/utils/getCategory';
-import {Plus, Refresh} from 'tabler-icons-react';
+import {Plus, Refresh, Upload} from 'tabler-icons-react';
 import {ProductItem} from '@fastly/components/organisms/ProductItem';
 import {useForm, zodResolver} from '@mantine/form';
 import {createProductSchema} from '@fastly/schemas/schemas';
@@ -66,33 +65,40 @@ export const DashboardStore = () => {
 
   const handleRegisterNewProduct = form.onSubmit(
     ({blurHash, description, image, name, price}) => {
-      executeCreateProduct({
-        data: {
-          blurHash,
-          description,
-          image,
-          name,
-          price,
-          storeId: store?.id || storeId,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Producto creado correctamente',
-            color: 'green',
-          });
-          setNewProductDrawerOpened(false);
-          refetchProducts();
+      const reader = new FileReader();
+      // @ts-ignore
+      reader.readAsDataURL(image);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeCreateProduct({
+          data: {
+            blurHash,
+            description,
+            image,
+            name,
+            price,
+            storeId: store?.id || storeId,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: error.response.data.message,
-              color: 'red',
+              message: 'Producto creado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setNewProductDrawerOpened(false);
+            refetchProducts();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: error.response.data.message,
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -198,14 +204,14 @@ export const DashboardStore = () => {
               mt="md"
               {...form.getInputProps('description')}
             />
-            <TextInput
+            {/* <TextInput
               label="Blur Hash del Producto"
               placeholder="Ingresa Blur Hash del producto"
               required
               type="text"
               mt="md"
               {...form.getInputProps('blurHash')}
-            />
+            /> */}
             {/* <TextInput
               label="Identificador de negocio del producto"
               placeholder="Ingresa el identificador de negocio del producto"
@@ -215,6 +221,7 @@ export const DashboardStore = () => {
               {...form.getInputProps('storeId')}
             /> */}
             <NumberInput
+              mt="md"
               label="Precio del producto en soles"
               placeholder="Ingresa el precio del producto en soles"
               decimalSeparator=","
@@ -223,12 +230,15 @@ export const DashboardStore = () => {
               stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
               {...form.getInputProps('price')}
             />
-            <TextInput
-              label="Imagen del producto"
-              placeholder="Ingresa la URL de la imagen del producto"
-              required
-              type="text"
+
+            <FileInput
+              label="Imagen del producto (2MB máximo)"
+              placeholder="Ingresa la imagen del producto"
+              withAsterisk
               mt="md"
+              required
+              accept="image/png,image/jpeg,image/jpg"
+              icon={<Upload size={14} />}
               {...form.getInputProps('image')}
             />
             <Group mt="xl">

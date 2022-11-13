@@ -11,6 +11,7 @@ import {
   Modal,
   useMantineTheme,
   Select,
+  FileInput,
 } from '@mantine/core';
 import useAxios from 'axios-hooks';
 import dayjs from 'dayjs';
@@ -18,7 +19,7 @@ import {TimeInput} from '@mantine/dates';
 import {showNotification} from '@mantine/notifications';
 import {zodResolver, useForm} from '@mantine/form';
 import {useModals} from '@mantine/modals';
-import {Pencil, Trash} from 'tabler-icons-react';
+import {Pencil, Trash, Upload} from 'tabler-icons-react';
 import {Store} from '@fastly/interfaces/appInterfaces';
 import {getEntityType} from '@fastly/utils/getEntityType';
 import {editStoreSchema} from '@fastly/schemas/schemas';
@@ -93,36 +94,43 @@ export const StoreTableItem = ({
       name,
       openTime,
     }) => {
-      executeEditStore({
-        data: {
-          owner: ownerId,
-          logo,
-          name,
-          description,
-          address,
-          category,
-          categoryDescription,
-          openTime: openTime ? new Date(openTime) : undefined,
-          closeTime: closeTime ? new Date(closeTime) : undefined,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Negocio editado correctamente',
-            color: 'green',
-          });
-          setEditStoreOpened(false);
-          refetch();
+      const reader = new FileReader();
+      // @ts-ignore
+      reader.readAsDataURL(logo);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeEditStore({
+          data: {
+            owner: ownerId,
+            logo: base64,
+            name,
+            description,
+            address,
+            category,
+            categoryDescription,
+            openTime: openTime ? new Date(openTime) : undefined,
+            closeTime: closeTime ? new Date(closeTime) : undefined,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: getRegisterErrorMessage(error.response.data.message),
-              color: 'red',
+              message: 'Negocio editado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setEditStoreOpened(false);
+            refetch();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: getRegisterErrorMessage(error.response.data.message),
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -182,6 +190,12 @@ export const StoreTableItem = ({
         overlayOpacity={0.55}
         overlayBlur={3}>
         <Paper>
+          <Group position="center">
+            <Avatar src={logo} alt={name} />
+            <Text weight="bold" size="xl">
+              {name}
+            </Text>
+          </Group>
           <form onSubmit={handleEditStore}>
             <Group grow>
               <TextInput
@@ -192,12 +206,14 @@ export const StoreTableItem = ({
                 mt="md"
                 {...editForm.getInputProps('name')}
               />
-              <TextInput
-                label="Logotipo del negocio"
-                placeholder="Ingresa la url del logotipo del negocio"
-                type="text"
-                required
+              <FileInput
+                label="Logotipo del negocio (2MB máximo)"
+                withAsterisk
                 mt="md"
+                required
+                accept="image/png,image/jpeg,image/jpg"
+                icon={<Upload size={14} />}
+                placeholder="Ingresa el logotipo del negocio"
                 {...editForm.getInputProps('logo')}
               />
             </Group>

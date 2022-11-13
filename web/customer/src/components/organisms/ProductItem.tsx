@@ -12,9 +12,10 @@ import {
   Modal,
   Paper,
   NumberInput,
+  FileInput,
 } from '@mantine/core';
 import {Product} from '@fastly/interfaces/appInterfaces';
-import {Trash} from 'tabler-icons-react';
+import {Trash, Upload} from 'tabler-icons-react';
 import useAxios from 'axios-hooks';
 import {useModals} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
@@ -102,33 +103,40 @@ export const ProductItem: FC<Props> = ({
 
   const handleEditProduct = editForm.onSubmit(
     ({blurHash, description, image, name, price, storeId}) => {
-      executeEditProduct({
-        data: {
-          storeId,
-          name,
-          description,
-          blurHash,
-          price,
-          image,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Producto editado correctamente',
-            color: 'green',
-          });
-          setEditProductOpened(false);
-          refetch();
+      const reader = new FileReader();
+      // @ts-ignore
+      reader.readAsDataURL(image);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeEditProduct({
+          data: {
+            storeId,
+            name,
+            description,
+            blurHash,
+            price,
+            image: base64,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: error.response.data.message,
-              color: 'red',
+              message: 'Producto editado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setEditProductOpened(false);
+            refetch();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: error.response.data.message,
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -202,14 +210,14 @@ export const ProductItem: FC<Props> = ({
               mt="md"
               {...editForm.getInputProps('description')}
             />
-            <TextInput
+            {/* <TextInput
               label="Blur Hash del Producto"
               placeholder="Ingresa Blur Hash del producto"
               required
               type="text"
               mt="md"
               {...editForm.getInputProps('blurHash')}
-            />
+            /> */}
             <NumberInput
               label="Precio del producto en soles"
               placeholder="Ingresa el precio del producto en soles"
@@ -221,12 +229,14 @@ export const ProductItem: FC<Props> = ({
               stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
               {...editForm.getInputProps('price')}
             />
-            <TextInput
-              label="Imagen del producto"
-              placeholder="Ingresa la URL de la imagen del producto"
-              required
-              type="text"
+            <FileInput
+              label="Imagen del producto (2MB máximo)"
+              placeholder="Ingresa la imagen del producto"
+              withAsterisk
               mt="md"
+              required
+              accept="image/png,image/jpeg,image/jpg"
+              icon={<Upload size={14} />}
               {...editForm.getInputProps('image')}
             />
 

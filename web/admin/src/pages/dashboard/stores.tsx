@@ -8,7 +8,9 @@ import {
   Button,
   Select,
   Text,
+  FileInput,
 } from '@mantine/core';
+import {Upload} from 'tabler-icons-react';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {MainAccount} from '@fastly/components/organisms/MainAccount';
 import useAxios from 'axios-hooks';
@@ -44,7 +46,7 @@ export const DashboardStores = () => {
       categoryDescription: '',
       openTime: new Date(),
       closeTime: new Date(),
-      logo: '',
+      logo: null,
       category: '',
     },
   });
@@ -61,36 +63,42 @@ export const DashboardStores = () => {
       openTime,
       owner,
     }) => {
-      executeCreateStore({
-        data: {
-          address,
-          name,
-          category,
-          categoryDescription,
-          description,
-          logo,
-          openTime,
-          closeTime,
-          owner,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Negocio creado correctamente',
-            color: 'green',
-          });
-          setNewStoreDrawerOpened(false);
-          refetchStores();
+      const reader = new FileReader();
+      reader.readAsDataURL(logo!);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeCreateStore({
+          data: {
+            address,
+            name,
+            category,
+            categoryDescription,
+            description,
+            logo: base64,
+            openTime,
+            closeTime,
+            owner,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: error.response.data.message,
-              color: 'red',
+              message: 'Negocio creado correctamente',
+              color: 'green',
             });
-          }
-        });
+            setNewStoreDrawerOpened(false);
+            refetchStores();
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: error.response.data.message,
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -159,12 +167,14 @@ export const DashboardStores = () => {
                 mt="md"
                 {...form.getInputProps('name')}
               />
-              <TextInput
-                label="Logotipo del negocio"
-                placeholder="Ingresa la url del logotipo del negocio"
-                type="text"
-                required
+              <FileInput
+                label="Logotipo del negocio (2MB máximo)"
+                withAsterisk
                 mt="md"
+                required
+                placeholder="Ingresa el logotipo del negocio"
+                accept="image/png,image/jpeg,image/jpg"
+                icon={<Upload size={14} />}
                 {...form.getInputProps('logo')}
               />
             </Group>

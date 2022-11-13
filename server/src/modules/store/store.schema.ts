@@ -26,10 +26,8 @@ export type GetStoresQueryStringType = Static<typeof GetStoresQueryString>;
 
 export const CreateStoreBody = Type.Object(
   {
-    // Reemplacé owner por owner email
     owner: Type.String({format: 'email'}),
-    // TODO: cambiar a base64 image
-    logo: Type.String({format: 'uri'}),
+    logo: Type.String(),
     name: Type.String(),
     description: Type.String(),
     address: Type.String(),
@@ -45,7 +43,7 @@ export type CreateStoreBodyType = Static<typeof CreateStoreBody>;
 export const EditStoreBody = Type.Object(
   {
     owner: Type.String({format: 'uuid'}),
-    logo: Type.String({format: 'uri'}),
+    logo: Type.String(),
     name: Type.String(),
     description: Type.String(),
     address: Type.String(),

@@ -8,6 +8,7 @@ import {
   TextInput,
   NumberInput,
   Select,
+  FileInput,
 } from '@mantine/core';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {MainAccount} from '@fastly/components/organisms/MainAccount';
@@ -20,6 +21,7 @@ import {GlobalTable} from '@fastly/components/organisms/GlobalTable';
 import {ProductTableItem} from '@fastly/components/organisms/ProductTableItem';
 import {getStoreCategory} from '@fastly/utils/getCategory';
 import {SelectStoreItem} from '@fastly/components/organisms/SelectStoreItem';
+import {Upload} from 'tabler-icons-react';
 
 type MyProductsResponse = Product & {owner: {id: string; email: string}};
 type MyStoresSelectResponse = {
@@ -59,39 +61,45 @@ export const DashboardProducts = () => {
       price: 0,
       blurHash: '',
       storeId: '',
-      image: '',
+      image: null,
     },
   });
 
   const handleRegisterNewProduct = form.onSubmit(
     ({blurHash, description, image, name, price, storeId}) => {
-      executeCreateProduct({
-        data: {
-          blurHash,
-          description,
-          image,
-          name,
-          price,
-          storeId,
-        },
-      })
-        .then(() => {
-          showNotification({
-            message: 'Producto creado correctamente',
-            color: 'green',
-          });
-          refetchProducts();
-          setNewProductDrawerOpened(false);
+      const reader = new FileReader();
+      reader.readAsDataURL(image!);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+
+        executeCreateProduct({
+          data: {
+            blurHash,
+            description,
+            image: base64,
+            name,
+            price,
+            storeId,
+          },
         })
-        .catch(error => {
-          if (error?.response?.data.message) {
+          .then(() => {
             showNotification({
-              title: 'Error!',
-              message: error.response.data.message,
-              color: 'red',
+              message: 'Producto creado correctamente',
+              color: 'green',
             });
-          }
-        });
+            refetchProducts();
+            setNewProductDrawerOpened(false);
+          })
+          .catch(error => {
+            if (error?.response?.data.message) {
+              showNotification({
+                title: 'Error!',
+                message: error.response.data.message,
+                color: 'red',
+              });
+            }
+          });
+      };
     },
   );
 
@@ -191,15 +199,16 @@ export const DashboardProducts = () => {
               mt="md"
               {...form.getInputProps('description')}
             />
-            <TextInput
+            {/* <TextInput
               label="Blur Hash del Producto"
               placeholder="Ingresa Blur Hash del producto"
               required
               type="text"
               mt="md"
               {...form.getInputProps('blurHash')}
-            />
+            /> */}
             <NumberInput
+              mt="md"
               label="Precio del producto en soles"
               placeholder="Ingresa el precio del producto en soles"
               decimalSeparator=","
@@ -208,12 +217,15 @@ export const DashboardProducts = () => {
               stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
               {...form.getInputProps('price')}
             />
-            <TextInput
-              label="Imagen del producto"
-              placeholder="Ingresa la URL de la imagen del producto"
-              required
-              type="text"
+
+            <FileInput
+              label="Imagen del producto (2MB máximo)"
+              placeholder="Ingresa la imagen del producto"
+              withAsterisk
               mt="md"
+              required
+              accept="image/png,image/jpeg,image/jpg"
+              icon={<Upload size={14} />}
               {...form.getInputProps('image')}
             />
             <Group mt="xl">

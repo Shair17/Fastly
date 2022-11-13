@@ -38,8 +38,7 @@ export const registerStoreSchema = z.object({
   categoryDescription: z.optional(z.string()),
   openTime: z.optional(z.date()),
   closeTime: z.optional(z.date()),
-  // TODO: usar base64 image
-  logo: z.string(),
+  logo: z.any(),
   category: z.nativeEnum(StoreCategory),
 });
 
@@ -96,14 +95,14 @@ export const editStoreSchema = z.object({
   categoryDescription: z.optional(z.string()),
   openTime: z.optional(z.date()),
   closeTime: z.optional(z.date()),
-  logo: z.string(),
+  logo: z.any(),
 });
 
 export const createProductSchema = z.object({
   name: z.string(),
   description: z.optional(z.string()),
   price: z.number().min(0, {message: 'Ingresa un precio válido.'}),
-  image: z.string().regex(URL_REGEX, {message: 'URL de la imagen inválida.'}),
+  image: z.any(),
   blurHash: z.string(),
 });
 
@@ -114,7 +113,7 @@ export const registerProductSchema = z.object({
   name: z.string(),
   description: z.optional(z.string()),
   price: z.number().min(0, {message: 'Ingresa un precio válido.'}),
-  image: z.string().regex(URL_REGEX, {message: 'URL de la imagen inválida.'}),
+  image: z.any(),
   blurHash: z.string(),
 });
 
@@ -126,5 +125,5 @@ export const editProductSchema = z.object({
   storeId: z
     .string()
     .regex(UUID_REGEX, {message: 'Identificador del negocio inválido.'}),
-  image: z.string().regex(URL_REGEX, {message: 'URL de la imagen inválida.'}),
+  image: z.any(),
 });
