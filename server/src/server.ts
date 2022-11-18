@@ -14,7 +14,6 @@ import Helmet from '@fastify/helmet';
 import Cors from '@fastify/cors';
 import HealthCheck from 'fastify-healthcheck';
 import Static from '@fastify/static';
-// import Favicon from 'fastify-favicon';
 import Routes from '@fastify/routes';
 import RateLimit from '@fastify/rate-limit';
 import IO from 'fastify-socket.io';

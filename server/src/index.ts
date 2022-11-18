@@ -8,7 +8,7 @@ main();
 async function main() {
   const startTime = Date.now();
   const app = await Server({
-    logger: isDev,
+    logger: true,
     disableRequestLogging: isDev,
     ignoreTrailingSlash: true,
     querystringParser: str => qs.parse(str),
