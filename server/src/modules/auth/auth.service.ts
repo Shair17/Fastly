@@ -389,7 +389,7 @@ export class AuthService {
         from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
         to: admin.email,
         subject: 'Recuperación de Contraseña ⚡',
-        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><br/><br/><a href="https://admin.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://admin.fastly.delivery/new-password/?token=${resetPasswordToken}</a>`,
+        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><br/><br/><a href="https://admin.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://admin.fastly.delivery/new-password/?token=${resetPasswordToken}</a><br/><br/><b>Tienes 10 minutos para hacerlo, luego tienes que volver a solicitar la recuperación de tu contraseña.<b/>`,
       });
     } catch (error) {
       console.log('error al enviar el correo', error);
@@ -678,7 +678,7 @@ export class AuthService {
         from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
         to: customer.email,
         subject: 'Recuperación de Contraseña ⚡',
-        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://customer.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://customer.fastly.delivery/new-password/?token=${resetPasswordToken}</a>`,
+        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://customer.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://customer.fastly.delivery/new-password/?token=${resetPasswordToken}</a><br/><br/><b>Tienes 10 minutos para hacerlo, luego tienes que volver a solicitar la recuperación de tu contraseña.<b/>`,
       });
     } catch (error) {
       console.log('error al enviar el correo', error);
@@ -966,7 +966,7 @@ export class AuthService {
         from: '"Recuperar Contraseña ⚡" <wiwi.max.pe@gmail.com>',
         to: dealer.email,
         subject: 'Recuperación de Contraseña ⚡',
-        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://dealer.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://dealer.fastly.delivery/new-password/?token=${resetPasswordToken}</a>`,
+        html: `<b>Clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:</b><a href="https://dealer.fastly.delivery/new-password/?token=${resetPasswordToken}" target="_blank">https://dealer.fastly.delivery/new-password/?token=${resetPasswordToken}</a><br/><br/><b>Tienes 10 minutos para hacerlo, luego tienes que volver a solicitar la recuperación de tu contraseña.<b/>`,
       });
     } catch (error) {
       console.log('error al enviar el correo', error);
