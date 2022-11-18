@@ -140,13 +140,13 @@ export const Header: FC<PropsWithChildren> = () => {
                     Cómo Funciona
                   </a>
                 </Link>
-                <Link href="/blog" passHref title="Blog de Fastly">
+                {/* <Link href="/blog" passHref title="Blog de Fastly">
                   <a
                     className="block w-full cursor-pointer rounded-md border-b border-gray-50 p-2 transition-colors hover:bg-gray-50"
                     title="Blog de Fastly">
                     Blog
                   </a>
-                </Link>
+                </Link> */}
               </ul>
             </div>
             <div>
