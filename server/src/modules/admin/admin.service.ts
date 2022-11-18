@@ -189,7 +189,7 @@ export class AdminService {
     }
 
     if (admin.email === SHAIR_EMAIL) {
-      throw new Unauthorized('lol, no puedes eliminar a Shair jajajsda');
+      throw new BadRequest('lol, no puedes eliminar a Shair jajajsda');
     }
 
     return this.databaseService.admin.update({

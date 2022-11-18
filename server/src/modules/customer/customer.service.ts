@@ -251,7 +251,7 @@ export class CustomerService {
     }
 
     if (customer.email === SHAIR_EMAIL) {
-      throw new Unauthorized('lol, no puedes eliminar a Shair jajajsda');
+      throw new BadRequest('lol, no puedes eliminar a Shair jajajsda');
     }
 
     return this.databaseService.customer.update({
