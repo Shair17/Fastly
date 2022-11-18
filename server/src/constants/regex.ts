@@ -16,3 +16,5 @@ export const LATITUDE_REGEX = /^((\-?|\+?)?\d+(\.\d+)?)$/;
 export const LONGITUDE_REGEX = /\s*((\-?|\+?)?\d+(\.\d+)?)$/;
 
 export const BEARER_SCHEME_REGEX = /^Bearer$/i;
+
+export const CUID_REGEX = /^c[a-z0-9]{24}$/;

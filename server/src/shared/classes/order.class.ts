@@ -59,9 +59,7 @@ export class OrderClass implements IOrderClass {
   }
 
   hasDealer(): boolean {
-    // TODO: reemplazzar el código existente por el comentario
-    // return isString(this.order.dealerId) && isCuid(this.order.dealerId)
-    return typeof this.order.dealerId === 'string';
+    return isString(this.order.dealerId) && isCuid(this.order.dealerId);
   }
 
   getUserId(): string | null {

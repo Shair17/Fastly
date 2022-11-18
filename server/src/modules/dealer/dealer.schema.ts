@@ -1,5 +1,6 @@
 import {Vehicle} from '@prisma/client';
 import {Static, Type} from '@sinclair/typebox';
+import {CUID_REGEX} from '../../constants/regex';
 import {
   DNI_REGEX,
   PASSWORD_REGEX,
@@ -40,7 +41,9 @@ export const CreateDealerBody = Type.Object(
 export type CreateDealerBodyType = Static<typeof CreateDealerBody>;
 
 export const EditDealerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type EditDealerParamsType = Static<typeof EditDealerParams>;
 
@@ -67,7 +70,9 @@ export const EditDealerBody = Type.Object(
 export type EditDealerBodyType = Static<typeof EditDealerBody>;
 
 export const DeleteDealerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type DeleteDealerParamsType = Static<typeof DeleteDealerParams>;
 
@@ -79,7 +84,9 @@ export const GetMyOrdersQueryString = Type.Object({
 export type GetMyOrdersQueryStringType = Static<typeof GetMyOrdersQueryString>;
 
 export const GetIsActiveDealerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetIsActiveDealerParamsType = Static<
   typeof GetIsActiveDealerParams
@@ -95,14 +102,18 @@ export type GetMyRankingsQueryStringType = Static<
 >;
 
 export const CreateDealerRankingParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type CreateDealerRankingParamsType = Static<
   typeof CreateDealerRankingParams
 >;
 
 export const CreateDealerRankingBody = Type.Object({
-  userId: Type.String({format: 'uuid'}),
+  userId: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
   comment: Type.Optional(Type.String()),
   value: Type.Number({minimum: 0, maximum: 5}),
 });
@@ -111,17 +122,23 @@ export type CreateDealerRankingBodyType = Static<
 >;
 
 export const GetDealerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetDealerParamsType = Static<typeof GetDealerParams>;
 
 export const GetDealerRankingParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetDealerRankingParamsType = Static<typeof GetDealerRankingParams>;
 
 export const GetDealerRankingsParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetDealerRankingsParamsType = Static<
   typeof GetDealerRankingsParams

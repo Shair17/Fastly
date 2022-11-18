@@ -1,20 +1,26 @@
 import {Static, Type} from '@sinclair/typebox';
-import {PASSWORD_REGEX, DNI_REGEX} from '../../constants/regex';
+import {PASSWORD_REGEX, DNI_REGEX, CUID_REGEX} from '../../constants/regex';
 
 export const GetCustomerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetCustomerParamsType = Static<typeof GetCustomerParams>;
 
 export const DeleteCustomerByAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type DeleteCustomerByAdminParamsType = Static<
   typeof DeleteCustomerByAdminParams
 >;
 
 export const EditCustomerParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type EditCustomerParamsType = Static<typeof EditCustomerParams>;
 export const EditCustomerBody = Type.Object(
@@ -36,7 +42,9 @@ export const EditCustomerBody = Type.Object(
 export type EditCustomerBodyType = Static<typeof EditCustomerBody>;
 
 export const BanCustomerByAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type BanCustomerByAdminParamsType = Static<
   typeof BanCustomerByAdminParams

@@ -1,9 +1,10 @@
 import {Type, Static} from '@sinclair/typebox';
 import {StoreCategory} from '@prisma/client';
+import {CUID_REGEX} from '../../constants/regex';
 
 export const GetStoreForFeedParams = Type.Object({
-  id: Type.String({
-    format: 'uuid',
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
   }),
 });
 export type GetStoreForFeedParamsType = Static<typeof GetStoreForFeedParams>;

@@ -1,5 +1,6 @@
 import {Type, Static} from '@sinclair/typebox';
 import {UserAddressTag} from '@prisma/client';
+import {CUID_REGEX} from '../../constants/regex';
 import {
   LATITUDE_REGEX,
   LONGITUDE_REGEX,
@@ -8,7 +9,9 @@ import {
 } from '../../constants/regex';
 
 export const BanUserByAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type BanUserByAdminParamsType = Static<typeof BanUserByAdminParams>;
 
@@ -52,7 +55,9 @@ export type UpdateNewUserBodyType = Static<typeof UpdateNewUserBody>;
 
 export const MyAddressParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {
     additionalProperties: false,
@@ -62,7 +67,9 @@ export type MyAddressParamsType = Static<typeof MyAddressParams>;
 
 export const DeleteAddressParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {
     additionalProperties: false,
@@ -87,7 +94,9 @@ export type AddAddressBodyType = Static<typeof AddAddressBody>;
 
 export const MyFavoriteParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {additionalProperties: false},
 );
@@ -106,7 +115,9 @@ export type UpdateUserProfileBodyType = Static<typeof UpdateUserProfileBody>;
 
 export const MyItemCartParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {additionalProperties: false},
 );
@@ -114,7 +125,9 @@ export type MyItemCartParamsType = Static<typeof MyItemCartParams>;
 
 export const AddItemCartBody = Type.Object(
   {
-    productId: Type.String({format: 'uuid'}),
+    productId: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
     quantity: Type.Number({minimum: 0, default: 0}),
   },
   {additionalProperties: false},
@@ -123,7 +136,9 @@ export type AddItemCartBodyType = Static<typeof AddItemCartBody>;
 
 export const EditItemCartQuantityParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {additionalProperties: false},
 );
@@ -145,7 +160,9 @@ export type EditItemCartQuantityBodyType = Static<
 
 export const DeleteFavoriteParams = Type.Object(
   {
-    id: Type.String({format: 'uuid'}),
+    id: Type.RegEx(CUID_REGEX, {
+      description: 'cuid unique identifier',
+    }),
   },
   {
     additionalProperties: false,

@@ -1,8 +1,10 @@
 import {Static, Type} from '@sinclair/typebox';
-import {PASSWORD_REGEX, DNI_REGEX} from '../../constants/regex';
+import {PASSWORD_REGEX, DNI_REGEX, CUID_REGEX} from '../../constants/regex';
 
 export const GetAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type GetAdminParamsType = Static<typeof GetAdminParams>;
 
@@ -24,7 +26,9 @@ export const CreateAdminBody = Type.Object(
 export type CreateAdminBodyType = Static<typeof CreateAdminBody>;
 
 export const EditAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type EditAdminParamsType = Static<typeof EditAdminParams>;
 export const EditAdminBody = Type.Object(
@@ -46,6 +50,8 @@ export const EditAdminBody = Type.Object(
 export type EditAdminBodyType = Static<typeof EditAdminBody>;
 
 export const DeleteAdminParams = Type.Object({
-  id: Type.String({format: 'uuid'}),
+  id: Type.RegEx(CUID_REGEX, {
+    description: 'cuid unique identifier',
+  }),
 });
 export type DeleteAdminParamsType = Static<typeof DeleteAdminParams>;

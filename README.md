@@ -13,7 +13,6 @@ Lista de TODOS (cosas que faltan hacer) en Fastly, está separado por 3 categor�
 
 ## Server
 * Eventos de socket para ordenes, solo faltan pequeños detalles.
-* Reemplazar llaves primarias de **uuid()** a **cuid()**.
 
 ## Web
 * Reemplazar por un monorepo de react con vitejs, para así tener una sola carpeta de node_modules para todos los proyectos, menos al de main que es en nextjs.
