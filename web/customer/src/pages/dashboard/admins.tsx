@@ -217,8 +217,8 @@ export const DashboardAdmins = () => {
         title="Administradores 🛡️"
         description={`Aquí podrás ver la lista de administradores en Fastly.${
           admins
-            ? ` Hay ${admins.length} administradore${
-                admins.length !== 1 ? 's' : ''
+            ? ` Hay ${admins.length} ${
+                admins.length !== 1 ? 'administradores' : 'administrador'
               }.`
             : ''
         }`}
