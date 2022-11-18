@@ -5,7 +5,7 @@ const currentAppVersion = '0.0.1';
 
 export const MAX_USER_ADDRESSES = 10;
 
-export const SHAIR_EMAIL = 'hi@shair.dev';
+export const SHAIR_EMAIL = 'kskrises@gmail.com';
 export const SHAIR_FACEBOOK_ID = '...';
 
 const fallBackServerVersion = '1.0.0';
