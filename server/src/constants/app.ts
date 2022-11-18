@@ -1,5 +1,7 @@
 const {version: currentServerVersion} = require('../../package.json');
-const {version: currentAppVersion} = require('../../../app/main/package.json');
+// const {version: currentAppVersion} = require('../../../app/main/package.json');
+// ? INFO: Poner la versión de la app aquí en código, importarla desde la app no funcionará.
+const currentAppVersion = '0.0.1';
 
 export const MAX_USER_ADDRESSES = 10;
 
