@@ -225,6 +225,8 @@ export const DashboardStore = () => {
               label="Precio del producto en soles"
               placeholder="Ingresa el precio del producto en soles"
               decimalSeparator=","
+              precision={2}
+              step={0.05}
               min={0}
               stepHoldDelay={500}
               stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
