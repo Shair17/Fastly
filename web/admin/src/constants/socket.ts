@@ -1,9 +1,7 @@
-export const SOCKET_URL = 'http://192.168.1.46:3000';
+import {isDev} from '@fastly/utils/isDev';
 
-// import {isDev} from './environment';
-
-// export const SOCKET_URL = isDev
-//   ? 'http://192.168.1.46:3000'
-//   : 'https://api.fastly.delivery';
+export const SOCKET_URL = isDev
+  ? 'http://192.168.1.46:3000'
+  : 'https://api.fastly.delivery';
 
 // Events
