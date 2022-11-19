@@ -15,3 +15,5 @@ export const UUID_REGEX =
 
 export const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/;
+
+export const CUID_REGEX = /^c[a-z0-9]{24}$/;

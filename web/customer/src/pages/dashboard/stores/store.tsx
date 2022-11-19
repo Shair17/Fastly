@@ -16,7 +16,7 @@ import {
 import useAxios from 'axios-hooks';
 import {useParams} from 'react-router-dom';
 import {NotFound404} from '@fastly/pages/404';
-import {isUUID} from '@fastly/utils';
+import {isCuid} from '@fastly/utils';
 import {DashboardLayout} from '@fastly/components/templates/DashboardLayout';
 import {Product, Store} from '@fastly/interfaces/appInterfaces';
 import {getStoreCategory} from '@fastly/utils/getCategory';
@@ -106,7 +106,7 @@ export const DashboardStore = () => {
     setNewProductDrawerOpened(true);
   };
 
-  if (!isUUID(storeId)) {
+  if (!isCuid(storeId)) {
     return <NotFound404 message="Identificador inválido." />;
   }
 

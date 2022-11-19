@@ -3,7 +3,7 @@ import {
   DNI_REGEX,
   PASSWORD_REGEX,
   URL_REGEX,
-  UUID_REGEX,
+  CUID_REGEX,
 } from '@fastly/constants/regex.constants';
 import {StoreCategory, Vehicle} from '@fastly/interfaces/appInterfaces';
 
@@ -109,7 +109,7 @@ export const createProductSchema = z.object({
 export const registerProductSchema = z.object({
   storeId: z
     .string()
-    .regex(UUID_REGEX, {message: 'Identificador del negocio inválido.'}),
+    .regex(CUID_REGEX, {message: 'Identificador del negocio inválido.'}),
   name: z.string(),
   description: z.optional(z.string()),
   price: z.number().min(0, {message: 'Ingresa un precio válido.'}),
@@ -124,6 +124,6 @@ export const editProductSchema = z.object({
   blurHash: z.string(),
   storeId: z
     .string()
-    .regex(UUID_REGEX, {message: 'Identificador del negocio inválido.'}),
+    .regex(CUID_REGEX, {message: 'Identificador del negocio inválido.'}),
   image: z.any(),
 });
