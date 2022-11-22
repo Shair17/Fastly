@@ -44,7 +44,7 @@ export const AddressesBottomSheet: React.FC<Props> = () => {
   };
 
   return (
-    <Div flex={1} bg="body">
+    <Div flex={1}>
       <ScrollView>
         <Div p="2xl">
           <Text fontWeight="bold" fontSize="6xl" color="text" mb="xl">

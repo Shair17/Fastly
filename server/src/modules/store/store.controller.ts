@@ -4,7 +4,6 @@ import {
   hasBearerToken,
   userIsAuthenticated,
   adminOrCustomerIsAuthenticated,
-  adminIsAuthenticated,
   adminOrCustomerOrUserIsAuthenticated,
   customerIsAuthenticated,
 } from '../../shared/hooks/auth';

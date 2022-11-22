@@ -90,7 +90,7 @@ export class ProductController {
     },
     onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
   })
-  async deleteStore(
+  async deleteProduct(
     request: Request<{
       Params: DeleteProductParamsType;
     }>,

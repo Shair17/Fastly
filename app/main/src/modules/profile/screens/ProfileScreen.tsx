@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Platform} from 'react-native';
-import {Avatar, Div, Text, Icon} from 'react-native-magnus';
+import {Avatar, Div, Text, Icon, useTheme} from 'react-native-magnus';
 import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
 import {ProfileItemSetting} from '@fastly/components/organisms/ProfileItemSetting';
 import {LogOutButton} from '@fastly/components/molecules/LogOutButton';
@@ -15,12 +15,8 @@ import {
 import {openLink} from '@fastly/utils/openLink';
 import {ProfileControllerHeader} from '../ProfileControllerHeader';
 
-/**
- * TODO
- * agregar cupones
- */
-
 export const ProfileScreen: React.FC = ({navigation}: any) => {
+  const {theme} = useTheme();
   const [refreshing, setRefreshing] = useState(false);
   const avatarUrl = useUserStore(u => u.avatar);
   const name = useUserStore(u => u.name);
@@ -42,7 +38,11 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
       <PullToRefresh refreshing={refreshing} onRefresh={onRefresh}>
         <Div p="2xl">
           <Div alignItems="center" mb="xl">
-            <Div borderWidth={2} borderColor="gray100" rounded="circle" mb="lg">
+            <Div
+              borderWidth={2}
+              borderColor={theme.name === 'light' ? 'gray100' : 'gray900'}
+              rounded="circle"
+              mb="lg">
               <Avatar size={120} source={{uri: avatarUrl}} />
             </Div>
 
@@ -79,7 +79,11 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
               text="Pedidos"
             />
 
-            <Div my="xl" h={1} bg="gray100" />
+            <Div
+              my="xl"
+              h={1}
+              bg={theme.name === 'light' ? 'gray100' : 'gray900'}
+            />
 
             <ProfileItemSetting
               onPress={() => navigation.navigate('Theme')}
@@ -87,7 +91,11 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
               text="Tema"
             />
 
-            <Div my="xl" h={1} bg="gray100" />
+            <Div
+              my="xl"
+              h={1}
+              bg={theme.name === 'light' ? 'gray100' : 'gray900'}
+            />
 
             <ProfileItemSetting
               onPress={() =>
@@ -124,7 +132,11 @@ export const ProfileScreen: React.FC = ({navigation}: any) => {
               text="Soporte"
             />
 
-            <Div my="xl" h={1} bg="gray100" />
+            <Div
+              my="xl"
+              h={1}
+              bg={theme.name === 'light' ? 'gray100' : 'gray900'}
+            />
 
             <LogOutButton />
           </Div>

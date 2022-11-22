@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Div, Text, Icon} from 'react-native-magnus';
+import {Div, Text, Icon, useTheme} from 'react-native-magnus';
 
 interface Props {
   onPress: () => void;
@@ -15,6 +15,7 @@ export const ProfileItemSetting: FC<Props> = ({
   iconName,
   text,
 }) => {
+  const {theme} = useTheme();
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={activeOpacity}>
       <Div row alignItems="center" justifyContent="space-between">
@@ -23,7 +24,7 @@ export const ProfileItemSetting: FC<Props> = ({
             fontFamily="Ionicons"
             name={iconName}
             color="text"
-            bg="gray100"
+            bg={theme.name === 'light' ? 'gray100' : 'gray900'}
             p={10}
             rounded="2xl"
             fontSize="2xl"
