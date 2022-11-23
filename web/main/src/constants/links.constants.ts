@@ -13,6 +13,6 @@ export const DEALER_PANEL = 'https://dealer.fastly.delivery';
 
 export const SHAIR_WEB = 'https://shair.dev';
 export const SHAIR_INSTAGRAM = 'https://www.instagram.com/shair.dev';
-export const SHAIR_CONTACTO = 'https://shair.dev/contact';
+export const SHAIR_CONTACTO = 'https://shair.dev/#contact';
 export const SHAIR_FACEBOOK = 'http://fb.me/shair17';
 export const SHAIR_WHATSAPP = 'https://api.whatsapp.com/send?phone=51966107266';

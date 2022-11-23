@@ -4,19 +4,19 @@ export const footerItems = [
     items: [
       {
         name: 'Emprendedores',
-        href: '#',
+        href: '/customer',
       },
       {
         name: 'Repartidores',
-        href: '#',
+        href: '/dealer',
       },
       {
         name: 'Desarrolladores',
-        href: '#',
+        href: '/shair-instagram',
       },
       {
         name: 'Influencers',
-        href: '#',
+        href: '/shair-instagram',
       },
       // {
       //   name: 'Inversionistas',

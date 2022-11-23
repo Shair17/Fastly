@@ -61,7 +61,11 @@ export const OrderDetailScreen: FC<Props> = ({navigation, route}) => {
             <Text fontWeight="bold" fontSize="2xl">
               Pedido:{' '}
             </Text>
-            {order.order.product.name} S/.{order.order.product.price}
+            {order.order.products.map((product, key) => (
+              <Text key={key.toString()}>
+                {product.name} S/. {product.price}{' '}
+              </Text>
+            ))}
           </Text>
           <Text fontWeight="500" fontSize="2xl" mb="md">
             <Text fontWeight="bold" fontSize="2xl">
@@ -71,10 +75,14 @@ export const OrderDetailScreen: FC<Props> = ({navigation, route}) => {
             {order.order.quantity > 1 ? 'unidades' : 'unidad'}
           </Text>
           <Text fontWeight="500" fontSize="2xl" mb="md">
-            <Text fontWeight="bold" fontSize="2xl">
-              Establecimiento:{' '}
-            </Text>
-            {order.order.product.storeId}
+            {order.order.products.map((product, key) => (
+              <>
+                <Text fontWeight="bold" fontSize="2xl">
+                  Establecimiento(s):{' '}
+                </Text>
+                {product.storeId}
+              </>
+            ))}
           </Text>
           <Text fontWeight="500" fontSize="2xl" mb="md">
             <Text fontWeight="bold" fontSize="2xl">

@@ -415,7 +415,6 @@ export class DealerService {
       this.userService.getByIdOrThrow(userId),
     ]);
 
-    // TODO: probar si esto funciona bien
     // solo se podrá agregar un ranking si existe una orden, usuario, dealer creados.
     const orderFound = await this.databaseService.order.findFirst({
       where: {

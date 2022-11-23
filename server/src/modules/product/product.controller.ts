@@ -16,6 +16,7 @@ import {
 import {
   hasBearerToken,
   adminOrCustomerIsAuthenticated,
+  adminOrCustomerOrUserIsAuthenticated,
   customerIsAuthenticated,
 } from '../../shared/hooks/auth';
 
@@ -41,7 +42,7 @@ export class ProductController {
     schema: {
       params: GetProductByIdParams,
     },
-    onRequest: [hasBearerToken, adminOrCustomerIsAuthenticated],
+    onRequest: [hasBearerToken, adminOrCustomerOrUserIsAuthenticated],
   })
   async getProduct(
     request: Request<{

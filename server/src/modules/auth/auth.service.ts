@@ -698,7 +698,6 @@ export class AuthService {
       statusCode: 200,
       message: 'Verifica tu correo para resetear tu contraseña',
       success: true,
-      // TODO: borrar esto, solo me servirá de prueba
       // link: `https://customer.fastly.delivery/new-password/?token=${resetPasswordToken}`,
       // resetPasswordToken,
     };

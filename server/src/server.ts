@@ -19,7 +19,7 @@ import RateLimit from '@fastify/rate-limit';
 import IO from 'fastify-socket.io';
 import {ConfigSchema} from './config/config.schema';
 import {AppModule} from './app.module';
-import {MapRoutes} from './plugins';
+import {MapRoutes, NoFavicon} from './plugins';
 
 const publicDir = resolve(__dirname, '../public');
 
@@ -94,6 +94,7 @@ export default async function Server(
     controllers: [...AppModule],
   });
   server.register(MapRoutes);
+  server.register(NoFavicon);
 
   return server;
 }

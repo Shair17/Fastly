@@ -1,5 +1,7 @@
 import {AndroidBadge} from 'components/atoms/AndroidBadge';
+import {CircleBackgroundIcon} from 'components/atoms/CircleBackgroundIcon';
 import {IOSBadge} from 'components/atoms/IOSBadge';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export const Hero = () => {
@@ -39,7 +41,17 @@ export const Hero = () => {
               </Link>
             </div>
           </div>
-          <div className="">mockup</div>
+          <div className="relative">
+            <CircleBackgroundIcon className="absolute right-0 bottom-0 left-1/2 -mb-48 hidden h-[460px] w-[460px] -translate-x-1/2 text-primary-50 sm:h-[600px] sm:w-[600px] lg:-mb-72 xl:flex" />
+            <div className="relative mx-auto -mb-20 w-full max-w-xs lg:-mb-24">
+              <Image
+                src="/assets/images/mockup.png"
+                width={500}
+                height={1000}
+                alt="Fastyl mockup"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

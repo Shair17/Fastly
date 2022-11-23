@@ -24,6 +24,14 @@ export const team = [
     whatsapp: '/shair-whatsapp',
   },
   {
+    name: 'Jennifer Ruiz',
+    description: 'Diseñadora',
+    avatar: '/assets/images/team/shair.jpg',
+    facebook: '/shair-facebook',
+    instagram: '/shair-instagram',
+    whatsapp: '/shair-whatsapp',
+  },
+  {
     name: 'Iván Aguilar',
     description: 'Administración',
     avatar: '/assets/images/team/shair.jpg',

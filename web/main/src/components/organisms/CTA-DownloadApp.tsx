@@ -17,10 +17,11 @@ export const CTADownloadApp: FC = () => {
                   Descargar Fastly
                 </h2>
                 <p className="mt-4 text-base text-gray-200 md:text-xl">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Rerum vel nesciunt voluptatem ut iure iusto obcaecati soluta
-                  unde doloremque incidunt illum amet, iste fuga adipisci vero
-                  cupiditate veritatis at nemo!
+                  Con Fastly puedes pedir lo que quieras cuando quieras en tu
+                  localidad en unos pocos pasos. Tú tranquilo, nosotros
+                  nerviosos. Quchau, ya llegamos! Descarga Fastly en tu
+                  plataforma de preferencia y disfruta de todos los servicios y
+                  beneficios que tenemos para ti.
                 </p>
                 <div className="mt-8 flex flex-row items-center space-x-4 md:mt-12">
                   <Link
@@ -47,7 +48,7 @@ export const CTADownloadApp: FC = () => {
                 <CircleBackgroundIcon className="absolute right-0 bottom-0 left-1/2 -mb-48 h-[460px] w-[460px] -translate-x-1/2 text-primary-50 sm:h-[600px] sm:w-[600px] lg:-mb-72" />
                 <div className="relative mx-auto -mb-20 w-full max-w-xs pl-9 lg:-mb-24">
                   <Image
-                    src="/assets/images/iphone-mockup.png"
+                    src="/assets/images/mockup.png"
                     width={250}
                     height={500}
                     alt="Fastyl mockup"

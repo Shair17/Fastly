@@ -61,7 +61,6 @@ export const useUserAddresses = create(
         });
       }
     },
-    // TODO: guardar en el storage el id de la address seleccionado
     setAddresses: (addresses: Address[]) => {
       if (
         addresses.length === 1 &&
