@@ -19,14 +19,14 @@ import * as data from './data';
 export const prisma = new PrismaClient();
 
 const DEFAULT_ADMINS_TO_GENERATE = 0;
-const DEFAULT_CUSTOMERS_TO_GENERATE = 0;
-const DEFAULT_DEALERS_TO_GENERATE = 0;
+const DEFAULT_CUSTOMERS_TO_GENERATE = 5;
+const DEFAULT_DEALERS_TO_GENERATE = 5;
 const DEFAULT_COUPONS_TO_GENERATE = 0;
-const DEFAULT_DEALER_RANKINGS_TO_GENERATE = 10;
+const DEFAULT_DEALER_RANKINGS_TO_GENERATE = 5;
 const DEFAULT_ORDERS_TO_GENERATE = 0;
-const DEFAULT_PRODUCTS_TO_GENERATE = 0;
-const DEFAULT_STORES_TO_GENERATE = 0;
-const DEFAULT_STORE_RANKINGS_TO_GENERATE = 0;
+const DEFAULT_PRODUCTS_TO_GENERATE = 5;
+const DEFAULT_STORES_TO_GENERATE = 5;
+const DEFAULT_STORE_RANKINGS_TO_GENERATE = 5;
 const DEFAULT_USER_ADDRESSES_TO_GENERATE = 0;
 const DEFAULT_USER_CART_TO_GENERATE = 0;
 const DEFAULT_USER_FAVORORITES_TO_GENERATE = 0;
@@ -136,6 +136,8 @@ async function main() {
       name: data.getFullName(),
       store: {
         create: {
+          description: data.getDescription(1),
+          logo: 'https://res.cloudinary.com/fastly-delivery-app-peru/image/upload/v1666557512/defaults/logos/fastly_square.png',
           address: data.getAddress(),
           category: data.getStoreCategory(),
           name: data.getFullName(),
@@ -164,6 +166,8 @@ async function main() {
   console.log(`Seeding ${DEFAULT_STORES_TO_GENERATE} stores...`);
   [...Array(DEFAULT_STORES_TO_GENERATE).keys()].forEach(async () => {
     await store.create({
+      description: data.getDescription(1),
+      logo: 'https://res.cloudinary.com/fastly-delivery-app-peru/image/upload/v1666557512/defaults/logos/fastly_square.png',
       address: data.getAddress(),
       category: data.getStoreCategory(),
       name: data.getFullName(),

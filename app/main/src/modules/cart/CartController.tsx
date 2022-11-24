@@ -1,13 +1,16 @@
 import React, {FC, useState} from 'react';
 import {Div, Text} from 'react-native-magnus';
-import {PullToRefresh} from '@fastly/components/templates/PullToRefresh';
+import {ScrollView} from 'react-native';
 import {CartStackProps} from '@fastly/navigation/stacks/cart';
 import {CartControllerHeader} from './CartControllerHeader';
 import {EmptyCart} from './EmptyCart';
+import {useCartStore} from '@fastly/stores/useCartStore';
+import {ItemCart} from './ItemCart';
+import {Button} from '@fastly/components/atoms/Button';
 
 export const CartController: FC<CartStackProps> = ({navigation}) => {
-  const [hasFavorites, setHasFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const cart = useCartStore(s => s.cart);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -24,12 +27,18 @@ export const CartController: FC<CartStackProps> = ({navigation}) => {
   return (
     <Div flex={1} bg="body">
       <CartControllerHeader />
-      {hasFavorites ? (
-        <PullToRefresh refreshing={refreshing} onRefresh={onRefresh}>
-          <Div bg="red" flex={1}>
-            <Text>Hola</Text>
+      {cart.length > 0 ? (
+        <ScrollView style={{flex: 1}}>
+          <Div p="2xl">
+            {cart.map((item, key) => (
+              // @ts-ignore
+              <ItemCart key={item.id} id={item.productId} />
+            ))}
+            <Button block fontWeight="bold" fontSize="lg">
+              Pedir
+            </Button>
           </Div>
-        </PullToRefresh>
+        </ScrollView>
       ) : (
         <EmptyCart goToHome={goToHome} />
       )}

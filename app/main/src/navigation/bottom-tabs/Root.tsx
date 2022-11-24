@@ -16,6 +16,7 @@ import {RootStackParams} from '../Root';
 import {LoadingScreen} from '../screens/LoadingScreen';
 import {bottomTabs} from './bottom-tabs';
 import {getTabBarBadge} from '@fastly/utils/getTabBarBadge';
+import {useCartStore} from '@fastly/stores/useCartStore';
 // import {useSocketStore} from '@fastly/stores/useSocketStore';
 
 interface Props
@@ -33,7 +34,6 @@ const Tab = createBottomTabNavigator<ApplicationParams>();
 
 export const Application: React.FC<Props> = () => {
   StatusBar.setTranslucent(false);
-  const [cartCount, setCartCount] = useState<number>(0);
   const [favoritesCount, setFavoritesCount] = useState<number>(0);
   const [{loading, error}, executeUserPopulate] = useAxios<MyProfileResponse>(
     '/users/me',
@@ -49,6 +49,8 @@ export const Application: React.FC<Props> = () => {
   );
   const setUser = useUserStore(u => u.setUser);
   const setAddresses = useUserAddresses(u => u.setAddresses);
+  const cart = useCartStore(s => s.cart);
+  const fetchCart = useCartStore(s => s.fetchCart);
   const keepMinigame = useMinigameStore(m => m.keep);
   // const isSocketOnline = useSocketStore(s => s.online);
   const {isConnected} = useNetInfo();
@@ -67,8 +69,8 @@ export const Application: React.FC<Props> = () => {
 
         setUser(user);
         setAddresses(addresses);
-        setCartCount(cart.length);
         setFavoritesCount(favorites.length);
+        fetchCart();
       })
       .catch(console.log);
   }, []);
@@ -105,7 +107,7 @@ export const Application: React.FC<Props> = () => {
               tabBarBadge: getTabBarBadge(
                 TabName,
                 TabName === 'CartStack'
-                  ? cartCount
+                  ? cart.length
                   : TabName === 'FavoritesStack'
                   ? favoritesCount
                   : undefined,

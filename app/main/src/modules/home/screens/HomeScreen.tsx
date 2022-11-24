@@ -106,23 +106,29 @@ export const HomeScreen: FC<HomeStackProps> = ({navigation, route}) => {
 
             <Div my="lg" />
 
-            <RecommendedForYou />
+            <RecommendedForYou
+              navigation={navigation}
+              data={feed.recommended}
+            />
 
             <Div my="lg" />
 
-            <LatestProducts />
+            <LatestProducts
+              navigation={navigation}
+              data={feed.productsJustAdded}
+            />
 
             <Div my="lg" />
 
-            <LatestStores />
+            <LatestStores navigation={navigation} data={feed.storesJustAdded} />
 
             <Div my="lg" />
 
-            <StoresFeed />
+            <StoresFeed navigation={navigation} data={feed.stores} />
 
             <Div my="lg" />
 
-            <ProductsFeed />
+            <ProductsFeed navigation={navigation} data={feed.products} />
 
             {/** Espacio para abajo */}
             <Div my="3xl" />
