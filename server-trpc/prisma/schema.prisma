@@ -1,0 +1,324 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
+model Admin {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  dni                String   @db.VarChar(8)
+  phone              String   @db.VarChar(9)
+  address            String
+  avatar             String
+  isBanned           Boolean  @default(false)
+  banReason          String?
+  isActive           Boolean  @default(false)
+  birthDate          DateTime
+  password           String
+  refreshToken       String?  @db.VarChar(1024)
+  resetPasswordToken String?  @db.VarChar(1024)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Customer {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  dni                String   @db.VarChar(8)
+  phone              String   @db.VarChar(9)
+  address            String
+  avatar             String
+  isBanned           Boolean  @default(false)
+  banReason          String?
+  isActive           Boolean  @default(false)
+  birthDate          DateTime
+  password           String
+  refreshToken       String?  @db.VarChar(1024)
+  resetPasswordToken String?  @db.VarChar(1024)
+  stores             Store[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("customers")
+}
+
+enum Vehicle {
+  CARRO
+  MOTO
+  BICICLETA
+  PIE
+  NONE
+}
+
+model Dealer {
+  id                 String          @id @default(cuid())
+  name               String
+  email              String          @unique
+  dni                String          @db.VarChar(8)
+  phone              String          @db.VarChar(9)
+  address            String
+  avatar             String
+  isBanned           Boolean         @default(false)
+  banReason          String?
+  isActive           Boolean         @default(false)
+  birthDate          DateTime
+  password           String
+  refreshToken       String?         @db.VarChar(1024)
+  resetPasswordToken String?         @db.VarChar(1024)
+  vehicle            Vehicle         @default(NONE)
+  available          Boolean         @default(false)
+  orders             Order[]
+  rankings           DealerRanking[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  @@map("dealers")
+}
+
+model DealerRanking {
+  id        String   @id @default(cuid())
+  comment   String?
+  value     Float    @db.Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  dealer    Dealer   @relation(fields: [dealerId], references: [id])
+  dealerId  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@map("dealers_rankings")
+}
+
+model User {
+  id                  String           @id @default(cuid())
+  name                String
+  email               String?
+  phone               String?          @db.VarChar(9)
+  dni                 String?          @db.VarChar(8)
+  avatar              String
+  refreshToken        String?          @db.VarChar(1024)
+  facebookId          String           @unique
+  facebookAccessToken String           @db.VarChar(512)
+  isBanned            Boolean          @default(false)
+  banReason           String?
+  addresses           UserAddress[]
+  favorites           UserFavorite[]
+  cart                UserCart[]
+  productRanking      ProductRanking[]
+  storeRankings       StoreRanking[]
+  dealerRankings      DealerRanking[]
+  orders              Order[]
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  @@map("users")
+}
+
+enum UserAddressTag {
+  CASA
+  AMIGO
+  PAREJA
+  TRABAJO
+  UNIVERSIDAD
+  OTRO
+}
+
+model UserAddress {
+  id           String         @id @default(cuid())
+  name         String
+  street       String
+  instructions String
+  zip          String
+  city         String
+  tag          UserAddressTag
+  latitude     Float          @db.Float()
+  longitude    Float          @db.Float()
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  order        Order[]
+  user         User?          @relation(fields: [userId], references: [id])
+  userId       String?
+
+  @@map("users_addresses")
+}
+
+model UserCart {
+  id        String   @id @default(cuid())
+  quantity  Int      @default(1) @db.UnsignedInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map("users_cart")
+}
+
+model UserFavorite {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map("users_favorites")
+}
+
+enum OrderStatus {
+  CANCELLED
+  PROBLEM
+  PENDING
+  SENT
+  DELIVERED
+}
+
+model CompletedOrders {
+  id      String @id @default(cuid())
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  @@map("completed_orders")
+}
+
+model Order {
+  id              String            @id @default(cuid())
+  products        Product[]
+  dealer          Dealer?           @relation(fields: [dealerId], references: [id])
+  dealerId        String?
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  quantity        Int               @default(1)
+  deliveryPrice   Float             @default(0) @db.Float
+  status          OrderStatus       @default(PENDING)
+  message         String?
+  arrivalTime     DateTime?
+  address         UserAddress       @relation(fields: [userAddressId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  userAddressId   String
+  completedOrders CompletedOrders[]
+
+  @@map("orders")
+}
+
+enum StoreCategory {
+  LICORERIA
+  RESTAURANTE
+  MASCOTAS
+  MODA
+  TECNOLOGIA
+  JUGUETERIA
+  FARMACIA
+  CUIDADO_PERSONAL
+  MAQUILLAJE
+  FLORISTERIA
+  TIENDA
+  SUPERMERCADOS
+  LIBRERIA
+  JUGUERIA
+  OTRO
+}
+
+model Store {
+  id                  String         @id @default(cuid())
+  name                String
+  description         String
+  address             String
+  logo                String
+  category            StoreCategory
+  categoryDescription String?
+  rankings            StoreRanking[]
+  products            Product[]
+  openTime            DateTime?
+  closeTime           DateTime?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  owner               Customer       @relation(fields: [ownerId], references: [id])
+  ownerId             String
+
+  @@map("stores")
+}
+
+model StoreRanking {
+  id        String   @id @default(cuid())
+  comment   String?
+  value     Float    @db.Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String
+
+  @@map("stores_rankings")
+}
+
+model Product {
+  id            String           @id @default(cuid())
+  name          String
+  description   String?
+  price         Float            @default(0) @db.Float
+  image         String
+  blurHash      String
+  coupon        Coupon?          @relation(fields: [couponId], references: [id])
+  couponId      String?
+  orders        Order[]
+  userCart      UserCart[]
+  userFavorites UserFavorite[]
+  rankings      ProductRanking[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  store         Store            @relation(fields: [storeId], references: [id])
+  storeId       String
+
+  @@map("products")
+}
+
+model ProductRanking {
+  id        String   @id @default(cuid())
+  comment   String?
+  value     Float    @db.Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+
+  @@map("products_rankings")
+}
+
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique @db.VarChar(10)
+  description String?
+  discount    Float     @default(0) @db.Float
+  expiration  DateTime?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("coupons")
+}

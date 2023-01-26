@@ -1,0 +1,53 @@
+{
+  "name": "server-trpc",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node scripts/clear && node dist/index.js | pino-pretty -c",
+    "dev": "nodemon | pino-pretty -c -t SYS:HH:MM:ss.l",
+    "env:dev": "cross-env NODE_ENV=development",
+    "build": "yarn clean && tsc",
+    "clean": "rimraf dist",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "createSecret": "node scripts/createSecret",
+    "seeds": "ts-node scripts/seeds"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/compress": "^6.1.1",
+    "@fastify/cors": "^8.1.1",
+    "@fastify/env": "^4.1.0",
+    "@fastify/helmet": "^10.0.2",
+    "@fastify/rate-limit": "^7.5.0",
+    "@fastify/static": "^6.5.0",
+    "@prisma/client": "^4.5.0",
+    "@sinclair/typebox": "^0.25.2",
+    "@trpc/server": "^10.0.0-proxy-beta.26",
+    "argon2": "^0.30.1",
+    "axios": "^1.1.3",
+    "cloudinary": "^1.32.0",
+    "cuid": "^2.1.8",
+    "fastify": "^4.9.2",
+    "fastify-plugin": "^4.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.8.0",
+    "socket.io": "^4.5.3",
+    "superjson": "^1.11.0",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/node": "^18.11.9",
+    "@types/nodemailer": "^6.4.6",
+    "nodemon": "^2.0.20",
+    "pino-pretty": "^9.1.1",
+    "prettier": "^2.7.1",
+    "prisma": "^4.5.0",
+    "prisma-dbml-generator": "^0.9.1",
+    "prisma-docs-generator": "^0.5.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
+}

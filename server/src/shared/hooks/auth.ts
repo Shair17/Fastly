@@ -9,6 +9,7 @@ import {BEARER_SCHEME_REGEX} from '../../constants/regex';
 import * as jwt from 'jsonwebtoken';
 import {isValidToken} from '../../utils/isValidToken';
 import {isString} from '../../utils';
+import {isCuid} from 'cuid';
 
 // Json Web Token Secrets
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET!;
@@ -119,6 +120,8 @@ const getDealerIdFromToken = (token: string): string | null => {
     return null;
   }
 };
+
+const isValidEntity = (id: string): boolean => isString(id) && isCuid(id);
 
 export const hasBearerToken: onRequestHookHandler = async (request, reply) => {
   const authorization = request.headers.authorization;

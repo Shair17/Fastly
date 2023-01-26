@@ -22,6 +22,8 @@ export class ConfigService {
     getInstanceByToken<FastifyInstance>(FastifyInstanceToken);
 
   configExists(key: ConfigKey): boolean {
+    // !! or Boolean()
+    // This is better reability??
     return !!this.fastify.config[key];
   }
 
