@@ -24,7 +24,6 @@ interface Props extends NativeStackScreenProps<ErrorStackParmas, 'Minigame'> {}
 
 export const MiniGameController: FC<Props> = ({}) => {
   useBackHandler(() => keepMinigame);
-
   const [running, setRunning] = useState<boolean>(true);
   const [score, setScore] = useState<number>(0);
   const gameEngineRef = useRef<GameEngine>();

@@ -4,7 +4,6 @@ import {useTheme} from 'react-native-magnus';
 import {useShowSessionIsExpired} from '@fastly/hooks/useShowSessionIsExpired';
 import {useAuthStore} from '@fastly/stores/useAuthStore';
 import {usePermissionsStore} from '@fastly/stores/usePermissionsStore';
-import {isLoggedIn} from '@fastly/services/refresh-token';
 import {BasicHeaderScreen} from '@fastly/components/molecules/BasicHeaderScreen';
 import {LoadingScreen} from './screens/LoadingScreen';
 import {WelcomeNewUserScreen} from './screens/WelcomeNewUserScreen';
@@ -45,7 +44,6 @@ export const Root: React.FC = () => {
   useShowSessionIsExpired();
 
   const {theme} = useTheme();
-  // const isAuthenticated = isLoggedIn();
   const isAuthenticated = useIsAuthenticated();
   const isNewUser = useAuthStore(z => z.isNewUser);
   const locationStatus = usePermissionsStore(z => z.locationStatus);
