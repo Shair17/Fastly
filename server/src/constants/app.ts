@@ -1,4 +1,4 @@
-const {version: currentServerVersion} = require('../../package.json');
+// const {version: currentServerVersion} = require('../../package.json');
 // const {version: currentAppVersion} = require('../../../app/main/package.json');
 // ? INFO: Poner la versión de la app aquí en código, importarla desde la app no funcionará.
 const currentAppVersion = '0.0.1';
@@ -13,8 +13,8 @@ const fallBackAppVersion = '1.0.0';
 
 export const serverHost = '0.0.0.0';
 export const serverName = 'Fastly-Shair@Server-Root/Main';
-export const serverVersion =
-  (currentServerVersion as string) || fallBackServerVersion;
+// export const serverVersion = (currentServerVersion as string) || fallBackServerVersion;
+export const serverVersion = fallBackServerVersion;
 
 export const appDeveloper = 'Shair <hello@shair.dev>';
 export const appName = 'Fastly Delivery Perú ⚡';
