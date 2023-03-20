@@ -53,7 +53,7 @@ export class IOService implements OnModuleInit {
 
       // Si el token es invalido Ó si no es usuario ni dealer entonces desconectar del socket
       if (!isValidToken || (!isAdmin && !isCustomer && !isUser && !isDealer)) {
-        return socket.disconnect();
+        // return socket.disconnect();
       }
 
       // es necesario que esté aquí?
