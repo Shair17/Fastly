@@ -8,7 +8,7 @@ import {defaultSEO} from 'constants/seo.constants';
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <Fragment>
-      <DefaultSeo {...defaultSEO} />
+      {/* <DefaultSeo {...defaultSEO} /> */}
       <Component {...pageProps} />
     </Fragment>
   );
