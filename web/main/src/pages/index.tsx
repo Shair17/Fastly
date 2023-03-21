@@ -1,5 +1,4 @@
 import type {NextPage} from 'next';
-import {} from 'next';
 // import {Layout} from 'components/templates/Layout';
 // import {Hero} from 'components/organisms/Hero';
 // import {Features} from 'components/organisms/Features';
@@ -25,8 +24,8 @@ const Home: NextPage = () => {
                 <li className="flex items-center">
                   <svg
                     className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
                     <circle cx="12" cy="12" r="11" />
                     <path
                       d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
@@ -38,8 +37,8 @@ const Home: NextPage = () => {
                 <li className="flex items-center">
                   <svg
                     className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
                     <circle cx="12" cy="12" r="11" />
                     <path
                       d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
@@ -51,8 +50,8 @@ const Home: NextPage = () => {
                 <li className="flex items-center">
                   <svg
                     className="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
                     <circle cx="12" cy="12" r="11" />
                     <path
                       d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9"
@@ -73,8 +72,8 @@ const Home: NextPage = () => {
               </p>
 
               <p>
-                Don't miss this unique opportunity to secure an exclusive and
-                memorable domain name.
+                Don&apos;t miss this unique opportunity to secure an exclusive
+                and memorable domain name.
               </p>
             </div>
             <div className="flex flex-col pt-8 text-base font-semibold leading-7 md:flex-row">
